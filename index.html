@@ -1,0 +1,1532 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cellvoyant</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2308131C'/%3E%3Cpath d='M5 17c3 0 3-7 6-7s3 12 6 12 3-9 6-9 3 4 5 4' fill='none' stroke='%233CCFD9' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#08131C">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cellvoyant">
+<meta property="og:description" content="Cellvoyant — AI market and competitor intelligence for telecom operators: research, working prototype, innovation catalog and provisional patent draft.">
+<meta name="twitter:card" content="summary">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<meta name="description" content="Cellvoyant — AI market and competitor intelligence for telecom operators: research, working prototype, innovation catalog and provisional patent draft.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+:root{
+  --bg:#ECEFF2; --band:#E1E6EB; --surface:#FFFFFF; --surface-2:#F4F6F8;
+  --ink:#0D1726; --ink-2:#2F3D52; --muted:#58667A; --line:#D2D9E1; --line-strong:#B3BECB;
+  --accent:#006E7A; --accent-ink:#FFFFFF; --accent-soft:#D3ECEE;
+  --signal:#A35A00; --signal-soft:#FBE9CF;
+  --crit:#BF352B; --crit-soft:#F8DCD8;
+  --good:#1B7C51; --good-soft:#D5EEE1;
+  --grid:rgba(13,23,38,.08);
+  --op-nim:#006E7A; --op-vtx:#4B44C6; --op-arc:#C2416C; --op-pls:#8A6810; --op-sky:#2F72C6; --op-kte:#5A7C1B;
+  --screen:#08131C; --screen-2:#0D1E2A; --screen-ink:#CFE3E8; --screen-dim:#7C97A3; --screen-grid:rgba(120,190,205,.14); --screen-trace:#3CCFD9; --screen-hot:#FFB547;
+  --shadow:0 1px 2px rgba(13,23,38,.05),0 14px 34px -16px rgba(13,23,38,.22);
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --f-serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+  --r:12px; --r-sm:7px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0A1016; --band:#0E161E; --surface:#111A23; --surface-2:#16212C;
+    --ink:#E4ECF2; --ink-2:#BAC7D3; --muted:#8696A7; --line:#213041; --line-strong:#304359;
+    --accent:#3CCFD9; --accent-ink:#03171B; --accent-soft:#0F3237;
+    --signal:#FFB547; --signal-soft:#3A2A10; --crit:#FF6F63; --crit-soft:#3D1815; --good:#4ACF98; --good-soft:#0F3224;
+    --grid:rgba(228,236,242,.07);
+    --op-nim:#3CCFD9; --op-vtx:#9690FF; --op-arc:#FF80A7; --op-pls:#E2B84C; --op-sky:#72B2FF; --op-kte:#A9D45C;
+    --screen:#060D13; --screen-2:#0B1822;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A1016; --band:#0E161E; --surface:#111A23; --surface-2:#16212C;
+  --ink:#E4ECF2; --ink-2:#BAC7D3; --muted:#8696A7; --line:#213041; --line-strong:#304359;
+  --accent:#3CCFD9; --accent-ink:#03171B; --accent-soft:#0F3237;
+  --signal:#FFB547; --signal-soft:#3A2A10; --crit:#FF6F63; --crit-soft:#3D1815; --good:#4ACF98; --good-soft:#0F3224;
+  --grid:rgba(228,236,242,.07);
+  --op-nim:#3CCFD9; --op-vtx:#9690FF; --op-arc:#FF80A7; --op-pls:#E2B84C; --op-sky:#72B2FF; --op-kte:#A9D45C;
+  --screen:#060D13; --screen-2:#0B1822;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.58;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--accent);text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:clamp(16px,4vw,32px)}
+.mono{font-family:var(--f-mono)}
+.num{font-variant-numeric:tabular-nums}
+h1,h2,h3,h4{font-family:var(--f-display);font-stretch:112%;font-variation-settings:"wdth" 112;line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:clamp(28px,4.2vw,44px);font-weight:800}
+h3{font-size:clamp(19px,2.2vw,23px);font-weight:750}
+h4{font-size:16px;font-weight:700;font-stretch:104%;font-variation-settings:"wdth" 104;letter-spacing:0}
+p{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:18px;height:2px;background:var(--accent)}
+.lede{font-size:clamp(17px,1.6vw,19px);color:var(--ink-2);max-width:62ch}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.tiny{font-size:12px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:saturate(1.3) blur(10px);-webkit-backdrop-filter:saturate(1.3) blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:18px;height:58px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--f-display);font-weight:850;font-stretch:118%;font-variation-settings:"wdth" 118;font-size:19px;letter-spacing:-.01em;flex:none}
+.brand svg{width:26px;height:26px}
+.nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-left:auto;mask-image:linear-gradient(90deg,#000 88%,transparent)}
+.nav::-webkit-scrollbar{display:none}
+.nav a{font-size:13.5px;font-weight:500;color:var(--ink-2);text-decoration:none;padding:7px 11px;border-radius:999px;white-space:nowrap}
+.nav a:hover{background:var(--surface);color:var(--ink)}
+.nav a.on{background:var(--ink);color:var(--bg)}
+@media (min-width:900px){.nav{mask-image:none}}
+
+/* hero */
+.hero{padding-block:clamp(36px,6vw,72px) clamp(28px,4vw,48px)}
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(24px,4vw,56px);align-items:center}
+@media (max-width:920px){.hero-grid{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(38px,6.2vw,72px);font-weight:880;font-stretch:120%;font-variation-settings:"wdth" 120;line-height:.98;letter-spacing:-.025em;margin-block:14px 18px}
+.hero h1 em{font-style:normal;color:var(--accent);font-stretch:80%;font-variation-settings:"wdth" 80;font-weight:900}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.btn{appearance:none;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:600 14.5px/1 var(--f-body);padding:12px 16px;border-radius:999px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .15s ease,background .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.accent{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.sm{padding:8px 12px;font-size:13px}
+.btn[disabled]{opacity:.55;cursor:progress;transform:none}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:22px;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.meta-row span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--good);display:inline-block}
+.dot.live{box-shadow:0 0 0 0 var(--good);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--good) 60%,transparent)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@media (prefers-reduced-motion: reduce){.dot.live{animation:none}}
+
+/* instrument */
+.instrument{background:var(--screen);color:var(--screen-ink);border-radius:16px;padding:14px 14px 12px;box-shadow:var(--shadow);border:1px solid color-mix(in srgb,var(--screen-trace) 18%,transparent)}
+.inst-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--screen-dim);padding:0 2px 10px}
+.inst-head b{color:var(--screen-ink);font-weight:600}
+.tag-sim{border:1px solid color-mix(in srgb,var(--screen-hot) 55%,transparent);color:var(--screen-hot);padding:2px 7px;border-radius:4px;font-size:10px;letter-spacing:.1em}
+#spectrum{display:block;width:100%;height:300px;border-radius:8px;background:var(--screen-2)}
+.ticker{margin-top:10px;font-family:var(--f-mono);font-size:12px;line-height:1.45;min-height:54px;display:grid;gap:2px}
+.ticker div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--screen-dim)}
+.ticker div:first-child{color:var(--screen-ink)}
+.ticker .t{color:var(--screen-hot);margin-right:6px}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:clamp(28px,4vw,44px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stats > div{padding:18px 18px 16px;border-left:1px solid var(--line)}
+.stats > div:first-child{border-left:0;padding-left:0}
+.stats b{display:block;font-family:var(--f-display);font-weight:850;font-size:clamp(26px,3.2vw,36px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stats span{display:block;font-size:13.5px;color:var(--ink-2);margin-top:8px;line-height:1.4}
+.stats cite{display:block;font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:6px}
+@media (max-width:820px){.stats{grid-template-columns:1fr 1fr}.stats > div:nth-child(3){border-left:0;padding-left:0}.stats > div:nth-child(n+3){border-top:1px solid var(--line)}}
+@media (max-width:420px){.stats > div{padding:14px 10px 12px}}
+
+/* sections */
+section.sec{padding-block:clamp(52px,8vw,96px)}
+section.band{background:var(--band)}
+.sec-head{display:grid;gap:14px;margin-bottom:clamp(26px,4vw,40px);max-width:820px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.4vw,28px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,22px)}
+@media (max-width:900px){.grid-3{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.grid-2,.grid-3{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(16px,2.2vw,22px)}
+.panel.lift{box-shadow:var(--shadow)}
+
+/* pains */
+.pains{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--line-strong)}
+.pain{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;padding:20px 20px 22px 0;border-bottom:1px solid var(--line)}
+.pain:nth-child(odd){border-right:1px solid var(--line)}
+.pain:nth-child(even){padding-left:20px}
+@media (max-width:760px){.pains{grid-template-columns:1fr}.pain:nth-child(odd){border-right:0}.pain:nth-child(even){padding-left:0}}
+.pain .ic{grid-row:span 2;width:38px;height:38px;border-radius:9px;background:var(--crit-soft);color:var(--crit);display:grid;place-items:center}
+.pain .ic svg{width:20px;height:20px}
+.pain h4{align-self:center}
+.pain p{color:var(--ink-2);font-size:15px}
+.pain .ev{grid-column:2;font-family:var(--f-mono);font-size:12px;color:var(--muted);margin-top:4px}
+
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table.t{width:100%;border-collapse:collapse;font-size:14.5px;min-width:640px}
+table.t th,table.t td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--surface-2)}
+table.t tr:last-child td{border-bottom:0}
+table.t td b{font-weight:600}
+
+/* market */
+.big-num{font-family:var(--f-display);font-weight:850;font-size:clamp(30px,3.6vw,42px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kv{display:grid;gap:4px}
+.kv .src{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.tam{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(16px,3vw,32px);align-items:start}
+@media (max-width:860px){.tam{grid-template-columns:1fr}}
+.seg{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.seg:last-child{border-bottom:0}
+.seg label{font-weight:600;font-size:14.5px}
+.seg output{font-family:var(--f-mono);font-size:13px;color:var(--ink-2);text-align:right}
+.seg .row{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg .row div{display:grid;gap:2px}
+.seg .row span{font-size:12px;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.funnel{display:grid;gap:10px}
+.funnel .bar{position:relative;border-radius:8px;padding:14px 16px;color:var(--accent-ink);background:var(--accent);display:flex;justify-content:space-between;align-items:baseline;gap:12px;min-width:0}
+.funnel .bar b{font-family:var(--f-display);font-size:26px;font-weight:850;font-variant-numeric:tabular-nums}
+.funnel .bar span{font-size:13px;font-weight:600}
+.funnel .bar.sam{background:color-mix(in srgb,var(--accent) 70%,var(--surface));color:var(--ink)}
+.funnel .bar.som{background:var(--accent-soft);color:var(--ink)}
+
+.matrix-wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,32px);align-items:start}
+@media (max-width:860px){.matrix-wrap{grid-template-columns:1fr}}
+.matrix{position:relative;aspect-ratio:1/1;max-width:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.matrix .q{position:absolute;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:10% 10%}
+.matrix .mid-x,.matrix .mid-y{position:absolute;background:var(--line-strong)}
+.matrix .mid-x{left:0;right:0;top:50%;height:1px}
+.matrix .mid-y{top:0;bottom:0;left:50%;width:1px}
+.matrix .ax{position:absolute;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.matrix .ax.x{bottom:8px;right:10px}
+.matrix .ax.y{top:10px;left:10px}
+.matrix .qlab{position:absolute;font-size:11px;color:var(--muted);font-style:italic}
+.mpt{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;white-space:nowrap}
+.mpt i{width:10px;height:10px;border-radius:50%;background:var(--ink-2);flex:none}
+.mpt.us{font-family:var(--f-display);font-size:14px;font-weight:850;color:var(--accent)}
+.mpt.us i{width:16px;height:16px;background:var(--accent);box-shadow:0 0 0 5px var(--accent-soft)}
+.mpt.l{flex-direction:row-reverse}
+
+/* platform */
+.stack{display:grid;gap:10px}
+.layer{display:grid;grid-template-columns:200px 1fr;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+@media (max-width:760px){.layer{grid-template-columns:1fr}}
+.layer h4{font-size:17px}
+.layer .sub{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;padding:4px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);white-space:nowrap}
+.chip.hl{background:var(--accent-soft);border-color:transparent;color:var(--ink)}
+.flow{display:flex;justify-content:center;color:var(--muted);height:14px;align-items:center}
+.flow svg{width:14px;height:14px}
+.layer.core{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+/* console */
+.console{background:var(--surface);border:1px solid var(--line-strong);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.c-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.c-title{font-family:var(--f-display);font-weight:800;font-size:16px;font-stretch:108%;font-variation-settings:"wdth" 108;display:flex;align-items:center;gap:10px}
+.c-title small{font-family:var(--f-mono);font-weight:400;font-size:12px;color:var(--muted)}
+.c-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.pill.sim{border-color:color-mix(in srgb,var(--signal) 45%,transparent);color:var(--signal);background:var(--signal-soft)}
+.pill.ai-on{color:var(--good);border-color:color-mix(in srgb,var(--good) 40%,transparent);background:var(--good-soft)}
+.pill.ai-off{color:var(--muted)}
+.tabs{display:flex;gap:2px;padding:6px 10px 0;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:thin}
+.tab{appearance:none;background:none;border:0;border-bottom:2px solid transparent;padding:10px 12px 11px;font:600 14px var(--f-body);color:var(--muted);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab .n{font-family:var(--f-mono);font-size:11px;background:var(--crit);color:#fff;border-radius:999px;padding:1px 6px}
+.tpanel{padding:clamp(12px,2vw,18px)}
+
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+@media (max-width:1000px){.kpis{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:560px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:var(--surface);display:grid;gap:3px;min-width:0}
+.kpi .l{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .v{font-family:var(--f-display);font-weight:820;font-size:24px;line-height:1.05;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.kpi .d{font-family:var(--f-mono);font-size:11.5px}
+.up{color:var(--good)} .down{color:var(--crit)} .warn{color:var(--signal)}
+.cc-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:980px){.cc-grid{grid-template-columns:1fr}}
+.box{border:1px solid var(--line);border-radius:10px;background:var(--surface);min-width:0}
+.box-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.box-h b{color:var(--ink);font-weight:600}
+.feed{max-height:560px;overflow-y:auto}
+.ev{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:12px;border-bottom:1px solid var(--line);cursor:pointer;background:var(--surface);transition:background .2s;border-left:3px solid transparent;text-align:left;width:100%;font:inherit;color:inherit;appearance:none;border-top:0;border-right:0}
+.ev:hover{background:var(--surface-2)}
+.ev.sel{background:var(--accent-soft);border-left-color:var(--accent)}
+.ev.new{animation:flash 1.4s ease}
+@keyframes flash{0%{background:var(--signal-soft)}100%{background:var(--surface)}}
+@media (prefers-reduced-motion: reduce){.ev.new{animation:none}}
+.ev .tm{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);padding-top:2px;font-variant-numeric:tabular-nums}
+.ev .body{display:grid;gap:5px;min-width:0}
+.ev .line1{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ev .txt{font-size:14.5px;font-weight:500;line-height:1.4}
+.ev .meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.sev{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px}
+.sev.crit{background:var(--crit-soft);color:var(--crit)}
+.sev.high{background:var(--signal-soft);color:var(--signal)}
+.sev.watch{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+.opt{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.opt::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--c)}
+.cls{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.fresh{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.fresh .track{flex:1;max-width:140px;height:4px;background:var(--surface-2);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.fresh .track i{display:block;height:100%;background:var(--accent);transition:width .8s linear}
+.fresh.stale .track i{background:var(--line-strong)}
+
+.radar-box{background:var(--screen);border-radius:10px;padding:10px;color:var(--screen-ink)}
+.radar-box .rh{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--screen-dim);padding:2px 4px 8px}
+#radar{display:block;width:100%;height:260px}
+.side{display:grid;gap:14px}
+.detail{padding:14px;display:grid;gap:14px}
+.detail h3{font-size:18px;line-height:1.25}
+.ev-chain{display:grid;gap:8px}
+.ev-chain div{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:13.5px}
+.ev-chain span{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.ev-chain .cb{grid-column:1/-1;height:4px;background:var(--surface-2);border-radius:4px;overflow:hidden}
+.ev-chain .cb i{display:block;height:100%;background:var(--ink-2)}
+.next{border-left:3px solid var(--signal);background:var(--signal-soft);padding:10px 12px;border-radius:0 8px 8px 0;font-size:14px}
+.next b{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;display:block;color:var(--signal);margin-bottom:2px}
+.plays{display:grid;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.play{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:10px 12px;border-bottom:1px solid var(--line);font-size:13.5px}
+.play:last-child{border-bottom:0}
+.play b{font-weight:600}
+.play .eff{font-family:var(--f-mono);font-size:12px;color:var(--good);text-align:right}
+.play .tr{grid-column:1/-1;color:var(--muted);font-size:12.5px}
+.row-btns{display:flex;flex-wrap:wrap;gap:8px}
+.ai-out{border:1px dashed var(--line-strong);border-radius:8px;padding:12px;font-size:14px;display:grid;gap:8px;background:var(--surface-2)}
+.ai-out .by{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.label{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* tariff dna */
+.dna-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:980px){.dna-grid{grid-template-columns:1fr}}
+.dna-legend{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;font-family:var(--f-mono);font-size:9.5px;color:var(--muted);text-align:center;letter-spacing:.02em}
+.plan{display:grid;grid-template-columns:minmax(150px,1fr) minmax(200px,1.6fr) 70px;gap:12px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer;width:100%;background:var(--surface);appearance:none;border-top:0;border-left:3px solid transparent;border-right:0;font:inherit;color:inherit;text-align:left}
+.plan:hover{background:var(--surface-2)}
+.plan.sel{background:var(--accent-soft);border-left-color:var(--accent)}
+.plan.near{border-left-color:var(--signal)}
+.plan .nm{display:grid;gap:1px;min-width:0}
+.plan .nm b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plan .pr{font-family:var(--f-display);font-weight:800;font-size:19px;text-align:right;font-variant-numeric:tabular-nums}
+.plan .pr small{font-family:var(--f-mono);font-weight:400;font-size:11px;color:var(--muted);display:block}
+.strip{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;height:26px}
+.strip i{border-radius:3px;position:relative;background:color-mix(in srgb,var(--c) var(--p),var(--surface-2));border:1px solid color-mix(in srgb,var(--c) 30%,transparent)}
+.strip i.mut{outline:2px solid var(--signal);outline-offset:1px}
+.strip i.mut::after{content:"";position:absolute;top:-5px;right:-5px;width:8px;height:8px;border-radius:50%;background:var(--signal);border:2px solid var(--surface)}
+@media (max-width:620px){.dna-head{display:none!important}.plan{grid-template-columns:1fr 64px}.plan .strip{grid-column:1/-1;grid-row:2}}
+.near-list{display:grid;gap:10px;padding:14px}
+.near-item{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:6px}
+.near-item .hd{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.deltas{display:flex;flex-wrap:wrap;gap:5px}
+.delta{font-family:var(--f-mono);font-size:11.5px;padding:2px 6px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line)}
+.delta.good{color:var(--good);background:var(--good-soft);border-color:transparent}
+.delta.bad{color:var(--crit);background:var(--crit-soft);border-color:transparent}
+.mut-log{display:grid;gap:0}
+.mut-log div{padding:10px 12px;border-bottom:1px solid var(--line);font-size:13.5px;display:grid;gap:3px}
+.mut-log div:last-child{border-bottom:0}
+.mut-log .gene{font-family:var(--f-mono);font-size:11.5px;color:var(--signal)}
+
+/* predictor */
+.pred-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.pred-tabs button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:10px;padding:9px 12px;font:600 13.5px var(--f-body);cursor:pointer;display:flex;align-items:center;gap:8px;text-align:left}
+.pred-tabs button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.pred-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:14px;align-items:start}
+@media (max-width:900px){.pred-grid{grid-template-columns:1fr}}
+.gauge{display:grid;justify-items:center;gap:6px;padding:16px}
+.gauge svg{width:100%;max-width:280px;height:auto}
+.gauge .pv{font-family:var(--f-display);font-weight:880;font-size:48px;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.gauge .pl{font-size:14px;color:var(--ink-2);text-align:center;max-width:32ch}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-top:1px solid var(--line)}
+.facts div{background:var(--surface);padding:10px 12px;display:grid;gap:2px}
+.facts b{font-family:var(--f-mono);font-size:13px;font-weight:600}
+.sig{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:start;padding:12px;border-bottom:1px solid var(--line)}
+.sig:last-child{border-bottom:0}
+.sig input{margin-top:3px;width:17px;height:17px;accent-color:var(--accent)}
+.sig label{font-size:14px;font-weight:500;cursor:pointer;line-height:1.4}
+.sig .sm{font-family:var(--f-mono);font-size:11px;color:var(--muted);display:block;margin-top:2px;font-weight:400}
+.sig .lr{font-family:var(--f-mono);font-size:12px;text-align:right;white-space:nowrap}
+.sig .lrbar{grid-column:2/-1;height:4px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.sig .lrbar i{display:block;height:100%;background:var(--accent)}
+.sig.off{opacity:.5}
+.sig.off .lrbar i{background:var(--line-strong)}
+.formula{font-family:var(--f-mono);font-size:12.5px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;white-space:nowrap;color:var(--ink-2)}
+
+/* war room */
+.war{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);gap:14px;align-items:start}
+@media (max-width:940px){.war{grid-template-columns:1fr}}
+.ctrl{display:grid;gap:14px;padding:14px}
+.ctrl .f{display:grid;gap:6px}
+.ctrl .f > div{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:600}
+.ctrl .f output{font-family:var(--f-mono);font-weight:500;color:var(--accent)}
+select,.inp{appearance:none;-webkit-appearance:none;width:100%;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:500 14px var(--f-body);padding:9px 34px 9px 11px;border-radius:8px;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 17px) 55%,calc(100% - 12px) 55%;background-size:5px 5px;background-repeat:no-repeat}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--surface-2)}
+.check input{width:17px;height:17px;accent-color:var(--accent);margin-top:2px;flex:none}
+.chart-wrap{padding:12px 12px 4px}
+#warChart{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--ink-2);padding:0 12px 10px}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.legend i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.verdict{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line)}
+.verdict div{background:var(--surface);padding:12px;display:grid;gap:2px}
+.verdict b{font-family:var(--f-display);font-size:22px;font-weight:820;font-variant-numeric:tabular-nums}
+@media (max-width:520px){.verdict{grid-template-columns:1fr}}
+table.strat{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
+table.strat th,table.strat td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+table.strat th{font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+table.strat th:first-child,table.strat td:first-child{text-align:left}
+table.strat tr.me td{background:var(--accent-soft)}
+table.strat .best{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;background:var(--good);color:var(--surface);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:1px}
+
+/* chat */
+.chat{display:grid;grid-template-rows:auto 1fr auto;height:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.chat-h{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);font-size:13px}
+.msgs{overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;background:var(--surface)}
+.msg{max-width:90%;padding:10px 13px;border-radius:12px;font-size:14.5px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.u{align-self:flex-end;background:var(--ink);color:var(--bg);border-bottom-right-radius:4px}
+.msg.a{align-self:flex-start;background:var(--surface-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.a .by{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;white-space:normal}
+.msg.a ul{margin:4px 0;padding-left:18px;white-space:normal}
+.msg.thinking{color:var(--muted);font-style:italic}
+.composer{display:grid;gap:8px;padding:10px;border-top:1px solid var(--line);background:var(--surface-2)}
+.sugg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.sugg button{appearance:none;flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:6px 11px;font:500 12.5px var(--f-body);cursor:pointer;white-space:nowrap}
+.sugg button:hover{border-color:var(--accent);color:var(--ink)}
+.composer form{display:flex;gap:8px}
+.composer textarea{flex:1;resize:none;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;font:15px/1.4 var(--f-body);background:var(--surface);color:var(--ink);min-height:44px;max-height:120px}
+.chat-side{display:grid;gap:12px;align-content:start}
+.ask-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.8fr);gap:14px}
+@media (max-width:900px){.ask-grid{grid-template-columns:1fr}.chat{height:520px}}
+
+/* lab */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.filters button{appearance:none;border:1px solid var(--line-strong);background:transparent;color:var(--ink-2);border-radius:999px;padding:7px 13px;font:600 13px var(--f-body);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters .cnt{font-family:var(--f-mono);font-weight:400;opacity:.7;margin-left:4px}
+.lab{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line-strong);border-left:1px solid var(--line)}
+@media (max-width:980px){.lab{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.lab{grid-template-columns:1fr}}
+.inno{padding:18px 18px 20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;gap:8px;align-content:start;background:var(--surface)}
+.inno .top-l{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.inno .cat{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.inno h4{font-size:17.5px;font-stretch:110%;font-variation-settings:"wdth" 110}
+.inno p{font-size:14px;color:var(--ink-2)}
+.inno .solves{font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+.inno .solves b{color:var(--ink-2);font-weight:600}
+.badge{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.badge.core{background:var(--accent);color:var(--accent-ink)}
+.badge.new{background:var(--signal-soft);color:var(--signal)}
+.badge.svc{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+
+/* patent */
+.patent-wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:clamp(20px,4vw,48px);align-items:start}
+@media (max-width:900px){.patent-wrap{grid-template-columns:1fr}}
+.patent-aside{position:sticky;top:84px;display:grid;gap:14px}
+@media (max-width:900px){.patent-aside{position:static}}
+.patent-aside .warnbox{border:1px solid color-mix(in srgb,var(--crit) 40%,transparent);background:var(--crit-soft);border-radius:10px;padding:14px;font-size:13.5px;display:grid;gap:6px}
+.patent-aside .warnbox b{color:var(--crit);font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.toc{display:grid;gap:2px;font-size:13.5px}
+.toc a{color:var(--ink-2);text-decoration:none;padding:4px 0;border-bottom:1px solid var(--line)}
+.toc a:hover{color:var(--accent)}
+.doc{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:clamp(20px,5vw,56px);font-family:var(--f-serif);font-size:16px;line-height:1.7;color:var(--ink);box-shadow:var(--shadow)}
+.doc .dh{text-align:center;display:grid;gap:6px;padding-bottom:22px;border-bottom:2px solid var(--ink);margin-bottom:24px}
+.doc .dh .k{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.doc .dh h3{font-family:var(--f-serif);font-weight:600;font-size:clamp(18px,2.2vw,22px);line-height:1.35;font-stretch:100%;font-variation-settings:normal;letter-spacing:0}
+.doc h4{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin:30px 0 10px;font-stretch:100%;font-variation-settings:normal}
+.doc .para{display:grid;grid-template-columns:62px 1fr;gap:10px;margin:0 0 12px}
+.doc .para > span{font-family:var(--f-mono);font-size:12px;color:var(--muted);padding-top:3px;font-variant-numeric:tabular-nums}
+@media (max-width:520px){.doc .para{grid-template-columns:1fr;gap:0}}
+.doc .claims{counter-reset:none;display:grid;gap:14px;padding:0;margin:0;list-style:none}
+.doc .claims li{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.doc .claims li > b{font-family:var(--f-mono);font-size:13px;padding-top:2px}
+.doc .claims .ind{font-weight:600}
+.doc .claims ol{list-style:none;margin:6px 0 0;padding:0 0 0 18px;display:grid;gap:6px}
+.doc figure{margin:18px 0;border:1px solid var(--line);border-radius:6px;padding:16px;background:var(--surface-2);font-family:var(--f-mono);font-size:12px}
+.doc figcaption{text-align:center;font-weight:600;letter-spacing:.1em;margin-top:10px;color:var(--ink-2)}
+.doc .eq{font-family:var(--f-mono);font-size:13.5px;background:var(--surface-2);border:1px solid var(--line);padding:12px 14px;border-radius:6px;overflow-x:auto;white-space:nowrap;margin:8px 0 14px}
+.fig-svg{width:100%;height:auto;display:block}
+.fig-svg text{font-family:var(--f-mono)}
+
+/* business */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:900px){.tiers{grid-template-columns:1fr}}
+.tier{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:12px;align-content:start}
+.tier.feat{border-color:var(--ink);box-shadow:var(--shadow)}
+.tier .price{font-family:var(--f-display);font-weight:850;font-size:30px;letter-spacing:-.02em}
+.tier .price small{font-family:var(--f-body);font-size:13px;font-weight:500;color:var(--muted);letter-spacing:0}
+.tier ul{margin:0;padding-left:18px;display:grid;gap:5px;font-size:14px;color:var(--ink-2)}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:2px solid var(--ink)}
+@media (max-width:900px){.timeline{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.timeline{grid-template-columns:1fr}}
+.phase{padding:16px 16px 18px 0;position:relative;display:grid;gap:8px;align-content:start}
+.phase::before{content:"";position:absolute;top:-7px;left:0;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--ink)}
+.phase.now::before{background:var(--accent);border-color:var(--accent)}
+.phase .when{font-family:var(--f-mono);font-size:12px;color:var(--muted);padding-top:8px}
+.phase ul{margin:0;padding-left:16px;font-size:14px;color:var(--ink-2);display:grid;gap:4px}
+.kpi-list{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:900px){.kpi-list{grid-template-columns:1fr 1fr}}
+.kpi-list div{border-top:2px solid var(--accent);padding-top:10px;display:grid;gap:4px}
+.kpi-list b{font-family:var(--f-display);font-weight:850;font-size:26px;letter-spacing:-.02em}
+.kpi-list span{font-size:13.5px;color:var(--ink-2)}
+
+.sources ol{margin:0;padding-left:22px;display:grid;gap:8px;font-size:14px;color:var(--ink-2)}
+.sources li{overflow-wrap:anywhere}
+.foot{padding-block:28px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between}
+.note{font-size:13px;color:var(--muted);margin-top:12px}
+.callout{border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--surface);border-radius:0 10px 10px 0;padding:14px 16px;font-size:15px}
+.fact-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line-strong);border-left:1px solid var(--line)}
+@media (max-width:900px){.fact-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.fact-grid{grid-template-columns:1fr}}
+.fact{padding:18px 18px 20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface);display:grid;gap:6px;align-content:start}
+.fact .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fact b{font-family:var(--f-display);font-weight:850;font-size:clamp(24px,2.8vw,32px);line-height:1.05;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.fact p{font-size:14.5px;color:var(--ink-2)}
+.fact cite,.stats cite a,.fact cite a{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.events-list{list-style:none;margin:0;padding:0 0 0 18px;border-left:2px solid var(--line-strong);display:grid;gap:16px}
+.events-list li{position:relative;display:grid;gap:2px;font-size:15px;color:var(--ink-2)}
+.events-list li::before{content:"";position:absolute;left:-25px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--accent)}
+.events-list time{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.msg.a{white-space:normal}
+.msg.a p{margin:0 0 6px}
+.msg.a p:last-child{margin-bottom:0}
+.ai-out p{margin:0}
+.fb rect{fill:var(--surface);stroke:var(--ink);stroke-width:1.2}
+.fm rect{fill:var(--signal-soft);stroke:var(--signal);stroke-width:2}
+.ft{fill:var(--ink);font-size:11px;font-weight:600}
+.fs{fill:var(--muted);font-size:10.5px}
+.fl path{fill:none;stroke:var(--ink-2);stroke-width:1.3}
+.fc1{fill:none;stroke:var(--crit);stroke-width:2.2}
+.fc2{fill:none;stroke:var(--accent);stroke-width:2.2}
+.fth{fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:5 4}
+.src-sum{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line)}
+.src-sum > div{padding:14px 16px 14px 0;display:grid;gap:4px}
+.src-sum > div + div{border-left:1px solid var(--line);padding-left:16px}
+.src-sum b{font-family:var(--f-display);font-weight:850;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.src-sum span{font-size:13px;color:var(--ink-2)}
+@media (max-width:760px){.src-sum{grid-template-columns:1fr 1fr}.src-sum > div:nth-child(3){border-left:0;padding-left:0}.src-sum > div:nth-child(n+3){border-top:1px solid var(--line)}}
+.src-group{margin-top:30px}
+.src-group h3{font-size:18px;margin-bottom:12px}
+table.src{min-width:760px;font-size:13.5px}
+table.src td:first-child{width:36px;color:var(--muted)}
+table.src tr:target td{background:var(--signal-soft)}
+.stype,.chk{display:inline-block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.t-primary{background:var(--accent-soft);color:var(--ink)}
+.t-analyst{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+.t-survey{background:var(--signal-soft);color:var(--signal)}
+.t-press{background:var(--surface-2);color:var(--muted);border:1px dashed var(--line-strong)}
+.c-ok{background:var(--good-soft);color:var(--good)}
+.c-fix{background:var(--signal-soft);color:var(--signal)}
+.c-claim{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+.c-na{background:var(--surface-2);color:var(--muted);border:1px dashed var(--line-strong)}
+.chat-ctl{display:flex;gap:8px;align-items:center}
+select.mini{width:auto;padding:5px 26px 5px 9px;font-size:12.5px;background-position:calc(100% - 14px) 55%,calc(100% - 9px) 55%}
+.trace{display:flex;flex-wrap:wrap;gap:5px;margin:2px 0 8px}
+.tchip{font-family:var(--f-mono);font-size:11px;line-height:1.35;padding:3px 8px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);display:inline-flex;gap:6px;align-items:center;overflow-wrap:anywhere}
+.tchip::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;background:var(--signal)}
+.tchip.done::before{background:var(--good)}
+.tchip.err::before{background:var(--crit)}
+.toolbox{display:grid;gap:6px}
+.tool-btn{appearance:none;display:grid;gap:3px;text-align:left;width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer;font:inherit;color:inherit}
+.tool-btn:hover{border-color:var(--accent);background:var(--surface-2)}
+.tool-btn .tb-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.tool-btn b{font-size:13.5px;font-weight:600}
+.tool-btn code{font-family:var(--f-mono);font-size:10.5px;color:var(--accent)}
+.tool-btn > span:last-child{font-size:12.5px;color:var(--muted)}
+.svc{display:grid;gap:4px;padding:10px 0;border-bottom:1px solid var(--line)}
+.svc:last-child{border-bottom:0}
+.svc .hd{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.svc .hd b{font-size:13.5px;font-weight:600}
+.svc-form{display:grid;gap:6px;margin-top:6px}
+.svc-form textarea{border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font:14px/1.4 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical}
+.svc-form .row2{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.label-row{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:8px}
+.req-list{display:grid;gap:8px}
+.req{border:1px solid var(--line);border-radius:8px;padding:10px;display:grid;gap:4px;font-size:13px;background:var(--surface)}
+.req .hd{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.st{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--accent-soft);color:var(--ink);white-space:nowrap}
+.st.st-withdrawn{background:var(--surface-2);color:var(--muted)}
+.st.st-done{background:var(--good-soft);color:var(--good)}
+.mt-wrap{overflow-x:auto;margin:6px 0}
+.mt{border-collapse:collapse;font-size:12.5px;min-width:100%}
+.mt th,.mt td{border:1px solid var(--line);padding:4px 7px;text-align:left;vertical-align:top}
+.mt th{background:var(--surface);font-weight:600}
+.land-ctl{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin:22px 0 14px}
+.land-ctl .filters{margin:0}
+.land-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.inp-search{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:500 14px var(--f-body);padding:9px 12px;border-radius:999px;min-width:0;width:min(280px,100%)}
+table.land{min-width:980px;font-size:13.5px}
+table.land th button{appearance:none;border:0;background:none;font:inherit;color:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;padding:0;display:inline-flex;gap:4px;align-items:center}
+table.land th button[aria-sort]::after{content:"↕";opacity:.4}
+table.land th button[aria-sort="descending"]::after{content:"↓";opacity:1}
+table.land th button[aria-sort="ascending"]::after{content:"↑";opacity:1}
+table.land tbody tr.row{cursor:pointer}
+table.land tbody tr.row:hover td{background:var(--surface-2)}
+table.land tbody tr.row.open td{background:var(--accent-soft)}
+table.land td.num{text-align:right;white-space:nowrap}
+table.land th.num{text-align:right}
+table.land .co b{font-weight:600}
+table.land .co span{display:block;font-size:12px;color:var(--muted)}
+.fund{display:inline-block;font-family:var(--f-mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:1px 6px;border-radius:4px;margin:1px 3px 1px 0;white-space:nowrap;border:1px solid transparent}
+.f-pe{background:var(--crit-soft);color:var(--crit)}
+.f-hf{background:var(--signal-soft);color:var(--signal)}
+.f-state{background:var(--accent-soft);color:var(--ink)}
+.f-infra{background:var(--good-soft);color:var(--good)}
+.f-vc,.f-other{background:var(--surface-2);color:var(--ink-2);border-color:var(--line)}
+.inv-names{font-size:12.5px;color:var(--ink-2)}
+.land-detail td{background:var(--surface-2);padding:16px 18px}
+.ld{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
+@media (max-width:760px){.ld{grid-template-columns:1fr}}
+.ld p{font-size:14px;color:var(--ink-2);margin-bottom:8px}
+.ld .figs{display:grid;gap:6px;font-size:13px}
+.ld .figs div{display:grid;grid-template-columns:120px 1fr;gap:8px}
+.ld .figs span{color:var(--muted);font-family:var(--f-mono);font-size:11.5px}
+.ld .srcs{font-size:12px;overflow-wrap:anywhere;display:grid;gap:3px;margin-top:8px}
+.inv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line-strong);border-left:1px solid var(--line)}
+@media (max-width:900px){.inv-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.inv-grid{grid-template-columns:1fr}}
+.inv{background:var(--surface);border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px;display:grid;gap:6px;align-content:start}
+.inv h4{font-size:16px}
+.inv p{font-size:13.5px;color:var(--ink-2)}
+.inv .hold{font-size:12.5px;color:var(--muted)}
+.takeaways{margin:0;padding-left:20px;display:grid;gap:10px;font-size:15px;color:var(--ink-2)}
+.idea-list{display:grid;gap:10px}
+.idea{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;gap:6px}
+.idea h4{font-size:16px}
+.idea p{font-size:14px;color:var(--ink-2)}
+.idea .why{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:6px}
+.idea .badge{justify-self:start}
+.live-bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:-8px 0 20px}
+.land-src.on{color:var(--good);border-color:color-mix(in srgb,var(--good) 40%,transparent);background:var(--good-soft)}
+.land-src.on::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--good);display:inline-block;animation:pulse 2s infinite}
+@media (prefers-reduced-motion: reduce){.land-src.on::before{animation:none}}
+.dl{font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.dl.up{color:var(--good)} .dl.down{color:var(--crit)}
+.rulehit{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border-radius:4px;background:var(--accent);color:var(--accent-ink)}
+.rules-body{padding:12px;display:grid;gap:10px}
+.rule-list{display:flex;flex-wrap:wrap;gap:6px}
+.rule-chip{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;padding:3px 4px 3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--ink)}
+.rule-chip button{appearance:none;border:0;background:none;color:inherit;cursor:pointer;font-size:15px;line-height:1;padding:2px 6px;border-radius:999px}
+.rule-chip button:hover{background:var(--surface)}
+.rule-form{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.spark{display:block;margin-top:3px}
+.toast{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;max-width:min(440px,calc(100vw - 32px));background:var(--ink);color:var(--bg);padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.45;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s}
+.toast.show{opacity:1;transform:none}
+.brief-panel{position:fixed;inset:0;z-index:70;background:color-mix(in srgb,var(--ink) 45%,transparent);display:grid;place-items:center;padding:16px}
+.brief-card{background:var(--surface);border-radius:12px;width:min(760px,100%);max-height:85vh;display:grid;grid-template-rows:auto 1fr;overflow:hidden;box-shadow:var(--shadow)}
+.brief-card textarea{border:0;padding:14px;font:13px/1.5 var(--f-mono);background:var(--surface);color:var(--ink);resize:none;min-height:50vh;width:100%}
+.seg-btns{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden;letter-spacing:0;text-transform:none}
+.seg-btns button{appearance:none;border:0;background:var(--surface);color:var(--ink-2);font:600 12.5px var(--f-body);padding:6px 10px;cursor:pointer;border-left:1px solid var(--line)}
+.seg-btns button:first-child{border-left:0}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.geo-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:980px){.geo-grid{grid-template-columns:1fr}}
+.geo-ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px 0}
+.geo-wrap{padding:10px 12px 4px}
+#geo{display:block;width:100%;cursor:crosshair}
+.geo-legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between;padding:4px 12px 12px}
+.geo-legend .scale{flex:1;min-width:90px;max-width:220px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--surface-2),var(--signal),var(--crit));border:1px solid var(--line)}
+.geo-legend[data-l="coverage"] .scale{background:linear-gradient(90deg,var(--crit),var(--signal),var(--good))}
+.geo-legend[data-l="retail"] .scale{background:linear-gradient(90deg,var(--surface-2),var(--accent))}
+.hot-list{display:grid}
+.hot{appearance:none;border:0;border-bottom:1px solid var(--line);background:var(--surface);text-align:left;padding:10px 12px;display:grid;gap:2px;cursor:pointer;font:inherit;color:inherit;width:100%}
+.hot:hover{background:var(--surface-2)}
+.hot:last-child{border-bottom:0}
+.geo-cell{padding:12px;display:grid;gap:8px;font-size:13.5px}
+.geo-cell .hd{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.figs2{display:grid;grid-template-columns:auto 1fr;gap:4px 12px}
+.figs2 span{color:var(--muted);font-size:12.5px}
+.figs2 b{font-weight:500}
+.cap-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:12px}
+.cap-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:980px){.cap-grid{grid-template-columns:1fr}}
+#capChart{width:100%;height:auto;display:block}
+#capChart .cap-row{cursor:pointer}
+#capChart .cap-row:hover rect{opacity:.8}
+.cap-list{display:grid;max-height:320px;overflow-y:auto}
+.cap-item{display:grid;gap:3px;padding:10px 12px;border-bottom:1px solid var(--line);font-size:13px}
+.cap-item:last-child{border-bottom:0}
+.cap-item b{font-weight:600}
+.hold-row{padding:8px 12px 4px;display:grid;gap:6px}
+.hold-row .hd{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.hold-track{position:relative;height:8px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.hold-track .band{position:absolute;left:57.1%;width:28.6%;top:0;bottom:0;background:color-mix(in srgb,var(--signal) 28%,transparent)}
+.hold-track .bar{position:absolute;left:0;top:0;bottom:0;background:var(--ink-2);border-radius:4px;opacity:.85}
+.badge.live{background:var(--good-soft);color:var(--good)}
+.inno .badges{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Cellvoyant home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M5 17c3 0 3-7 6-7s3 12 6 12 3-9 6-9 3 4 5 4" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Cellvoyant
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#problem">Problem</a>
+      <a href="#market">Market</a>
+      <a href="#landscape">Landscape</a>
+      <a href="#platform">Platform</a>
+      <a href="#console">Live console</a>
+      <a href="#lab">Innovation lab</a>
+      <a href="#patent">Patent</a>
+      <a href="#business">Business</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">AI market &amp; competitor intelligence · telecom</div>
+        <h1>See the market's next move <em>before</em> it's announced.</h1>
+        <p class="lede">Cellvoyant pulls tariffs, network speed tests, regulatory filings, job posts, app updates, retail activity and social chatter into one live picture of your market. Then it predicts what each competitor will do next and simulates your best response, fast enough to act on.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#console">Open the live console</a>
+          <a class="btn" href="#patent">Read the patent draft</a>
+        </div>
+        <div class="meta-row">
+          <span><i class="dot live"></i>Working prototype</span>
+          <span>Simulated data · fictional operators</span>
+          <span>Built-in AI assistant (Claude-powered in the private version)</span>
+        </div>
+      </div>
+      <div class="instrument" aria-label="Market spectrum: simulated competitor signals by class over time">
+        <div class="inst-head"><span><b>Market spectrum</b> · signal class × time</span><span class="tag-sim">Simulated</span></div>
+        <canvas id="spectrum" role="img" aria-label="Animated waterfall of competitor signals across six signal classes"></canvas>
+        <div class="ticker" id="ticker" aria-live="off"></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div><b>$1.55T</b><span>Global telecom revenue in 2025, growing only 1.7% a year</span><cite><a href="#src-1">Deloitte, 2026 outlook</a></cite></div>
+      <div><b>68%</b><span>of operators turned data growth into ARPU growth, although 93% saw usage rise</span><cite><a href="#src-5">Tefficient, 1H 2025</a></cite></div>
+      <div><b>−2%</b><span>Forecast global telecom capex for 2026, so every investment has to count</span><cite><a href="#src-7">Dell'Oro, Apr 2026</a></cite></div>
+      <div><b>2×</b><span>CI teams that share insights weekly are twice as likely to see revenue impact (79% vs 41%)</span><cite><a href="#src-24">Crayon, 2026</a></cite></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="problem">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Industry research · September 2026</div>
+      <h2>Flat revenue, heavy investment, and customers one eSIM scan away from leaving</h2>
+      <p class="lede">Telecom is a trillion-dollar industry that barely grows. Operators must defend every line and every dollar of capex, while the set of competitors widens to include cable companies, satellite players and app-only brands. That is the setting in which competitive decisions are made too slowly.</p>
+    </div>
+
+    <div class="fact-grid">
+      <div class="fact"><span class="k">Revenue</span><b>$1.55T</b><p>Global telecom revenue in 2025, up ~1.7%. Service revenue is forecast to grow only ~2.8% a year to 2029.</p><cite><a href="#src-1">Deloitte</a> · <a href="#src-2">PwC</a></cite></div>
+      <div class="fact"><span class="k">ARPU</span><b>$6.32 → $6.20</b><p>Monthly mobile ARPU is expected to slip between 2024 and 2029, and revenue per GB is still falling in most markets.</p><cite><a href="#src-2">PwC</a> · <a href="#src-6">Tefficient</a></cite></div>
+      <div class="fact"><span class="k">Returns</span><b>~90 bp</b><p>Median ROIC is below the cost of capital for developed-market operators. Capex was flat in 2025 and is forecast to fall 2% in 2026.</p><cite><a href="#src-8">BCG</a> · <a href="#src-7">Dell'Oro</a></cite></div>
+      <div class="fact"><span class="k">5G</span><b>3.1B</b><p>5G subscriptions in Q1 2026, heading to 6.4B by 2031. More than 90 of the 390 5G operators now run standalone 5G.</p><cite><a href="#src-3">Ericsson Mobility Report, Jun 2026</a></cite></div>
+      <div class="fact"><span class="k">Fixed wireless</span><b>185M → 350M</b><p>FWA connections from end-2025 to 2031. 71% of providers offer 5G FWA, and Verizon alone added 193K in Q2 2026.</p><cite><a href="#src-4">Ericsson</a> · <a href="#src-10">Verizon</a></cite></div>
+      <div class="fact"><span class="k">Loyalty</span><b>up to 77%</b><p>of consumers feel no loyalty to their provider. Q2 2026 postpaid phone churn was 0.86% a month at AT&amp;T and 0.92% at Verizon.</p><cite><a href="#src-1">Deloitte</a> · <a href="#src-11">AT&amp;T 8-K</a> · <a href="#src-9">Verizon 8-K</a></cite></div>
+    </div>
+
+    <div class="grid-2" style="margin-top:clamp(28px,4vw,44px)">
+      <div>
+        <h3 style="margin-bottom:16px">2025–26: the list of competitors keeps getting longer</h3>
+        <ol class="events-list">
+          <li><time>May 2025</time><span>Vodafone and Three complete their UK merger, forming VodafoneThree</span></li>
+          <li><time>Jul 2025</time><span>T-Mobile and Starlink launch commercial satellite-to-phone service</span></li>
+          <li><time>Jan 2026</time><span>Verizon closes its Frontier fiber acquisition; the EU proposes the Digital Networks Act</span></li>
+          <li><time>Feb 2026</time><span>AT&amp;T closes the purchase of Lumen's consumer fiber business</span></li>
+          <li><time>Mar 2026</time><span>Accenture agrees to buy Ookla (Speedtest, Downdetector, RootMetrics) for $1.2B</span></li>
+          <li><time>May 2026</time><span>FCC approves EchoStar spectrum sales to AT&amp;T (~$23B) and SpaceX (~$17B)</span></li>
+          <li><time>Jun 2026</time><span>Bouygues, Iliad and Orange sign a €20.35B memorandum of understanding to acquire and split SFR, which would take France from four operators to three</span></li>
+          <li><time>Aug 2026</time><span>Charter completes its acquisition of Cox Communications</span></li>
+        </ol>
+        <p class="note">Sources: <a href="#src-13">[13]</a> <a href="#src-14">[14]</a> <a href="#src-15">[15]</a> <a href="#src-16">[16]</a> <a href="#src-11">[11]</a> <a href="#src-18">[18]</a> <a href="#src-17">[17]</a> <a href="#src-19">[19]</a> <a href="#src-20">[20]</a></p>
+      </div>
+      <div style="display:grid;gap:14px;align-content:start">
+        <div class="callout"><b>Carriers are publishing less.</b> Verizon's Q2 2026 release gives only total postpaid phone net adds, with no consumer/business split, and AT&amp;T no longer splits churn by bundle status. Recon Analytics reports that T-Mobile now publishes accounts instead of customer counts. Competitors have to estimate more from outside. <a href="#src-9">[9]</a> <a href="#src-11">[11]</a> <a href="#src-12">[12]</a></div>
+        <div class="callout"><b>Promotions are getting more expensive.</b> Recon Analytics estimates a ~190 bp promotional-amortization headwind on Verizon's ARPA. Verizon's own Q2 2026 release shows consumer ARPA down 1.4%. <a href="#src-12">[12]</a> <a href="#src-9">[9]</a></div>
+        <div class="callout"><b>AI spending is rising.</b> 89% of telcos plan to raise AI spend in 2026, yet only 16% of AI deployments target the network, even though networks are 34% of opex. <a href="#src-26">NVIDIA</a> · <a href="#src-27">GSMA Intelligence</a></div>
+      </div>
+    </div>
+
+    <h3 style="margin:clamp(40px,5vw,56px) 0 18px">The problems, as teams experience them</h3>
+    <div class="pains">
+      <div class="pain"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="4" cy="5" r="2"/><circle cx="16" cy="4" r="2"/><circle cx="6" cy="15" r="2"/><circle cx="15" cy="15" r="2"/><path d="M10 10l-4-4M10 10l5-5M10 10l-3 4M10 10l4 4" stroke-dasharray="2 2"/></svg></span><h4>Signals are scattered</h4><p>Tariffs, filings, speed tests, job posts, app releases and social each sit with a different team and tool. Nobody sees the whole picture.</p><span class="ev">76% of analysts still prepare data by hand in spreadsheets · <a href="#src-25">Alteryx 2025</a></span></div>
+      <div class="pain"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="7.5"/><path d="M10 5v5l3.5 2"/></svg></span><h4>Intelligence arrives too late</h4><p>Reports are monthly or quarterly, but promotions run for weeks. By the time the deck is ready, the port-outs have already happened.</p><span class="ev">Weekly CI sharing: 79% see revenue impact vs 41% · <a href="#src-24">Crayon 2026</a></span></div>
+      <div class="pain"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h14M3 8h10M3 12h7"/><circle cx="14.5" cy="14.5" r="3"/><path d="M16.7 16.7L19 19"/></svg></span><h4>Pricing is fought in the fine print</h4><p>Fees, price locks, trade-ins and allowance changes shift the real price without touching the headline number, so plans can't be compared like-for-like.</p><span class="ev">~190 bp promo headwind on Verizon ARPA (Recon Analytics estimate) · <a href="#src-12">[12]</a></span></div>
+      <div class="pain"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 16l4-5 3 3 7-9"/><path d="M13 5h4v4"/></svg></span><h4>Usage grows, revenue doesn't</h4><p>Data usage keeps rising while ARPU stays flat. Every price move by a rival hits a margin that is already thin.</p><span class="ev">93% grew usage, 68% grew ARPU · <a href="#src-5">Tefficient</a></span></div>
+      <div class="pain"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2.5" width="10" height="15" rx="2"/><path d="M8 6h4v4H8z"/><path d="M9 14h2"/></svg></span><h4>Switching gets easier every year</h4><p>eSIM sign-up takes minutes, and loyalty is low. A rival's promotion can turn into a port-out wave in days.</p><span class="ev">Up to 77% feel no loyalty · <a href="#src-1">Deloitte</a></span></div>
+      <div class="pain"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="3"/><path d="M10 1v3M10 16v3M1 10h3M16 10h3M3.6 3.6l2.1 2.1M14.3 14.3l2.1 2.1M3.6 16.4l2.1-2.1M14.3 5.7l2.1-2.1"/></svg></span><h4>The rival set got wider</h4><p>Cable MVNOs, satellite-to-phone services, FWA and digital eSIM brands compete for the same lines, and most tracking tools miss them.</p><span class="ev">Charter–Cox, SpaceX spectrum, 185M FWA links · <a href="#src-20">[20]</a> <a href="#src-17">[17]</a> <a href="#src-4">[4]</a></span></div>
+      <div class="pain"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 10s3-6 8-6 8 6 8 6-3 6-8 6-8-6-8-6z"/><path d="M3 17L17 3"/></svg></span><h4>Less disclosure, more guesswork</h4><p>Key KPI splits vanished from 2026 earnings releases. Estimating from the outside is now a core skill.</p><span class="ev">Verizon and AT&amp;T dropped KPI splits in Q2 2026 · <a href="#src-9">[9]</a> <a href="#src-11">[11]</a></span></div>
+      <div class="pain"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 17V9M10 17V4M16 17v-6"/><path d="M2 17h16"/></svg></span><h4>Every capex dollar must count</h4><p>With returns below the cost of capital, operators need to know where rivals will strengthen their networks next, before committing their own spend.</p><span class="ev">Median ROIC 90 bp below WACC · <a href="#src-8">BCG</a></span></div>
+    </div>
+
+    <h3 style="margin:clamp(40px,5vw,56px) 0 16px">Who feels it, and what they need</h3>
+    <div class="table-scroll">
+      <table class="t">
+        <thead><tr><th>Team</th><th>The question they can't answer fast enough</th><th>Cellvoyant answer</th></tr></thead>
+        <tbody>
+          <tr><td><b>CMO &amp; pricing</b></td><td>"A rival just changed its price. Should we respond, and how?"</td><td>Tariff DNA, War Room digital twin</td></tr>
+          <tr><td><b>Strategy &amp; corp dev</b></td><td>"What will each rival do next quarter?"</td><td>Move Predictor, Earnings Call Decoder</td></tr>
+          <tr><td><b>Network planning</b></td><td>"Where are rivals getting stronger, and is our coverage claim still true?"</td><td>Coverage Truth Engine, Tower &amp; Fiber Map</td></tr>
+          <tr><td><b>Enterprise sales</b></td><td>"Which deals are rivals chasing?"</td><td>B2B Deal Radar</td></tr>
+          <tr><td><b>Regulatory</b></td><td>"Which consultations and auctions change our position?"</td><td>Regulatory Early Warning, Spectrum Oracle</td></tr>
+          <tr><td><b>Retail &amp; customer care</b></td><td>"What are customers hearing in stores this week?"</td><td>Voice-of-Store bot, Retail Pulse</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="market">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Market research</div>
+      <h2>Fast-growing adjacent markets, and no telecom-native predictive player</h2>
+      <p class="lede">Cellvoyant sits where three markets overlap: AI in telecom, telecom analytics and competitive-intelligence software. Each is growing. None of the vendors in our scan fuses tariffs, network data, regulatory events and B2B signals into predictions of competitor moves.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="panel kv"><span class="label">AI in telecommunications</span><span class="big-num">$4.7B → $88B</span><span class="small" style="color:var(--ink-2)">2025 to 2034, a 37.9% CAGR. Other estimates for 2025 range from $3.6B to $4.7B, with CAGRs of 24–42%.</span><span class="src"><a href="#src-21">Fortune Business Insights</a></span></div>
+      <div class="panel kv"><span class="label">Telecom analytics</span><span class="big-num">$8.1B → $14.7B</span><span class="small" style="color:var(--ink-2)">2025 to 2031, a 10.2% CAGR</span><span class="src"><a href="#src-22">Mordor Intelligence</a></span></div>
+      <div class="panel kv"><span class="label">Competitive-intelligence tools</span><span class="big-num">$0.71B → $4.0B</span><span class="small" style="color:var(--ink-2)">2025 to 2034, a 21.2% CAGR. Depending on how the market is defined, estimates run from $0.59B to $5.7B.</span><span class="src"><a href="#src-23">Fortune Business Insights</a></span></div>
+    </div>
+
+    <h3 style="margin:clamp(40px,5vw,56px) 0 8px">Bottom-up sizing: who would buy Cellvoyant</h3>
+    <p class="muted small" style="margin-bottom:18px;max-width:70ch">Organization counts and contract values are our planning assumptions, not sourced facts. Drag the sliders to test them.</p>
+    <div class="tam">
+      <div class="panel" id="tamSegs"></div>
+      <div class="panel" style="display:grid;gap:16px">
+        <div class="funnel">
+          <div class="bar" style="width:100%"><span>TAM · all segments</span><b id="fTam">—</b></div>
+          <div class="bar sam" id="barSam" style="width:35%"><span>SAM</span><b id="fSam">—</b></div>
+          <div class="bar som" id="barSom" style="width:25%"><span>SOM</span><b id="fSom">—</b></div>
+        </div>
+        <div class="seg"><label for="samP">SAM: reachable markets (North America, EU, UK, GCC, ANZ)</label><output id="oSam" for="samP"></output><div class="row" style="grid-template-columns:1fr"><input type="range" id="samP" min="10" max="80" step="1" value="35"></div></div>
+        <div class="seg"><label for="somP">SOM: share of SAM won by year 5</label><output id="oSom" for="somP"></output><div class="row" style="grid-template-columns:1fr"><input type="range" id="somP" min="1" max="25" step="1" value="8"></div></div>
+        <p class="small muted">Default contract values match the proposed pricing tiers (Operator $144k/yr, Scout $30k/yr). Tier-1 groups on custom contracts would push the TAM higher.</p>
+      </div>
+    </div>
+
+    <h3 style="margin:clamp(40px,5vw,56px) 0 18px">Competitive landscape</h3>
+    <div class="matrix-wrap">
+      <div>
+        <div class="matrix" role="img" aria-label="Positioning map: generic CI tools sit top-left, telecom research firms bottom-right, Cellvoyant top-right">
+          <div class="q"></div><div class="mid-x"></div><div class="mid-y"></div>
+          <span class="qlab" style="left:10px;top:10px">Fast, but generic</span>
+          <span class="qlab" style="right:10px;top:10px;text-align:right">Where Cellvoyant plays</span>
+          <span class="qlab" style="left:10px;bottom:10px">General research</span>
+          <span class="qlab" style="right:10px;bottom:10px">Deep, but periodic or single-source</span>
+          <span class="mpt" style="left:15%;top:24%"><i></i>Similarweb</span>
+          <span class="mpt" style="left:17%;top:36%"><i></i>Crayon</span>
+          <span class="mpt" style="left:28%;top:45%"><i></i>Klue</span>
+          <span class="mpt" style="left:13%;top:55%"><i></i>Kompyte</span>
+          <span class="mpt" style="left:28%;top:66%"><i></i>AlphaSense</span>
+          <span class="mpt l" style="left:76%;top:34%"><i></i>Ookla (Accenture)</span>
+          <span class="mpt l" style="left:86%;top:47%"><i></i>Opensignal</span>
+          <span class="mpt l" style="left:74%;top:60%"><i></i>Tarifica</span>
+          <span class="mpt" style="left:58%;top:74%"><i></i>Tefficient</span>
+          <span class="mpt l" style="left:90%;top:68%"><i></i>GSMA Intelligence</span>
+          <span class="mpt l" style="left:88%;top:83%"><i></i>Analysys Mason</span>
+          <span class="mpt us l" style="left:86%;top:19%"><i></i>Cellvoyant</span>
+        </div>
+        <p class="note"><span class="mono">x</span> = telecom depth → &nbsp; <span class="mono">y</span> = predictive, real-time ↑ · Our positioning view, based on public product descriptions.</p>
+      </div>
+      <div class="table-scroll">
+        <table class="t" style="min-width:520px">
+          <thead><tr><th>Vendor</th><th>Strength</th><th>What's missing for telecom teams</th></tr></thead>
+          <tbody>
+            <tr><td><b>Crayon, Klue</b></td><td>Web and news tracking, battlecards, win-loss analysis</td><td>Built for B2B SaaS sales; no tariff or network semantics</td></tr>
+            <tr><td><b>Kompyte</b> (Semrush → Adobe)</td><td>Competitor website and pricing-page tracking</td><td>Marketing-tech focus; Adobe completed its Semrush purchase in Apr 2026 <a href="#src-29">[29]</a></td></tr>
+            <tr><td><b>AlphaSense</b></td><td>AI search over filings, broker research and expert calls; $600M+ ARR <a href="#src-28">[28]</a></td><td>Horizontal research tool; no telecom entity model or alerts</td></tr>
+            <tr><td><b>Ookla</b> (Accenture), <b>Opensignal</b></td><td>Crowd-measured network experience; Opensignal adds US switching analytics <a href="#src-18">[18]</a> <a href="#src-31">[31]</a></td><td>No tariff, regulatory or predictive competitor-move alerts</td></tr>
+            <tr><td><b>Tarifica, Teligen</b></td><td>Tariff databases and benchmarking (Tarifica covers 46 countries) <a href="#src-30">[30]</a></td><td>Tariffs only; no fusion with other signals</td></tr>
+            <tr><td><b>GSMA Intelligence, Omdia, Analysys Mason, Tefficient</b></td><td>Expert KPIs, forecasts and benchmarks</td><td>Periodic reports, not real-time and not predictive</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:clamp(28px,4vw,40px)">
+      <div class="callout"><b>The gap.</b> Every telecom-native vendor in our 13-vendor scan covers one kind of data: tariffs, network performance, or KPIs and forecasts. The horizontal CI tools don't understand telecom. None of them predicts competitor moves from all the signals combined. <span class="muted small">(Scan, not an exhaustive survey.)</span></div>
+      <div class="callout"><b>Why now.</b> Carriers are disclosing less, and independent data assets are consolidating into consultancies and marketing suites (Accenture–Ookla, Adobe–Semrush). GenAI budgets are rising (89% of telcos), and eSIM and satellite-to-phone service widen the set of competitors. <a href="#src-18">[18]</a> <a href="#src-29">[29]</a> <a href="#src-26">[26]</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="landscape">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Competitor &amp; capital landscape · data as of Sep 2026</div>
+      <h2>Who competes, who owns them, and where the capital sits</h2>
+      <p class="lede">Every direct competitor and adjacent telecom-intelligence vendor, and the operators that make up the market. For each: ownership, private-equity and hedge-fund involvement, market cap or valuation, revenue and capital raised, each figure with its source and date. Click any row for details.</p>
+    </div>
+
+    <div class="live-bar"><span class="pill land-src">Bundled snapshot</span><span class="mono small land-age"></span><span class="small muted">Market caps are refreshed from exchange data. The table updates the moment new figures reach the live data store, with no reload needed.</span></div>
+    <div class="src-sum" id="landTiles"></div>
+
+    <div class="land-ctl">
+      <div class="filters" id="landSegs" role="group" aria-label="Filter by segment"></div>
+      <div class="land-tools">
+        <label class="sr" for="landQ">Search companies</label>
+        <input class="inp-search" id="landQ" type="search" placeholder="Search company, investor, country…">
+        <label class="check small" for="landCap"><input type="checkbox" id="landCap"><span>Only PE, hedge-fund or state involvement</span></label>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table class="t land" id="landTable"></table>
+    </div>
+    <p class="note" id="landNote"></p>
+
+    <h3 style="margin:clamp(40px,5vw,56px) 0 8px">Follow the money: private equity, infrastructure funds and hedge funds in telecom</h3>
+    <p class="muted small" style="margin-bottom:14px;max-width:72ch">Deals, stakes and activist campaigns from 2023 to 2026, newest first. Values are approximate US-dollar equivalents at announcement.</p>
+    <div class="filters" id="dealTypes" role="group" aria-label="Filter deals by investor type"></div>
+    <div class="table-scroll"><table class="t" id="dealTable" style="min-width:820px"></table></div>
+
+    <h3 style="margin:clamp(40px,5vw,56px) 0 16px">The most active investors</h3>
+    <div class="inv-grid" id="invGrid"></div>
+
+    <div class="grid-2" style="margin-top:clamp(36px,5vw,52px);align-items:start">
+      <div>
+        <h3 style="margin-bottom:14px">What this means for Cellvoyant</h3>
+        <ul class="takeaways" id="landTake"></ul>
+      </div>
+      <div>
+        <h3 style="margin-bottom:14px">New services this research points to</h3>
+        <div class="idea-list">
+          <div class="idea"><span class="badge new">New</span><h4>Cellvoyant Capital</h4><p>An investor edition for hedge funds, PE and infrastructure funds: tariff indices, promo intensity, network-quality momentum and switching intent per operator. It is built only from public data behind a compliance firewall, so no customer's private data ever reaches investors.</p><span class="why">Why now: carriers disclose less every quarter, and funds already buy alternative data.</span></div>
+          <div class="idea"><span class="badge new">New</span><h4>Deal Diligence Twin</h4><p>For buyers of towers, fiber and operators: per-asset competitive intensity, coverage truth, tenancy and churn risk, simulated under rival responses. Buyers get an outside-in view instead of management's numbers.</p><span class="why">Why now: infrastructure funds are the most active buyers of telecom assets.</span></div>
+          <div class="idea"><span class="badge new">New</span><h4>Consolidation Simulator</h4><p>Models market-structure changes such as a 4→3 merger (for example France's SFR MoU): price, churn, capex and likely remedies. For acquirers, the rivals left outside the deal, and regulators.</p><span class="why">Why now: in-market consolidation is back on the agenda in Europe.</span></div>
+          <div class="idea"><span class="badge new">New</span><h4>Activist &amp; Capital Radar</h4><p>Tracks 13D/13F filings, activist letters, PE bids and carve-outs as leading signals of operator strategy shifts, such as asset sales, tower spin-offs and price moves. It is a new signal class in the Move Predictor.</p><span class="why">Why now: activist campaigns have already forced asset sales at listed telecom companies.</span></div>
+          <div class="idea"><span class="badge new">New</span><h4>Peer Valuation Pulse</h4><p>A live view of market cap, EV/EBITDA, ARPU and churn across listed peers for CFO and investor-relations teams, which links each valuation move to the competitive event behind it.</p><span class="why">Why now: 2026 disclosure cuts make peer comparisons harder.</span></div>
+          <div class="idea"><span class="badge core">Strategy</span><h4>Neutrality Charter &amp; Data Partner Exchange</h4><p>Stay independent of consultancies, ad-tech suites and operators, and publish the methodology. Then turn single-source vendors into suppliers through licensed data connectors with provenance and revenue share.</p><span class="why">Why now: independent data assets are being absorbed by larger groups.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="platform">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The solution</div>
+      <h2>One signal mesh, one telecom knowledge graph, agents that reason about moves</h2>
+      <p class="lede">Cellvoyant works like a network operations center for the market. Instead of alarms from base stations, it receives signals from competitors, turns them into verified events, and sends each one to the person who can act before it goes stale.</p>
+    </div>
+
+    <div class="stack" aria-label="Platform architecture">
+      <div class="layer">
+        <div><div class="sub">Layer 1 · Ingest</div><h4>Signal Mesh</h4><p class="small muted">40+ public, licensed and first-party feeds, refreshed from minutes to daily</p></div>
+        <div class="chips">
+          <span class="chip">Tariff &amp; fine-print crawlers</span><span class="chip">Crowd speed &amp; coverage tests</span><span class="chip">Regulator &amp; spectrum filings</span><span class="chip">Equipment authorizations</span><span class="chip">App-store release diffs</span><span class="chip">Job postings</span><span class="chip">Domain &amp; trademark registrations</span><span class="chip">Public tenders / RFPs</span><span class="chip">Earnings calls</span><span class="chip">Social &amp; reviews</span><span class="chip">Retail footprint</span><span class="chip">Device &amp; trade-in promos</span><span class="chip">Satellite launch manifests</span><span class="chip hl">Your port-out &amp; CRM data</span><span class="chip hl">Frontline staff reports</span>
+        </div>
+      </div>
+      <div class="flow" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M7 1v11M2 7l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+      <div class="layer core">
+        <div><div class="sub">Layer 2 · Understand</div><h4>Temporal Telecom Knowledge Graph</h4><p class="small muted">Every signal resolved to entities with time-stamped edges</p></div>
+        <div class="chips">
+          <span class="chip hl">Operators &amp; brands</span><span class="chip hl">Plans → "tariff genes"</span><span class="chip hl">Spectrum bands &amp; licenses</span><span class="chip hl">Sites, districts &amp; hex cells</span><span class="chip hl">Devices &amp; promos</span><span class="chip hl">Enterprise accounts</span><span class="chip hl">Executives &amp; vendors</span><span class="chip">Provenance on every edge</span><span class="chip">Source reliability scores</span>
+        </div>
+      </div>
+      <div class="flow" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M7 1v11M2 7l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+      <div class="layer">
+        <div><div class="sub">Layer 3 · Reason</div><h4>Specialist AI agents</h4><p class="small muted">Predict, compare, simulate, explain, and cite evidence every time</p></div>
+        <div class="chips">
+          <span class="chip">Move Predictor</span><span class="chip">Tariff DNA Sequencer</span><span class="chip">Market Digital Twin</span><span class="chip">Churn Contagion Radar</span><span class="chip">Coverage Truth Engine</span><span class="chip">Spectrum Auction Oracle</span><span class="chip">Earnings Call Decoder</span><span class="chip">Counter-Move Playbooks</span><span class="chip">Grounded LLM narrator</span>
+        </div>
+      </div>
+      <div class="flow" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M7 1v11M2 7l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+      <div class="layer">
+        <div><div class="sub">Layer 4 · Act</div><h4>Delivered while it matters</h4><p class="small muted">Insight half-life decides who hears what, and how fast</p></div>
+        <div class="chips">
+          <span class="chip">Command center</span><span class="chip">Slack / Teams / WhatsApp alerts</span><span class="chip">Auto-assembled Decision Rooms</span><span class="chip">3-minute audio morning brief</span><span class="chip">Insight API &amp; webhooks → pricing engine, CRM</span><span class="chip">AI assistant: runs tools, books services</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin:44px 0 14px">Each problem, and what solves it</h3>
+    <div class="table-scroll">
+      <table class="t">
+        <thead><tr><th>Problem today</th><th>What Cellvoyant does</th><th>Outcome we target</th></tr></thead>
+        <tbody>
+          <tr><td><b>Signals live in 15+ tools and inboxes</b></td><td>Signal Mesh + knowledge graph unify every source into one timeline per competitor, district and plan</td><td>One screen, one source of truth</td></tr>
+          <tr><td><b>Monthly reports arrive after the promo ends</b></td><td>Streaming detection; alerts ranked by impact × confidence × freshness</td><td>Time-to-insight from weeks to minutes</td></tr>
+          <tr><td><b>Price changes hide in fees and fine print</b></td><td>Tariff DNA breaks each plan into ten normalized "genes" and flags stealth changes</td><td>Like-for-like plan comparison, every day</td></tr>
+          <tr><td><b>Teams react to launches instead of anticipating them</b></td><td>Move Predictor combines weak pre-launch signals into a launch probability with an estimated time window</td><td>30–90 days of lead time on major moves</td></tr>
+          <tr><td><b>"Should we match?" is decided on gut feel</b></td><td>War Room digital twin simulates every response strategy against subscriber and revenue outcomes</td><td>Responses that protect margin, not only share</td></tr>
+          <tr><td><b>Coverage-map claims can't be checked</b></td><td>Coverage Truth Engine compares advertised maps with crowd-measured experience in each hex cell</td><td>Credible, evidence-backed network marketing</td></tr>
+          <tr><td><b>Non-traditional rivals get missed</b> (cable MVNOs, satellite-to-phone, eSIM-only brands)</td><td>Entity model covers any brand that competes for a line, whatever its license type</td><td>No blind spots</td></tr>
+          <tr><td><b>AI answers can't be trusted or audited</b></td><td>The grounded narrator can only state what the provenance chain supports and cites a signal ID for every claim</td><td>Every answer can be audited</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="console">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Working prototype</div>
+      <h2>The Cellvoyant console</h2>
+      <p class="lede">Click an alert to see its evidence, sequence a tariff, toggle the weak signals behind a prediction, war-game a price cut, or have the AI assistant run any of it and book a service. The console runs live and updates every second. Its figures are simulated for six fictional operators in one fictional metro market, and you play <b>Nimbus Mobile</b>. The Capital radar and Landscape use real, sourced market data.</p>
+    </div>
+
+    <div class="console" id="app">
+      <div class="c-bar">
+        <div class="c-title">Metro North <small id="simClock">—</small> <small title="Simulated market time runs 300 times faster than real time">sim ×300</small></div>
+        <div class="c-right">
+          <span class="pill sim">Simulated data</span>
+          <span class="pill ai-off" id="aiPill">AI: connecting…</span>
+          <span class="pill" id="rulePill">Rule hits: 0</span>
+          <button class="btn sm" id="exportBtn" type="button">Export brief</button>
+          <button class="btn sm" id="liveBtn" type="button" aria-pressed="true"><i class="dot live" id="liveDot"></i><span>Live</span></button>
+        </div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Console views">
+        <button class="tab" role="tab" id="tab-cc" aria-controls="p-cc" aria-selected="true">Command center <span class="n" id="critCount">0</span></button>
+        <button class="tab" role="tab" id="tab-dna" aria-controls="p-dna" aria-selected="false">Tariff DNA</button>
+        <button class="tab" role="tab" id="tab-pred" aria-controls="p-pred" aria-selected="false">Move predictor</button>
+        <button class="tab" role="tab" id="tab-war" aria-controls="p-war" aria-selected="false">War room</button>
+        <button class="tab" role="tab" id="tab-geo" aria-controls="p-geo" aria-selected="false">Geo radar</button>
+        <button class="tab" role="tab" id="tab-cap" aria-controls="p-cap" aria-selected="false">Capital radar</button>
+        <button class="tab" role="tab" id="tab-ask" aria-controls="p-ask" aria-selected="false">AI assistant</button>
+      </div>
+
+      <!-- COMMAND CENTER -->
+      <div class="tpanel" role="tabpanel" id="p-cc" aria-labelledby="tab-cc">
+        <div class="kpis" id="kpis"></div>
+        <div class="cc-grid">
+          <div class="box">
+            <div class="box-h"><span><b>Signal feed</b> · ranked by impact × confidence × freshness</span><span id="feedCount"></span></div>
+            <div class="feed" id="feed" role="list"></div>
+          </div>
+          <div class="side">
+            <div class="radar-box">
+              <div class="rh"><span>Threat radar</span><span>closer = higher threat</span></div>
+              <canvas id="radar" role="img" aria-label="Radar showing each competitor's current threat level"></canvas>
+            </div>
+            <div class="box" id="detail" aria-live="polite"></div>
+            <div class="box" id="rulesBox">
+              <div class="box-h"><span><b>Alert rules</b> · flag matching signals instantly</span><span class="tiny" id="ruleNote"></span></div>
+              <div class="rules-body">
+                <div class="rule-list" id="ruleList"></div>
+                <form class="rule-form" id="ruleForm">
+                  <label class="sr" for="rOp">Operator</label><select id="rOp" class="mini"></select>
+                  <label class="sr" for="rCls">Signal class</label><select id="rCls" class="mini"></select>
+                  <label class="sr" for="rSev">Minimum severity</label><select id="rSev" class="mini"></select>
+                  <button class="btn sm accent" type="submit">Add rule</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARIFF DNA -->
+      <div class="tpanel" role="tabpanel" id="p-dna" aria-labelledby="tab-dna" hidden>
+        <div class="dna-grid">
+          <div class="box">
+            <div class="box-h"><span><b>Every plan, sequenced</b> · darker = more value to the customer</span><span>click a plan</span></div>
+            <div style="padding:10px 12px 6px;display:grid;grid-template-columns:minmax(150px,1fr) minmax(200px,1.6fr) 70px;gap:12px" class="dna-head">
+              <span class="label">Plan</span>
+              <div class="dna-legend" id="dnaLegend"></div>
+              <span class="label" style="text-align:right">Price</span>
+            </div>
+            <div id="plans"></div>
+          </div>
+          <div class="side">
+            <div class="box">
+              <div class="box-h"><span><b>Nearest rival plans</b></span><span id="nearFor"></span></div>
+              <div class="near-list" id="nearList"></div>
+            </div>
+            <div class="box">
+              <div class="box-h"><span><b>Mutations detected</b> · last 14 days</span></div>
+              <div class="mut-log" id="mutLog"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREDICTOR -->
+      <div class="tpanel" role="tabpanel" id="p-pred" aria-labelledby="tab-pred" hidden>
+        <div class="pred-tabs" id="predTabs"></div>
+        <div class="pred-grid">
+          <div class="box">
+            <div class="gauge" id="gauge"></div>
+            <div class="facts" id="predFacts"></div>
+          </div>
+          <div class="box">
+            <div class="box-h"><span><b>Weak signals</b> · toggle to see the fused probability move</span></div>
+            <div id="sigList"></div>
+            <div style="padding:12px;display:grid;gap:6px;border-top:1px solid var(--line)">
+              <span class="label">Dependence-adjusted log-odds fusion</span>
+              <div class="formula" id="formula"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WAR ROOM -->
+      <div class="tpanel" role="tabpanel" id="p-war" aria-labelledby="tab-war" hidden>
+        <div class="war">
+          <div class="box">
+            <div class="box-h"><span><b>Scenario</b></span><button class="btn sm" id="warReset" type="button">Reset</button></div>
+            <form class="ctrl" id="warForm" onsubmit="return false">
+              <div class="f"><div><label for="wRival">Rival making the move</label></div>
+                <select id="wRival"><option value="arc">Arcline Wireless</option><option value="vtx">Vertex Telecom</option><option value="pls">Pulsar Cable Mobile</option><option value="kte">Kite (digital MVNO)</option></select></div>
+              <div class="f"><div><label for="wCut">Rival price cut</label><output id="oCut" for="wCut"></output></div><input type="range" id="wCut" min="0" max="30" step="1" value="14"></div>
+              <div class="f"><div><label for="wWeeks">Promo duration</label><output id="oWeeks" for="wWeeks"></output></div><input type="range" id="wWeeks" min="4" max="16" step="1" value="8"></div>
+              <div class="f"><div><label for="wEsim">eSIM-ready base (switching ease)</label><output id="oEsim" for="wEsim"></output></div><input type="range" id="wEsim" min="10" max="80" step="1" value="45"></div>
+              <div class="f"><div><label for="wNet">Your network perception edge</label><output id="oNet" for="wNet"></output></div><input type="range" id="wNet" min="-10" max="10" step="1" value="2"></div>
+              <div class="f"><div><label for="wResp">Your response</label></div>
+                <select id="wResp"><option value="targeted">Targeted retention credits (at-risk lines only)</option><option value="perk">Hold price, add streaming perk</option><option value="half">Match 50% of the cut</option><option value="match">Match the cut fully</option><option value="hold">Do nothing</option></select></div>
+              <label class="check" for="wEarly"><input type="checkbox" id="wEarly" checked><span><b>Early warning on</b>: respond in week 0 (Cellvoyant) instead of week 3 (typical monthly-report cycle)</span></label>
+            </form>
+          </div>
+          <div class="box">
+            <div class="box-h"><span><b>Projected extra port-outs to rival</b> · per week</span><span id="warTitle"></span></div>
+            <div class="chart-wrap"><svg id="warChart" viewBox="0 0 640 260" role="img" aria-label="Line chart of weekly port-outs with and without your response"></svg></div>
+            <div class="legend"><span><i style="background:var(--crit)"></i>No response</span><span><i style="background:var(--accent)"></i>Your response</span><span><i style="background:color-mix(in srgb,var(--accent) 25%,transparent);height:10px"></i>Lines saved</span></div>
+            <div class="verdict" id="verdict"></div>
+            <div style="overflow-x:auto;border-top:1px solid var(--line)"><table class="strat" id="stratTable"></table></div>
+            <div style="padding:12px;display:grid;gap:10px;border-top:1px solid var(--line)">
+              <div class="row-btns"><button class="btn sm accent" id="warExplain" type="button">Explain this scenario with Claude</button></div>
+              <div id="warAI"></div>
+              <p class="tiny muted">Model: port-out uplift = cut × elasticity × (0.6 + 0.8 × eSIM share) × (1 − 0.03 × network edge), ramping over two weeks and decaying 50% a week after the promo ends. Customer lifetime value $1,104 (ARPU $46 × 24 months). Response costs cover the promo plus 4 weeks. Illustrative only.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GEO RADAR -->
+      <div class="tpanel" role="tabpanel" id="p-geo" aria-labelledby="tab-geo" hidden>
+        <div class="geo-grid">
+          <div class="box">
+            <div class="box-h"><span><b>Metro North</b> · hex map, updates every second</span><span class="pill sim">Simulated</span></div>
+            <div class="geo-ctl">
+              <div class="seg-btns" id="geoLayers" role="group" aria-label="Map layer"><button type="button" data-l="churn" aria-pressed="true">Churn contagion</button><button type="button" data-l="coverage" aria-pressed="false">Coverage truth</button><button type="button" data-l="retail" aria-pressed="false">Rival retail</button></div>
+              <span id="geoOpWrap" hidden><label class="sr" for="geoOp">Operator</label><select id="geoOp" class="mini"><option value="arc">Arcline</option><option value="vtx">Vertex</option><option value="pls">Pulsar</option><option value="nim">Nimbus (you)</option></select></span>
+            </div>
+            <div class="geo-wrap"><canvas id="geo" role="img" aria-label="Hexagonal map of Metro North colored by the selected layer"></canvas></div>
+            <div class="geo-legend" id="geoLegend"><span class="mono tiny" id="geoUnit"></span><span class="scale"></span><span class="mono tiny">crowd tests today: <b id="geoTests">0</b></span></div>
+          </div>
+          <div class="side">
+            <div class="box"><div class="box-h"><span><b>Hotspots right now</b></span><span class="tiny">click to inspect</span></div><div class="hot-list" id="geoHot"></div></div>
+            <div class="box"><div class="box-h"><span><b>Selected cell</b></span></div><div class="geo-cell" id="geoCell"></div>
+              <div class="row-btns" style="padding:0 12px 12px"><button class="btn sm accent" id="geoAsk" type="button">Ask the assistant about this area</button><button class="btn sm" id="geoWar" type="button">Simulate a response</button></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAPITAL RADAR -->
+      <div class="tpanel" role="tabpanel" id="p-cap" aria-labelledby="tab-cap" hidden>
+        <div class="cap-head"><span class="pill land-src">Bundled snapshot</span><span class="tiny muted mono land-age"></span><span class="tiny muted">Researched data, not simulated. Sources are in the Landscape section.</span></div>
+        <div class="cap-grid">
+          <div class="box">
+            <div class="box-h"><span><b>Peer valuation pulse</b> · listed operators &amp; towers</span><span class="seg-btns" id="capMetric" role="group" aria-label="Metric"><button type="button" data-m="mcap" aria-pressed="true">Market cap</button><button type="button" data-m="mult" aria-pressed="false">Cap ÷ revenue</button><button type="button" data-m="rev" aria-pressed="false">Revenue</button></span></div>
+            <div class="chart-wrap"><svg id="capChart" role="img" aria-label="Bar chart ranking operators by the selected metric"></svg></div>
+            <div class="legend"><span><i style="background:var(--accent);height:8px"></i>State or sovereign anchor holder</span><span><i style="background:var(--signal);height:8px"></i>PE, infra-fund or hedge-fund involvement</span><span><i style="background:var(--line-strong);height:8px"></i>Other</span><span class="muted">▲▼ change since previous check · click a bar for details</span></div>
+          </div>
+          <div class="side">
+            <div class="box"><div class="box-h"><span><b>Activist watch</b> · hedge funds</span></div><div id="capActivist" class="cap-list"></div></div>
+            <div class="box"><div class="box-h"><span><b>PE hold clock</b> · competitor owners</span></div><div id="capHold"></div></div>
+            <div class="box"><div class="box-h"><span><b>Latest capital moves</b> · PE &amp; infra funds</span></div><div id="capMoves" class="cap-list"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSISTANT -->
+      <div class="tpanel" role="tabpanel" id="p-ask" aria-labelledby="tab-ask" hidden>
+        <div class="ask-grid">
+          <div class="chat">
+            <div class="chat-h">
+              <span><b>Cellvoyant assistant</b> · runs the console's tools and books services</span>
+              <span class="chat-ctl"><label class="sr" for="aiDepth">Answer depth</label><select id="aiDepth" class="mini" title="Answer depth"><option value="quick">Fast</option><option value="default">Thorough</option></select><span class="pill ai-off" id="aiPill2">connecting…</span></span>
+            </div>
+            <div class="msgs" id="msgs" aria-live="polite"></div>
+            <div class="composer">
+              <div class="sugg" id="sugg"></div>
+              <form id="askForm">
+                <label class="sr" for="askInput">Message the assistant</label>
+                <textarea id="askInput" rows="1" placeholder="Ask a question, run a tool, or book a service…"></textarea>
+                <button class="btn primary" id="askBtn" type="submit">Send</button>
+                <button class="btn" id="stopBtn" type="button" hidden>Stop</button>
+              </form>
+            </div>
+          </div>
+          <div class="chat-side">
+            <div class="panel">
+              <div class="label" style="margin-bottom:8px">Tools the assistant runs</div>
+              <div class="toolbox" id="toolbox"></div>
+            </div>
+            <div class="panel">
+              <div class="label" style="margin-bottom:2px">Services you can request</div>
+              <div id="svcList"></div>
+            </div>
+            <div class="panel">
+              <div class="label-row"><span class="label">Request queue</span><span class="tiny muted" id="reqNote">Connecting…</span></div>
+              <div class="req-list" id="reqList"></div>
+            </div>
+            <p class="tiny muted">In the Claude viewer the assistant runs on Claude, on your account, after you allow it. Anywhere else a built-in assistant runs the same tools. It cites signal IDs, says when evidence is thin, and never suggests coordinating prices with competitors. Requests are a concept workflow: someone on your team picks them up from the queue.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="lab">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Innovation lab</div>
+      <h2>31 tools, engines, services and guardrails</h2>
+      <p class="lede">Ten of them already run in the console above (filter by <b>Live now</b>). This is the full set Cellvoyant is designed to grow into, each tied to a specific telecom problem. Items marked <span class="badge core">Patent core</span> carry the inventive steps claimed in the draft below.</p>
+    </div>
+    <div class="filters" id="labFilters" role="group" aria-label="Filter innovations"></div>
+    <div class="lab" id="labGrid"></div>
+  </div>
+</section>
+
+<section class="sec band" id="patent">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Intellectual property</div>
+      <h2>Provisional patent application, working draft</h2>
+      <p class="lede">A complete first draft in the structure a US provisional application uses: field, background, summary, drawings, detailed description, 20 claims and an abstract. Take it to a registered patent attorney or agent to review and file. This draft is not legal advice.</p>
+    </div>
+    <div class="patent-wrap">
+      <aside class="patent-aside">
+        <div class="warnbox">
+          <b>Before you share this page</b>
+          <span>Public disclosure before filing can destroy patent rights in most countries (Europe, China, India and others require "absolute novelty"). The US gives a 1-year grace period, but only for the US. <strong>Keep this link private until a provisional is filed.</strong> <a href="#src-34">[34]</a> <a href="#src-33">[33]</a></span>
+        </div>
+        <div class="panel">
+          <div class="label" style="margin-bottom:8px">Filing path</div>
+          <ol class="small" style="margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)">
+            <li>Run a professional prior-art search on the fusion, half-life and simulation claims</li>
+            <li>An attorney tightens the claims and adds figures to USPTO drawing standards</li>
+            <li>File a US provisional to secure a priority date ("patent pending") <a href="#src-32">[32]</a></li>
+            <li>Within 12 months: file a non-provisional and/or a PCT application to claim that priority date <a href="#src-32">[32]</a></li>
+            <li>Choose countries at the PCT national phase (about 30 months from priority) <a href="#src-35">[35]</a></li>
+          </ol>
+        </div>
+        <div class="panel">
+          <div class="label" style="margin-bottom:8px">Why the claims read this way</div>
+          <p class="small" style="color:var(--ink-2)">Software claims that look like "analyzing data" can be rejected as abstract ideas (35 U.S.C. §101 / <i>Alice</i>; in Europe, the "technical character" test). So each independent claim is tied to specific technical steps: dependence-adjusted fusion that reduces false alerts, decay-bounded routing latency, and event-triggered simulation that saves compute. <a href="#src-36">[36]</a> <a href="#src-37">[37]</a> <a href="#src-38">[38]</a></p>
+        </div>
+        <nav class="toc" aria-label="Patent sections">
+          <a href="#pt-field">Field</a><a href="#pt-bg">Background</a><a href="#pt-sum">Summary</a><a href="#pt-fig">Drawings</a><a href="#pt-det">Detailed description</a><a href="#pt-claims">Claims (20)</a><a href="#pt-abs">Abstract</a><a href="#pt-prior">Prior-art positioning</a>
+        </nav>
+      </aside>
+
+      <article class="doc">
+        <div class="dh">
+          <span class="k">Provisional patent application · Confidential draft v0.1 · Not filed</span>
+          <h3>SYSTEM AND METHOD FOR PREDICTING COMPETITIVE ACTIONS IN TELECOMMUNICATIONS MARKETS USING DEPENDENCE-ADJUSTED MULTI-SOURCE SIGNAL FUSION, TIME-DECAYING INSIGHT ROUTING, AND COUNTERFACTUAL SUBSCRIBER SIMULATION</h3>
+          <span class="k">Applicant: [your name / company] · Inventor(s): [names] · Docket CV-001-PROV</span>
+        </div>
+
+        <h4 id="pt-field">Field of the invention</h4>
+        <div class="para"><span>[0001]</span><p>The present disclosure relates to data processing systems for telecommunications markets, and more particularly to computer-implemented systems that ingest heterogeneous signals about telecommunications operators, resolve them into a temporal knowledge graph, predict competitor actions using dependence-adjusted probabilistic fusion, prioritize resulting insights using a time-decay function, and evaluate counterfactual response strategies using subscriber-level simulation.</p></div>
+
+        <h4 id="pt-bg">Background</h4>
+        <div class="para"><span>[0002]</span><p>Telecommunications operators, including mobile network operators, mobile virtual network operators, cable and fiber broadband providers, and satellite direct-to-device providers, compete in markets where offers change frequently and switching friction is falling due to technologies such as embedded SIM (eSIM) provisioning.</p></div>
+        <div class="para"><span>[0003]</span><p>Information relevant to competitor behavior is scattered across many unrelated sources: published tariffs and their fine print, regulatory and spectrum filings, radio equipment authorizations, mobile application releases, employment postings, domain and trademark registrations, public procurement notices, crowd-sourced network measurements, retail footprint changes, and social media. These sources differ in format, latency, and reliability.</p></div>
+        <div class="para"><span>[0004]</span><p>Existing approaches include (a) periodic analyst reports, which have latency of weeks to months; (b) generic web-change monitoring tools, which produce high volumes of unranked alerts without telecom-specific semantics; and (c) network performance analytics products, which measure experience but do not model competitor intent. None of these combines the sources into a calibrated prediction of a specific competitor action within a time window.</p></div>
+        <div class="para"><span>[0005]</span><p>Naively combining signals causes systematic overconfidence, because many signals share a common origin (for example, one press leak re-reported by dozens of outlets), which produces false alerts and alert fatigue. In addition, the value of a competitive insight decays quickly. An alert about a two-week promotion that reaches a decision-maker after three weeks has no value, yet conventional systems deliver alerts in first-in, first-out order or on fixed schedules.</p></div>
+        <div class="para"><span>[0006]</span><p>There is therefore a need for a system that fuses heterogeneous telecom signals without double-counting shared origins, ranks insights by their decaying value, and quantifies response options before a decision is made.</p></div>
+
+        <h4 id="pt-sum">Summary</h4>
+        <div class="para"><span>[0007]</span><p>In one aspect, a computer-implemented method ingests signals from a plurality of heterogeneous sources, resolves each signal to entities of a temporal telecommunications knowledge graph, and, for a candidate action class, computes a fused likelihood that an operator will perform the action within a predicted time window.</p></div>
+        <div class="para"><span>[0008]</span><p>The fusion combines per-signal log-likelihood ratios weighted by learned source-reliability scores and discounted by a dependence factor derived from shared-origin clustering, so that correlated signals do not inflate the fused likelihood.</p></div>
+        <div class="para"><span>[0009]</span><p>Each resulting insight is assigned a half-life based on the action class and predicted time window. A priority score decays exponentially with the insight's age, and a routing subsystem delivers the insight to a role-specific recipient before the priority score falls below a threshold.</p></div>
+        <div class="para"><span>[0010]</span><p>For insights whose priority exceeds a simulation threshold, a market simulation engine runs a subscriber-level model calibrated on historical switching data to estimate the subscriber and revenue impact of a plurality of counterfactual response strategies. The ranked strategies are delivered with the insight. Running simulations only when triggered by events reduces compute consumption compared with continuous scenario modeling.</p></div>
+        <div class="para"><span>[0011]</span><p>Further aspects include a tariff genome that decomposes offers into normalized attribute vectors to detect "stealth" changes, a grounded natural-language generator constrained to a provenance chain, a feedback calibrator that updates reliability scores from realized outcomes, and competition-law guardrails for multi-operator benchmarking.</p></div>
+
+        <h4 id="pt-fig">Brief description of the drawings</h4>
+        <div class="para"><span>[0012]</span><p>FIG. 1 is a block diagram of a competitive-intelligence system 100 according to an embodiment.</p></div>
+        <div class="para"><span>[0013]</span><p>FIG. 2 illustrates a tariff genome vector and detection of a stealth mutation.</p></div>
+        <div class="para"><span>[0014]</span><p>FIG. 3 is a graph of a time-decaying priority score and a routing deadline.</p></div>
+
+        <figure aria-label="FIG. 1 system block diagram">
+          <svg class="fig-svg" viewBox="0 0 640 330" role="img" aria-label="Block diagram: sources feed ingestion 110, entity resolution 120, knowledge graph 130, tariff module 140 and fusion engine 150, insight generator 160, half-life scheduler 170, simulation engine 180, routing 190, feedback 195">
+            <g class="fb"><rect x="10" y="20" width="130" height="200" rx="4"/></g>
+            <text class="ft" x="75" y="42" text-anchor="middle">SOURCES</text>
+            <text class="fs" x="22" y="68">tariffs</text><text class="fs" x="22" y="88">filings</text><text class="fs" x="22" y="108">equip. auth.</text><text class="fs" x="22" y="128">app releases</text><text class="fs" x="22" y="148">job posts</text><text class="fs" x="22" y="168">speed tests</text><text class="fs" x="22" y="188">social</text><text class="fs" x="22" y="208">first-party</text>
+            <g class="fb"><rect x="170" y="20" width="130" height="54" rx="4"/><rect x="170" y="96" width="130" height="54" rx="4"/><rect x="330" y="20" width="140" height="130" rx="4"/><rect x="500" y="20" width="130" height="54" rx="4"/><rect x="500" y="96" width="130" height="54" rx="4"/><rect x="330" y="176" width="140" height="54" rx="4"/><rect x="500" y="176" width="130" height="54" rx="4"/><rect x="170" y="176" width="130" height="54" rx="4"/><rect x="330" y="258" width="300" height="54" rx="4"/></g>
+            <text class="ft" x="235" y="44" text-anchor="middle">INGESTION</text><text class="fs" x="235" y="62" text-anchor="middle">110</text>
+            <text class="ft" x="235" y="120" text-anchor="middle">ENTITY RESOLUTION</text><text class="fs" x="235" y="138" text-anchor="middle">120</text>
+            <text class="ft" x="400" y="72" text-anchor="middle">TEMPORAL TELECOM</text><text class="ft" x="400" y="90" text-anchor="middle">KNOWLEDGE GRAPH</text><text class="fs" x="400" y="110" text-anchor="middle">130</text>
+            <text class="ft" x="565" y="44" text-anchor="middle">TARIFF GENOME</text><text class="fs" x="565" y="62" text-anchor="middle">140</text>
+            <text class="ft" x="565" y="120" text-anchor="middle">FUSION ENGINE</text><text class="fs" x="565" y="138" text-anchor="middle">150</text>
+            <text class="ft" x="400" y="200" text-anchor="middle">INSIGHT GENERATOR</text><text class="fs" x="400" y="218" text-anchor="middle">160</text>
+            <text class="ft" x="565" y="200" text-anchor="middle">HALF-LIFE SCHED.</text><text class="fs" x="565" y="218" text-anchor="middle">170</text>
+            <text class="ft" x="235" y="200" text-anchor="middle">SIMULATION ENG.</text><text class="fs" x="235" y="218" text-anchor="middle">180</text>
+            <text class="ft" x="480" y="282" text-anchor="middle">ROUTING &amp; DELIVERY 190 · FEEDBACK CALIBRATOR 195</text><text class="fs" x="480" y="300" text-anchor="middle">role recipients · decision rooms · API</text>
+            <g class="fl"><path d="M140 60h30M235 74v22M300 123h30M470 47h30M470 123h30M565 150v26M500 203h-30M330 203h-30M400 230v28M235 230v55h95M565 230v28"/><path d="M330 300H40V220" stroke-dasharray="4 4"/></g>
+            <text class="fs" x="44" y="322">feedback → reliability r_i</text>
+          </svg>
+          <figcaption>FIG. 1</figcaption>
+        </figure>
+
+        <h4 id="pt-det">Detailed description</h4>
+        <div class="para"><span>[0015]</span><p><b>System overview.</b> Referring to FIG. 1, system 100 comprises a signal ingestion subsystem 110, an entity resolution engine 120, a temporal telecommunications knowledge graph 130, a tariff genome module 140, a fusion engine 150, an insight generator 160, a half-life scheduler 170, a market simulation engine 180, a routing and delivery subsystem 190, and a feedback calibrator 195. The components may run on one or more processors in a cloud or on-premises environment.</p></div>
+        <div class="para"><span>[0016]</span><p><b>Ingestion 110.</b> Connectors retrieve signals at source-specific cadences: tariff pages and terms documents (e.g., hourly), regulatory and equipment-authorization databases (daily), application store release artifacts including binary string tables and release notes (per release), employment postings (daily), domain and trademark registrations (daily), procurement notices (daily), crowd-sourced network measurements aggregated per hexagonal cell (hourly), and first-party data such as number port-out records (near real time). Each signal is stored with a timestamp, a source identifier, a content hash, and a canonical-origin fingerprint.</p></div>
+        <div class="para"><span>[0017]</span><p><b>Entity resolution 120 and graph 130.</b> Signals are linked to nodes representing operators, brands, offers, spectrum licenses and bands, sites and geographic cells, devices, enterprise accounts, executives and vendors. Edges carry validity intervals, so the graph can be queried "as of" any time. This lets the system reconstruct what was knowable at the moment a decision was made, which is used for back-testing.</p></div>
+        <div class="para"><span>[0018]</span><p><b>Tariff genome 140.</b> Each offer is converted into a genome vector <i>g</i> = (price, data allowance, hotspot allowance, standalone-5G access, bundled-perk value, roaming entitlement, contract lock-in, recurring fees, satellite messaging, device credit), with each gene normalized to [0, 1] in the direction of customer value. A <i>stealth mutation</i> is detected when at least one non-price gene changes by more than a threshold while the headline price gene is unchanged. The system raises a mutation event whose effective-price impact is computed from a hedonic regression across all offers in the market (FIG. 2).</p></div>
+        <figure aria-label="FIG. 2 tariff genome">
+          <svg class="fig-svg" viewBox="0 0 640 150" role="img" aria-label="Two genome vectors of ten genes; genes 8 and 3 differ between t0 and t1 while price gene 1 is unchanged">
+            <text class="ft" x="10" y="36">t0</text><text class="ft" x="10" y="96">t1</text>
+            <g class="fb">
+              <rect x="40" y="18" width="52" height="28"/><rect x="96" y="18" width="52" height="28"/><rect x="152" y="18" width="52" height="28"/><rect x="208" y="18" width="52" height="28"/><rect x="264" y="18" width="52" height="28"/><rect x="320" y="18" width="52" height="28"/><rect x="376" y="18" width="52" height="28"/><rect x="432" y="18" width="52" height="28"/><rect x="488" y="18" width="52" height="28"/><rect x="544" y="18" width="52" height="28"/>
+              <rect x="40" y="78" width="52" height="28"/><rect x="96" y="78" width="52" height="28"/><rect x="208" y="78" width="52" height="28"/><rect x="264" y="78" width="52" height="28"/><rect x="320" y="78" width="52" height="28"/><rect x="376" y="78" width="52" height="28"/><rect x="488" y="78" width="52" height="28"/><rect x="544" y="78" width="52" height="28"/>
+            </g>
+            <g class="fm"><rect x="152" y="78" width="52" height="28"/><rect x="432" y="78" width="52" height="28"/></g>
+            <text class="fs" x="66" y="37" text-anchor="middle">$55</text><text class="fs" x="66" y="97" text-anchor="middle">$55</text>
+            <text class="fs" x="178" y="37" text-anchor="middle">30GB</text><text class="fs" x="178" y="97" text-anchor="middle">15GB</text>
+            <text class="fs" x="458" y="37" text-anchor="middle">$0</text><text class="fs" x="458" y="97" text-anchor="middle">$4</text>
+            <text class="fs" x="66" y="128" text-anchor="middle">g1 price</text><text class="fs" x="178" y="128" text-anchor="middle">g3 hotspot</text><text class="fs" x="458" y="128" text-anchor="middle">g8 fees</text>
+            <text class="fs" x="320" y="144" text-anchor="middle">headline unchanged → stealth mutation; effective price +$6.10 (hedonic)</text>
+          </svg>
+          <figcaption>FIG. 2</figcaption>
+        </figure>
+        <div class="para"><span>[0019]</span><p><b>Fusion 150.</b> For an operator <i>o</i> and action class <i>a</i> (e.g., fixed-wireless launch, price reduction, market entry, partnership), the fusion engine starts from a prior log-odds <i>L</i><sub>0</sub> learned from historical base rates and adds evidence from each enabled signal <i>i</i>:</p></div>
+        <div class="eq">L(a | S) = L₀(a) + Σᵢ rᵢ · ln(LRᵢ) · (1 − dᵢ) ,   P = 1 / (1 + e^(−L))</div>
+        <div class="para"><span>[0020]</span><p>where LR<sub>i</sub> is the likelihood ratio of signal <i>i</i> given the action versus its absence, <i>r</i><sub>i</sub> ∈ [0, 1] is a learned reliability of the signal's source type, and <i>d</i><sub>i</sub> ∈ [0, 1) is a dependence discount. In one embodiment, signals are clustered by canonical-origin fingerprint and by source-type correlation learned from history. Within a cluster, the first signal receives <i>d</i> = 0 and each additional signal receives a positive discount (e.g., 0.5), so re-reported evidence cannot drive <i>P</i> toward certainty. The engine also outputs a predicted time window derived from the empirical lead-time distribution between each signal type and realized actions of class <i>a</i>, and a "decisive signal" identified as the signal whose removal most reduces <i>P</i>.</p></div>
+        <div class="para"><span>[0021]</span><p><b>Insight generator 160.</b> An insight record comprises the fused probability, the time window, an estimated impact <i>I</i> (e.g., revenue at risk), and a provenance chain listing every contributing signal with its identifier, source, timestamp, reliability and discount.</p></div>
+        <div class="para"><span>[0022]</span><p><b>Half-life scheduler 170.</b> Each insight receives a half-life <i>h</i> that depends on its action class and time window (e.g., hours for an outage-driven churn window, weeks for a spectrum consultation). Its priority is:</p></div>
+        <div class="eq">Priority(t) = I · P · 2^(−(t − t₀) / h) ;   deliver to role R before t* where Priority(t*) = θ_R</div>
+        <figure aria-label="FIG. 3 priority decay">
+          <svg class="fig-svg" viewBox="0 0 640 200" role="img" aria-label="Two exponential decay curves; the short half-life insight crosses the routing threshold much earlier">
+            <g class="fl"><path d="M50 20v150h570"/></g>
+            <path class="fc1" d="M50 30 C 110 110, 150 150, 250 162 S 450 168, 620 169"/>
+            <path class="fc2" d="M50 60 C 200 90, 350 115, 620 140"/>
+            <path class="fth" d="M50 120h570"/>
+            <text class="fs" x="56" y="116">threshold θ_R</text>
+            <text class="fs" x="150" y="84">h = 6 h (outage churn window)</text>
+            <text class="fs" x="400" y="102">h = 20 d (spectrum consultation)</text>
+            <text class="fs" x="96" y="188">t*₁</text><text class="fs" x="330" y="188">time since detection →</text>
+            <path class="fth" d="M104 20v150"/>
+          </svg>
+          <figcaption>FIG. 3</figcaption>
+        </figure>
+        <div class="para"><span>[0023]</span><p><b>Simulation engine 180.</b> When Priority exceeds a simulation threshold, the engine creates a market model with subscriber agents segmented by plan, tenure, device and eSIM capability, network-experience cell and price sensitivity, calibrated on historical port-in and port-out data. It runs the predicted action against a plurality of response strategies (e.g., hold, full match, partial match, non-price perk, targeted retention credits) and response lags. For each, it outputs incremental port-outs, customer-lifetime-value loss avoided, response cost and net impact. Strategies are ranked by net impact subject to user-configured constraints such as a maximum ARPU dilution.</p></div>
+        <div class="para"><span>[0024]</span><p><b>Grounded narration.</b> A language model generates a natural-language explanation of the insight and ranked strategies. The generator is constrained to statements supported by the provenance chain and simulation outputs. Each sentence carries at least one signal identifier, and sentences without support are removed before delivery.</p></div>
+        <div class="para"><span>[0025]</span><p><b>Routing 190.</b> Recipients are chosen by role (for example pricing, retail, network planning, enterprise sales, regulatory or executive) according to the action class, the impact and the time to <i>t*</i>. For insights above a critical threshold, the subsystem can automatically open a decision room in a collaboration tool, pre-filled with the evidence, the ranked strategies and proposed owners.</p></div>
+        <div class="para"><span>[0026]</span><p><b>Feedback calibrator 195.</b> When an action is realized or the window expires, the outcome is recorded. Reliability scores <i>r</i><sub>i</sub>, likelihood ratios, lead-time distributions and simulation elasticities are updated, for example by Bayesian updating or gradient-based calibration against a proper scoring rule such as the Brier score.</p></div>
+        <div class="para"><span>[0027]</span><p><b>Guardrails.</b> In a multi-operator benchmarking embodiment, contributed metrics are released only as aggregates across at least <i>k</i> contributors and after a minimum time lag. Forward-looking pricing information is excluded, so the system cannot serve as a channel for coordination between competitors. Personal data is excluded from social and first-party signals or aggregated before ingestion.</p></div>
+        <div class="para"><span>[0028]</span><p><b>Technical effects.</b> The dependence discount reduces false-positive alerts compared with independent-evidence fusion. Decay-bounded routing puts an upper bound on delivery latency for short-lived insights. Event-triggered simulation reduces processor time compared with continuous scenario modeling across all operators and action classes.</p></div>
+        <div class="para"><span>[0029]</span><p><b>Alternatives.</b> The fusion may instead use a learned model such as gradient-boosted trees or a graph neural network over graph 130, provided dependence between signals is accounted for. The decay function may be non-exponential. The simulation may be agent-based, system-dynamics or a learned surrogate model. The techniques also apply to adjacent regulated network industries such as energy retail and pay-TV.</p></div>
+
+        <h4 id="pt-claims">Claims</h4>
+        <p style="margin-bottom:12px">What is claimed is:</p>
+        <ul class="claims">
+          <li><b>1.</b><div><span class="ind">A computer-implemented method comprising:</span>
+            <ol>
+              <li>(a) ingesting, from a plurality of heterogeneous data sources, signals associated with one or more telecommunications operators, the sources comprising at least two of: tariff publications, regulatory filings, radio equipment authorization records, network performance measurements, application release artifacts, employment postings, and domain name registrations;</li>
+              <li>(b) resolving each signal to one or more nodes of a temporal knowledge graph comprising operator, offer, spectrum, geographic-cell and infrastructure nodes connected by edges having validity intervals;</li>
+              <li>(c) for a candidate action class and an operator, computing a fused likelihood that the operator will perform an action of the class within a time window by combining per-signal log-likelihood ratios weighted by source-reliability scores and reduced by dependence discounts determined from clustering the signals by canonical origin;</li>
+              <li>(d) generating an insight comprising the fused likelihood, the time window, an impact estimate, and a provenance chain identifying each contributing signal;</li>
+              <li>(e) assigning the insight a half-life based at least on the action class and computing a priority score that decays over time according to the half-life;</li>
+              <li>(f) in response to the priority score exceeding a simulation threshold, simulating a plurality of response strategies against the predicted action using a subscriber-level market model to estimate, for each strategy, a subscriber impact and a revenue impact; and</li>
+              <li>(g) transmitting the insight and a ranking of the response strategies to a recipient selected by role, before a time at which the priority score is predicted to fall below a routing threshold for that role.</li>
+            </ol></div></li>
+          <li><b>2.</b><div>The method of claim 1, further comprising converting each offer into a genome vector of normalized attributes including price, data allowance, recurring fees and contract lock-in, and generating a stealth-mutation event when a non-price attribute changes beyond a threshold while the price attribute is unchanged.</div></li>
+          <li><b>3.</b><div>The method of claim 2, further comprising estimating an effective price change of the stealth mutation using a hedonic regression over genome vectors of offers in the market.</div></li>
+          <li><b>4.</b><div>The method of claim 1, wherein the dependence discount is zero for a first signal of a cluster and positive for each additional signal of the same cluster.</div></li>
+          <li><b>5.</b><div>The method of claim 1, wherein clustering further uses correlations between source types learned from historical co-occurrence.</div></li>
+          <li><b>6.</b><div>The method of claim 1, further comprising identifying a decisive signal as the signal whose removal most reduces the fused likelihood, and including it in the insight.</div></li>
+          <li><b>7.</b><div>The method of claim 1, wherein the time window is derived from an empirical distribution of lead times between signal types and realized actions of the action class.</div></li>
+          <li><b>8.</b><div>The method of claim 1, further comprising recording a realized outcome and updating the source-reliability scores based on a proper scoring rule.</div></li>
+          <li><b>9.</b><div>The method of claim 1, wherein the response strategies comprise at least a price match, a partial price match, a non-price benefit, and a retention offer targeted to subscribers having a predicted switching propensity above a threshold, and wherein the simulating is repeated for at least two response lags.</div></li>
+          <li><b>10.</b><div>The method of claim 1, wherein the subscriber-level market model segments subscribers at least by embedded-SIM capability and by measured network experience in the subscriber's geographic cell.</div></li>
+          <li><b>11.</b><div>The method of claim 1, further comprising generating, by a language model, a natural-language explanation constrained such that each sentence references at least one signal of the provenance chain, and removing unsupported sentences before transmission.</div></li>
+          <li><b>12.</b><div>The method of claim 1, further comprising, in response to the priority score exceeding a critical threshold, automatically creating a collaboration channel pre-populated with the insight, the ranking and proposed owners.</div></li>
+          <li><b>13.</b><div>The method of claim 1, wherein the network performance measurements are aggregated per hexagonal cell and compared with coverage representations published by an operator to generate a coverage-claim discrepancy signal.</div></li>
+          <li><b>14.</b><div>The method of claim 1, wherein the signals further comprise reports submitted by frontline retail personnel, each weighted by a reporter reliability learned from previously verified reports.</div></li>
+          <li><b>15.</b><div>The method of claim 1, further comprising receiving benchmark metrics from a plurality of operators and releasing an aggregate only when at least a minimum number of operators have contributed and a minimum time lag has elapsed, and excluding forward-looking pricing information from release.</div></li>
+          <li><b>16.</b><div class="ind">A system comprising one or more processors and memory storing instructions that, when executed, cause the one or more processors to perform operations comprising steps (a) through (g) of claim 1.</div></li>
+          <li><b>17.</b><div>The system of claim 16, wherein the operations further comprise the operations of claim 2.</div></li>
+          <li><b>18.</b><div>The system of claim 16, wherein the operations further comprise querying the temporal knowledge graph as of a past time to back-test the fused likelihood against realized actions.</div></li>
+          <li><b>19.</b><div class="ind">A non-transitory computer-readable medium storing instructions that, when executed by one or more processors, cause performance of the method of claim 1.</div></li>
+          <li><b>20.</b><div>The medium of claim 19, wherein the instructions further cause performance of the method of claim 11.</div></li>
+        </ul>
+
+        <h4 id="pt-abs">Abstract</h4>
+        <p>A system ingests heterogeneous signals about telecommunications operators, including tariffs, filings, equipment authorizations, app releases, job postings and network measurements, and resolves them into a temporal knowledge graph. A fusion engine computes the likelihood that an operator will take a specific competitive action within a time window by combining reliability-weighted log-likelihood ratios with dependence discounts for signals of common origin. Each resulting insight carries a provenance chain and a half-life, and its priority decays over time. Insights above a threshold trigger subscriber-level simulation of alternative responses, and the ranked responses are routed to role-specific recipients before the insight's priority decays below a routing threshold.</p>
+
+        <h4 id="pt-prior">Prior-art positioning (for the attorney)</h4>
+        <div class="table-scroll" style="font-family:var(--f-body)">
+          <table class="t">
+            <thead><tr><th>Category of prior art</th><th>What it typically does</th><th>Elements not shown (to verify by search)</th></tr></thead>
+            <tbody>
+              <tr><td>Generic competitive-intelligence SaaS</td><td>Web-change monitoring, news, battlecards</td><td>Telecom tariff genome; dependence-adjusted fusion; half-life routing; subscriber simulation</td></tr>
+              <tr><td>Telecom research &amp; advisory</td><td>Periodic reports, forecasts, databases</td><td>Streaming signals; per-action probabilities; automated routing</td></tr>
+              <tr><td>Network experience analytics</td><td>Crowd-sourced speed and coverage measurement</td><td>Competitor-intent prediction; response simulation</td></tr>
+              <tr><td>Churn prediction (operator-internal)</td><td>Propensity scores from own subscriber data</td><td>External competitor-action triggers; counterfactual response ranking</td></tr>
+              <tr><td>Event forecasting / OSINT fusion</td><td>Bayesian fusion of open-source signals (security, finance)</td><td>Telecom entity model; tariff mutation; decay-bounded role routing</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="business">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Business model &amp; go-to-market</div>
+      <h2>How Cellvoyant makes money and wins its first customers</h2>
+      <p class="lede">Proposed pricing and targets to validate in customer discovery. They are planning assumptions, not market facts.</p>
+    </div>
+
+    <div class="tiers">
+      <div class="tier">
+        <div class="label">Scout</div>
+        <div class="price">$2,500<small> /month</small></div>
+        <p class="small muted">MVNOs, regional carriers, fiber ISPs</p>
+        <ul><li>1 market, 8 competitors</li><li>Signal feed + Tariff DNA</li><li>Slack/Teams alerts, weekly AI brief</li><li>5 seats</li></ul>
+      </div>
+      <div class="tier feat">
+        <div class="label">Operator <span class="badge core" style="margin-left:6px">Core</span></div>
+        <div class="price">$12,000<small> /month</small></div>
+        <p class="small muted">National MNOs and cable operators</p>
+        <ul><li>Unlimited markets and competitors</li><li>Move Predictor + War Room twin</li><li>Your port-out and CRM data joined in</li><li>Decision Rooms, API, unlimited seats</li></ul>
+      </div>
+      <div class="tier">
+        <div class="label">Group</div>
+        <div class="price">Custom<small> · from $250k/yr</small></div>
+        <p class="small muted">Multi-country groups, tower cos, investors</p>
+        <ul><li>Cross-country roll-ups, Spectrum Oracle</li><li>Benchmark consortium clean room</li><li>Dedicated analyst pod (4-hour verification)</li><li>Private deployment option</li></ul>
+      </div>
+    </div>
+    <p class="note">Other revenue: Insight API (per call), Analyst-on-Demand services, quarterly war-gaming sprints, launch-readiness audits.</p>
+
+    <h3 style="margin:48px 0 16px">Go-to-market</h3>
+    <div class="grid-2">
+      <div class="panel">
+        <div class="label" style="margin-bottom:10px">Beachhead</div>
+        <p style="color:var(--ink-2)">Pricing and marketing teams at <b>challenger operators and MVNOs</b>. They feel competitive moves fastest, run lean analyst teams, and can buy without a year-long procurement. A 30-day <b>shadow-mode pilot</b> runs Cellvoyant alongside the existing process and measures how many days earlier it caught each move.</p>
+      </div>
+      <div class="panel">
+        <div class="label" style="margin-bottom:10px">Expansion</div>
+        <p style="color:var(--ink-2)">Expand from pricing to <b>network planning</b> (Coverage Truth), <b>enterprise sales</b> (B2B Deal Radar) and <b>regulatory</b> (Spectrum Oracle). Distribute through telecom consultancies and billing/BSS vendors. The benchmark consortium becomes a data network effect that competitors cannot copy.</p>
+      </div>
+    </div>
+
+    <h3 style="margin:48px 0 22px">Roadmap</h3>
+    <div class="timeline">
+      <div class="phase now"><div class="when">Q4 2026 · now</div><h4>MVP in one market</h4><ul><li>Signal Mesh: 12 source types</li><li>Tariff DNA + stealth mutations</li><li>Feed, alerts, AI assistant</li><li>File provisional patent</li></ul></div>
+      <div class="phase"><div class="when">H1 2027</div><h4>Predict &amp; simulate</h4><ul><li>Move Predictor with back-testing</li><li>War Room digital twin (beta)</li><li>First 3 paying design partners</li></ul></div>
+      <div class="phase"><div class="when">H2 2027</div><h4>Network &amp; B2B</h4><ul><li>Coverage Truth Engine</li><li>B2B Deal Radar</li><li>Decision Rooms, audio brief</li><li>Non-provisional / PCT filing</li></ul></div>
+      <div class="phase"><div class="when">2028</div><h4>Scale</h4><ul><li>Multi-country groups</li><li>Benchmark consortium</li><li>Spectrum Auction Oracle</li><li>Insight API marketplace</li></ul></div>
+    </div>
+
+    <h3 style="margin:48px 0 16px">Success targets</h3>
+    <div class="kpi-list">
+      <div><b>&lt; 15 min</b><span>from a public change to a ranked alert</span></div>
+      <div><b>30–90 days</b><span>lead time on major launches (FWA, new brands, bundles)</span></div>
+      <div><b>≥ 70%</b><span>precision on high-severity predictions, back-tested</span></div>
+      <div><b>−40%</b><span>analyst hours spent collecting data</span></div>
+    </div>
+
+    <h3 style="margin:48px 0 16px">Risks and how we handle them</h3>
+    <div class="table-scroll">
+      <table class="t">
+        <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td><b>Competition law</b>: a shared intel platform could look like a channel for price coordination</td><td>Public and licensed data only. Consortium releases only lagged aggregates across at least k contributors and never forward-looking prices. Antitrust counsel reviews the design. The assistant is barred from recommending coordination.</td></tr>
+          <tr><td><b>Data access</b>: site terms, rate limits, licensing</td><td>Respect robots and terms of service, prefer licensed feeds and partnerships (crowd-measurement vendors, filings aggregators), and record provenance for every item</td></tr>
+          <tr><td><b>AI errors</b>: made-up or overconfident claims</td><td>Grounded narrator with mandatory signal citations, calibrated probabilities, back-testing, and human verification for critical alerts</td></tr>
+          <tr><td><b>Privacy</b>: social and first-party data</td><td>No personal data in competitive signals, aggregate before storing, GDPR/CCPA data processing agreements, customer data stays in the customer's tenant</td></tr>
+          <tr><td><b>Patent eligibility</b></td><td>Claims tied to technical implementation, a professional prior-art search, and a PCT filing to keep options open</td></tr>
+          <tr><td><b>Incumbents copy features</b></td><td>Speed of shipping, the reliability-calibration data moat, consortium network effects, and patent protection</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<section class="sec band sources" id="sources">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Sources</div>
+      <h2>Where every number comes from</h2>
+      <p class="lede" style="font-size:16px">38 sources, re-checked on 24 September 2026 against the original pages. Where a source said something slightly different, the page wording was corrected. Market-size estimates vary widely with each firm's definitions. All console data is simulated.</p>
+    </div>
+    <div class="src-sum">
+<div><b>23</b><span>primary sources: filings, company releases, regulators, courts</span></div>
+<div><b>27</b><span>verified or confirmed</span></div>
+<div><b>6</b><span>corrected on this page after the check</span></div>
+<div><b>5</b><span>analyst claims or not yet re-checked, labeled as such</span></div>
+</div>
+<div class="src-group"><h3>Industry &amp; operators</h3><div class="table-scroll"><table class="t src"><thead><tr><th>#</th><th>Source</th><th>Type</th><th>Supports on this page</th><th>Check · 24 Sep 2026</th></tr></thead><tbody>
+<tr id="src-1"><td class="mono">1</td><td><span class="muted small">Deloitte</span><br><a href="https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/telecommunications-industry-outlook.html" target="_blank" rel="noopener">2026 Global Telecommunications Industry Outlook</a></td><td><span class="stype t-analyst">Analyst estimate</span></td><td>Revenue ~$1.55T (+1.7%); stagnant ARPU; ~18% capex intensity; up to 77% of consumers feel no loyalty</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-2"><td class="mono">2</td><td><span class="muted small">PwC</span><br><a href="https://www.pwc.com/gx/en/1/industries/technology-media-telecom/telecom-outlook-perspectives.html" target="_blank" rel="noopener">Perspectives from the Global Telecom Outlook 2025–2029</a> · <a href="https://www.pwc.com/gx/en/industries/tmt/assets/pwc-global-telecom-outlook-2026.pdf" target="_blank" rel="noopener">PDF</a></td><td><span class="stype t-analyst">Analyst estimate</span></td><td>Service revenue $1.15T → $1.32T (2.8% CAGR); monthly mobile ARPU $6.32 → $6.20</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified; an earlier press-release link covered the 2024–28 edition and was removed</span></td></tr>
+<tr id="src-3"><td class="mono">3</td><td><span class="muted small">Ericsson</span><br><a href="https://www.ericsson.com/en/press-releases/2026/6/ericsson-mobility-report-5g-subscriptions-top-three-billion-as-uplink-gains-momentum" target="_blank" rel="noopener">Mobility Report, June 2026</a></td><td><span class="stype t-primary">Primary</span></td><td>3.1B 5G subscriptions; 6.4B by 2031; 90+ of 390 5G operators on standalone</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-4"><td class="mono">4</td><td><span class="muted small">Ericsson</span><br><a href="https://www.ericsson.com/en/reports-and-papers/mobility-report/dataforecasts/fwa-outlook" target="_blank" rel="noopener">Fixed Wireless Access outlook</a></td><td><span class="stype t-primary">Primary</span></td><td>FWA 185M (2025) → 350M (2031); 71% of providers offer 5G FWA</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-5"><td class="mono">5</td><td><span class="muted small">Tefficient</span><br><a href="https://tefficient.com/mobile-data-operators-1h-2025/" target="_blank" rel="noopener">Mobile data and operators, 1H 2025</a></td><td><span class="stype t-analyst">Analyst estimate</span></td><td>93% of operators grew usage; 68% grew ARPU</td><td><span class="chk c-fix">Corrected</span><br><span class="tiny muted">Corrected: 68% is the 1H 2025 figure (69% was 2024)</span></td></tr>
+<tr id="src-6"><td class="mono">6</td><td><span class="muted small">Tefficient</span><br><a href="https://tefficient.com/arpu-growth-softens-further-as-mobile-data-usage-growth-slows-in-half-of-the-countries/" target="_blank" rel="noopener">ARPU growth softens further as mobile data usage growth slows (Nov 2025)</a></td><td><span class="stype t-analyst">Analyst estimate</span></td><td>Revenue per GB still falling in most markets</td><td><span class="chk c-fix">Corrected</span><br><span class="tiny muted">Replaces an unsupported "all-time low" claim</span></td></tr>
+<tr id="src-7"><td class="mono">7</td><td><span class="muted small">Dell'Oro Group</span><br><a href="https://www.delloro.com/news/worldwide-telecom-capex-to-decline-in-2026/" target="_blank" rel="noopener">Worldwide telecom capex to decline in 2026 (Apr 2026)</a></td><td><span class="stype t-analyst">Analyst estimate</span></td><td>Capex flat in 2025, −2% in 2026</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-8"><td class="mono">8</td><td><span class="muted small">BCG</span><br><a href="https://www.bcg.com/publications/2025/boosting-value-creation-in-telcos" target="_blank" rel="noopener">Returns May Be Declining, but Opportunity Is Calling (Feb 2025)</a></td><td><span class="stype t-analyst">Analyst estimate</span></td><td>Developed-market median ROIC 90 bp below WACC</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified; replaces a secondhand trade-press citation</span></td></tr>
+<tr id="src-9"><td class="mono">9</td><td><span class="muted small">Verizon</span><br><a href="https://www.sec.gov/Archives/edgar/data/732712/000073271226000040/a2026q2exhibit99.htm" target="_blank" rel="noopener">2Q 2026 results, Form 8-K Exhibit 99</a></td><td><span class="stype t-primary">Primary</span></td><td>Postpaid phone churn 0.92%; consumer ARPA −1.4%; no consumer/business phone split</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-10"><td class="mono">10</td><td><span class="muted small">Verizon</span><br><a href="https://www.verizon.com/about/news/verizon-delivers-record-2q26-results" target="_blank" rel="noopener">Verizon delivers record 2Q26 results</a></td><td><span class="stype t-primary">Primary</span></td><td>193K fixed wireless net adds in Q2 2026</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-11"><td class="mono">11</td><td><span class="muted small">AT&amp;T</span><br><a href="https://www.sec.gov/Archives/edgar/data/0000732717/000073271726000294/t-2q2026exhibit991.htm" target="_blank" rel="noopener">2Q 2026 results, Form 8-K Exhibit 99.1</a></td><td><span class="stype t-primary">Primary</span></td><td>Postpaid phone churn 0.86%; Lumen fiber purchase closed 2 Feb 2026; churn no longer split by bundle</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-12"><td class="mono">12</td><td><span class="muted small">Recon Analytics</span><br><a href="https://www.reconanalytics.com/what-the-carriers-stopped-telling-you-about-q2-2026/" target="_blank" rel="noopener">What the carriers stopped telling you about Q2 2026</a></td><td><span class="stype t-analyst">Analyst estimate</span></td><td>~190 bp promo headwind on Verizon ARPA; T-Mobile reporting accounts, not customers</td><td><span class="chk c-claim">Analyst claim</span><br><span class="tiny muted">Analyst claim: not found in carrier releases</span></td></tr>
+</tbody></table></div></div>
+<div class="src-group"><h3>Deals, satellite &amp; regulation</h3><div class="table-scroll"><table class="t src"><thead><tr><th>#</th><th>Source</th><th>Type</th><th>Supports on this page</th><th>Check · 24 Sep 2026</th></tr></thead><tbody>
+<tr id="src-13"><td class="mono">13</td><td><span class="muted small">Vodafone</span><br><a href="https://www.vodafone.com/news/newsroom/corporate-and-financial/completion-of-vodafone-and-three-merger-in-the-uk" target="_blank" rel="noopener">Completion of Vodafone and Three merger in the UK</a></td><td><span class="stype t-primary">Primary</span></td><td>VodafoneThree completed 31 May 2025</td><td><span class="chk c-fix">Corrected</span><br><span class="tiny muted">Corrected date; replaces Wikipedia</span></td></tr>
+<tr id="src-14"><td class="mono">14</td><td><span class="muted small">Broadband Breakfast</span><br><a href="https://broadbandbreakfast.com/t-mobile-and-starlink-satellite-service-to-officially-launch-july-23/" target="_blank" rel="noopener">T-Mobile and Starlink satellite service to officially launch July 23</a></td><td><span class="stype t-press">Press</span></td><td>T-Satellite commercial launch, 23 Jul 2025</td><td><span class="chk c-ok">Confirmed</span><br><span class="tiny muted">Corroborated by other trade press</span></td></tr>
+<tr id="src-15"><td class="mono">15</td><td><span class="muted small">Verizon</span><br><a href="https://www.sec.gov/Archives/edgar/data/732712/000119312526016059/d198618d8k.htm" target="_blank" rel="noopener">Form 8-K, 20 Jan 2026 (Frontier closing)</a></td><td><span class="stype t-primary">Primary</span></td><td>Frontier acquisition closed 20 Jan 2026</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified; replaces a weak secondary source</span></td></tr>
+<tr id="src-16"><td class="mono">16</td><td><span class="muted small">European Commission</span><br><a href="https://digital-strategy.ec.europa.eu/en/library/proposal-regulation-digital-networks-act-dna" target="_blank" rel="noopener">Proposal for a Regulation on the Digital Networks Act</a></td><td><span class="stype t-primary">Primary</span></td><td>Digital Networks Act proposed 21 Jan 2026</td><td><span class="chk c-ok">Confirmed</span><br><span class="tiny muted">Confirmed</span></td></tr>
+<tr id="src-17"><td class="mono">17</td><td><span class="muted small">FCC · AT&amp;T · DCD</span><br><a href="https://docs.fcc.gov/public/attachments/DA-26-470A1.pdf" target="_blank" rel="noopener">FCC orders DA-26-470 / 471; AT&amp;T closes EchoStar spectrum purchase</a> · <a href="https://about.att.com/story/2026/echostar-spectrum.html" target="_blank" rel="noopener">AT&amp;T</a> · <a href="https://www.datacenterdynamics.com/en/news/fcc-approves-echostars-40bn-spectrum-sales-to-att-spacex/" target="_blank" rel="noopener">DCD</a></td><td><span class="stype t-primary">Primary</span></td><td>FCC approval 12 May 2026; AT&amp;T ~$23B (closed 28 Jul 2026); SpaceX ~$17B</td><td><span class="chk c-ok">Confirmed</span><br><span class="tiny muted">Confirmed; SpaceX amount from trade press</span></td></tr>
+<tr id="src-18"><td class="mono">18</td><td><span class="muted small">Accenture</span><br><a href="https://newsroom.accenture.com/news/2026/accenture-to-acquire-ookla-to-strengthen-network-intelligence-and-experience-with-data-and-ai-for-enterprises" target="_blank" rel="noopener">Accenture to acquire Ookla (2 Mar 2026)</a> · <a href="https://www.cnbc.com/2026/03/03/ziff-davis-to-sell-connectivity-division-to-accenture-for-1point2-billion.html" target="_blank" rel="noopener">CNBC, $1.2B</a></td><td><span class="stype t-primary">Primary</span></td><td>Accenture agrees to buy Ookla for $1.2B</td><td><span class="chk c-fix">Corrected</span><br><span class="tiny muted">Corrected date (announced 2 Mar)</span></td></tr>
+<tr id="src-19"><td class="mono">19</td><td><span class="muted small">Orange</span><br><a href="https://www.orange.com/en/press-release/signature-dun-protocole-daccord-en-vue-de-lacquisition-de-sfr-476232-476232" target="_blank" rel="noopener">Signing of a memorandum of understanding for the acquisition of SFR (6 Jun 2026)</a></td><td><span class="stype t-primary">Primary</span></td><td>€20.35B MoU to acquire and split SFR</td><td><span class="chk c-fix">Corrected</span><br><span class="tiny muted">Corrected: an MoU, not a signed deal</span></td></tr>
+<tr id="src-20"><td class="mono">20</td><td><span class="muted small">Charter</span><br><a href="https://www.sec.gov/Archives/edgar/data/0001091667/000114036126033909/ef20080687_ex99-1.htm" target="_blank" rel="noopener">Form 8-K Exhibit 99.1 (20 Aug 2026)</a></td><td><span class="stype t-primary">Primary</span></td><td>Cox acquisition completed 20 Aug 2026</td><td><span class="chk c-fix">Corrected</span><br><span class="tiny muted">Corrected date; unsourced $34.5B headline removed</span></td></tr>
+</tbody></table></div></div>
+<div class="src-group"><h3>Markets &amp; adoption</h3><div class="table-scroll"><table class="t src"><thead><tr><th>#</th><th>Source</th><th>Type</th><th>Supports on this page</th><th>Check · 24 Sep 2026</th></tr></thead><tbody>
+<tr id="src-21"><td class="mono">21</td><td><span class="muted small">Fortune Business Insights</span><br><a href="https://www.fortunebusinessinsights.com/ai-in-telecommunication-market-109439" target="_blank" rel="noopener">AI in telecommunication market</a></td><td><span class="stype t-analyst">Analyst estimate</span></td><td>$4.73B (2025) → $88.1B (2034), 37.9% CAGR</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-22"><td class="mono">22</td><td><span class="muted small">Mordor Intelligence</span><br><a href="https://www.mordorintelligence.com/industry-reports/telecom-analytics-market" target="_blank" rel="noopener">Telecom analytics market</a></td><td><span class="stype t-analyst">Analyst estimate</span></td><td>$8.09B (2025) → $14.69B (2031)</td><td><span class="chk c-na">Not re-checked</span><br><span class="tiny muted">Not re-checked in this pass</span></td></tr>
+<tr id="src-23"><td class="mono">23</td><td><span class="muted small">Fortune Business Insights</span><br><a href="https://www.fortunebusinessinsights.com/competitive-intelligence-tools-market-104522" target="_blank" rel="noopener">Competitive intelligence tools market</a></td><td><span class="stype t-analyst">Analyst estimate</span></td><td>$0.71B → $4.03B, 21.2% CAGR</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-24"><td class="mono">24</td><td><span class="muted small">Crayon</span><br><a href="https://www.crayon.co/state-of-competitive-intelligence-2026" target="_blank" rel="noopener">2026 State of Competitive Intelligence</a></td><td><span class="stype t-survey">Vendor survey</span></td><td>Weekly CI sharing: 79% see revenue impact vs 41%</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-25"><td class="mono">25</td><td><span class="muted small">Alteryx</span><br><a href="https://www.alteryx.com/resources/report/2025-state-of-the-data-analyst" target="_blank" rel="noopener">2025 State of the Data Analyst</a></td><td><span class="stype t-survey">Vendor survey</span></td><td>76% of analysts still prepare data in spreadsheets</td><td><span class="chk c-na">Not re-checked</span><br><span class="tiny muted">Not re-checked in this pass</span></td></tr>
+<tr id="src-26"><td class="mono">26</td><td><span class="muted small">NVIDIA</span><br><a href="https://blogs.nvidia.com/blog/ai-in-telco-survey-2026/" target="_blank" rel="noopener">State of AI in telecommunications, 2026</a></td><td><span class="stype t-survey">Vendor survey</span></td><td>89% of telcos plan to raise AI spend in 2026</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-27"><td class="mono">27</td><td><span class="muted small">GSMA</span><br><a href="https://www.gsma.com/newsroom/press-release/scaling-telco-ai-from-ambition-to-reality/" target="_blank" rel="noopener">Scaling telco AI: from ambition to reality (Jun 2026)</a></td><td><span class="stype t-primary">Primary</span></td><td>16% of AI deployments target the network; networks are 34% of opex</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+</tbody></table></div></div>
+<div class="src-group"><h3>Competitors</h3><div class="table-scroll"><table class="t src"><thead><tr><th>#</th><th>Source</th><th>Type</th><th>Supports on this page</th><th>Check · 24 Sep 2026</th></tr></thead><tbody>
+<tr id="src-28"><td class="mono">28</td><td><span class="muted small">AlphaSense</span><br><a href="https://www.alpha-sense.com/press/alphasense-raises-350m-at-7-5b-valuation-and-surpasses-600m-in-annual-recurring-revenue/" target="_blank" rel="noopener">Raises $350M at $7.5B valuation (3 Jun 2026)</a></td><td><span class="stype t-primary">Primary</span></td><td>$600M+ ARR, $7.5B valuation</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-29"><td class="mono">29</td><td><span class="muted small">Adobe</span><br><a href="https://news.adobe.com/news/2026/04/adobe-completes-semrush-acquisition" target="_blank" rel="noopener">Adobe completes Semrush acquisition (28 Apr 2026)</a></td><td><span class="stype t-primary">Primary</span></td><td>Kompyte’s parent Semrush is now part of Adobe</td><td><span class="chk c-ok">Verified</span><br><span class="tiny muted">Verified</span></td></tr>
+<tr id="src-30"><td class="mono">30</td><td><span class="muted small">PRWeb</span><br><a href="https://www.prweb.com/releases/tarifica-expands-telecom-pricing-intelligence-platform-to-include-all-gcc-countries-302588867.html" target="_blank" rel="noopener">Tarifica expands telecom pricing intelligence platform</a></td><td><span class="stype t-press">Press</span></td><td>Tarifica covers 46 countries</td><td><span class="chk c-na">Not re-checked</span><br><span class="tiny muted">Not re-checked; paid press release</span></td></tr>
+<tr id="src-31"><td class="mono">31</td><td><span class="muted small">Opensignal</span><br><a href="https://insights.opensignal.com/2021/09/14/comlinkdata-acquires-opensignal-further-extending-its-leadership-in-customer-analytics-for-the" target="_blank" rel="noopener">Comlinkdata acquires Opensignal (2021)</a></td><td><span class="stype t-primary">Primary</span></td><td>Opensignal combines network experience with switching analytics</td><td><span class="chk c-na">Not re-checked</span><br><span class="tiny muted">Not re-checked in this pass</span></td></tr>
+</tbody></table></div></div>
+<div class="src-group"><h3>Patent &amp; IP law</h3><div class="table-scroll"><table class="t src"><thead><tr><th>#</th><th>Source</th><th>Type</th><th>Supports on this page</th><th>Check · 24 Sep 2026</th></tr></thead><tbody>
+<tr id="src-32"><td class="mono">32</td><td><span class="muted small">USPTO</span><br><a href="https://www.uspto.gov/patents/basics/apply/provisional-application" target="_blank" rel="noopener">Provisional Application for Patent</a></td><td><span class="stype t-primary">Primary</span></td><td>Non-provisional must follow within 12 months</td><td><span class="chk c-ok">Confirmed</span><br><span class="tiny muted">Confirmed</span></td></tr>
+<tr id="src-33"><td class="mono">33</td><td><span class="muted small">USPTO</span><br><a href="https://www.uspto.gov/web/offices/pac/mpep/s2152.html" target="_blank" rel="noopener">MPEP §2152 (35 U.S.C. §102(b)(1) exceptions)</a></td><td><span class="stype t-primary">Primary</span></td><td>US 1-year grace period for the inventor’s own disclosure</td><td><span class="chk c-ok">Confirmed</span><br><span class="tiny muted">Confirmed</span></td></tr>
+<tr id="src-34"><td class="mono">34</td><td><span class="muted small">EPO</span><br><a href="https://www.epo.org/en/legal/epc/2020/a54.html" target="_blank" rel="noopener">European Patent Convention, Article 54: Novelty</a></td><td><span class="stype t-primary">Primary</span></td><td>Absolute novelty: anything public before filing is prior art</td><td><span class="chk c-ok">Confirmed</span><br><span class="tiny muted">Confirmed (official page)</span></td></tr>
+<tr id="src-35"><td class="mono">35</td><td><span class="muted small">WIPO</span><br><a href="https://www.wipo.int/en/web/pct-system/faqs/article22_faq" target="_blank" rel="noopener">PCT Article 22(1) time limit FAQ</a></td><td><span class="stype t-primary">Primary</span></td><td>National phase at 30 months from priority</td><td><span class="chk c-ok">Confirmed</span><br><span class="tiny muted">Confirmed</span></td></tr>
+<tr id="src-36"><td class="mono">36</td><td><span class="muted small">US Supreme Court</span><br><a href="https://supreme.justia.com/cases/federal/us/573/13-298/case.pdf" target="_blank" rel="noopener">Alice Corp. v. CLS Bank Int’l, 573 U.S. 208 (2014)</a></td><td><span class="stype t-primary">Primary</span></td><td>Abstract-idea test for software claims</td><td><span class="chk c-ok">Confirmed</span><br><span class="tiny muted">Confirmed</span></td></tr>
+<tr id="src-37"><td class="mono">37</td><td><span class="muted small">USPTO</span><br><a href="https://www.uspto.gov/web/offices/pac/mpep/s2106.html" target="_blank" rel="noopener">MPEP §2106: Patent subject-matter eligibility</a></td><td><span class="stype t-primary">Primary</span></td><td>How examiners apply the Alice test</td><td><span class="chk c-ok">Confirmed</span><br><span class="tiny muted">Confirmed</span></td></tr>
+<tr id="src-38"><td class="mono">38</td><td><span class="muted small">EPO</span><br><a href="https://www.epo.org/en/legal/guidelines-epc/2025/g_ii_3_6.html" target="_blank" rel="noopener">Guidelines for Examination G-II 3.6: Programs for computers</a></td><td><span class="stype t-primary">Primary</span></td><td>“Technical character” / further technical effect requirement</td><td><span class="chk c-ok">Confirmed</span><br><span class="tiny muted">Confirmed (official page)</span></td></tr>
+</tbody></table></div></div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>Cellvoyant is a concept by its author. The prototype uses simulated data for fictional operators. Research figures cite their sources below.</span>
+    <span class="mono">v0.4 · 29 Sep 2026</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<div class="brief-panel" id="briefPanel" hidden role="dialog" aria-modal="true" aria-labelledby="briefTitle">
+  <div class="brief-card">
+    <div class="box-h"><span id="briefTitle"><b>Brief</b> · copy and share</span><span class="row-btns"><button class="btn sm accent" id="briefCopy" type="button">Copy</button><button class="btn sm" id="briefClose" type="button">Close</button></span></div>
+    <label class="sr" for="briefText">Brief text</label>
+    <textarea id="briefText" readonly></textarea>
+  </div>
+</div>
+<script src="landscape.js" charset="utf-8"></script>
+<script src="cellvoyant.js" charset="utf-8"></script>
+</body>
+</html>
