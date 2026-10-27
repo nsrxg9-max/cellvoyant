@@ -263,40 +263,1318 @@ function initSpectrum() {
   RM.addEventListener && RM.addEventListener('change', start);
 }
 
+/* ---------- DEPARTMENTS, LENS, MISSION-CONTROL DASHBOARD, ANALYST WORKBENCH, ACADEMY ---------- */
+const DEPTS = [
+  { k: 'pm', name: 'Marketing, Pricing & Sales', short: 'Marketing', mission: 'Win the price and promotion battle without giving away margin.',
+    questions: ['A rival just changed a price or promo: do we respond, and how?', 'Which of our plans is most exposed, gene by gene?', 'Is a rival’s stealth price rise a chance to win switchers?'],
+    tools: [['Tariff DNA', 'tab-dna'], ['War room', 'tab-war'], ['Right-time engagement studio', '#challenge'], ['Command center', 'tab-cc'], ['AI assistant', 'tab-ask']],
+    kpis: ['Premium price gap vs the cheapest rival', 'Port-in / port-out balance', 'Revenue at risk from open pricing signals', 'Promotion intensity by rival'],
+    rhythm: [['Daily', 'Act-by priorities and pricing alerts'], ['Weekly', 'War-room review of rival promotions'], ['Quarterly', 'Tariff DNA re-baseline of the market']], teams: [['Pricing strategy', 'Plan design, price-response decisions and Tariff DNA reviews'], ['Campaigns & CRM', 'Offers, timing and next-best-action for every customer'], ['Brand & digital', 'Share of voice, app store and digital acquisition'], ['Sales & distribution', 'Dealers, partners, online and telesales']], ws: 'ws_tariff' },
+  { k: 'st', name: 'Strategy & Corporate Development', short: 'Strategy', mission: 'See rival moves 30–90 days early and shape the market instead of reacting to it.',
+    questions: ['What will each rival do next quarter?', 'Which merger or partnership could change the market?', 'Where should our next big bet go?'],
+    tools: [['Move predictor', 'tab-pred'], ['Positioning quadrants', '#positioning'], ['Capital radar', 'tab-cap'], ['Landscape', '#landscape']],
+    kpis: ['Probability of the top rival moves', 'Quadrant position against peers', 'Capital moves in the market', 'Time-to-insight on major launches'],
+    rhythm: [['Weekly', 'Move-predictor review with signal what-ifs'], ['Monthly', 'Positioning and capital-moves update'], ['Quarterly', 'Executive foresight session']], teams: [['Corporate strategy', 'Long-range plan and portfolio choices'], ['M&A & partnerships', 'Deal screening and partner moves'], ['Competitive intelligence', 'Rival tracking, battlecards and early warnings'], ['New business', 'Fintech, satellite, AI and data-center bets']], ws: 'ws_foresight' },
+  { k: 'nw', name: 'Network Planning', short: 'Network', mission: 'Put capex where rivals are about to attack, and keep every coverage claim true.',
+    questions: ['Where are rivals adding capacity or new carriers?', 'Is our coverage claim still true in each district?', 'Where would a rival fixed-wireless or fiber launch hit us first?'],
+    tools: [['Geo radar', 'tab-geo'], ['Move predictor', 'tab-pred'], ['Operator workspace', 'tab-ws'], ['Command center', 'tab-cc']],
+    kpis: ['Measured vs advertised 5G per hex cell', 'Rival site permits and carrier adds', 'Outage signals, ours and rivals’'],
+    rhythm: [['Daily', 'Outage and coverage-truth alerts'], ['Monthly', 'Capex priority list for contested cells'], ['Quarterly', 'Network truth sprint']], teams: [['RAN & capacity planning', 'Where to add sites, carriers and spectrum'], ['Fiber & fixed wireless', 'Home broadband build and FWA capacity'], ['Network performance', 'Speed, outages and coverage truth'], ['Sites & infrastructure', 'Towers, permits and network sharing']], ws: 'ws_network' },
+  { k: 'b2b', name: 'Enterprise & B2B', short: 'Enterprise', mission: 'Win the next private-5G, IoT and enterprise deal before a rival locks it in.',
+    questions: ['Which tenders and private-5G deals are rivals chasing?', 'Where can we pre-empt a rival’s enterprise bundle?', 'Which accounts are at risk after a rival win?'],
+    tools: [['Command center', 'tab-cc'], ['Operator workspace', 'tab-ws'], ['AI assistant', 'tab-ask'], ['Landscape', '#landscape']],
+    kpis: ['Open tenders by rival', 'Rival wins and likely next bids', 'Enterprise churn signals'],
+    rhythm: [['Weekly', 'Tender and win/loss scan'], ['Monthly', 'Account-risk review'], ['Quarterly', 'Partner and bid strategy']], teams: [['Large enterprise & government', 'Strategic accounts and public sector'], ['SME & business mobile', 'Small-business bundles and churn'], ['IoT & private networks', 'Private 5G, IoT and edge deals'], ['Bids & tenders', 'Tender tracking, pricing and win/loss']], ws: 'ws_copilot' },
+  { k: 'rg', name: 'Regulatory, Privacy & Spectrum', short: 'Regulatory', mission: 'Shape the rules and the spectrum map before they shape you.',
+    questions: ['Which consultations and auctions change our position?', 'What will rivals bid, and what can they afford?', 'Are rival offers compliant with consumer-protection rules?'],
+    tools: [['Command center', 'tab-cc'], ['Capital radar', 'tab-cap'], ['AI assistant', 'tab-ask']],
+    kpis: ['Open consultations and deadlines', 'Rival spectrum holdings and balance-sheet headroom', 'Stealth-fee and transparency issues'],
+    rhythm: [['Weekly', 'Consultation and filing tracker'], ['Monthly', 'Rival spectrum-position review'], ['Before auctions', 'Spectrum auction simulation']], teams: [['Regulatory affairs', 'Consultations, filings and regulator relations'], ['Spectrum strategy', 'Holdings, auctions and renewals'], ['Data privacy & consumer protection', 'Consent, contact rules and data protection'], ['Competition law & compliance', 'Fair competition and information barriers']], ws: 'ws_spectrum' },
+  { k: 'fi', name: 'Finance & Investor Relations', short: 'Finance', mission: 'Explain every valuation move and quantify the revenue at risk from rivals.',
+    questions: ['How do we compare with listed peers on value and growth?', 'What do activist and private-equity moves say about rivals?', 'How much revenue is at risk from current rival moves?'],
+    tools: [['Analyst workbench', 'tab-wb'], ['Capital radar', 'tab-cap'], ['Landscape', '#landscape']],
+    kpis: ['Market cap ÷ revenue against peers', 'Revenue at risk from open signals', 'Capital moves and activist stakes'],
+    rhythm: [['Weekly', 'Peer valuation pulse'], ['Quarterly', 'Earnings-season competitor pack'], ['Annually', 'Capital & valuation lab']], teams: [['Financial planning & analysis', 'Budgets, forecasts and revenue at risk'], ['Investor relations', 'Peer valuation and the market story'], ['Treasury & capital markets', 'Funding, ratings and capital moves'], ['Revenue assurance', 'Leakage, fraud and billing accuracy']], ws: 'ws_capital' },
+  { k: 'cx', name: 'Customer Experience & Retention', short: 'CX & Retention', mission: 'Stop churn where it starts: in the district, the store and the first call.',
+    questions: ['Where is churn spreading, district by district?', 'What are customers hearing in stores this week?', 'Who needs a retention offer today?'],
+    tools: [['Right-time engagement studio', '#challenge'], ['Operator workspace', 'tab-ws'], ['Geo radar', 'tab-geo'], ['Command center', 'tab-cc']],
+    kpis: ['Port-outs per 10k lines by district', 'Rival retail pressure', 'Save-desk conversion'],
+    rhythm: [['Daily', 'Churn hotspots and save-desk priorities'], ['Weekly', 'Store intel round-up'], ['Monthly', 'Churn contagion clinic']], teams: [['Retention & save desk', 'Save offers and win-back'], ['Customer care & contact center', 'Calls, chat and first-contact resolution'], ['Retail stores & franchise', 'Store network and rival retail pressure'], ['CX insights & voice of customer', 'Surveys, complaints and journey analytics']], ws: 'ws_churn' },
+  { k: 'an', name: 'Market & Investment Analysts', short: 'Analysts', mission: 'Answer any question about operators, owners and markets with sourced numbers in minutes.',
+    questions: ['How do operators compare across regions?', 'Who owns whom, and where is the capital moving?', 'What are the unit economics of a market or a response?'],
+    tools: [['Analyst workbench', 'tab-wb'], ['Positioning quadrants', '#positioning'], ['Landscape', '#landscape'], ['AI assistant', 'tab-ask']],
+    kpis: ['Peer revenue, growth and valuation', 'Innovation checklist coverage', 'State, private-equity and hedge-fund stakes'],
+    rhythm: [['Daily', 'Signal scan and peer moves'], ['Weekly', 'Benchmark refresh'], ['Ongoing', 'Certified analyst program']], teams: [['Market research', 'Market sizing, surveys and forecasts'], ['Equity & credit research', 'Listed operators, towers and debt'], ['Benchmarking & data', 'Peer KPIs and data quality'], ['Investment analytics', 'Private-equity, infrastructure and hedge-fund lens']], ws: 'ws_cert' }
+];
+DEPTS.splice(7, 0, { k: 'da', name: 'Consumer Analytics & Data Science', short: 'Analytics', mission: 'Turn behavioral, transactional and contextual data into models every team can trust and act on.',
+  questions: ['When is each customer most likely to engage, and on which channel?', 'Which customers are about to churn, and why?', 'Did the last campaign actually change behavior?'],
+  tools: [['Right-time engagement studio', '#challenge'], ['Operator workspace', 'tab-ws'], ['Analyst workbench', 'tab-wb'], ['AI assistant', 'tab-ask']],
+  kpis: ['Model ranking quality (AUC) and calibration', 'Engagement uplift vs fixed schedules', 'Contacts per customer per week', 'Opt-out and complaint rates'],
+  rhythm: [['Daily', 'Score customers and refresh contact windows'], ['Weekly', 'Model monitoring: drift, accuracy and fairness'], ['Quarterly', 'Retrain and A/B test the contact policy']],
+  teams: [['Customer analytics', 'Segments, churn scores and customer value'], ['Data science & ML', 'Contact-time, churn and uplift models'], ['Data engineering & platform', 'Tokenized pipelines and feature store'], ['Experimentation & measurement', 'A/B tests and campaign uplift']], ws: 'ws_rte' });
+const DEPT = Object.fromEntries(DEPTS.map(d => [d.k, d]));
+const WORKSHOPS = [
+  { k: 'ws_signals', name: 'Competitive signals 101', level: 'Foundation', aud: ['op', 'an'], dur: 'Half day (3 h)', format: 'Remote, live', size: '10–30 people', depts: ['pm', 'st', 'cx', 'an'],
+    desc: 'How Cellvoyant turns 41 sources into ranked signals: evidence chains, confidence, freshness and half-life.',
+    agenda: ['Anatomy of a signal: source, evidence, confidence', 'Freshness and half-life: why old news loses value', 'Triage drill on the live console', 'Writing a three-line signal brief'], outcome: 'Everyone can triage the feed and write a signal brief.' },
+  { k: 'ws_tariff', name: 'Tariff DNA & price-response lab', level: 'Practitioner', aud: ['op', 'an'], dur: '1 day', format: 'In person or remote', size: '8–16 people', depts: ['pm', 'fi'],
+    desc: 'Decode rival plans gene by gene, spot stealth fee changes and choose a response that protects margin.',
+    agenda: ['Reading Tariff DNA and value scores', 'Spotting stealth changes in fees, throttles and contract terms', 'Response options: match, flank, bundle or hold', 'Guardrails: fair comparisons, no price coordination'], outcome: 'A response playbook for your three most dangerous rival plans.' },
+  { k: 'ws_churn', name: 'Churn contagion clinic', level: 'Practitioner', aud: ['op'], dur: 'Half day', format: 'Remote or in store', size: '10–25 people', depts: ['cx', 'pm'],
+    desc: 'Find where churn is spreading district by district and design save-desk offers that pay back.',
+    agenda: ['Churn contagion on the Geo radar', 'Store intel: what customers hear from rivals', 'Retention offer economics in the Analyst workbench', 'Save-desk scripts that stay compliant'], outcome: 'A district hotspot list and a retention offer that clears break-even.' },
+  { k: 'ws_rte', name: 'Right-time engagement lab', level: 'Practitioner', aud: ['op', 'an'], dur: '1 day', format: 'Hybrid', size: '8–20 people', depts: ['da', 'cx', 'pm', 'rg'],
+    desc: 'Build and govern a contact-timing model: features, evaluation, guardrails and an A/B test plan, using the studio on this page.',
+    agenda: ['Behavioral, transactional and contextual features', 'Training and evaluating a contact-time model', 'Guardrails: consent, quiet hours, caps, cooling-off', 'Designing the A/B test and reading the uplift'], outcome: 'A contact policy and a test plan ready for a first pilot.' },
+  { k: 'ws_network', name: 'Network truth sprint', level: 'Practitioner', aud: ['op'], dur: '2 days', format: 'Hybrid', size: '6–12 people', depts: ['nw', 'rg'],
+    desc: 'Compare advertised and measured coverage, find where rivals will attack and rank capex by competitive risk.',
+    agenda: ['Coverage truth on the Geo radar', 'Rival build signals: permits, hiring, new carriers', 'Contested cells and capex ranking', 'Fixing coverage claims before a regulator asks'], outcome: 'A ranked list of contested cells for the next capex cycle.' },
+  { k: 'ws_capital', name: 'Capital & valuation lab', level: 'Practitioner', aud: ['an', 'ex'], dur: '1 day', format: 'Remote or in person', size: '8–20 people', depts: ['fi', 'an', 'st'],
+    desc: 'Benchmark operators on revenue, growth, valuation and ownership, and read what sovereign, private-equity and activist moves signal.',
+    agenda: ['Peer benchmarks in the Analyst workbench', 'Ownership: state, private equity, infrastructure and hedge funds', 'Tower and fiber carve-outs: what they mean', 'Building an investor-ready competitor pack'], outcome: 'A peer benchmark pack you can refresh every quarter.' },
+  { k: 'ws_copilot', name: 'AI analyst copilot bootcamp', level: 'Foundation', aud: ['op', 'an'], dur: 'Half day', format: 'Remote', size: '10–40 people', depts: ['b2b', 'pm', 'an', 'cx'],
+    desc: 'Get reliable, sourced answers from the AI assistant: prompts, tools, checks, and when to ask a human analyst.',
+    agenda: ['What each assistant tool does', 'Prompts for battlecards, briefs and what-ifs', 'Checking numbers and sources', 'When to request Analyst-on-Demand'], outcome: 'A team prompt library for your ten most common questions.' },
+  { k: 'wargame', name: 'Rival response war game', level: 'Advanced', aud: ['op', 'ex'], dur: '2 days', format: 'In person', size: '12–24 people', depts: ['st', 'pm', 'cx'],
+    desc: 'Teams play against AI-simulated rivals on real market data, then test the winning moves in the War room.',
+    agenda: ['Build rival personas from public signals', 'Three rounds of move and counter-move', 'Score outcomes in the War room twin', 'Turn the winning move into a 30-day plan'], outcome: 'A tested 30-day competitive response plan with owners.' },
+  { k: 'ws_foresight', name: 'Move-prediction & foresight studio', level: 'Advanced', aud: ['an', 'ex'], dur: '1 day', format: 'In person', size: '8–14 people', depts: ['st', 'an'],
+    desc: 'Use the Move predictor to forecast rival launches 30–90 days out and plan pre-emptive moves.',
+    agenda: ['Base rates and signal fusion', 'What-if drills: add and remove signals', 'A scenario map for the next two quarters', 'Early-warning alert rules for the console'], outcome: 'A two-quarter scenario map and five live alert rules.' },
+  { k: 'ws_spectrum', name: 'Spectrum auction simulation', level: 'Advanced', aud: ['an', 'ex'], dur: '1 day', format: 'In person', size: '8–16 people', depts: ['rg', 'fi', 'st'],
+    desc: 'Model rival budgets and bidding strategies before an auction or licence renewal.',
+    agenda: ['Spectrum holdings and needs by rival', 'Balance-sheet headroom from the Capital radar', 'Three-round bidding simulation', 'Consultation and regulatory strategy'], outcome: 'A bidding envelope and walk-away price, stress-tested against rivals.' },
+  { k: 'ws_exec', name: 'Executive foresight briefing', level: 'Executive', aud: ['ex'], dur: '2 hours', format: 'In person', size: '4–12 people', depts: ['st', 'fi'],
+    desc: 'A board-level view of rival moves, capital flows and your place on the positioning quadrant, ending in three decisions.',
+    agenda: ['Where you sit on the positioning quadrant', 'The three rival moves most likely next', 'Capital moves that change the market', 'Three decisions for the next 90 days'], outcome: 'Three decisions with owners and dates.' },
+  { k: 'ws_cert', name: 'Cellvoyant certified analyst program', level: 'Certification', aud: ['an'], dur: '6 weeks, 2 h a week', format: 'Remote cohort', size: '15–30 people', depts: ['an', 'st', 'fi'],
+    desc: 'A structured program in telecom competitive intelligence: sources, signals, benchmarks, forecasting and ethics, with a capstone.',
+    agenda: ['Weeks 1–2: sources, evidence and ethics', 'Weeks 3–4: benchmarks, unit economics and valuation', 'Week 5: forecasting and war-gaming', 'Week 6: capstone brief to a review panel'], outcome: 'A Cellvoyant analyst certificate and a capstone brief.' }
+];
+const wsAnchor = k => 'ws-' + String(k).replace(/^ws_/, '');
+const ROUTE = { 'Port-outs': ['cx', 'pm', 'fi', 'da'], 'Pricing': ['pm', 'st', 'fi', 'an'], 'Social': ['pm', 'cx', 'nw', 'da'], 'Hiring': ['st', 'nw', 'an'], 'Stealth pricing': ['pm', 'cx', 'rg'], 'Devices': ['pm', 'cx'], 'Enterprise': ['b2b', 'st'], 'Network': ['nw', 'pm'], 'Regulatory': ['rg', 'st', 'fi'], 'Satellite': ['st', 'nw', 'rg'], 'Retail': ['cx', 'pm', 'da'] };
+const routeOf = e => ROUTE[e.tpl.cls] || ['st', 'an'];
+const SECTORS = [
+  { k: 'mob', ex: 'Unlimited Premium', name: 'Consumer mobile', watch: ['Tariffs, promotions and stealth fees', 'Port-in and port-out flows', 'eSIM switching intent', 'Device and trade-in offers'], tools: [['Tariff DNA', 'tab-dna'], ['War room', 'tab-war'], ['Geo radar', 'tab-geo']], depts: ['pm', 'cx', 'fi'] },
+  { k: 'home', ex: 'fixed-wireless', name: 'Home broadband & fixed wireless', watch: ['Fixed-wireless launches and installer hiring', 'Fiber build permits', 'Mobile + home bundle pricing'], tools: [['Move predictor', 'tab-pred'], ['Geo radar', 'tab-geo']], depts: ['nw', 'st', 'pm'], fact: ['Fixed-wireless connections are forecast to grow from 185M (2025) to 350M (2031).', '#src-4'] },
+  { k: 'ent', ex: 'private-5G', name: 'Enterprise, private 5G & IoT', watch: ['Public tenders and awards', 'Private-5G deployments', 'Enterprise price lists and bundles'], tools: [['Command center', 'tab-cc'], ['AI assistant', 'tab-ask']], depts: ['b2b', 'st'] },
+  { k: 'whl', ex: 'new carriers', name: 'Wholesale, towers & fiber', watch: ['Tower and fiber carve-outs', 'Infrastructure-fund deals', 'Network-sharing agreements'], tools: [['Capital radar', 'tab-cap'], ['Landscape', '#landscape']], depts: ['fi', 'st', 'an'] },
+  { k: 'sat', ex: 'direct-to-phone', name: 'Satellite & direct-to-device', watch: ['Launch manifests and filings', 'Operator–satellite partnerships', 'Spectrum transactions'], tools: [['Move predictor', 'tab-pred'], ['Landscape', '#landscape']], depts: ['st', 'rg', 'nw'], fact: ['T-Mobile and Starlink launched commercial satellite-to-phone service in July 2025.', '#src-14'] },
+  { k: 'dig', ex: 'in-app sign-up', name: 'Digital services & fintech', watch: ['Wallet and fintech launches', 'Data-center and AI-cloud investments', 'App-store ranking moves'], tools: [['Positioning quadrants', '#positioning'], ['Analyst workbench', 'tab-wb']], depts: ['st', 'an', 'fi'] }
+];
+
+/* lens */
+let lens = 'all';
+try { const v = localStorage.getItem('cv-lens'); if (v && (v === 'all' || DEPT[v])) lens = v; } catch (e) { /* storage unavailable */ }
+const lensMatch = e => lens === 'all' || routeOf(e).includes(lens);
+const lensScore = e => score(e) * (lensMatch(e) ? 1 : .3);
+function setLens(v) {
+  lens = v === 'all' || DEPT[v] ? v : 'all';
+  try { localStorage.setItem('cv-lens', lens); } catch (e) { /* ignore */ }
+  const sel = $('#lensSel'); if (sel) sel.value = lens;
+  renderFeed(); renderPriorities(); renderLensBrief(); renderStatus();
+}
+
+/* dashboard pieces */
+const idxHist = [], sigHist = [], portHist = [], critHist = [];
+function pressure() {
+  const open = events.filter(e => fresh(e) > .1);
+  const r = open.reduce((s, e) => s + (e.tpl.risk || 0) * e.tpl.conf * fresh(e), 0);
+  const crit = events.filter(e => e.tpl.sev === 'crit' && fresh(e) > .25).length;
+  return { idx: Math.round(100 * (.7 * r / (r + 8e6) + .3 * Math.min(1, crit / 5))), r, crit };
+}
+const levelOf = v => v >= 75 ? ['Severe', 'crit'] : v >= 55 ? ['High', 'warn'] : v >= 35 ? ['Elevated', 'warn'] : ['Calm', 'up'];
+function areaSpark(vals, color) {
+  if (vals.length < 2) return '<svg class="area" viewBox="0 0 100 34" preserveAspectRatio="none" aria-hidden="true"></svg>';
+  const mn = Math.min(...vals), mx = Math.max(...vals), rg = mx - mn || 1;
+  const pts = vals.map((v, i) => [(i / (vals.length - 1) * 100).toFixed(2), (30 - (v - mn) / rg * 24).toFixed(2)]);
+  const line = pts.map(p => p.join(',')).join(' ');
+  return `<svg class="area" viewBox="0 0 100 34" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,34 ${line} 100,34" style="fill:${color};opacity:.16"/><polyline points="${line}" vector-effect="non-scaling-stroke" style="fill:none;stroke:${color};stroke-width:1.6"/></svg>`;
+}
+function deltaChip(hist, fmt, goodUp) {
+  if (hist.length < 6) return '<span class="dchip">—</span>';
+  const a = hist[Math.max(0, hist.length - 11)], b = hist[hist.length - 1], d = b - a;
+  if (Math.abs(d) < 1e-9) return '<span class="dchip">■ flat</span>';
+  const cls = goodUp == null ? '' : (goodUp ? d > 0 : d < 0) ? ' g' : ' b';
+  return `<span class="dchip${cls}" title="change over the last 10 sim updates">${d > 0 ? '▲' : '▼'} ${fmt(Math.abs(d))}</span>`;
+}
+function renderPulse(P) {
+  const el = $('#pulseBox'); if (!el) return;
+  const [lvl, cls] = levelOf(P.idx);
+  const t = {}; events.forEach(e => { if (e.tpl.op !== 'all') t[e.tpl.op] = (t[e.tpl.op] || 0) + score(e); });
+  const tot = Object.values(t).reduce((a, b) => a + b, 0) || 1;
+  const drv = Object.entries(t).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  const col = cls === 'crit' ? 'var(--crit)' : cls === 'warn' ? 'var(--signal)' : 'var(--good)';
+  el.innerHTML = `<div class="pulse-g"><svg viewBox="0 0 200 116" aria-hidden="true">
+      <path d="M16 104 A84 84 0 0 1 184 104" fill="none" stroke="var(--surface-2)" stroke-width="14" stroke-linecap="round"/>
+      <path d="M16 104 A84 84 0 0 1 184 104" fill="none" stroke="${col}" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="${Math.max(.5, P.idx)} 100"/>
+      ${[0, 25, 50, 75, 100].map(v => { const a = Math.PI * (1 - v / 100), x = 100 + Math.cos(a) * 98, y = 104 - Math.sin(a) * 98; return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.6" style="fill:var(--muted)"/>`; }).join('')}
+    </svg><div class="pulse-v"><b>${P.idx}</b><span class="${cls}">${lvl}</span></div></div>
+    <div class="pulse-t"><span class="label">Competitive pressure index</span>
+      <p class="small muted">Revenue at risk, weighted by confidence and freshness, plus critical signals. Updated every second.</p>
+      ${areaSpark(idxHist, col)}
+      <div class="drv">${drv.map(([o, v]) => `<div><span class="opt" style="--c:${opColor(o)}">${esc(OPS[o].short)}</span><span class="bar"><i style="width:${(v / tot * 100).toFixed(1)}%;background:${opColor(o)}"></i></span><span class="mono tiny">${Math.round(v / tot * 100)}%</span></div>`).join('')}</div></div>`;
+}
+function renderTape(P) {
+  const el = $('#tape'); if (!el) return;
+  const sixH = events.filter(e => simMin - e.t <= 360).length / 6;
+  const open = events.filter(e => fresh(e) > .1), avgF = open.length ? open.reduce((s, e) => s + fresh(e), 0) / open.length : 0;
+  const prem = PLANS.find(p => p.id === 'arc-p'), kite = PLANS.find(p => p.id === 'kte-e'), nim = PLANS.find(p => p.id === 'nim-u');
+  const d = deltaChip(idxHist, v => Math.round(v), false);
+  const items = [['Pressure', `${P.idx}`, d], ['At risk', fmtMoney(P.r), ''], ['Port bal 7d', (netPorts > 0 ? '+' : '−') + fmtInt(Math.abs(netPorts)), ''], ['Signals/h', sixH.toFixed(1), ''], ['Avg fresh', Math.round(avgF * 100) + '%', ''], ['Critical', String(P.crit), ''],
+    ['NIM Unl+', '$' + nim.price, ''], ['ARC Prem', '$' + prem.price, '<span class="dchip b">▼ $10</span>'], ['KITE eSIM', '$' + kite.price, '<span class="dchip">new</span>']];
+  el.innerHTML = items.map(([l, v, x]) => `<span class="tp"><span class="tl">${esc(l)}</span><b>${esc(v)}</b>${x}</span>`).join('');
+}
+function actBy(e) { const due = e.t + e.tpl.hl * 60, left = due - simMin; return { due, left }; }
+const fmtLeft = m => m <= 0 ? 'overdue' : m < 60 ? `in ${Math.round(m)} min` : m < 1440 ? `in ${Math.floor(m / 60)}h ${pad(Math.round(m % 60))}m` : `in ${Math.round(m / 1440)}d`;
+function renderPriorities() {
+  const el = $('#prio'); if (!el) return;
+  const top = [...events].filter(e => fresh(e) > .15).sort((a, b) => lensScore(b) - lensScore(a)).slice(0, 3);
+  el.innerHTML = top.map((e, i) => {
+    const T = e.tpl, a = actBy(e), r = routeOf(e);
+    return `<article class="pcard s-${T.sev}"><div class="ph"><span class="mono tiny">Priority ${i + 1}</span><span class="sev ${T.sev}">${SEVL[T.sev]}</span></div>
+      <b class="pt">${esc(e.text)}</b>
+      <div class="pm"><span class="opt" style="--c:${opColor(T.op)}">${esc(OPS[T.op].short)}</span><span class="mono tiny ${a.left <= 0 ? 'down' : a.left < 240 ? 'warn' : ''}">Act by ${esc(fmtHM(a.due))} · ${fmtLeft(a.left)}</span></div>
+      <div class="routes">${r.map(k => `<span class="rt${lens === k ? ' on' : ''}">${esc(DEPT[k].short)}</span>`).join('')}</div>
+      <div class="row-btns"><button type="button" class="btn sm" data-open="${e.id}">Open evidence</button><button type="button" class="btn sm" data-wsig="${e.id}">Add to workspace</button></div></article>`;
+  }).join('');
+}
+function renderLensBrief() {
+  const el = $('#lensBrief'); if (!el) return;
+  if (lens === 'all') { el.innerHTML = `<span class="lb-k">Lens · All departments</span><span class="small">Every signal is routed to the departments that can act on it. Pick a department lens to see its signals first.</span>`; return; }
+  const D = DEPT[lens], mine = events.filter(e => routeOf(e).includes(lens) && fresh(e) > .1), crit = mine.filter(e => e.tpl.sev === 'crit').length;
+  const next = mine.map(actBy).filter(a => a.left > 0).sort((a, b) => a.left - b.left)[0];
+  el.innerHTML = `<span class="lb-k">Lens · ${esc(D.name)}</span><span class="small"><b>${mine.length}</b> open signals routed to you${crit ? `, <b class="down">${crit} critical</b>` : ''}${next ? `. Next act-by ${esc(fmtHM(next.due))} (${fmtLeft(next.left)})` : ''}.</span>
+    <span class="lb-tools">${D.tools.filter(t => t[1].startsWith('tab-')).map(t => `<button type="button" class="chip hl" data-tab="${t[1]}">${esc(t[0])}</button>`).join('')}</span>`;
+}
+function renderStatus() {
+  const el = $('#cStatus'); if (!el) return;
+  const sixH = events.filter(e => simMin - e.t <= 360).length;
+  el.innerHTML = `<span><i class="dot live"></i>41 of 41 sources online</span><span>Signals in the last 6h: ${sixH}</span><span>Lens: ${esc(lens === 'all' ? 'All departments' : DEPT[lens].name)}</span><span>${live ? 'Live · sim clock ×300' : 'Paused'}</span><span>Data: simulated, fictional operators</span>`;
+}
+function taskFromSignal(id, btn) {
+  const e = events.find(x => x.id === id); if (!e) return;
+  addTask({ title: e.text, kind: 'signal', ref: e.id, dept: routeOf(e)[0], prio: e.tpl.sev === 'crit' ? 'high' : 'normal', due: fmtHM(actBy(e).due) }, btn);
+}
+function initDashboard() {
+  const sel = $('#lensSel');
+  if (sel) { sel.innerHTML = `<option value="all">All departments</option>` + DEPTS.map(d => `<option value="${d.k}">${esc(d.name)}</option>`).join(''); sel.value = lens; sel.onchange = () => setLens(sel.value); }
+  $('#prio').addEventListener('click', e => { const w = e.target.closest('[data-wsig]'); if (w) { taskFromSignal(w.dataset.wsig, w); return; } const b = e.target.closest('[data-open]'); if (!b) return; selId = b.dataset.open; renderFeed(); renderDetail(); detailEl.scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'center' }); });
+  $('#lensBrief').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) selectTab(b.dataset.tab); });
+  renderPriorities(); renderLensBrief(); renderStatus();
+}
+
+/* ---------- ANALYST WORKBENCH ---------- */
+const WB = { sel: [], metric: 'rev' };
+const WB_M = { rev: ['Revenue', c => revOf(c), v => fmtMoney(v)], mcap: ['Market cap', c => (c.mcap && c.mcap.usd) || 0, v => fmtMoney(v)], growth: ['Revenue growth', c => c.growth && c.growth.v != null ? +c.growth.v : null, v => pct(v)], innov: ['Innovation (of 7)', c => c.innov ? innovCount(c) : null, v => v + '/7'], mult: ['Mkt cap ÷ revenue', c => { const m = c.mcap && c.mcap.usd, r = revOf(c); return m && r ? m / r : null; }, v => v.toFixed(2) + '×'] };
+const wbOps = () => posItems('ops');
+function wbPreset(region) {
+  const all = wbOps().filter(c => region === 'Global' || c.region === region).sort((a, b) => revOf(b) - revOf(a));
+  WB.sel = all.slice(0, region === 'Global' ? 8 : 6).map(c => c.id); wbRender();
+}
+function wbRender() {
+  if (!POS || !$('#wbChart')) return;
+  const ops = wbOps(), by = Object.fromEntries(ops.map(c => [c.id, c])), M = WB_M[WB.metric];
+  $$('#wbMetric button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === WB.metric)));
+  const sel = WB.sel.map(id => by[id]).filter(Boolean);
+  $('#wbChips').innerHTML = sel.map(c => `<span class="chip hl wbc">${esc(c.short || c.name)}<button type="button" data-rm="${esc(c.id)}" aria-label="Remove ${esc(c.name)}">×</button></span>`).join('') || '<span class="small muted">Pick a preset or add operators.</span>';
+  const rows = sel.map(c => ({ c, v: M[1](c) })).sort((a, b) => (b.v == null) - (a.v == null) || (b.v || 0) - (a.v || 0));
+  const W = 640, rh = 30, L = 150, R = 86, H = Math.max(1, rows.length) * rh + 10;
+  const vals = rows.map(r => r.v).filter(v => v != null), mx = Math.max(...vals.map(Math.abs), 1e-9), hasNeg = vals.some(v => v < 0);
+  const zero = hasNeg ? L + (W - L - R) * .25 : L, span = hasNeg ? (W - L - R) * .75 : W - L - R;
+  const svg = $('#wbChart'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.innerHTML = rows.map((r, i) => {
+    const y = i * rh + 6, col = r.c.cls === 'c2' ? 'var(--cx-2)' : r.c.cls === 'c3' ? 'var(--cx-3)' : 'var(--cx-1)';
+    const mk = r.c.cls === 'c2' ? `<rect x="${L - 14}" y="${y + 7}" width="9" height="9" rx="1.5" style="fill:${col}"/>` : r.c.cls === 'c3' ? `<polygon points="${L - 9.5},${y + 6} ${L - 4.5},${y + 16} ${L - 14.5},${y + 16}" style="fill:${col}"/>` : `<circle cx="${L - 9.5}" cy="${y + 11.5}" r="4.5" style="fill:${col}"/>`;
+    const lab = `<text x="${L - 20}" y="${y + 16}" text-anchor="end" style="font:12px var(--f-body);fill:var(--ink-2)">${esc((r.c.short || r.c.name).slice(0, 22))}</text>${mk}`;
+    if (r.v == null) return `${lab}<text x="${L}" y="${y + 16}" style="font:11px var(--f-mono);fill:var(--muted)">not disclosed</text>`;
+    const w = Math.max(2, Math.abs(r.v) / mx * span), x = r.v < 0 ? zero - w : zero;
+    return `<g><title>${esc(r.c.name)}: ${M[2](r.v)}</title>${lab}
+      <rect x="${x.toFixed(1)}" y="${y + 4}" width="${w.toFixed(1)}" height="${rh - 12}" rx="4" style="fill:${col}"/>
+      <text x="${(r.v < 0 ? zero + 6 : x + w + 6).toFixed(1)}" y="${y + 16}" style="font:600 11.5px var(--f-mono);fill:var(--ink)">${M[2](r.v)}</text></g>`;
+  }).join('') + (hasNeg ? `<line x1="${zero}" x2="${zero}" y1="0" y2="${H}" style="stroke:var(--line-strong)"/>` : '');
+  $('#wbTable').innerHTML = `<thead><tr><th>Operator</th><th>Region</th><th>Revenue</th><th>Mkt cap</th><th>Growth</th><th>Innovation</th><th>Cap ÷ rev</th><th>Owners</th></tr></thead><tbody>` +
+    sel.map(c => `<tr><td>${esc(c.short || c.name)}</td><td>${esc(c.region || '')}</td><td>${revOf(c) ? fmtMoney(revOf(c)) : '—'}</td><td>${c.mcap && c.mcap.usd ? fmtMoney(c.mcap.usd) : '—'}</td><td>${pct(c.growth && c.growth.v)}</td><td>${c.innov ? innovCount(c) + '/7' : '—'}</td><td>${WB_M.mult[1](c) ? WB_M.mult[1](c).toFixed(2) + '×' : '—'}</td><td>${posBadges(c) || '<span class="muted">listed / strategic</span>'}</td></tr>`).join('') + '</tbody>';
+}
+function wbCSV() {
+  const ops = wbOps(), by = Object.fromEntries(ops.map(c => [c.id, c]));
+  const q = s => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
+  return ['operator,region,country,revenue_usd,market_cap_usd,revenue_growth_pct,innovation_of_7,state,private_equity_or_infra,hedge_fund'].concat(WB.sel.map(id => by[id]).filter(Boolean).map(c => [q(c.name), q(c.region), q(c.country), revOf(c) || '', (c.mcap && c.mcap.usd) || '', c.growth && c.growth.v != null ? c.growth.v : '', c.innov ? innovCount(c) : '', c.f.state ? 1 : 0, (c.f.pe || c.f.infra) ? 1 : 0, c.f.hf ? 1 : 0].join(','))).join('\n');
+}
+const UE_DEF = { ueArpu: 46, ueChurn: 1.4, ueMargin: 55, ueCac: 180, ueRisk: 35, ueOffer: 5, ueMonths: 6, ueCut: 30 };
+function ueRun() {
+  const g = id => +$('#' + id).value;
+  const arpu = g('ueArpu'), ch = g('ueChurn') / 100, m = g('ueMargin') / 100, cac = g('ueCac'), risk = g('ueRisk') / 100, off = g('ueOffer'), mo = g('ueMonths'), cut = g('ueCut') / 100;
+  const out = { ueArpu: '$' + arpu, ueChurn: (ch * 100).toFixed(1) + '% a month', ueMargin: Math.round(m * 100) + '%', ueCac: '$' + cac, ueRisk: Math.round(risk * 100) + '%', ueOffer: '$' + off + ' a month', ueMonths: mo + ' months', ueCut: Math.round(cut * 100) + '%' };
+  Object.entries(out).forEach(([k, v]) => { const o = $('#o-' + k); if (o) o.textContent = v; });
+  // CLV = monthly gross margin × expected lifetime (1 ÷ churn); an offer saves CLV on the share of at-risk customers it keeps
+  const life = 1 / ch, gm = arpu * m, clv = gm * life, pay = cac / gm, ratio = clv / (cac || 1);
+  const cost = off * mo, saved = risk * cut * clv, gain = saved - cost, be = risk * clv > 0 ? cost / (risk * clv) : 1;
+  $('#ueOut').innerHTML = [['Customer lifetime', life.toFixed(0) + ' months'], ['Lifetime value (CLV)', fmtMoney(clv)], ['CLV ÷ acquisition cost', ratio.toFixed(1) + '×'], ['Acquisition payback', pay.toFixed(1) + ' months'], ['Net value per targeted customer', (gain >= 0 ? '+' : '') + fmtMoney(gain)], ['Break-even churn cut', be > 1 ? 'over 100%' : Math.max(1, Math.round(be * 100)) + '%']]
+    .map(([l, v], i) => `<div class="${i === 4 ? (gain >= 0 ? 'good' : 'bad') : ''}"><span>${l}</span><b>${v}</b></div>`).join('');
+  const bars = [['Value saved', saved, 'var(--cx-1)'], ['Offer cost', cost, 'var(--muted)'], ['Net value', gain, gain >= 0 ? 'var(--good)' : 'var(--crit)']], mx = Math.max(...bars.map(b => Math.abs(b[1])), 1);
+  $('#ueChart').innerHTML = bars.map((b, i) => { const w = Math.max(2, Math.abs(b[1]) / mx * 380); return `<g><text x="0" y="${i * 30 + 17}" style="font:12px var(--f-body);fill:var(--ink-2)">${b[0]}</text><rect x="110" y="${i * 30 + 5}" width="${w.toFixed(1)}" height="16" rx="4" style="fill:${b[2]}"/><text x="${(116 + w).toFixed(1)}" y="${i * 30 + 17}" style="font:600 11.5px var(--f-mono);fill:var(--ink)">${fmtMoney(b[1])}</text></g>`; }).join('');
+  $('#ueNote').textContent = `Offering ${fmtMoney(off)} a month for ${mo} months costs ${fmtMoney(cost)} per targeted customer. It pays back if it cuts the chance of leaving by at least ${be > 1 ? '100' : Math.max(1, Math.round(be * 100))}%. At ${Math.round(cut * 100)}% it ${gain >= 0 ? 'adds' : 'loses'} ${fmtMoney(Math.abs(gain))} per targeted customer.`;
+}
+function initWorkbench() {
+  if (!$('#p-wb')) return;
+  const regions = ['Gulf (GCC)', 'Middle East', 'Asia-Pacific', 'Europe', 'Africa', 'Americas', 'Global'];
+  $('#wbPreset').innerHTML = regions.map(r => `<button type="button" data-r="${esc(r)}">${esc(r === 'Global' ? 'Global top 8' : r)}</button>`).join('');
+  $('#wbPreset').addEventListener('click', e => { const b = e.target.closest('[data-r]'); if (!b) return; $$('#wbPreset button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); wbPreset(b.dataset.r); });
+  $('#wbMetric').innerHTML = Object.entries(WB_M).map(([k, m]) => `<button type="button" data-m="${k}" aria-pressed="${k === WB.metric}">${esc(m[0])}</button>`).join('');
+  $('#wbMetric').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (!b) return; WB.metric = b.dataset.m; wbRender(); });
+  $('#wbOps').innerHTML = wbOps().map(c => `<option value="${esc(c.name)}"></option>`).join('');
+  const add = () => { const v = $('#wbFind').value.trim().toLowerCase(); if (!v) return; const c = wbOps().find(x => x.name.toLowerCase() === v || String(x.short || '').toLowerCase() === v) || wbOps().find(x => x.name.toLowerCase().includes(v)); if (c && !WB.sel.includes(c.id) && WB.sel.length < 12) { WB.sel.push(c.id); wbRender(); } $('#wbFind').value = ''; };
+  $('#wbFind').addEventListener('change', add);
+  $('#wbFind').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); add(); } });
+  $('#wbChips').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (!b) return; WB.sel = WB.sel.filter(id => id !== b.dataset.rm); wbRender(); });
+  $('#wbCopy').onclick = async () => { const csv = wbCSV(); try { await navigator.clipboard.writeText(csv); toast('Benchmark copied as CSV'); } catch (e) { showBriefPanel(csv); } };
+  $('#wbSave').onclick = async () => { const csv = wbCSV(); if (downloadsNs) { try { await downloadsNs.save({ filename: 'cellvoyant-peer-benchmark.csv', data: csv }); toast('Benchmark saved'); return; } catch (e) { if (e && e.code === 'declined') { toast('Save cancelled'); return; } } } showBriefPanel(csv); };
+  Object.keys(UE_DEF).forEach(id => $('#' + id).addEventListener('input', ueRun));
+  $('#ueReset').onclick = () => { Object.entries(UE_DEF).forEach(([k, v]) => { $('#' + k).value = v; }); ueRun(); };
+  const first = $('#wbPreset [data-r="Gulf (GCC)"]'); if (first) first.setAttribute('aria-pressed', 'true');
+  wbPreset('Gulf (GCC)'); ueRun();
+}
+
+/* ---------- DEPARTMENTS SECTION ---------- */
+let deptMode = 'dept', deptSel = 'pm', sectorSel = 'mob';
+function goTool(target, deptKey) {
+  if (deptKey) setLens(deptKey);
+  if (target.startsWith('#')) { const s = $(target); if (s) s.scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' }); return; }
+  selectTab(target); $('#app').scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' });
+}
+function renderDepts() {
+  const root = $('#deptHub'); if (!root) return;
+  $$('#deptMode button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === deptMode)));
+  if (deptMode === 'dept') {
+    const D = DEPT[deptSel], W = WORKSHOPS.find(w => w.k === D.ws);
+    const routed = TPL.filter(t => (ROUTE[t.cls] || []).includes(D.k)).length;
+    root.innerHTML = `<div class="hub-list" role="group" aria-label="Departments">${DEPTS.map(d => `<button type="button" data-d="${d.k}" aria-pressed="${d.k === deptSel}"><b>${esc(d.name)}</b><span>${d.teams.length} teams · ${esc(d.teams.map(t => t[0]).join(', '))}</span></button>`).join('')}</div>
+      <article class="hub-panel">
+        <div class="hp-head"><div><span class="label">Department</span><h3>${esc(D.name)}</h3><p class="lede" style="font-size:16px">${esc(D.mission)}</p></div>
+          <button type="button" class="btn accent" data-go="tab-cc" data-lens="${D.k}">Open the console with the ${esc(D.short)} lens</button></div>
+        <div class="hp-grid">
+          <div><span class="label">Questions it answers</span><ul class="cxl">${D.questions.map(q => `<li>${esc(q)}</li>`).join('')}</ul></div>
+          <div><span class="label">Tools</span><div class="chips" style="margin-top:8px">${D.tools.map(t => `<button type="button" class="chip hl" data-go="${t[1]}" data-lens="${D.k}">${esc(t[0])}</button>`).join('')}</div>
+            <p class="small muted" style="margin-top:10px">${routed} of ${TPL.length} signal types in the console are routed to this department.</p></div>
+          <div><span class="label">KPIs it watches</span><ul class="cxl">${D.kpis.map(k => `<li>${esc(k)}</li>`).join('')}</ul></div>
+          <div><span class="label">Operating rhythm</span><div class="rhythm">${D.rhythm.map(r => `<div><b>${esc(r[0])}</b><span>${esc(r[1])}</span></div>`).join('')}</div></div>
+        </div>
+        <div><span class="label">Teams in this department</span><div class="teams">${D.teams.map(t => `<div><b>${esc(t[0])}</b><span>${esc(t[1])}</span></div>`).join('')}</div></div>
+        ${W ? `<div class="hp-ws"><span class="label">Recommended workshop</span><b>${esc(W.name)}</b><span class="small">${esc(W.dur)} · ${esc(W.format)} · ${esc(W.outcome)}</span><a class="small" href="#${wsAnchor(W.k)}">See it in the Academy →</a></div>` : ''}
+      </article>`;
+  } else {
+    const S = SECTORS.find(s => s.k === sectorSel);
+    const ex = TPL.find(t => t.text.includes(S.ex));
+    root.innerHTML = `<div class="hub-list" role="group" aria-label="Business sectors">${SECTORS.map(s => `<button type="button" data-s="${s.k}" aria-pressed="${s.k === sectorSel}"><b>${esc(s.name)}</b><span>${esc(s.watch[0])}</span></button>`).join('')}</div>
+      <article class="hub-panel">
+        <div class="hp-head"><div><span class="label">Business sector</span><h3>${esc(S.name)}</h3>${S.fact ? `<p class="small" style="color:var(--ink-2)">${esc(S.fact[0])} <a href="${S.fact[1]}">[source]</a></p>` : ''}</div></div>
+        <div class="hp-grid">
+          <div><span class="label">Signals Cellvoyant watches</span><ul class="cxl">${S.watch.map(w => `<li>${esc(w)}</li>`).join('')}</ul></div>
+          <div><span class="label">Tools</span><div class="chips" style="margin-top:8px">${S.tools.map(t => `<button type="button" class="chip hl" data-go="${t[1]}">${esc(t[0])}</button>`).join('')}</div></div>
+          <div><span class="label">Departments involved</span><div class="chips" style="margin-top:8px">${S.depts.map(k => `<button type="button" class="chip" data-d2="${k}">${esc(DEPT[k].name)}</button>`).join('')}</div></div>
+          ${ex ? `<div><span class="label">Example signal (simulated)</span><p class="small" style="color:var(--ink-2);margin-top:6px">${esc(ex.text.replace(/\{d\}/g, 'East district'))}</p></div>` : ''}
+        </div>
+      </article>`;
+  }
+}
+function initDepts() {
+  const root = $('#deptHub'); if (!root) return;
+  $('#deptMode').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (!b) return; deptMode = b.dataset.m; renderDepts(); });
+  root.addEventListener('click', e => {
+    const d = e.target.closest('[data-d]'); if (d) { deptSel = d.dataset.d; renderDepts(); return; }
+    const s = e.target.closest('[data-s]'); if (s) { sectorSel = s.dataset.s; renderDepts(); return; }
+    const d2 = e.target.closest('[data-d2]'); if (d2) { deptMode = 'dept'; deptSel = d2.dataset.d2; renderDepts(); return; }
+    const g = e.target.closest('[data-go]'); if (g) goTool(g.dataset.go, g.dataset.lens);
+  });
+  renderDepts(); renderRouteMap();
+}
+function renderRouteMap() {
+  const el = $('#routeMap'); if (!el) return;
+  el.innerHTML = `<thead><tr><th scope="col">Signal type</th>${DEPTS.map(d => `<th scope="col">${esc(d.short)}</th>`).join('')}</tr></thead><tbody>` +
+    Object.keys(ROUTE).map(c => `<tr><th scope="row">${esc(c)}</th>${DEPTS.map(d => { const i = ROUTE[c].indexOf(d.k); return `<td>${i < 0 ? '' : `<i class="rm-dot${i === 0 ? ' lead' : ''}" title="${i === 0 ? 'Lead owner' : 'Informed'}"></i><span class="sr">${i === 0 ? 'Lead owner' : 'Informed'}</span>`}</td>`; }).join('')}</tr>`).join('') + '</tbody>';
+}
+
+/* ---------- ACADEMY ---------- */
+let acadAud = 'all';
+function renderAcademy() {
+  const root = $('#wsGrid'); if (!root) return;
+  $$('#wsAud button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.a === acadAud)));
+  const AUD = { op: 'Operators', an: 'Analysts', ex: 'Executives' };
+  root.innerHTML = WORKSHOPS.filter(w => acadAud === 'all' || w.aud.includes(acadAud)).map(w => `<article class="ws" id="${wsAnchor(w.k)}">
+    <div class="ws-top"><span class="label">${esc(w.level)}</span><span class="ws-aud">${w.aud.map(a => `<span class="rt">${AUD[a]}</span>`).join('')}</span></div>
+    <h4>${esc(w.name)}</h4>
+    <div class="ws-meta"><span>${esc(w.dur)}</span><span>${esc(w.format)}</span><span>${esc(w.size)}</span></div>
+    <p class="small">${esc(w.desc)}</p>
+    <ul class="cxl">${w.agenda.map(a => `<li>${esc(a)}</li>`).join('')}</ul>
+    <div class="ws-out"><span class="label">You leave with</span><span class="small">${esc(w.outcome)}</span></div>
+    <div class="chips">${w.depts.map(k => `<span class="chip">${esc(DEPT[k].short)}</span>`).join('')}</div>
+    <div class="ws-act"><button type="button" class="btn sm accent" data-book="${esc(w.k)}" aria-expanded="false">Request seats</button></div>
+    <form class="ws-form" data-k="${esc(w.k)}" hidden>
+      <div class="ws-row"><label class="small" for="wsn-${esc(w.k)}">Team size</label><select class="mini" id="wsn-${esc(w.k)}"><option>1–5</option><option>6–12</option><option>13–25</option><option>26+</option></select>
+      <label class="small" for="wsm-${esc(w.k)}">Preferred month</label><select class="mini" id="wsm-${esc(w.k)}">${['Nov 2026', 'Dec 2026', 'Jan 2027', 'Feb 2027', 'Mar 2027'].map(m => `<option>${m}</option>`).join('')}</select></div>
+      <label class="sr" for="wst-${esc(w.k)}">Notes</label><textarea id="wst-${esc(w.k)}" rows="2" placeholder="Team, location or goals (optional)"></textarea>
+      <div class="ws-row"><button type="submit" class="btn sm accent">Send request</button><span class="tiny" data-msg aria-live="polite"></span></div>
+    </form></article>`).join('');
+}
+function initAcademy() {
+  if (!$('#wsGrid')) return;
+  $('#wsAud').addEventListener('click', e => { const b = e.target.closest('[data-a]'); if (!b) return; acadAud = b.dataset.a; renderAcademy(); });
+  $('#wsGrid').addEventListener('click', e => { const b = e.target.closest('[data-book]'); if (!b) return; const f = $(`.ws-form[data-k="${b.dataset.book}"]`); f.hidden = !f.hidden; b.setAttribute('aria-expanded', String(!f.hidden)); if (!f.hidden) $('select', f).focus(); });
+  $('#wsGrid').addEventListener('submit', async e => {
+    e.preventDefault(); const f = e.target, k = f.dataset.k, msg = $('[data-msg]', f), btn = $('button[type=submit]', f);
+    btn.disabled = true;
+    try { const r = await createRequest({ service: k, details: `Team size ${$('#wsn-' + k).value} · ${$('#wsm-' + k).value}${$('#wst-' + k).value.trim() ? ' · ' + $('#wst-' + k).value.trim() : ''}`, urgency: 'standard', via: 'academy' }); msg.textContent = `Requested: ${r.label}${r.saved ? '. It’s in the request queue in the AI assistant tab.' : ' (kept for this visit only).'}`; }
+    catch (err) { msg.textContent = err.message; }
+    finally { btn.disabled = false; }
+  });
+  renderAcademy();
+}
+
+/* ---------- RIGHT-TIME ENGAGEMENT: contact-time model on synthetic, tokenized customers ---------- */
+const RT_CH = [['push', 'App push'], ['sms', 'SMS'], ['email', 'Email'], ['call', 'Call'], ['inapp', 'In-app']];
+const RT_CHN = Object.fromEntries(RT_CH);
+const RT_GOALS = [['retention', 'Retention offer'], ['upsell', 'Upsell'], ['service', 'Service message']];
+const RT_GN = Object.fromEntries(RT_GOALS);
+const RT_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const RT_SEG = [
+  { k: 'youth', l: 'Prepaid youth', peaks: [[21, 2.2], [13, 2]], wk: 1.25, ch: { push: .9, sms: .3, email: -.4, call: -.9, inapp: 1 }, arpu: 18, risk: .3 },
+  { k: 'family', l: 'Postpaid family', peaks: [[20, 1.8], [8, 1.2]], wk: 1.1, ch: { push: .4, sms: .5, email: .4, call: .1, inapp: .3 }, arpu: 62, risk: .12 },
+  { k: 'pro', l: 'Business professional', peaks: [[9, 1.5], [18, 1.6]], wk: .7, ch: { push: .2, sms: .3, email: .8, call: .3, inapp: 0 }, arpu: 75, risk: .1 },
+  { k: 'senior', l: 'Senior', peaks: [[11, 2.2]], wk: 1, ch: { push: -.5, sms: .7, email: 0, call: .8, inapp: -.6 }, arpu: 35, risk: .08 },
+  { k: 'roamer', l: 'Frequent traveller', peaks: [[7, 1.5], [22, 1.8]], wk: .9, ch: { push: .6, sms: .2, email: .5, call: -.3, inapp: .6 }, arpu: 88, risk: .18 },
+  { k: 'value', l: 'Value seeker', peaks: [[19, 2.5]], wk: 1.2, ch: { push: .5, sms: .6, email: .2, call: -.5, inapp: .4 }, arpu: 25, risk: .35 }
+];
+const RT_F = ['Bias', 'Activity at this hour', 'Activity squared (peak sharpness)', 'Hour of day (sine)', 'Hour of day (cosine)', 'Weekend day', 'Weekend × weekend-activity ratio', 'Channel: app push', 'Channel: SMS', 'Channel: email', 'Channel: call', 'Channel: in-app', 'Past response rate on this channel', 'Service message × bill due', 'Bill due within 3 days', 'Retention offer × churn score', 'Goal: upsell', 'Goal: service', 'Contacts in the last 7 days', 'Outage × marketing', 'Outage × service', 'Recent complaint × marketing', 'Roaming × push', 'Roaming × call', 'Call after 20:00', 'Email 07:00–09:00', 'Upsell × high ARPU', 'Push × app usage', 'In-app × app usage'];
+const RT_FG = [null, 'act', 'act', 'act', 'act', 'wk', 'wk', 'ch', 'ch', 'ch', 'ch', 'ch', 'rate', 'bill', 'bill', 'risk', 'goal', 'goal', 'fat', 'out', 'out', 'cmp', 'roam', 'roam', 'late', 'morn', 'arpu', 'app', 'app'];
+const RT = { seed: 7, ready: false, ctl: { cust: null, ch: 'push', goal: 'retention', outage: false, bill: false, roam: false, ram: false, wknd: 'ss' } };
+const rtSig = z => 1 / (1 + Math.exp(-z));
+function rtRng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function rtAct(c, we, ram, noisy) {
+  const key = (we ? 1 : 0) + (ram ? 2 : 0) + (noisy ? 4 : 0);
+  if (c.actC[key]) return c.actC[key];
+  const pk = c.seg.peaks.map(([h, s]) => [h + c.shift + (ram ? 2.5 : 0), s * (ram ? 1.2 : 1)]);
+  const raw = Array.from({ length: 24 }, (_, h) => {
+    let v = .3; pk.forEach(([m, s]) => { let d = Math.abs(h - m) % 24; d = Math.min(d, 24 - d); v += Math.exp(-d * d / (2 * s * s)); });
+    if (we) v *= h >= 10 ? c.wk : .7; if (ram && h >= 10 && h <= 16) v *= .6;
+    return v * (noisy ? c.noise[(we ? 24 : 0) + h] : 1);
+  });
+  const mx = Math.max(...raw); return (c.actC[key] = raw.map(v => v / mx));
+}
+function rtTrue(c, h, ch, goal, x) {
+  const mk = goal !== 'service';
+  let z = -3.0 + 1.3 * rtAct(c, x.we, x.ram, false)[h] + c.aff[ch] + (x.we ? (c.wk - 1) * .8 : 0);
+  if (goal === 'service') z += x.billDue ? .9 : .1; if (goal === 'retention') z += 1.6 * c.risk - .2; if (goal === 'upsell') z += c.arpu > 60 ? .3 : -.3;
+  z -= .45 * x.c7; if (x.outage) z += mk ? -1.2 : .5; if (x.complaint && mk) z -= 1.5;
+  if (x.roam) z += ch === 'push' ? .35 : ch === 'call' ? -.7 : 0;
+  if (ch === 'call' && h >= 20) z -= .6; if (ch === 'email' && h >= 7 && h <= 9) z += .35;
+  return rtSig(z);
+}
+function rtX(c, h, ch, goal, x) {
+  const a = rtAct(c, x.we, x.ram, true)[h], mk = goal !== 'service';
+  return [1, a, a * a, Math.sin(2 * Math.PI * h / 24), Math.cos(2 * Math.PI * h / 24), x.we ? 1 : 0, x.we ? c.wk - 1 : 0,
+    ch === 'push' ? 1 : 0, ch === 'sms' ? 1 : 0, ch === 'email' ? 1 : 0, ch === 'call' ? 1 : 0, ch === 'inapp' ? 1 : 0, c.rate[ch],
+    goal === 'service' && x.billDue ? 1 : 0, x.billDue ? 1 : 0, goal === 'retention' ? c.risk : 0, goal === 'upsell' ? 1 : 0, goal === 'service' ? 1 : 0,
+    x.c7 / 3, x.outage && mk ? 1 : 0, x.outage && !mk ? 1 : 0, x.complaint && mk ? 1 : 0, x.roam && ch === 'push' ? 1 : 0, x.roam && ch === 'call' ? 1 : 0,
+    ch === 'call' && h >= 20 ? 1 : 0, ch === 'email' && h >= 7 && h <= 9 ? 1 : 0, goal === 'upsell' && c.arpu > 60 ? 1 : 0, ch === 'push' ? c.app : 0, ch === 'inapp' ? c.app : 0];
+}
+const rtP = x => { let z = 0; for (let f = 0; f < x.length; f++) z += RT.w[f] * x[f]; return rtSig(z); };
+// guardrails run before any score is used; '' means the slot is allowed
+function rtBlock(c, h, ch, goal, x) {
+  const mk = goal !== 'service';
+  if (c.optOut) return 'Opted out of all contact';
+  if (!c.consent[ch]) return `No consent for ${RT_CHN[ch]}`;
+  if (mk && x.complaint) return 'Cooling-off: complaint in the last 48 hours';
+  if (mk && x.outage) return 'Cooling-off: network outage in the customer’s area';
+  if (mk && x.c7 >= 2) return 'Frequency cap: 2 marketing contacts in 7 days already used';
+  if ((ch === 'call' || ch === 'sms') && (h < 8 || h >= 21)) return 'Quiet hours: calls and SMS only 08:00–21:00';
+  if (h < 8 || h >= 22) return 'Quiet hours: no messages 22:00–08:00';
+  if (ch === 'call' && x.we) return 'No sales calls on weekend days';
+  if (ch === 'call' && x.ram && h >= 17 && h < 20) return 'Ramadan schedule: no calls around sunset';
+  return '';
+}
+const rtWeekend = (d, wknd) => wknd === 'fs' ? d === 4 || d === 5 : d === 5 || d === 6;
+const rtToday = () => new Date();
+function rtCtx(c, d) {
+  const t = RT.ctl, own = c === RT.cur && !RT.sim;
+  const daysToBill = (c.bill - rtToday().getDate() + 30) % 30;
+  return { we: rtWeekend(d, t.wknd), outage: own ? t.outage : false, billDue: own ? t.bill : daysToBill <= 3, ram: t.ram, c7: c.c7, complaint: c.complaint, roam: own ? t.roam : c.roam };
+}
+function rtAuc(ps, ys) {
+  const ix = ps.map((p, i) => i).sort((a, b) => ps[a] - ps[b]); let pos = 0, rk = 0;
+  ix.forEach((i, r) => { if (ys[i]) { pos++; rk += r + 1; } });
+  const neg = ys.length - pos; return pos && neg ? (rk - pos * (pos + 1) / 2) / (pos * neg) : .5;
+}
+function rtBuild() {
+  const R = rtRng(RT.seed), N = 1500, gauss = () => Math.sqrt(-2 * Math.log(R() || 1e-9)) * Math.cos(2 * Math.PI * R());
+  const hx = () => Math.floor(R() * 0xffffff).toString(16).toUpperCase().padStart(6, '0');
+  const cust = Array.from({ length: N }, (_, i) => {
+    const S = RT_SEG[Math.floor(R() * RT_SEG.length)];
+    return { id: 'C-' + hx(), i, seg: S, shift: gauss() * 1.2, aff: Object.fromEntries(RT_CH.map(([k]) => [k, S.ch[k] + gauss() * .35])),
+      consent: { push: R() < .82, sms: R() < .9, email: R() < .75, call: R() < .3, inapp: R() < .88 }, optOut: R() < .03, wk: S.wk * (1 + gauss() * .12),
+      bill: 1 + Math.floor(R() * 28), c7: Math.floor(R() * R() * 4), complaint: R() < .05, roam: S.k === 'roamer' ? R() < .4 : R() < .03,
+      arpu: Math.round(S.arpu * (.7 + R() * .6)), risk: Math.min(.95, Math.max(.02, S.risk + gauss() * .1)), noise: Array.from({ length: 48 }, () => Math.max(.4, 1 + gauss() * .15)), actC: {} };
+  });
+  cust.forEach(c => { c.app = Math.min(1, Math.max(0, .5 + .3 * (c.aff.push + c.aff.inapp) / 2 + gauss() * .1)); });
+  const histRow = c => {
+    const chs = RT_CH.map(x => x[0]).filter(k => c.consent[k]); if (!chs.length) return null;
+    const ch = chs[Math.floor(R() * chs.length)], d = Math.floor(R() * 7), h = 8 + Math.floor(R() * 13), goal = RT_GOALS[Math.floor(R() * 3)][0];
+    const x = { we: d >= 5, outage: R() < .06, billDue: R() < .12, ram: false, c7: Math.floor(R() * 3), complaint: R() < .05, roam: c.roam && R() < .7 };
+    return { c, d, h, ch, goal, x, y: R() < rtTrue(c, h, ch, goal, x) ? 1 : 0 };
+  };
+  // history A (previous 90 days) gives each customer's channel response rates; history B is the training and holdout set
+  cust.forEach(c => {
+    const n = {}, e = {}; RT_CH.forEach(([k]) => { n[k] = 0; e[k] = 0; });
+    if (!c.optOut) for (let j = 0; j < 16; j++) { const r = histRow(c); if (r) { n[r.ch]++; e[r.ch] += r.y; } }
+    c.rate = Object.fromEntries(RT_CH.map(([k]) => [k, (e[k] + .3) / (n[k] + 2)]));
+  });
+  const rows = []; cust.forEach(c => { if (!c.optOut) for (let j = 0; j < 12; j++) { const r = histRow(c); if (r) { r.v = rtX(c, r.h, r.ch, r.goal, r.x); r.train = c.i < N * .8; rows.push(r); } } });
+  const tr = rows.filter(r => r.train), te = rows.filter(r => !r.train), k = RT_F.length;
+  const w = new Float64Array(k), idx = tr.map((_, i) => i);
+  for (let ep = 0; ep < 10; ep++) {
+    for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); const t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+    const lr = .12 / (1 + ep * .6);
+    for (const ri of idx) { const { v, y } = tr[ri]; let z = 0; for (let f = 0; f < k; f++) z += w[f] * v[f]; const g = rtSig(z) - y; for (let f = 0; f < k; f++) w[f] -= lr * (g * v[f] + (f ? 1e-4 * w[f] : 0)); }
+  }
+  RT.w = w;
+  // baseline: one-size-fits-all engagement rate by channel × hour, learned on the same training rows
+  const bN = {}, bE = {}; tr.forEach(r => { const key = r.ch + r.h; bN[key] = (bN[key] || 0) + 1; bE[key] = (bE[key] || 0) + r.y; });
+  const ys = te.map(r => r.y), ps = te.map(r => rtP(r.v)), bs = te.map(r => { const key = r.ch + r.h; return ((bE[key] || 0) + 1) / ((bN[key] || 0) + 6); });
+  const base = ys.reduce((a, b) => a + b, 0) / ys.length;
+  const top = ps.map((p, i) => [p, ys[i]]).sort((a, b) => b[0] - a[0]).slice(0, Math.round(ps.length * .2));
+  const cal = Array.from({ length: 8 }, () => [0, 0, 0]); const pmax = Math.max(...ps);
+  ps.forEach((p, i) => { const b = Math.min(7, Math.floor(p / pmax * 8)); cal[b][0] += p; cal[b][1] += ys[i]; cal[b][2]++; });
+  RT.cust = cust; RT.hold = cust.filter(c => c.i >= N * .8 && !c.optOut);
+  RT.m = { auc: rtAuc(ps, ys), bAuc: rtAuc(bs, ys), brier: ps.reduce((s, p, i) => s + (p - ys[i]) ** 2, 0) / ps.length, lift: top.reduce((s, t) => s + t[1], 0) / top.length / base, base,
+    nTrain: tr.length, nTest: te.length, nCust: N, cal: cal.filter(b => b[2]).map(b => ({ p: b[0] / b[2], o: b[1] / b[2], n: b[2] })) };
+  RT.cur = RT.hold.slice().sort((a, b) => b.risk - a.risk)[3];
+  RT.impC = {}; RT.ready = true;
+}
+const rtEnsure = () => { if (!RT.ready) rtBuild(); };
+function rtGrid(c, ch, goal) {
+  const cells = [];
+  for (let d = 0; d < 7; d++) for (let h = 0; h < 24; h++) { const x = rtCtx(c, d), bl = rtBlock(c, h, ch, goal, x); cells.push({ d, h, ch, bl, p: bl ? 0 : rtP(rtX(c, h, ch, goal, x)), x }); }
+  return cells;
+}
+function rtBest(c, goal, ch) {
+  let best = null;
+  (ch ? [ch] : RT_CH.map(k => k[0])).forEach(k => rtGrid(c, k, goal).forEach(z => { if (!z.bl && (!best || z.p > best.p)) best = z; }));
+  return best;
+}
+function rtFixed(c, goal) {
+  const ch = c.consent.sms ? 'sms' : c.consent.email ? 'email' : null; if (!ch) return null;
+  const x = rtCtx(c, 1), bl = rtBlock(c, 10, ch, goal, x);
+  return { d: 1, h: 10, ch, bl, x, p: bl ? 0 : rtP(rtX(c, 10, ch, goal, x)) };
+}
+function rtReasons(c, z, goal) {
+  const allowed = rtGrid(c, z.ch, goal).filter(q => !q.bl); if (!allowed.length) return [];
+  const xb = rtX(c, z.h, z.ch, goal, z.x), avg = new Array(xb.length).fill(0);
+  allowed.forEach(q => rtX(c, q.h, q.ch, goal, q.x).forEach((v, f) => { avg[f] += v / allowed.length; }));
+  const grp = {}; xb.forEach((v, f) => { const g = RT_FG[f]; if (g) grp[g] = (grp[g] || 0) + RT.w[f] * (v - avg[f]); });
+  const L = { act: `Often online around ${pad(z.h)}:00 (app and data sessions)`, wk: z.x.we ? 'More active on weekend days' : 'Weekday routine', rate: `Answered ${Math.round(c.rate[z.ch] * 100)}% of past ${RT_CHN[z.ch]} messages`, bill: 'Bill due within 3 days', risk: `High churn score (${Math.round(c.risk * 100)}%), so retention offers land`, fat: 'Few recent contacts', morn: 'Reads email early in the morning', arpu: 'High-value plan', app: `Uses the app on ${Math.round(c.app * 100)}% of days`, roam: 'Roaming: push reaches them abroad' };
+  const out = Object.entries(grp).filter(([g, v]) => v > .04 && L[g]).sort((a, b) => b[1] - a[1]).map(([g]) => L[g]);
+  if (c.rate[z.ch] >= .2 && !out.includes(L.rate)) out.push(L.rate);
+  return out.slice(0, 3);
+}
+const rtSlot = z => `${RT_DAYS[z.d]} ${pad(z.h)}:00–${pad((z.h + 1) % 24)}:00`;
+function rtImpact(goal) {
+  const key = [goal, RT.ctl.wknd, RT.ctl.ram].join('|'); if (RT.impC[key]) return RT.impC[key];
+  RT.sim = true;
+  let nF = 0, nM = 0, sF = 0, sM = 0, blocked = 0, arpu = 0; const seg = {};
+  RT.hold.forEach(c => {
+    const f = rtFixed(c, goal), b = rtBest(c, goal), z = seg[c.seg.k] || (seg[c.seg.k] = { n: 0, nF: 0, sF: 0, nM: 0, sM: 0 }); z.n++;
+    if (f && !f.bl) { const t = rtTrue(c, f.h, f.ch, goal, f.x); nF++; sF += t; z.nF++; z.sF += t; }
+    if (b) { const t = rtTrue(c, b.h, b.ch, goal, b.x); nM++; sM += t; arpu += c.arpu; z.nM++; z.sM += t; } else blocked++;
+  });
+  const pf = nF ? sF / nF : 0, pm = nM ? sM / nM : 0, avgArpu = nM ? arpu / nM : 0, extra = (pm - pf) * 1e5;
+  const money = goal === 'retention' ? extra * .25 * avgArpu * 12 : goal === 'upsell' ? extra * .1 * 5 * 12 : null;
+  RT.sim = false;
+  return RT.impC[key] = { goal, pf, pm, nF, nM, blocked, n: RT.hold.length, uplift: pf ? pm / pf - 1 : 0, extra, money, avgArpu, seg };
+}
+function rtQueue(goal, n) {
+  RT.sim = true;
+  const now = rtToday(), d0 = (now.getDay() + 6) % 7, h0 = now.getHours(), out = [];
+  RT.hold.forEach(c => {
+    let best = null;
+    for (let k = 1; k <= 4; k++) { const h = (h0 + k) % 24, d = (d0 + (h0 + k >= 24 ? 1 : 0)) % 7, x = rtCtx(c, d);
+      RT_CH.forEach(([ch]) => { if (rtBlock(c, h, ch, goal, x)) return; const p = rtP(rtX(c, h, ch, goal, x)); if (!best || p > best.p) best = { d, h, ch, p, x }; }); }
+    if (!best) return;
+    const val = goal === 'retention' ? c.risk * c.arpu * 12 : goal === 'upsell' ? c.arpu * .2 * 12 : 1;
+    out.push({ c, z: best, score: best.p * val, val });
+  });
+  RT.sim = false;
+  return out.sort((a, b) => b.score - a.score).slice(0, n || 8);
+}
+
+/* studio UI */
+function rtHeat() {
+  const c = RT.cur, goal = RT.ctl.goal, cells = rtGrid(c, RT.ctl.ch, goal), best = cells.filter(z => !z.bl).sort((a, b) => b.p - a.p)[0];
+  const cw = 26, ch = 22, L = 40, T = 20, svg = $('#rtHeat');
+  svg.setAttribute('viewBox', `0 0 ${L + 24 * cw + 4} ${T + 7 * ch + 4}`);
+  const fill = p => `color-mix(in srgb,var(--accent) ${(6 + 94 * Math.min(1, p / .5)).toFixed(0)}%,var(--surface-2))`;
+  svg.innerHTML = `<defs><pattern id="rtHatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" style="fill:var(--surface)"/><line x1="0" y1="0" x2="0" y2="5" style="stroke:var(--line-strong);stroke-width:1.4"/></pattern></defs>` +
+    [0, 3, 6, 9, 12, 15, 18, 21].map(h => `<text x="${L + h * cw + 2}" y="13" style="font:10.5px var(--f-mono);fill:var(--muted)">${pad(h)}</text>`).join('') +
+    RT_DAYS.map((d, i) => `<text x="${L - 8}" y="${T + i * ch + 15}" text-anchor="end" style="font:11px var(--f-mono);fill:${rtWeekend(i, RT.ctl.wknd) ? 'var(--signal)' : 'var(--ink-2)'}">${d}</text>`).join('') +
+    cells.map(z => `<rect x="${L + z.h * cw + 1}" y="${T + z.d * ch + 1}" width="${cw - 2}" height="${ch - 2}" rx="3" style="fill:${z.bl ? 'url(#rtHatch)' : fill(z.p)}"><title>${RT_DAYS[z.d]} ${pad(z.h)}:00 · ${z.bl ? 'blocked: ' + esc(z.bl) : Math.round(z.p * 100) + '% chance of engaging'}</title></rect>`).join('') +
+    (best ? `<rect x="${L + best.h * cw}" y="${T + best.d * ch}" width="${cw}" height="${ch}" rx="4" style="fill:none;stroke:var(--ink);stroke-width:2"/>` : '');
+  $('#rtHmNote').textContent = `${RT_CHN[RT.ctl.ch]} · ${RT_GN[goal]}`;
+  return best;
+}
+function rtRender() {
+  if (!$('#rtApp')) return; rtEnsure();
+  const c = RT.cur, goal = RT.ctl.goal, bestCh = rtHeat(), bestAll = rtBest(c, goal), fx = rtFixed(c, goal);
+  $$('#rtCh button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.ch === RT.ctl.ch)));
+  $$('#rtGoal button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.g === goal)));
+  const reasons = bestAll ? rtReasons(c, bestAll, goal) : [];
+  const x0 = rtCtx(c, 1), rules = [
+    ['Consent', RT_CH.filter(([k]) => c.consent[k]).map(k => k[1]).join(', ') || 'none', !c.optOut],
+    ['Quiet hours', 'Calls and SMS 08:00–21:00 · other messages 08:00–22:00', true],
+    ['Frequency cap', `${c.c7} of 2 marketing contacts used this week`, goal === 'service' || c.c7 < 2],
+    ['Cooling-off', x0.complaint ? 'Complaint in the last 48 hours: no marketing' : RT.ctl.outage ? 'Outage today: no marketing' : 'No recent complaint or outage', goal === 'service' || !(x0.complaint || RT.ctl.outage)],
+    ['Rest days', `No sales calls on ${RT.ctl.wknd === 'fs' ? 'Fri–Sat' : 'Sat–Sun'}${RT.ctl.ram ? '; none around sunset in Ramadan' : ''}`, true]
+  ];
+  $('#rtRec').innerHTML = `<div class="box-h"><span><b>Recommendation</b> · ${esc(c.id)}</span><span>${esc(RT_GN[goal])}</span></div><div class="detail">
+    ${bestAll ? `<div class="rt-best"><span class="label">Best next contact</span><b>${esc(RT_CHN[bestAll.ch])} · ${esc(rtSlot(bestAll))}</b><span class="rt-p"><span class="mono">${Math.round(bestAll.p * 100)}%</span> predicted chance of engaging</span></div>`
+      : `<div class="rt-best"><span class="label">Best next contact</span><b>Do not contact this week</b><span class="small muted">Every slot is blocked by consent, a cap or a cooling-off rule.</span></div>`}
+    <div class="rt-cmp">${bestCh ? `<div><span class="label">Best ${esc(RT_CHN[RT.ctl.ch])} slot</span><b>${esc(rtSlot(bestCh))} · ${Math.round(bestCh.p * 100)}%</b></div>` : `<div><span class="label">${esc(RT_CHN[RT.ctl.ch])}</span><b>blocked all week</b></div>`}
+      <div><span class="label">Fixed schedule (Tue 10:00 ${fx ? esc(RT_CHN[fx.ch]) : 'SMS'})</span><b>${fx ? (fx.bl ? 'blocked' : Math.round(fx.p * 100) + '%') : 'no channel'}</b></div></div>
+    ${reasons.length ? `<div><span class="label">Why this moment</span><ul class="cxl">${reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul></div>` : ''}
+    <div><span class="label">Guardrails checked</span><div class="rt-rules">${rules.map(r => `<div class="${r[2] ? 'ok' : 'stop'}"><i aria-hidden="true">${r[2] ? '✓' : '✕'}</i><b>${esc(r[0])}</b><span>${esc(r[1])}</span></div>`).join('')}</div></div>
+    ${bestAll ? `<div class="row-btns"><button type="button" class="btn sm accent" data-wsadd="rt" data-c="${esc(c.id)}">Add to my workspace</button></div>` : ''}
+  </div>`;
+  const days = (c.bill - rtToday().getDate() + 30) % 30;
+  $('#rtProfile').innerHTML = `<div class="box-h"><span><b>Customer profile</b> · tokenized</span><span>${esc(c.id)}</span></div><div class="rt-prof">
+    ${[['Segment', c.seg.l], ['Plan value', '$' + c.arpu + ' a month'], ['Churn score', Math.round(c.risk * 100) + '%'], ['Bill due', days === 0 ? 'today' : 'in ' + days + ' days'], ['Contacts this week', c.c7], ['Roaming', c.roam ? 'yes' : 'no']].map(([l, v]) => `<div><span>${esc(l)}</span><b>${esc(String(v))}</b></div>`).join('')}
+    </div><div class="rt-act">${areaSpark(rtAct(c, false, RT.ctl.ram, true), 'var(--accent)')}<span class="tiny muted">Weekday activity by hour, 00–23 (behavioral data)</span></div>`;
+  rtRenderEval(); rtRenderImpact(); rtRenderQueue(); rtRenderFair(); rtRenderPilot(); renderDeck(); renderSolve();
+}
+function rtRenderEval() {
+  const m = RT.m, W = 260, H = 150, P = 30, mx = Math.max(.05, ...m.cal.map(b => Math.max(b.p, b.o))) * 1.08;
+  const sx = v => P + v / mx * (W - P - 8), sy = v => H - 22 - v / mx * (H - 32);
+  const wTop = Array.from(RT.w).map((v, f) => [RT_F[f], v]).slice(1).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1])).slice(0, 6), wm = Math.max(...wTop.map(t => Math.abs(t[1])));
+  $('#rtEval').innerHTML = `<div class="box-h"><span><b>Model evaluation</b> · held-out customers</span><span>${fmtInt(m.nTest)} contacts</span></div><div class="wb-body">
+    <div class="ue-out">${[['AUC (ranking quality)', m.auc.toFixed(3), `vs ${m.bAuc.toFixed(3)} for a one-size-fits-all hour × channel rule`], ['Lift in top 20%', m.lift.toFixed(2) + '×', 'engagement vs the average contact'], ['Brier score', m.brier.toFixed(3), 'lower is better; probabilities are calibrated']].map(([l, v, s]) => `<div><span>${l}</span><b>${v}</b><span>${s}</span></div>`).join('')}</div>
+    <div class="rt-two"><svg viewBox="0 0 ${W} ${H}" class="rt-cal" role="img" aria-label="Calibration: predicted versus observed engagement by score band">
+      <line x1="${sx(0)}" y1="${sy(0)}" x2="${sx(mx)}" y2="${sy(mx)}" style="stroke:var(--line-strong);stroke-dasharray:4 4"/>
+      <line x1="${P}" y1="${H - 22}" x2="${W - 4}" y2="${H - 22}" style="stroke:var(--line)"/><line x1="${P}" y1="6" x2="${P}" y2="${H - 22}" style="stroke:var(--line)"/>
+      <polyline points="${m.cal.map(b => sx(b.p).toFixed(1) + ',' + sy(b.o).toFixed(1)).join(' ')}" style="fill:none;stroke:var(--cx-1);stroke-width:1.6"/>
+      ${m.cal.map(b => `<circle cx="${sx(b.p).toFixed(1)}" cy="${sy(b.o).toFixed(1)}" r="${(2.5 + Math.sqrt(b.n) / 14).toFixed(1)}" style="fill:var(--cx-1)"><title>predicted ${Math.round(b.p * 100)}% · observed ${Math.round(b.o * 100)}% · ${b.n} contacts</title></circle>`).join('')}
+      <text x="${W - 4}" y="${H - 6}" text-anchor="end" style="font:10px var(--f-mono);fill:var(--muted)">predicted →</text><text x="4" y="12" style="font:10px var(--f-mono);fill:var(--muted)">observed</text></svg>
+      <div><span class="label">What the model learned (largest weights)</span><div class="rt-w">${wTop.map(([n, v]) => `<div><span>${esc(n)}</span><span class="bar"><i style="width:${(Math.abs(v) / wm * 100).toFixed(0)}%;background:${v >= 0 ? 'var(--good)' : 'var(--crit)'}"></i></span><span class="mono tiny">${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(2)}</span></div>`).join('')}</div></div></div>
+    <p class="tiny muted">Logistic regression on ${RT_F.length - 1} behavioral, transactional and contextual features. Trained on ${fmtInt(m.nTrain)} past contacts from ${fmtInt(m.nCust * .8)} customers; tested on customers it never saw.</p></div>`;
+}
+function rtRenderImpact() {
+  const I = rtImpact(RT.ctl.goal); RT.imp = I;
+  const bars = [['Fixed schedule', I.pf, 'var(--muted)'], ['Right-time model', I.pm, 'var(--accent)']], mx = Math.max(I.pf, I.pm, .01);
+  $('#rtImpact').innerHTML = `<div class="box-h"><span><b>Business impact</b> · policy simulation</span><span>${esc(RT_GN[I.goal])}</span></div><div class="wb-body">
+    ${bars.map(b => `<div class="rt-bar"><span>${b[0]}</span><span class="bar"><i style="width:${(b[1] / mx * 100).toFixed(1)}%;background:${b[2]}"></i></span><b class="mono">${(b[1] * 100).toFixed(1)}%</b></div>`).join('')}
+    <div class="ue-out">${[['Engagement uplift', (I.uplift >= 0 ? '+' : '') + Math.round(I.uplift * 100) + '%', 'vs Tue 10:00 SMS for everyone'], ['Extra engaged per 100k', '+' + fmtInt(I.extra), 'customers contacted'], [I.money != null ? 'Revenue protected per 100k' : 'Not contacted', I.money != null ? fmtMoney(I.money) + '/yr' : fmtInt(I.blocked) + ' of ' + I.n, I.money != null ? (I.goal === 'retention' ? 'if 25% of extra engaged customers stay' : 'if 10% take a $5/month add-on') : 'blocked by guardrails']].map(([l, v, s]) => `<div><span>${l}</span><b>${v}</b><span>${s}</span></div>`).join('')}</div>
+    <p class="tiny muted">Simulated on ${fmtInt(I.n)} held-out synthetic customers using the true (hidden) response model. ${fmtInt(I.blocked)} were not contacted because every slot was blocked. Revenue assumptions are illustrative; the A/B test in the report measures the real effect.</p></div>`;
+}
+function rtRenderQueue() {
+  const q = rtQueue(RT.ctl.goal, 8); RT.q = q;
+  $('#rtQueue').innerHTML = `<div class="box-h"><span><b>Contact queue</b> · next 4 hours, ranked by chance × value</span><span>${esc(RT_GN[RT.ctl.goal])}</span></div><div class="tbl-wrap"><table class="wb-table"><thead><tr><th>Customer</th><th>Segment</th><th>When</th><th>Channel</th><th>Chance</th><th>Why</th><th></th></tr></thead><tbody>` +
+    (q.length ? q.map(r => `<tr><td class="mono">${esc(r.c.id)}</td><td>${esc(r.c.seg.l)}</td><td class="mono">${esc(rtSlot(r.z))}</td><td>${esc(RT_CHN[r.z.ch])}</td><td class="mono">${Math.round(r.z.p * 100)}%</td><td class="small">${esc((rtReasons(r.c, r.z, RT.ctl.goal)[0]) || '—')}</td><td><button type="button" class="btn sm" data-wsadd="rtq" data-c="${esc(r.c.id)}">Add to workspace</button></td></tr>`).join('')
+      : `<tr><td colspan="7" class="muted">Quiet hours: nobody can be contacted in the next 4 hours.</td></tr>`) + '</tbody></table></div>';
+}
+function rtReport() {
+  rtEnsure(); const m = RT.m, I = RT.imp || rtImpact(RT.ctl.goal), d = new Date().toISOString().slice(0, 10);
+  const imps = RT_GOALS.map(([g, l]) => { const x = g === RT.ctl.goal ? I : rtImpact(g); return `| ${l} | ${(x.pf * 100).toFixed(1)}% | ${(x.pm * 100).toFixed(1)}% | ${x.uplift >= 0 ? '+' : ''}${Math.round(x.uplift * 100)}% | ${fmtInt(x.blocked)} of ${x.n} |`; }).join('\n');
+  return `# Right-time engagement: technical report
+Cellvoyant · generated ${d} · model seed ${RT.seed}
+
+> All customers in this report are synthetic and tokenized. No real customer data was used.
+
+## 1. Summary
+Telecom companies often contact customers at the wrong moment, which wastes retention and upsell opportunities and annoys customers. This prototype predicts, for every tokenized customer, the hour, day and channel with the highest chance of engagement, and only inside the windows that consent, quiet hours, frequency caps and cooling-off rules allow.
+
+On held-out customers the model ranks contacts with an AUC of **${m.auc.toFixed(3)}** (a one-size-fits-all hour × channel rule scores ${m.bAuc.toFixed(3)}) and the top 20% of its scores engage **${m.lift.toFixed(2)}×** more often than the average contact.
+
+## 2. Problem background
+Traditional outreach uses fixed schedules or generic triggers and ignores individual routines and real-time context. As digital interactions grow, customers expect personalized, timely and respectful contact. This responds to the industry trend toward hyper-personalization and data-driven decisions, with the goals of better experience and lower churn.
+
+## 3. Stakeholders
+- Customer experience and retention teams: own the save desk and retention offers
+- Marketing and sales: own campaigns, upsell and channel mix
+- Consumer analytics: own the model, monitoring and experiments
+- Customers: receive fewer, better-timed contacts and can opt out at any time
+- Regulatory and compliance: consent, privacy and telecom marketing rules
+
+## 4. Data sources (synthetic in this prototype)
+| Type | Data | Use |
+|---|---|---|
+| Behavioral | App and data sessions by hour, weekday and weekend | Activity profile at each hour |
+| Behavioral | Past responses by channel (previous 90 days) | Channel response rate |
+| Transactional | Bill cycle, plan value (ARPU), churn score | Bill-due and value features |
+| Contextual | Network outages, roaming, complaints, rest days, Ramadan schedule | Context features and guardrails |
+| Contact history | ${fmtInt(m.nTrain + m.nTest)} past contacts with outcome (engaged or not) | Training and evaluation labels |
+
+Identifiers are random tokens (for example ${RT.hold[0].id}). No names, phone numbers, e-mail addresses or message content are stored or needed.
+
+## 5. Features
+${RT_F.slice(1).map((f, i) => `${i + 1}. ${f}`).join('\n')}
+
+## 6. Model
+- Logistic regression, L2-regularized, trained with stochastic gradient descent (10 epochs)
+- Training set: ${fmtInt(m.nTrain)} contacts from ${fmtInt(m.nCust * .8)} customers; test set: ${fmtInt(m.nTest)} contacts from customers the model never saw (split by customer to avoid leakage)
+- Channel response rates are computed from an earlier history window than the training labels, so the label never leaks into its own feature
+- Scoring: every allowed (day, hour, channel) slot in the next 7 days is scored; the best slot is recommended with its top reasons
+
+Largest learned weights:
+${Array.from(RT.w).map((v, f) => [RT_F[f], v]).slice(1).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1])).slice(0, 8).map(([n, v]) => `- ${n}: ${v >= 0 ? '+' : ''}${v.toFixed(2)}`).join('\n')}
+
+## 7. Evaluation
+| Metric | Value |
+|---|---|
+| AUC, right-time model | ${m.auc.toFixed(3)} |
+| AUC, hour × channel baseline | ${m.bAuc.toFixed(3)} |
+| Lift in top 20% of scores | ${m.lift.toFixed(2)}× |
+| Brier score | ${m.brier.toFixed(3)} |
+| Base engagement rate | ${(m.base * 100).toFixed(1)}% |
+
+Calibration (predicted vs observed):
+${m.cal.map(b => `- predicted ${(b.p * 100).toFixed(1)}% → observed ${(b.o * 100).toFixed(1)}% (${b.n} contacts)`).join('\n')}
+
+## 8. Contact policy and guardrails
+Guardrails are applied before any score is used, so the model can never recommend a blocked slot.
+- Consent per channel; opted-out customers are never contacted
+- Quiet hours: calls and SMS only 08:00–21:00 (the US rule for telephone solicitations, 47 CFR 64.1200(c)(1), used as a reference); other messages only 08:00–22:00
+- Frequency cap: at most 2 marketing contacts per customer per 7 days
+- Cooling-off: no marketing within 48 hours of a complaint or during a network outage in the customer's area
+- Rest days: no sales calls on weekend days (configurable: Sat–Sun or Fri–Sat); optional Ramadan schedule with no calls around sunset
+- Service messages (for example a bill reminder) skip the marketing cap and cooling-off, but still respect consent and quiet hours
+
+## 9. Findings: policy simulation
+Same customers, same guardrails: fixed schedule (Tuesday 10:00 SMS, or e-mail without SMS consent) vs the right-time model.
+
+| Goal | Fixed schedule | Right-time model | Uplift | Not contacted (blocked) |
+|---|---|---|---|---|
+${imps}
+
+## 10. Business impact (illustrative)
+For ${RT_GN[I.goal].toLowerCase()} contacts, the model engages about **${fmtInt(I.extra)} more customers per 100,000 contacted**.${I.money != null ? ` ${I.goal === 'retention' ? 'If 25% of those extra engaged customers stay for another 12 months at the average plan value' : 'If 10% of them take a $5 a month add-on for 12 months'}, that is about **${fmtMoney(I.money)} a year** per 100,000 customers.` : ''} These are simulation results with stated assumptions; a controlled test is needed to measure the real effect.
+
+## 11. Fairness and segment check
+Same guardrails for every segment (${RT_GN[RT.ctl.goal].toLowerCase()} contacts).
+
+| Segment | Customers | Reachable | Fixed schedule | Right-time | Change |
+|---|---|---|---|---|---|
+${rtFairRows(rtImpact(RT.ctl.goal)).map(r => `| ${r.l} | ${r.n} | ${Math.round(r.reach * 100)}% | ${r.pf == null ? '—' : (r.pf * 100).toFixed(1) + '%'} | ${r.pm == null ? '—' : (r.pm * 100).toFixed(1) + '%'} | ${r.d == null ? '—' : (r.d >= 0 ? '+' : '') + Math.round(r.d * 100) + '%'} |`).join('\n')}
+
+## 12. Pilot plan (A/B test)
+${(() => { const P = rtPilot(); return `- Groups: fixed schedule (control) vs right-time model (treatment), same offer and the same guardrails
+- Sample size: ${fmtInt(P.n)} customers per group to detect ${(P.p1 * 100).toFixed(1)}% → ${(P.p2 * 100).toFixed(1)}% engagement (two-sided 5% significance, ${Math.round(PILOT.pw * 100)}% power)
+- Duration: about ${P.days} days at ${fmtInt(PILOT.daily)} contacts a day per group
+- A churn effect needs about ${fmtInt(P.nc)} customers per group (1.4% → 1.26% monthly churn), so engagement is the leading metric and churn is confirmed over a longer window
+- Success metrics: engagement rate, accepted offers, saves, churn
+- Guardrail metrics: opt-outs, complaints, contacts per customer; stop if opt-outs or complaints rise more than 20% vs control`; })()}
+
+## 13. Limitations and next steps
+- Synthetic data: retrain and re-evaluate on anonymized or tokenized operator data before any decision
+- Run an A/B test (fixed schedule vs right-time) with churn, engagement, opt-out and complaint rates as success and guardrail metrics
+- Move from response modeling to uplift modeling (who is changed by the contact, not just who responds)
+- Monitor weekly for drift, calibration and fairness across segments; retrain quarterly
+- Add channel cost and message fatigue to the objective
+
+## 14. Privacy, ethics and confidentiality
+- Use only anonymized or tokenized data; minimize features to what the model needs
+- Comply with the data-protection and telecom rules where the operator works (for example the EU GDPR, UAE Federal Decree-Law No. 45 of 2021 and the Saudi Personal Data Protection Law) and with local marketing-call rules
+- No intrusive or spam-like contact: guardrails, caps and opt-outs are enforced in code, and every recommendation shows its reasons
+- Treat all operator data as highly confidential; respect legal, ethical and cultural norms, including rest days and religious observances
+`;
+}
+async function rtDownload() {
+  const md = rtReport();
+  if (downloadsNs) { try { await downloadsNs.save({ filename: 'cellvoyant-right-time-technical-report.md', data: md }); toast('Technical report saved'); return; } catch (e) { if (e && e.code === 'declined') { toast('Save cancelled'); return; } } }
+  showBriefPanel(md);
+}
+function initRT() {
+  if (!$('#rtApp')) return;
+  $('#rtCh').innerHTML = RT_CH.map(([k, l]) => `<button type="button" data-ch="${k}" aria-pressed="false">${esc(l)}</button>`).join('');
+  $('#rtGoal').innerHTML = RT_GOALS.map(([k, l]) => `<button type="button" data-g="${k}" aria-pressed="false">${esc(l)}</button>`).join('');
+  const fillCust = () => {
+    $('#rtCust').innerHTML = RT.hold.slice().sort((a, b) => b.risk - a.risk).slice(0, 40).map(c => `<option value="${esc(c.id)}">${esc(c.id)} · ${esc(c.seg.l)} · churn ${Math.round(c.risk * 100)}%</option>`).join('');
+    $('#rtCust').value = RT.cur.id; $('#rtSeed').textContent = 'sample ' + RT.seed;
+  };
+  const syncCtx = () => { const c = RT.cur, days = (c.bill - rtToday().getDate() + 30) % 30; RT.ctl.bill = days <= 3; RT.ctl.roam = c.roam; RT.ctl.outage = false; $('#rtBill').checked = RT.ctl.bill; $('#rtRoam').checked = RT.ctl.roam; $('#rtOutage').checked = false; };
+  const run = () => { rtEnsure(); fillCust(); syncCtx(); rtRender(); };
+  $('#rtCust').addEventListener('change', () => { RT.cur = RT.cust.find(c => c.id === $('#rtCust').value) || RT.cur; syncCtx(); rtRender(); });
+  $('#rtCh').addEventListener('click', e => { const b = e.target.closest('[data-ch]'); if (!b) return; RT.ctl.ch = b.dataset.ch; rtRender(); });
+  $('#rtGoal').addEventListener('click', e => { const b = e.target.closest('[data-g]'); if (!b) return; RT.ctl.goal = b.dataset.g; rtRender(); });
+  [['rtOutage', 'outage'], ['rtBill', 'bill'], ['rtRoam', 'roam'], ['rtRam', 'ram']].forEach(([id, k]) => $('#' + id).addEventListener('change', e => { RT.ctl[k] = e.target.checked; if (k === 'ram') RT.cust.forEach(c => { c.actC = {}; }); rtRender(); }));
+  $('#rtWknd').addEventListener('change', e => { RT.ctl.wknd = e.target.value; rtRender(); });
+  $('#rtRetrain').onclick = () => { RT.seed = RT.seed % 997 + 11; RT.ready = false; run(); toast(`Retrained on sample ${RT.seed}: AUC ${RT.m.auc.toFixed(3)}`); };
+  $('#rtPlan').onclick = rtPlanDownload;
+  $('#plUp').addEventListener('input', e => { PILOT.up = +e.target.value; rtRenderPilot(); renderDeck(); });
+  $('#plDaily').addEventListener('input', e => { PILOT.daily = +e.target.value; rtRenderPilot(); renderDeck(); });
+  $('#plPw').addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (!b) return; PILOT.pw = +b.dataset.p; rtRenderPilot(); renderDeck(); });
+  $('#rtReport').onclick = rtDownload; $$('[data-rtreport]').forEach(b => { b.onclick = rtDownload; });
+  $('#rtApp').addEventListener('click', e => { const b = e.target.closest('[data-wsadd]'); if (!b) return; const c = RT.cust.find(x => x.id === b.dataset.c); if (!c) return;
+    const z = b.dataset.wsadd === 'rtq' ? (RT.q.find(r => r.c === c) || {}).z : rtBest(c, RT.ctl.goal); if (!z) return;
+    addTask({ title: `${RT_GN[RT.ctl.goal]} to ${c.id} by ${RT_CHN[z.ch]}`, kind: 'contact', ref: c.id, dept: RT.ctl.goal === 'upsell' ? 'pm' : 'cx', prio: c.risk >= .3 ? 'high' : 'normal', due: rtSlot(z) }, b); });
+  let started = false; const go = () => { if (started) return; started = true; run(); };
+  if ('IntersectionObserver' in window) { const io = new IntersectionObserver(es => { if (es.some(x => x.isIntersecting)) { io.disconnect(); go(); } }, { rootMargin: '600px' }); io.observe($('#rtApp')); }
+  setTimeout(go, 5000);
+}
+
+/* ---------- OPERATOR WORKSPACE: shared shift board ---------- */
+let tasksDb = null, tasks = [], tasksState = 'wait', tasksRO = false;
+const localTasks = [];
+const TASK_COLS = [['todo', 'To do'], ['doing', 'In progress'], ['done', 'Done']];
+const taskList = () => (tasksDb ? tasks : localTasks).filter(t => t.status !== 'archived');
+async function addTask(t, btn) {
+  if (tasksRO) { toast('View-only access: tasks can’t be added here'); return null; }
+  const body = { title: String(t.title || '').slice(0, 200), kind: ['signal', 'contact', 'manual'].includes(t.kind) ? t.kind : 'manual', ref: String(t.ref || '').slice(0, 40), dept: DEPT[t.dept] ? t.dept : 'st', prio: t.prio === 'high' ? 'high' : 'normal', due: String(t.due || '').slice(0, 40), status: 'todo', createdAt: new Date().toISOString() };
+  if (!body.title) return null;
+  if (btn) btn.disabled = true;
+  try {
+    if (tasksDb) { const ref = await tasksDb.collection('tasks').add(body); toast('Added to the operator workspace'); return Object.assign({ id: ref.id }, body); }
+    const id = 'local' + Date.now().toString(36); localTasks.unshift(Object.assign({ id }, body)); renderWorkspace(); toast('Added to the workspace (this visit only)'); return Object.assign({ id }, body);
+  } catch (e) {
+    if (e && e.code === 'invalid_argument') { tasksRO = true; renderWorkspace(); toast('View-only access: tasks can’t be added here'); }
+    else toast('The task could not be saved. Try again.');
+    return null;
+  } finally { if (btn) btn.disabled = false; }
+}
+async function setTaskStatus(id, status) {
+  if (tasksDb && !id.startsWith('local')) { try { await tasksDb.doc('tasks/' + id).update({ status }); } catch (e) { toast('Could not update the task'); } }
+  else { const t = localTasks.find(x => x.id === id); if (t) t.status = status; renderWorkspace(); }
+}
+function renderWorkspace() {
+  const root = $('#wsBoard'); if (!root) return;
+  const list = taskList(), by = s => list.filter(t => t.status === s);
+  $('#wsNote').textContent = { on: 'Shared · everyone who can open this page sees this board', wait: 'Connecting…', err: 'Board unavailable right now', off: 'Kept for this visit only' }[tasksState] + (tasksRO ? ' · view-only' : '');
+  root.innerHTML = TASK_COLS.map(([k, l], ci) => `<div class="wcol"><div class="wcol-h"><b>${l}</b><span class="mono tiny">${by(k).length}</span></div>${by(k).slice(0, 20).map(t => `<article class="wcard p-${esc(t.prio)}">
+      <b>${esc(t.title)}</b>
+      <span class="tiny muted mono">${esc(t.kind)}${t.ref ? ' · ' + esc(t.ref) : ''}${t.due ? ' · due ' + esc(t.due) : ''}</span>
+      <div class="routes"><span class="rt">${esc((DEPT[t.dept] || DEPT.st).short)}</span>${t.prio === 'high' ? '<span class="sev crit">High</span>' : ''}</div>
+      ${tasksRO ? '' : `<div class="wbtns">${ci > 0 ? `<button type="button" class="btn sm" data-mv="${esc(t.id)}" data-to="${TASK_COLS[ci - 1][0]}" aria-label="Move back to ${TASK_COLS[ci - 1][1]}">←</button>` : ''}${ci < 2 ? `<button type="button" class="btn sm" data-mv="${esc(t.id)}" data-to="${TASK_COLS[ci + 1][0]}">${ci === 0 ? 'Start' : 'Done'} →</button>` : `<button type="button" class="btn sm" data-mv="${esc(t.id)}" data-to="archived">Archive</button>`}</div>`}
+    </article>`).join('') || '<p class="tiny muted" style="padding:6px 2px">Nothing here.</p>'}</div>`).join('');
+  const open = list.filter(t => t.status !== 'done');
+  $('#wsStats').innerHTML = [['Open tasks', open.length], ['High priority', open.filter(t => t.prio === 'high').length], ['Done this shift', by('done').length], ['Critical signals', events.filter(e => e.tpl.sev === 'crit' && fresh(e) > .25).length]].map(([l, v]) => `<div><span>${l}</span><b>${v}</b></div>`).join('');
+  const tc = $('#taskCount'); if (tc) { tc.textContent = open.length; tc.hidden = !open.length; }
+}
+function handoverMD() {
+  const list = taskList(), top = [...events].sort((a, b) => lensScore(b) - lensScore(a)).slice(0, 5);
+  let notes = ''; try { notes = localStorage.getItem('cv-notes') || ''; } catch (e) { /* ignore */ }
+  return `# Shift handover · Metro North\n${fmtClock()} (simulated market time) · lens: ${lens === 'all' ? 'all departments' : DEPT[lens].name}\n\n## Signals to watch\n` + top.map(e => `- [${e.id}] ${SEVL[e.tpl.sev]} · ${e.text} · act by ${fmtHM(actBy(e).due)} · owner ${DEPT[routeOf(e)[0]].name}`).join('\n') +
+    TASK_COLS.map(([k, l]) => `\n\n## ${l}\n` + (list.filter(t => t.status === k).map(t => `- ${t.prio === 'high' ? '**High** · ' : ''}${t.title}${t.due ? ' (due ' + t.due + ')' : ''} · ${(DEPT[t.dept] || DEPT.st).name}`).join('\n') || '- none')).join('') +
+    (notes.trim() ? `\n\n## Notes\n${notes.trim()}` : '') + `\n\n_Data in the console is simulated for fictional operators._\n`;
+}
+function initWorkspace() {
+  if (!$('#wsBoard')) return;
+  $('#wsDept').innerHTML = DEPTS.map(d => `<option value="${d.k}">${esc(d.name)}</option>`).join('');
+  $('#wsForm').addEventListener('submit', async e => { e.preventDefault(); const t = $('#wsTitle').value.trim(); if (!t) { $('#wsTitle').focus(); return; } const r = await addTask({ title: t, kind: 'manual', dept: $('#wsDept').value, prio: $('#wsPrio').value }, $('#wsForm button[type=submit]')); if (r) $('#wsTitle').value = ''; });
+  $('#wsBoard').addEventListener('click', e => { const b = e.target.closest('[data-mv]'); if (b) { b.disabled = true; setTaskStatus(b.dataset.mv, b.dataset.to); } });
+  try { $('#wsNotes').value = localStorage.getItem('cv-notes') || ''; } catch (e) { /* ignore */ }
+  let nt; $('#wsNotes').addEventListener('input', () => { clearTimeout(nt); nt = setTimeout(() => { try { localStorage.setItem('cv-notes', $('#wsNotes').value); } catch (e) { /* ignore */ } }, 400); });
+  $('#wsHandover').onclick = async () => { const md = handoverMD(); if (downloadsNs) { try { await downloadsNs.save({ filename: 'cellvoyant-shift-handover.md', data: md }); toast('Handover note saved'); return; } catch (e) { if (e && e.code === 'declined') { toast('Save cancelled'); return; } } } showBriefPanel(md); };
+  $('#wsQuick').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) goTool(b.dataset.go); });
+  (window.claude && typeof window.claude.use === 'function' ? window.claude.use('db').catch(() => null) : Promise.resolve(null)).then(d => {
+    tasksDb = d || null; tasksState = tasksDb ? 'on' : 'off';
+    if (tasksDb) tasksDb.collection('tasks').orderBy('createdAt', 'desc').limit(60).onSnapshot(s => { tasks = s.docs.map(x => Object.assign({ id: x.id }, x.data())); renderWorkspace(); }, () => { tasksState = 'err'; renderWorkspace(); });
+    renderWorkspace();
+  });
+  renderWorkspace();
+}
+
+/* ---------- RESOURCES & TOOLS LIBRARY ---------- */
+const RES_TPL = {
+  brief: () => `# Signal brief\n\n**Signal ID:** S-____  **Date / time:** ____  **Severity:** Critical / High / Watch\n**Operator:** ____  **Signal type:** ____  **Lead owner:** ____  **Act by:** ____\n\n## What happened (one sentence)\n\n## Evidence (source · reliability)\n- \n- \n\n## So what (impact on us, with numbers)\n\n## Recommended action (owner · by when)\n1. \n2. \n\n## What to watch next\n`,
+  battle: () => `# Competitor battlecard: ____\n\n**Updated:** ____  **Owner:** ____\n\n## Their position\n- Quadrant: ____\n- Owners and capital: ____\n- Headline plans and effective prices (incl. fees): ____\n\n## Recent moves (signal IDs)\n- \n\n## Where we win\n- \n\n## Where they win\n- \n\n## Talk track (factual, no disparagement)\n- \n\n## Likely next move and our pre-planned response\n- \n`,
+  policy: () => `# Customer contact policy\n\n**Version:** ____  **Approved by (compliance):** ____\n\n## Consent\n- Channels and the consent each needs: push ____ · SMS ____ · e-mail ____ · call ____ · in-app ____\n- Opt-out handling and time to honor: ____\n\n## Quiet hours (local time of the customer)\n- Calls and SMS: 08:00–21:00\n- Other messages: 08:00–22:00\n- Rest days and religious observances: ____\n\n## Frequency caps\n- Marketing contacts per customer per 7 days: 2\n\n## Cooling-off\n- After a complaint: 48 hours with no marketing\n- During a network outage in the customer's area: no marketing\n\n## Data\n- Tokenized IDs only; no names, numbers or message content in models\n- Retention period: ____\n\n## Review\n- Monthly opt-out and complaint review: ____\n`,
+  handover: () => `# Shift handover\n\n**Shift:** ____  **From:** ____  **To:** ____\n\n## Signals to watch (ID · act by · owner)\n- \n\n## Tasks in progress\n- \n\n## Decisions taken this shift\n- \n\n## Blockers and escalations\n- \n`,
+  model: () => `# Model card: ____\n\n## Intended use\n\n## Not for\n\n## Training data (source, period, anonymization)\n\n## Features\n\n## Evaluation (metric · value · test set)\n\n## Fairness checks (segments compared)\n\n## Guardrails enforced outside the model\n\n## Owner, monitoring and retraining schedule\n`,
+  workshop: () => `# Workshop preparation checklist\n\n- [ ] Goal and the decision the workshop should produce\n- [ ] Attendees from each department involved\n- [ ] Data pack: signals, plans, positioning, benchmarks (public or anonymized only)\n- [ ] Competition-law briefing: no confidential information about competitors' future prices\n- [ ] Pre-read sent 3 days before\n- [ ] Owner for every action, with a date\n`
+};
+const RESOURCES = [
+  ['Templates', 'Signal brief', 'One page that turns a signal into a decision: what happened, evidence, impact, action, owner and act-by time.', 'dl:brief'],
+  ['Templates', 'Competitor battlecard', 'Position, owners, plans, recent moves, where you win and a factual talk track.', 'dl:battle'],
+  ['Templates', 'Customer contact policy', 'Consent, quiet hours, frequency caps and cooling-off rules, ready for compliance sign-off.', 'dl:policy'],
+  ['Templates', 'Shift handover note', 'Signals to watch, tasks in progress, decisions and escalations for the next shift.', 'dl:handover'],
+  ['Templates', 'Model card', 'Intended use, data, features, evaluation, fairness checks and monitoring for any customer model.', 'dl:model'],
+  ['Templates', 'Workshop preparation checklist', 'Everything to prepare before a war game or Academy session, including a competition-law briefing.', 'dl:workshop'],
+  ['Tools', 'Operator workspace', 'Shared shift board: add signals and contacts as tasks, move them through the shift, export a handover note.', 'go:tab-ws'],
+  ['Tools', 'Right-time engagement studio', 'Predict the best hour, day and channel to contact each tokenized customer, inside the guardrails.', 'go:#challenge'],
+  ['Tools', 'Analyst workbench', 'Benchmark 108 real operators and work out retention-offer unit economics.', 'go:tab-wb'],
+  ['Tools', 'War room', 'Simulate a rival price cut and compare five responses on lines saved, cost and net impact.', 'go:tab-war'],
+  ['Tools', 'Tariff DNA', 'Compare plans gene by gene and catch stealth price rises.', 'go:tab-dna'],
+  ['Tools', 'AI assistant', 'Ask questions, run every tool above, write briefs and book services.', 'go:tab-ask'],
+  ['Data & regulators', 'ITU ICT statistics', 'Official country-level telecom and internet statistics from the UN agency for ICT.', 'https://www.itu.int/en/ITU-D/Statistics/Pages/default.aspx'],
+  ['Data & regulators', 'GSMA Intelligence', 'Operator, connection and market data across the mobile industry (subscription).', 'https://www.gsmaintelligence.com/'],
+  ['Data & regulators', 'TDRA (UAE)', 'Telecommunications and Digital Government Regulatory Authority of the UAE.', 'https://tdra.gov.ae/'],
+  ['Data & regulators', 'CST (Saudi Arabia)', 'Communications, Space and Technology Commission of Saudi Arabia.', 'https://www.cst.gov.sa/'],
+  ['Data & regulators', 'Ofcom (UK)', 'UK communications regulator: market reports, coverage and pricing data.', 'https://www.ofcom.org.uk/'],
+  ['Data & regulators', 'FCC (US)', 'US Federal Communications Commission: spectrum, coverage maps and rules.', 'https://www.fcc.gov/'],
+  ['Data & regulators', 'BEREC (EU)', 'Body of European Regulators for Electronic Communications: reports and guidelines.', 'https://www.berec.europa.eu/'],
+  ['Data & regulators', '3GPP', 'The standards body behind 4G, 5G and satellite direct-to-device specifications.', 'https://www.3gpp.org/'],
+  ['Data & regulators', 'Ericsson Mobility Report', 'Twice-yearly forecasts for subscriptions, traffic and fixed wireless.', 'https://www.ericsson.com/en/reports-and-papers/mobility-report'],
+  ['Data & regulators', 'Speedtest Global Index', 'Monthly median mobile and fixed speeds by country.', 'https://www.speedtest.net/global-index'],
+  ['Privacy & rules', 'EU GDPR (official text)', 'The EU General Data Protection Regulation, Regulation (EU) 2016/679.', 'https://eur-lex.europa.eu/eli/reg/2016/679/oj'],
+  ['Privacy & rules', 'UAE personal data protection law', 'Federal Decree-Law No. 45 of 2021 regarding the protection of personal data.', 'https://u.ae/en/about-the-uae/digital-uae/data/data-protection-laws'],
+  ['Privacy & rules', 'SDAIA (Saudi Arabia)', 'Saudi Data and AI Authority, which oversees the Personal Data Protection Law.', 'https://sdaia.gov.sa/'],
+  ['Privacy & rules', 'US calling-hours rule', '47 CFR 64.1200: no telephone solicitations before 8 a.m. or after 9 p.m. local time.', 'https://www.ecfr.gov/current/title-47/chapter-I/subchapter-B/part-64/subpart-L/section-64.1200'],
+  ['Privacy & rules', 'UK ICO: direct marketing guidance', 'How UK privacy and electronic-communications rules apply to marketing calls, texts and e-mail.', 'https://ico.org.uk/for-organisations/direct-marketing-and-privacy-and-electronic-communications/']
+];
+const PLAYBOOKS = [
+  ['Respond to a rival price cut in 72 hours', ['Hour 0: confirm the cut with Tariff DNA and an Analyst-on-Demand check', 'Hour 4: size the port-out risk in the War room (do nothing vs four responses)', 'Hour 24: targeted credits to at-risk lines in the most exposed districts', 'Hour 48: brief stores and the save desk with a factual talk track', 'Hour 72: review port-outs against the forecast and decide whether to escalate']],
+  ['Contain a churn wave in one district', ['Find the wave front on the Geo radar churn layer', 'Check Retail pressure for rival kiosks or promotions nearby', 'Score customers in the district with the right-time model; contact the top of the queue first', 'Cap and cool-off rules stay on: no more than 2 marketing contacts a week', 'Re-measure port-outs per 10k lines after 7 days']],
+  ['Launch a right-time retention campaign', ['Agree the contact policy with compliance (template above)', 'Train and evaluate the model; publish the model card', 'A/B test: half fixed schedule, half right-time, same offer', 'Track engagement, churn, opt-outs and complaints daily', 'Scale only if churn falls and opt-outs and complaints do not rise']],
+  ['Prepare for a spectrum auction', ['List each rival’s holdings, needs and balance-sheet headroom (Capital radar)', 'Agree the bidding envelope and walk-away price with Finance', 'Run the spectrum simulation workshop with three bidding rounds', 'File consultation responses on time (Regulatory tracker)', 'Brief the board on scenarios and the decision rules']]
+];
+const GLOSSARY = [
+  ['ARPU', 'Average revenue per user (or line) per month.'], ['Churn', 'The share of customers who leave in a period, usually per month.'], ['Port-out / port-in', 'A customer moving their number to (or from) another operator.'],
+  ['MNO', 'Mobile network operator: owns its radio network and spectrum.'], ['MVNO', 'Mobile virtual network operator: sells mobile service on another operator’s network.'], ['FWA', 'Fixed wireless access: home broadband delivered over 4G or 5G.'],
+  ['Direct-to-device (D2D)', 'Satellite service that reaches ordinary phones without a dish.'], ['5G standalone', '5G with its own 5G core network, enabling features such as network slicing.'], ['CLV', 'Customer lifetime value: monthly margin × expected lifetime in months.'],
+  ['CAC', 'Customer acquisition cost: what it costs to win one new line.'], ['Uplift', 'The change caused by an action compared with not taking it, measured with a control group.'], ['AUC', 'Area under the ROC curve: how well a model ranks positives above negatives (0.5 = random, 1 = perfect).'],
+  ['Calibration', 'Whether predicted probabilities match observed rates (30% predicted ≈ 30% observed).'], ['Frequency cap', 'The maximum number of marketing contacts a customer can receive in a period.'], ['Quiet hours', 'Hours when customers must not be contacted, by law or by policy.'],
+  ['Tokenization', 'Replacing identifiers such as phone numbers with random tokens so data can be analyzed without revealing who it is about.'], ['Signal half-life', 'The time after which a competitor signal has lost half its decision value.'], ['Act-by time', 'The signal time plus its half-life: the latest time to act while the signal is still worth most of its value.']
+];
+let resCat = 'All', resQ = '';
+function renderResources() {
+  const root = $('#resGrid'); if (!root) return;
+  const cats = ['All', ...new Set(RESOURCES.map(r => r[0])), 'Playbooks', 'Glossary'], q = resQ.toLowerCase();
+  const hit = (...s) => !q || s.join(' ').toLowerCase().includes(q);
+  $('#resCats').innerHTML = cats.map(c => `<button type="button" data-c="${esc(c)}" aria-pressed="${c === resCat}">${esc(c)}</button>`).join('');
+  const show = c => resCat === 'All' || resCat === c;
+  const items = RESOURCES.filter(r => show(r[0]) && hit(r[0], r[1], r[2]));
+  const pb = PLAYBOOKS.filter(p => show('Playbooks') && hit(p[0], ...p[1])), gl = GLOSSARY.filter(g => show('Glossary') && hit(g[0], g[1]));
+  root.innerHTML = (items.length ? `<div class="res-grid">${items.map(([c, t, d, a]) => `<article class="res"><span class="label">${esc(c)}</span><h4>${esc(t)}</h4><p class="small">${esc(d)}</p>
+      ${a.startsWith('dl:') ? `<button type="button" class="btn sm accent" data-dl="${a.slice(3)}">Download template (.md)</button>` : a.startsWith('go:') ? `<button type="button" class="btn sm" data-go="${a.slice(3)}">Open</button>` : `<a class="btn sm" href="${esc(a)}" target="_blank" rel="noopener noreferrer">Visit site ↗</a>`}</article>`).join('')}</div>` : '') +
+    (pb.length ? `<h3 class="res-h">Playbooks</h3><div class="res-pb">${pb.map(([t, s]) => `<details class="panel"><summary><b>${esc(t)}</b></summary><ol class="cxl">${s.map(x => `<li>${esc(x)}</li>`).join('')}</ol></details>`).join('')}</div>` : '') +
+    (gl.length ? `<h3 class="res-h">Glossary</h3><dl class="gloss">${gl.map(([t, d]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join('')}</dl>` : '') +
+    (!items.length && !pb.length && !gl.length ? '<p class="muted">No resources match. Try another word.</p>' : '');
+}
+function initResources() {
+  if (!$('#resGrid')) return;
+  $('#resCats').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (b) { resCat = b.dataset.c; renderResources(); } });
+  let st; $('#resQ').addEventListener('input', e => { clearTimeout(st); st = setTimeout(() => { resQ = e.target.value.trim(); renderResources(); }, 120); });
+  $('#resGrid').addEventListener('click', async e => {
+    const g = e.target.closest('[data-go]'); if (g) { goTool(g.dataset.go); return; }
+    const b = e.target.closest('[data-dl]'); if (!b) return;
+    const k = b.dataset.dl, md = RES_TPL[k]();
+    if (downloadsNs) { try { await downloadsNs.save({ filename: `cellvoyant-${k}-template.md`, data: md }); toast('Template saved'); return; } catch (err) { if (err && err.code === 'declined') { toast('Save cancelled'); return; } } }
+    showBriefPanel(md);
+  });
+  renderResources();
+}
+
+/* ---------- CHALLENGE UPGRADES: fairness check, pilot planner, contact-plan export, findings deck ---------- */
+function rtFairRows(I) {
+  return RT_SEG.map(S => {
+    const z = I.seg[S.k] || { n: 0, nF: 0, sF: 0, nM: 0, sM: 0 }, pf = z.nF ? z.sF / z.nF : null, pm = z.nM ? z.sM / z.nM : null;
+    const d = pf != null && pm != null ? pm / pf - 1 : null;
+    return { l: S.l, n: z.n, reach: z.n ? z.nM / z.n : 0, pf, pm, d, worse: d != null && d < -.03 };
+  });
+}
+function rtRenderFair() {
+  const I = rtImpact(RT.ctl.goal), rows = rtFairRows(I), worse = rows.filter(r => r.worse);
+  $('#rtFair').innerHTML = `<div class="box-h"><span><b>Fairness &amp; segment check</b> · same guardrails for everyone</span><span>${esc(RT_GN[I.goal])}</span></div><div class="wb-body">
+    <div class="rt-verdict ${worse.length ? 'bad' : 'good'}"><b>${worse.length ? `${worse.length} segment${worse.length > 1 ? 's' : ''} worse off` : 'No segment is worse off'}</b><span class="small">${worse.length ? 'Review before a pilot: ' + esc(worse.map(r => r.l).join(', ')) : 'Every segment engages at least as well as on the fixed schedule, and nobody is contacted beyond the cap.'}</span></div>
+    <div class="tbl-wrap"><table class="wb-table"><thead><tr><th>Segment</th><th>Customers</th><th>Reachable</th><th>Fixed</th><th>Right-time</th><th>Change</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.l)}</td><td>${r.n}</td><td>${Math.round(r.reach * 100)}%</td><td>${r.pf == null ? '—' : (r.pf * 100).toFixed(1) + '%'}</td><td>${r.pm == null ? '—' : (r.pm * 100).toFixed(1) + '%'}</td><td class="${r.d == null || Math.abs(r.d) <= .03 ? '' : r.d > 0 ? 'up' : 'down'}">${r.d == null ? '—' : Math.abs(r.d) <= .03 ? 'on par' : (r.d > 0 ? '+' : '') + Math.round(r.d * 100) + '%'}</td></tr>`).join('')}</tbody></table></div>
+    <p class="tiny muted">Reachable = share of the segment with at least one allowed slot this week. Changes within ±3% count as on par (about 50 test customers per segment). Customers without consent, or under a cap or cooling-off, are left alone.</p></div>`;
+}
+const PILOT = { up: 15, pw: .8, daily: 2000 };
+// two-proportion sample size per group, two-sided 5% significance
+function pilotN(p1, p2, pw) { const pb = (p1 + p2) / 2, zb = pw >= .9 ? 1.2816 : .8416; return Math.ceil((1.96 * Math.sqrt(2 * pb * (1 - pb)) + zb * Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2 / (p2 - p1) ** 2); }
+function rtPilot() {
+  const I = rtImpact(RT.ctl.goal), p1 = Math.max(.01, I.pf), p2 = Math.min(.99, p1 * (1 + PILOT.up / 100)), n = pilotN(p1, p2, PILOT.pw);
+  return { p1, p2, n, days: Math.max(1, Math.ceil(n / PILOT.daily)), nc: pilotN(.014, .0126, PILOT.pw), goal: I.goal };
+}
+function rtRenderPilot() {
+  const el = $('#rtPilotOut'); if (!el) return;
+  const P = rtPilot();
+  $('#o-plUp').textContent = '+' + PILOT.up + '%'; $('#o-plDaily').textContent = fmtInt(PILOT.daily);
+  $$('#plPw button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.p === PILOT.pw)));
+  el.innerHTML = [['Customers per group', fmtInt(P.n), `to detect ${(P.p1 * 100).toFixed(1)}% → ${(P.p2 * 100).toFixed(1)}% engagement`], ['Days to run', P.days, `at ${fmtInt(PILOT.daily)} contacts a day per group`], ['For a churn effect', fmtInt(P.nc), 'per group, to detect 1.4% → 1.26% monthly churn']]
+    .map(([l, v, s]) => `<div><span>${l}</span><b>${v}</b><span>${s}</span></div>`).join('');
+}
+function rtPlanCSV() {
+  rtEnsure(); const g = RT.ctl.goal, q = v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : v;
+  RT.sim = true;
+  const rows = RT.hold.map(c => { const b = rtBest(c, g); return b ? [c.id, c.seg.l, RT_GN[g], RT_DAYS[b.d], pad(b.h) + ':00', RT_CHN[b.ch], (b.p * 100).toFixed(1), 'contact'] : [c.id, c.seg.l, RT_GN[g], '', '', '', '', 'do_not_contact']; });
+  RT.sim = false;
+  return ['customer_token,segment,goal,day,hour,channel,engage_probability_pct,action'].concat(rows.map(r => r.map(q).join(','))).join('\n');
+}
+async function rtPlanDownload() {
+  const csv = rtPlanCSV();
+  if (downloadsNs) { try { await downloadsNs.save({ filename: 'cellvoyant-contact-plan.csv', data: csv }); toast('Contact plan saved'); return; } catch (e) { if (e && e.code === 'declined') { toast('Save cancelled'); return; } } }
+  showBriefPanel(csv);
+}
+
+let deckI = 0;
+function deckSlides() {
+  rtEnsure();
+  const m = RT.m, G = RT_GOALS.map(([g, l]) => [l, rtImpact(g)]), I = G[0][1], P = rtPilot(), worse = rtFairRows(rtImpact(RT.ctl.goal)).filter(r => r.worse);
+  const stat = a => `<div class="dk-stats">${a.map(([l, v]) => `<div><b>${v}</b><span>${l}</span></div>`).join('')}</div>`;
+  const mx = Math.max(...G.map(([, x]) => Math.max(x.pf, x.pm)), .01);
+  return [
+    { t: 'Reach every customer at the right moment', lede: 'An AI model that predicts the best hour, day and channel to contact each customer, inside strict privacy and anti-spam guardrails.',
+      viz: stat([['ranking quality (AUC)', m.auc.toFixed(2)], ['retention engagement vs fixed schedule', (I.uplift >= 0 ? '+' : '') + Math.round(I.uplift * 100) + '%'], ['guardrails enforced in code', '5']]),
+      pts: [`AUC ${m.auc.toFixed(2)} on customers the model never saw`, `Retention engagement ${(I.pm * 100).toFixed(1)}% vs ${(I.pf * 100).toFixed(1)}% on a fixed schedule`, 'Synthetic, tokenized data in this prototype'] },
+    { t: 'The problem', pts: ['Fixed schedules and generic triggers ignore each customer’s routine and context', 'Wrong-moment contacts are ignored, annoy customers and push them toward rivals', 'Customers now expect personal, timely and respectful outreach', 'Retention, upsell and satisfaction all depend on timing'] },
+    { t: 'Methodology', viz: `<div class="dk-flow">${['Behavioral, transactional and contextual data', `${RT_F.length - 1} features per hour and channel`, 'Logistic regression, tested on unseen customers', 'Guardrails: consent, quiet hours, caps, cooling-off', 'Best slot, channel and reasons'].map((s, i) => `<div><span class="mono tiny">${i + 1}</span>${esc(s)}</div>`).join('<i aria-hidden="true">→</i>')}</div>`,
+      get hp() { return this.pts; }, pts: ['Behavioral: app and data sessions by hour; past responses by channel', 'Transactional: bill cycle, plan value, churn score', 'Contextual: outages, roaming, complaints, rest days, Ramadan schedule', 'Split by customer for testing, so no customer appears in both sets'] },
+    { t: 'Model quality', viz: stat([['AUC, right-time model', m.auc.toFixed(3)], ['AUC, one-size-fits-all rule', m.bAuc.toFixed(3)], ['engagement in the top 20% of scores', m.lift.toFixed(2) + '×'], ['Brier score (calibration)', m.brier.toFixed(3)]]),
+      pts: [`AUC ${m.auc.toFixed(3)} vs ${m.bAuc.toFixed(3)} for an hour × channel rule`, `Top 20% of scores engage ${m.lift.toFixed(2)}× more than the average contact`, `Brier score ${m.brier.toFixed(3)}; predicted and observed rates line up`] },
+    { t: 'Findings', viz: `<div class="dk-bars">${G.map(([l, x]) => `<div class="dk-bg"><span>${esc(l)}</span><div><i style="width:${(x.pf / mx * 100).toFixed(1)}%;background:var(--muted)"></i><b class="mono">${(x.pf * 100).toFixed(1)}%</b></div><div><i style="width:${(x.pm / mx * 100).toFixed(1)}%;background:var(--accent)"></i><b class="mono">${(x.pm * 100).toFixed(1)}%</b></div></div>`).join('')}<div class="dk-key tiny"><span><i style="background:var(--muted)"></i>Fixed schedule (Tue 10:00 SMS)</span><span><i style="background:var(--accent)"></i>Right-time model</span></div></div>`,
+      pts: G.map(([l, x]) => `${l}: ${(x.pf * 100).toFixed(1)}% → ${(x.pm * 100).toFixed(1)}% engagement (${x.uplift >= 0 ? '+' : ''}${Math.round(x.uplift * 100)}%)`) },
+    { t: 'Business impact', viz: stat([['more engaged customers per 100k contacted', '+' + fmtInt(I.extra)], ['revenue protected per 100k a year', fmtMoney(I.money)], ['held-out customers left alone by guardrails', fmtInt(I.blocked)]]),
+      pts: [`About ${fmtInt(I.extra)} more customers engage per 100,000 retention contacts`, `If 25% of them stay 12 more months: about ${fmtMoney(I.money)} a year per 100,000 customers`, 'Illustrative simulation; the pilot measures the real effect'] },
+    { t: 'Responsible by design', viz: `<div class="rt-verdict ${worse.length ? 'bad' : 'good'}"><b>${worse.length ? worse.length + ' segment(s) need review' : 'No customer segment is worse off'}</b><span class="small">Fairness check across ${RT_SEG.length} segments</span></div>`,
+      get hp() { return this.pts; }, pts: ['Tokenized IDs only: no names, numbers or message content', 'Consent per channel; opt-outs are never contacted', 'Calls and SMS 08:00–21:00; no messages 22:00–08:00', 'At most 2 marketing contacts a week; none after a complaint or during an outage', 'Rest days and a Ramadan schedule are configurable'] },
+    { t: 'Next step: a controlled pilot', viz: stat([['customers per group', fmtInt(P.n)], ['days at ' + fmtInt(PILOT.daily) + ' contacts a day', P.days], ['per group for a churn effect', fmtInt(P.nc)]]),
+      get hp() { return this.pts.slice(1); }, pts: [`A/B test: fixed schedule vs right-time, same offer, ${fmtInt(P.n)} customers per group to detect +${PILOT.up}% engagement`, 'Success: engagement, saves and churn', 'Guardrails: opt-outs and complaints must not rise', 'Scale to all segments only if both hold'] }
+  ];
+}
+function renderDeck() {
+  const st = $('#deckStage'); if (!st || !RT.ready) return;
+  const S = deckSlides(); deckI = Math.max(0, Math.min(deckI, S.length - 1)); const s = S[deckI];
+  st.innerHTML = `<div class="dk-slide"><span class="label">Right-time engagement · ${deckI + 1} of ${S.length}</span><h3>${esc(s.t)}</h3>${s.lede ? `<p class="dk-lede">${esc(s.lede)}</p>` : ''}${s.viz || ''}${(s.hp || (s.viz ? [] : s.pts)).length ? `<ul>${(s.hp || s.pts).map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}</div>`;
+  $('#deckDots').innerHTML = S.map((x, i) => `<button type="button" data-i="${i}" aria-label="Slide ${i + 1}: ${esc(x.t)}"${i === deckI ? ' aria-current="true"' : ''}></button>`).join('');
+  $('#deckNum').textContent = `${deckI + 1} / ${S.length}`;
+  $('#deckPrev').disabled = deckI === 0; $('#deckNext').disabled = deckI === S.length - 1;
+}
+const deckMD = () => `# Right-time engagement: findings presentation\nCellvoyant · synthetic, tokenized data · model seed ${RT.seed}\n\n` + deckSlides().map((s, i) => `---\n\n## ${i + 1}. ${s.t}\n\n${s.lede ? s.lede + '\n\n' : ''}${s.pts.map(p => '- ' + p).join('\n')}`).join('\n\n') + '\n';
+function initDeck() {
+  if (!$('#deck')) return;
+  const go = d => { deckI += d; renderDeck(); };
+  $('#deckPrev').onclick = () => go(-1); $('#deckNext').onclick = () => go(1);
+  $('#deckDots').addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) { deckI = +b.dataset.i; renderDeck(); } });
+  $('#deck').addEventListener('keydown', e => { if (e.key === 'ArrowRight') { e.preventDefault(); go(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); } });
+  const fs = $('#deckFs');
+  if (!document.fullscreenEnabled) fs.hidden = true;
+  else fs.onclick = () => { const d = $('#deck'); (document.fullscreenElement ? document.exitFullscreen() : d.requestFullscreen()).catch(() => toast('Full screen isn’t available here')); };
+  document.addEventListener('fullscreenchange', () => { fs.textContent = document.fullscreenElement === $('#deck') ? 'Exit full screen' : 'Present full screen'; });
+  $('#deckDl').onclick = async () => { rtEnsure(); const md = deckMD(); if (downloadsNs) { try { await downloadsNs.save({ filename: 'cellvoyant-right-time-presentation.md', data: md }); toast('Presentation saved'); return; } catch (e) { if (e && e.code === 'declined') { toast('Save cancelled'); return; } } } showBriefPanel(md); };
+}
+
+/* ---------- CHALLENGE: how each problem was solved (live results) ---------- */
+function renderSolve() {
+  const el = $('#chSolve'); if (!el) return;
+  const R = RT.ready, m = RT.m || {}, G = R ? Object.fromEntries(RT_GOALS.map(([g]) => [g, rtImpact(g)])) : {}, I = G.retention, pc = v => (v * 100).toFixed(1) + '%';
+  const up = x => (x.uplift >= 0 ? '+' : '') + Math.round(x.uplift * 100) + '%', wait = '<span class="muted">loading…</span>';
+  const worse = R ? rtFairRows(rtImpact(RT.ctl.goal)).filter(r => r.worse) : [];
+  const groups = [
+    ['The problems', [
+      ['Customers are reached at the wrong moment', 'Scores every hour of the week on all five channels (840 slots) for each customer and picks the best slot the guardrails allow', '#rtApp', 'Heatmap & recommendation', R ? `Retention engagement ${pc(I.pf)} → <b>${pc(I.pm)}</b>` : wait],
+      ['Fixed schedules and generic triggers', 'Replaces the one-size-fits-all send time with a personal schedule, tested head-to-head against Tuesday 10:00 SMS', '#rtImpact', 'Business impact', R ? `<b>${up(I)}</b> engagement vs the fixed schedule` : wait],
+      ['Individual preferences are ignored', 'Learns each customer’s routine (activity by hour, weekday vs weekend) and channel preference (past responses, app usage)', '#rtProfile', 'Customer profile', 'Every recommendation shows its top reasons'],
+      ['Real-time context is ignored', 'Context features and switches: network outage, bill due, roaming, rest days and a Ramadan schedule', '#rtApp', 'Context controls', 'The recommendation updates instantly'],
+      ['Missed retention (churn)', 'The retention goal weights the churn score; the contact queue ranks customers by chance × value for the next 4 hours', '#rtQueue', 'Contact queue', R ? `+${fmtInt(I.extra)} engaged per 100k; about ${fmtMoney(I.money)}/yr protected (illustrative)` : wait],
+      ['Missed upsell and satisfaction', 'Separate upsell and service-message goals with their own signals (plan value, bill due)', '#rtApp', 'Goal switch', R ? `Upsell <b>${up(G.upsell)}</b> · service <b>${up(G.service)}</b>` : wait]]],
+    ['Data & model', [
+      ['Use behavioral, transactional and contextual data', `${RT_F.length - 1} features from session patterns, channel history and app usage; bill cycle, plan value and churn score; outages, roaming, complaints and calendar`, '#rtEval', 'Model evaluation', R ? `AUC <b>${m.auc.toFixed(3)}</b> vs ${m.bAuc.toFixed(3)} for a fixed rule; top 20% engage ${m.lift.toFixed(2)}×` : wait],
+      ['Personalization at scale', 'Scores 1,500 tokenized customers in about a tenth of a second and exports a contact plan any CRM can load', '#rtApp', 'Download contact plan (CSV)', 'One row per customer: day, hour, channel, chance, or do-not-contact']]],
+    ['Constraints', [
+      ['Anonymized or tokenized data only', 'Customers exist only as random tokens such as C-1A2B3C; no names, numbers or message content are used', '#rtProfile', 'Tokenized profile', 'No personal fields in the model'],
+      ['Privacy and telecom rules', 'Consent per channel; calls and SMS only 08:00–21:00 (US calling-hours rule as reference); no messages 22:00–08:00', '#rtRec', 'Guardrails checked', 'Blocked slots are hatched and can never be recommended'],
+      ['No intrusive or spam-like contact', 'At most 2 marketing contacts a week; no marketing after a complaint or during an outage; opt-outs never contacted', '#rtRec', 'Guardrails checked', R ? `${fmtInt(I.blocked)} of ${I.n} test customers left alone this week` : wait],
+      ['Ethical and cultural guidelines', 'Configurable rest days (Sat–Sun or Fri–Sat), a Ramadan schedule, and a fairness check across customer segments', '#rtFair', 'Fairness check', R ? (worse.length ? `<span class="down">${worse.length} segment(s) need review</span>` : '<span class="up">No segment is worse off</span>') : wait],
+      ['Confidentiality', 'Only synthetic data on this page; in production, data stays in the operator’s own environment', '#launch', 'FAQ', 'Treated as highly confidential']]],
+    ['Stakeholders', [
+      ['CX & retention, marketing & sales', 'Retention queue for the save desk; upsell and service goals for campaigns; tasks go to the operator workspace', '#departments', 'Departments', 'Each team has its own lens and workshop'],
+      ['Consumer analytics', 'Model evaluation, fairness check, pilot planner and technical report', '#rtPilot', 'Pilot planner', R ? `${fmtInt(rtPilot().n)} customers per group for the A/B test` : wait],
+      ['Customers and regulators', 'Fewer, better-timed contacts with easy opt-out; every rule documented in the report', '#challenge', 'Technical report', 'Section 14: privacy, ethics and confidentiality']]],
+    ['Deliverables', [
+      ['AI model for optimal contact times', 'Logistic regression trained in the browser, tested on customers it never saw', '#rtEval', 'Model evaluation', '<span class="up">✓ Delivered</span>'],
+      ['Prototype or dashboard', 'The right-time engagement studio', '#rtApp', 'Studio', '<span class="up">✓ Delivered</span>'],
+      ['Presentation: methodology, findings, impact', '8-slide deck with live numbers, downloadable', '#deck', 'Presentation', '<span class="up">✓ Delivered</span>'],
+      ['Technical report', 'Data sources, features, model, evaluation, fairness, pilot plan, privacy', '#challenge', 'Download from the studio', '<span class="up">✓ Delivered</span>']]]
+  ];
+  el.innerHTML = `<thead><tr><th scope="col">Challenge problem or requirement</th><th scope="col">How we solved it</th><th scope="col">Where to see it</th><th scope="col">Result</th></tr></thead>` +
+    groups.map(([g, rows]) => `<tbody><tr class="grp"><th colspan="4" scope="colgroup">${esc(g)}</th></tr>${rows.map(([p, sol, href, where, res]) => `<tr><th scope="row">${esc(p)}</th><td>${esc(sol)}</td><td><a href="${href}">${esc(where)}</a></td><td>${res}</td></tr>`).join('')}</tbody>`).join('');
+}
+
+/* ---------- LAUNCH: pilot sign-up ---------- */
+function initLaunch() {
+  renderSolve();
+  const cm = $('#claimMap'); if (cm) cm.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) goTool(b.dataset.go); });
+  const f = $('#pilotForm'); if (!f) return;
+  const tc = $('#lcTools'); if (tc) tc.textContent = TOOLDEFS.length;
+  f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const mods = $$('input[name=plMod]:checked', f).map(x => x.value), msg = $('#plMsg'), btn = $('button[type=submit]', f);
+    if (!mods.length) { msg.textContent = 'Pick at least one module.'; return; }
+    btn.disabled = true;
+    try {
+      const notes = $('#plNotes').value.trim();
+      const r = await createRequest({ service: 'pilot', details: `Organization: ${$('#plOrg').value} · Region: ${$('#plReg').value} · Modules: ${mods.join(', ')}${notes ? ' · ' + notes : ''}`, urgency: 'standard', via: 'launch' });
+      msg.textContent = `Pilot request ${r.label} sent${r.saved ? '. It’s in the request queue in the console’s AI assistant tab.' : ' (kept for this visit only).'}`; f.reset();
+    } catch (err) { msg.textContent = err.message; }
+    finally { btn.disabled = false; }
+  });
+}
+
+/* ---------- CHALLENGE 2: CENTRAL MARKET-INTELLIGENCE HUB (sources, multilingual desk, search, access) ---------- */
+// unit = illustrative compute + licence cost (USD) per refresh across all tracked competitors; hl = signal half-life (h); min = fastest interval allowed by rate limits or terms (h)
+const MI_SRC = [
+  { k: 'web', n: 'Competitor websites & tariff pages', cat: 'Competitors', ex: 'Plan pages, offers, store locators', conn: 'Polite crawler with change detection', fmt: 'Unstructured', acc: 'Public', hl: 24, min: 1, unit: 4, rel: .9, rule: 'robots.txt, crawl-delay and terms of service respected' },
+  { k: 'app', n: 'Competitor mobile apps', cat: 'Competitors', ex: 'Release notes, in-app offers, versions', conn: 'App store listing monitor', fmt: 'Semi-structured', acc: 'Public', hl: 72, min: 6, unit: 1, rel: .85, rule: 'Public listing data only; no decompiling' },
+  { k: 'social', n: 'Official social media channels', cat: 'Competitors', ex: 'Brand accounts on the major networks', conn: 'Official platform APIs', fmt: 'Unstructured', acc: 'API key', hl: 6, min: .25, unit: .5, rel: .7, rule: 'Platform rate limits and developer terms; official accounts only' },
+  { k: 'ios', n: 'Apple App Store ratings & reviews', cat: 'App stores', ex: 'Ratings, review text, rank', conn: 'App Store Connect API (own apps); licensed app-intelligence feed (rivals)', fmt: 'Semi-structured', acc: 'API key / licensed', hl: 48, min: 6, unit: 2, rel: .8, rule: 'Official API for own apps; a licensed provider for competitors' },
+  { k: 'gplay', n: 'Google Play ratings & reviews', cat: 'App stores', ex: 'Ratings, review text, install bands', conn: 'Google Play Developer API (own apps); licensed app-intelligence feed (rivals)', fmt: 'Semi-structured', acc: 'API key / licensed', hl: 48, min: 6, unit: 2, rel: .8, rule: 'Official API for own apps; a licensed provider for competitors' },
+  { k: 'gov', n: 'Government & ministries', cat: 'Public sector', ex: 'Ministries of economy, digital and trade', conn: 'RSS and page monitor', fmt: 'Unstructured', acc: 'Public', hl: 168, min: 6, unit: .3, rel: .95, rule: 'Official sources; terms of use respected' },
+  { k: 'cb', n: 'Central banks', cat: 'Public sector', ex: 'Central Bank of the UAE, Saudi Central Bank', conn: 'Publications and statistics downloads', fmt: 'Structured', acc: 'Public', hl: 720, min: 24, unit: .3, rel: .97, rule: 'Official open publications' },
+  { k: 'stats', n: 'National statistics', cat: 'Public sector', ex: 'UAE FCSC, Saudi GASTAT open data', conn: 'Open-data APIs', fmt: 'Structured', acc: 'Public', hl: 2160, min: 24, unit: .3, rel: .97, rule: 'Open-data licences' },
+  { k: 'reg', n: 'Telecom regulators', cat: 'Regulation', ex: 'TDRA (UAE), CST (Saudi Arabia) and peers', conn: 'Announcement and consultation monitor', fmt: 'Unstructured', acc: 'Public', hl: 168, min: 1, unit: .3, rel: .97, rule: 'Public notices; no login areas without authorization' },
+  { k: 'media', n: 'Trusted business media', cat: 'Media & research', ex: 'Licensed news APIs and publisher feeds', conn: 'Licensed news API', fmt: 'Unstructured', acc: 'Licensed', hl: 12, min: .25, unit: 3, rel: .85, rule: 'Used within the licence; summaries where full text is restricted' },
+  { k: 'research', n: 'Licensed research providers', cat: 'Media & research', ex: 'Analyst reports and datasets', conn: 'Authorized accounts and APIs; credentials in a vault', fmt: 'Long documents', acc: 'Licensed', hl: 720, min: 24, unit: 5, rel: .9, rule: 'Named seats and territories from the licence; no redistribution' },
+  { k: 'fin', n: 'Financial reports & exchange filings', cat: 'Financial', ex: 'ADX, DFM and Tadawul disclosures; annual reports', conn: 'Exchange disclosure feeds', fmt: 'Long documents', acc: 'Public', hl: 168, min: 1, unit: 1, rel: .97, rule: 'Official disclosures' },
+  { k: 'net', n: 'Network performance tests', cat: 'Network', ex: 'Crowd-sourced speed and coverage data', conn: 'Licensed measurement feed', fmt: 'Structured', acc: 'Licensed', hl: 168, min: 24, unit: 3, rel: .85, rule: 'Aggregated data under licence' },
+  { k: 'int', n: 'Internal databases & spreadsheets', cat: 'Internal', ex: 'Regional databases, vendor subscriptions, analyst spreadsheets', conn: 'Database connectors, SFTP and governed upload', fmt: 'Structured', acc: 'Internal', hl: 720, min: 24, unit: .2, rel: .9, rule: 'Classified, access-controlled, stays in the tenant' }
+];
+const MI = { target: .25, budget: 2000, role: 'uae', q: '', type: 'all', extra: [], panel: 'src', hit: null };
+const sigLog = [];
+const avgFresh = (T, H) => T <= 0 ? 1 : (H / (T * Math.LN2)) * (1 - Math.pow(2, -T / H));
+const fmtEvery = h => h < 1 ? Math.round(h * 60) + ' min' : h < 48 ? (+h.toFixed(h < 10 ? 1 : 0)) + ' h' : Math.round(h / 24) + ' d';
+function miPlan() {
+  const rows = MI_SRC.map(s => ({ s, T: Math.max(s.min, s.hl * MI.target) })), cost = r => 720 / r.T * r.s.unit;
+  let total = rows.reduce((a, r) => a + cost(r), 0), guard = 0;
+  // over budget: stretch the interval whose saving costs the least reliability-weighted freshness per dollar
+  while (total > MI.budget && guard++ < 500) {
+    let best = null;
+    rows.forEach(r => { const T2 = r.T * 1.5; if (T2 > r.s.hl * 2) return; const dc = cost(r) - 720 / T2 * r.s.unit, df = (avgFresh(r.T, r.s.hl) - avgFresh(T2, r.s.hl)) * r.s.rel; if (dc > 0 && (!best || df / dc < best.sc)) best = { r, T2, sc: df / dc }; });
+    if (!best) break; best.r.T = best.T2; total = rows.reduce((a, r) => a + cost(r), 0);
+  }
+  rows.forEach(r => { r.cost = cost(r); r.f = avgFresh(r.T, r.s.hl); r.per = 720 / r.T; });
+  return { rows, total, fresh: rows.reduce((a, r) => a + r.f * r.s.rel, 0) / rows.reduce((a, r) => a + r.s.rel, 0), over: total > MI.budget + 1 };
+}
+function miRenderSources() {
+  const P = miPlan();
+  const usd = v => '$' + fmtInt(v);
+  $('#o-miTarget').textContent = Math.round(MI.target * 100) + '% of half-life'; $('#o-miBudget').textContent = usd(MI.budget) + ' a month';
+  $('#miSrcSum').innerHTML = [['Sources connected', MI_SRC.length + ' types'], ['Monthly refresh cost', usd(P.total)], ['Average freshness', Math.round(P.fresh * 100) + '%'], ['Budget', P.over ? `<span class="down">over: needs ${usd(P.total)}</span>` : `<span class="up">within ${usd(MI.budget)}</span>`]]
+    .map(([l, v]) => `<div><span>${l}</span><b>${v}</b></div>`).join('');
+  $('#miSrcTable').innerHTML = `<thead><tr><th>Source</th><th>Connector</th><th>Access</th><th>Refresh every</th><th>Cost / month</th><th>Freshness</th><th>Compliance rule</th></tr></thead><tbody>` +
+    P.rows.map(r => `<tr id="mi-src-${r.s.k}"${MI.hit === r.s.k ? ' class="hit"' : ''}><td><b>${esc(r.s.n)}</b><span class="tiny muted">${esc(r.s.ex)}</span></td><td class="small">${esc(r.s.conn)}<span class="tiny muted">${esc(r.s.fmt)}</span></td><td><span class="acc acc-${r.s.acc.split(' ')[0].toLowerCase()}">${esc(r.s.acc)}</span></td><td class="mono">${fmtEvery(r.T)}</td><td class="mono">${fmtMoney(r.cost)}</td><td><span class="fbar"><i style="width:${(r.f * 100).toFixed(0)}%"></i></span><span class="mono tiny">${Math.round(r.f * 100)}%</span></td><td class="small">${esc(r.s.rule)}</td></tr>`).join('') + '</tbody>';
+}
+
+/* multilingual desk */
+const MI_SAMPLES = {
+  en: ['English · analyst note', 'Arcline cut its Unlimited Premium plan to $60 a month for new lines. Early reviews of the Arcline app praise the faster sign-up, but several customers complain about slow speeds in the East district. Vertex has posted 42 fixed-wireless installer roles, which suggests a home internet launch within three months. Analysts expect Nimbus to respond with targeted retention credits rather than a full price match.'],
+  ar: ['العربية · خبر', 'أطلقت شركة أركلاين باقة جديدة غير محدودة بسعر 60 دولاراً شهرياً للخطوط الجديدة. ويشكو بعض العملاء من بطء الإنترنت وانقطاع الخدمة في المنطقة الشرقية، بينما أشاد آخرون بسهولة التسجيل عبر التطبيق.'],
+  zh: ['中文 · 应用评论', 'Kite 推出了新的 eSIM 无限流量套餐，价格很便宜，注册也很快。但是有些用户抱怨网速太慢，晚上经常断网。'],
+  long: ['English · long report', 'Metro North mobile revenue grew slowly in the third quarter as price competition intensified. Arcline led the discounting with a $10 cut on its premium plan, and its port-in volumes rose sharply in the East and Harbor districts. Vertex avoided headline price cuts but added a network access fee to a legacy plan, which raised its effective price. Pulsar opened six pop-up kiosks near Nimbus stores and bundled mobile lines with home broadband. Kite, the digital eSIM brand, gained attention with a $25 unlimited plan and a four-minute in-app sign-up. Network quality remained a key differentiator: Pulsar improved median 5G speeds by 18% after adding carriers, while complaints about Arcline outages spiked twice. The regulator opened a consultation on shared mid-band spectrum, with responses due in 45 days. Looking ahead, the main risks are a Vertex fixed-wireless launch and a wider Arcline family-plan discount, both of which could raise churn among high-value customers.']
+};
+const MI_POS = ['praise', 'praised', 'good', 'great', 'excellent', 'fast', 'faster', 'easy', 'cheap', 'love', 'best', 'improved', 'improve', 'growth', 'strong', 'gained', 'ممتاز', 'جيد', 'رائع', 'سريع', 'سهولة', 'أشاد', 'أفضل', 'رخيص', '很好', '优秀', '快', '便宜', '满意', '推荐', '喜欢', '方便'];
+const MI_NEG = ['complain', 'complaint', 'complaints', 'slow', 'outage', 'outages', 'bad', 'poor', 'expensive', 'worse', 'decline', 'problem', 'risk', 'risks', 'churn', 'spiked', 'بطء', 'بطيء', 'انقطاع', 'يشكو', 'شكوى', 'سيء', 'مشكلة', 'غالي', 'أسوأ', '慢', '断网', '抱怨', '投诉', '差', '贵', '问题', '失望'];
+const MI_CONCEPTS = {
+  'Price & plans': ['price', 'prices', 'pricing', 'tariff', 'plan', 'discount', 'fee', 'سعر', 'أسعار', 'باقة', 'خصم', 'رسوم', '价格', '套餐', '降价', '资费'],
+  'Network quality': ['network', 'speed', 'speeds', 'coverage', '5g', 'outage', 'outages', 'شبكة', 'سرعة', 'تغطية', 'الجيل الخامس', 'انقطاع', 'الإنترنت', '网络', '网速', '覆盖', '断网', '信号'],
+  'eSIM & switching': ['esim', 'switch', 'port-in', 'port-out', 'شريحة', 'انتقال', '携号转网', 'esim'],
+  'Apps & reviews': ['app', 'review', 'reviews', 'rating', 'sign-up', 'تطبيق', 'التطبيق', 'تقييم', 'التسجيل', '应用', '评论', '评分', '注册'],
+  'Regulation & spectrum': ['regulator', 'regulatory', 'consultation', 'spectrum', 'licence', 'license', 'الهيئة', 'تنظيم', 'الطيف', 'ترخيص', '监管', '频谱', '牌照'],
+  'Churn & retention': ['churn', 'retention', 'leave', 'complain', 'complaints', 'الاحتفاظ', 'يشكو', 'شكوى', '流失', '投诉', '抱怨'],
+  'Home broadband & FWA': ['fixed-wireless', 'fixed wireless', 'fwa', 'home internet', 'broadband', 'installer', 'الإنترنت المنزلي', '家庭宽带', '宽带'],
+  'Retail & stores': ['store', 'stores', 'kiosk', 'kiosks', 'retail', 'متجر', 'متاجر', '门店', '零售'],
+  'Finance & capital': ['revenue', 'earnings', 'profit', 'ebitda', 'dividend', 'market cap', 'private equity', 'hedge fund', 'stake', 'acquisition', 'deal', 'إيرادات', 'أرباح', 'استحواذ', 'صفقة', '营收', '利润', '收购', '投资']
+};
+const MI_ALIAS = { 'أركلاين': 'Arcline', 'فيرتكس': 'Vertex', 'نيمبس': 'Nimbus', 'اتصالات': 'e&', '中国移动': 'China Mobile', '中国电信': 'China Telecom', '中国联通': 'China Unicom' };
+const isCJKorAr = w => /[؀-ۿ一-鿿]/.test(w);
+function miHas(hay, term) { if (isCJKorAr(term)) return hay.includes(term); const t = term.toLowerCase(); return new RegExp('(^|[^a-z0-9])' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^a-z0-9]|$)', 'i').test(hay); }
+function miCount(hay, list) { return list.reduce((n, w) => n + (miHas(hay, w) ? 1 : 0), 0); }
+function miLang(t) {
+  const c = r => (t.match(r) || []).length;
+  const L = [['Arabic', c(/[؀-ۿ]/g)], ['Chinese', c(/[一-鿿]/g) * 2], ['Cyrillic', c(/[Ѐ-ӿ]/g)], ['Hindi', c(/[ऀ-ॿ]/g)], ['English', c(/[A-Za-z]/g)]].sort((a, b) => b[1] - a[1]);
+  const tot = L.reduce((a, x) => a + x[1], 0) || 1;
+  return L.filter((x, i) => x[1] && (i === 0 || x[1] / tot > .2)).map(x => x[0]);
+}
+function miSent(t) { const lo = t.toLowerCase(), p = miCount(lo, MI_POS), n = miCount(lo, MI_NEG), s = (p - n) / (p + n + 1); return { p, n, s, l: p && n && Math.abs(p - n) <= 1 ? 'Mixed' : s > .15 ? 'Positive' : s < -.15 ? 'Negative' : 'Neutral' }; }
+const miSplit = t => t.replace(/\s+/g, ' ').trim().split(/(?<=[.!?。！？؟])\s*/).map(s => s.trim()).filter(s => s.length > 1);
+function miSummary(t) {
+  const S = miSplit(t); if (S.length <= 2) return S;
+  const tok = s => isCJKorAr(s) ? (s.match(/[一-鿿]{2}|[؀-ۿ]{3,}/g) || []) : (s.toLowerCase().match(/[a-z][a-z-]{3,}/g) || []);
+  const tf = {}; S.forEach(s => tok(s).forEach(w => { tf[w] = (tf[w] || 0) + 1; }));
+  const k = Math.min(3, Math.ceil(S.length / 3));
+  return S.map((s, i) => ({ s, i, sc: tok(s).reduce((a, w) => a + (tf[w] > 1 ? tf[w] : 0), 0) / Math.sqrt(tok(s).length + 1) + Object.values(MI_CONCEPTS).reduce((a, l) => a + (miCount(s.toLowerCase(), l) ? .8 : 0), 0) + (i === 0 ? 1.2 : 0) }))
+    .sort((a, b) => b.sc - a.sc).slice(0, k).sort((a, b) => a.i - b.i).map(x => x.s);
+}
+function miEntities(t) {
+  const lo = t.toLowerCase(), out = new Set();
+  Object.values(OPS).forEach(o => { if (o.short !== 'Market' && miHas(lo, o.short)) out.add(o.name); });
+  Object.entries(MI_ALIAS).forEach(([a, n]) => { if (t.includes(a)) out.add(n); });
+  (POS ? POS.operators : []).forEach(c => { const s = c.short || c.name; if (s && s.length > 2 && miHas(lo, s)) out.add(c.name); });
+  return [...out].slice(0, 8);
+}
+const miTopics = t => Object.entries(MI_CONCEPTS).filter(([, l]) => miCount(t.toLowerCase(), l)).map(([k]) => k);
+function miAnalyze() {
+  const t = $('#miText').value.trim(), out = $('#miOut'); if (!t) { out.innerHTML = '<p class="small muted">Paste or pick a text to analyze.</p>'; return; }
+  const langs = miLang(t), sen = miSent(t), sum = miSummary(t), ents = miEntities(t), tops = miTopics(t), n = miSplit(t).length;
+  const cls = sen.l === 'Positive' ? 'up' : sen.l === 'Negative' ? 'down' : 'warn';
+  out.innerHTML = `<div class="ue-out mi-tiles"><div><span>Language</span><b>${esc(langs.join(' + ') || 'Unknown')}</b></div><div><span>Sentiment</span><b class="${cls}">${sen.l}</b><span>${sen.p} positive · ${sen.n} negative cues</span></div><div><span>Length</span><b>${n} sentence${n === 1 ? '' : 's'}</b></div></div>
+    <div><span class="label">Summary (key ${sum.length} of ${n} sentences)</span><ul class="cxl"${langs[0] === 'Arabic' ? ' dir="rtl" lang="ar"' : langs[0] === 'Chinese' ? ' lang="zh"' : ''}>${sum.map(s => { const x = miSent(s); return `<li>${esc(s)} <span class="sentp ${x.l.toLowerCase()}">${x.l}</span></li>`; }).join('')}</ul></div>
+    <div class="mi-two"><div><span class="label">Companies linked to the knowledge base</span><div class="chips">${ents.map(e => `<span class="chip hl">${esc(e)}</span>`).join('') || '<span class="small muted">none found</span>'}</div></div>
+    <div><span class="label">Topics</span><div class="chips">${tops.map(e => `<span class="chip">${esc(e)}</span>`).join('') || '<span class="small muted">none found</span>'}</div></div></div>`;
+  MI.last = { t, langs, sen, sum, ents, tops };
+}
+async function miClaude(btn) {
+  const t = $('#miText').value.trim(), out = $('#miAi'); if (!t) return;
+  if (!sample) { out.innerHTML = '<div class="ai-out"><span class="by">Built-in analysis</span><p class="small">Claude is not available in this view, so the built-in lexicon analysis above is used. In the Claude viewer this button translates the text to English and writes an abstractive summary.</p></div>'; return; }
+  btn.disabled = true; out.innerHTML = '<div class="ai-out"><span class="by">Claude · reading</span><span class="muted">Thinking…</span></div>';
+  try {
+    const d = await sample.json(`You are a telecom market-intelligence analyst. Read the text below (any language). Reply with only JSON: {"language": "...", "english_translation": "faithful translation, or the text itself if already English (max 120 words)", "summary": ["2-4 short bullet points in English"], "sentiment": "positive|negative|mixed|neutral", "companies": ["..."], "recommended_action": "one sentence for the operator, never suggesting price coordination"}.\n\nTEXT:\n${t.slice(0, 6000)}`);
+    out.innerHTML = `<div class="ai-out"><span class="by">Claude · ${esc(d.language || '')} → English</span>${d.english_translation ? `<p class="small">${esc(d.english_translation)}</p>` : ''}${Array.isArray(d.summary) ? `<ul class="cxl">${d.summary.slice(0, 4).map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}<p class="small"><b>Sentiment:</b> ${esc(d.sentiment || '—')} · <b>Action:</b> ${esc(d.recommended_action || '—')}</p></div>`;
+  } catch (err) { out.innerHTML = `<div class="ai-out"><span class="by">Built-in analysis</span><p class="small">${esc(aiFail(err))}. The built-in analysis above still applies.</p></div>`; }
+  finally { btn.disabled = false; }
+}
+
+/* knowledge base search, linked stories and emerging signals */
+const MI_ROLES = {
+  uae: { l: 'UAE consumer analyst', lic: 'full', bu: ['uae'] },
+  intl: { l: 'International consumer analyst', lic: 'full', bu: ['intl'] },
+  ent: { l: 'Enterprise (B2B) analyst', lic: 'summary', bu: ['ent'] },
+  group: { l: 'Group strategy executive', lic: 'full', bu: ['uae', 'intl', 'ent'] },
+  ext: { l: 'External consultant', lic: 'none', bu: [] }
+};
+const MI_DOCS = [
+  { type: 'Document', title: 'Licensed research note: GCC mobile pricing outlook (synthetic sample)', text: 'Licensed provider forecast for mobile pricing, eSIM adoption and fixed wireless growth across Gulf markets. Price competition expected to intensify among challengers.', cls: 'licensed' },
+  { type: 'Document', title: 'Internal: UAE consumer churn extract, week 43 (synthetic sample)', text: 'Tokenized aggregate churn by district and segment for the UAE consumer division. Port-outs to digital brands up in two districts. Retention offers performing above plan.', cls: 'internal', bu: 'uae' },
+  { type: 'Document', title: 'Internal: international consumer pricing review (synthetic sample)', text: 'Pricing benchmarks and plan changes across international consumer markets, prepared by the international division pricing team.', cls: 'internal', bu: 'intl' },
+  { type: 'Document', title: 'Internal: enterprise tender pipeline (synthetic sample)', text: 'Open public-sector and private 5G tenders, competitor bids and win/loss notes for the enterprise unit.', cls: 'internal', bu: 'ent' }
+];
+function miDocs() {
+  const D = [];
+  events.forEach(e => D.push({ type: 'Signal', title: e.text, text: [OPS[e.tpl.op].name, e.tpl.cls, e.tpl.src, e.next, ...e.evidence.map(v => v[0])].join(' '), cls: 'public', t: e.t, act: ['signal', e.id] }));
+  (POS ? POS.operators : []).forEach(c => D.push({ type: 'Operator', title: c.name, text: [c.short, c.country, c.region, c.group, c.ticker, ...(c.holders || []).map(h => h.n), ...(c.improve || []), ...(c.win || []), ...(c.competitors || [])].filter(Boolean).join(' '), cls: 'public', act: ['op', c.id] }));
+  (LAND ? LAND.companies : []).forEach(c => D.push({ type: 'Company', title: c.name, text: [c.seg, c.hq, c.what, c.own, ...(c.investors || []).map(i => typeof i === 'string' ? i : i.n || i.name || ''), c.recent].filter(Boolean).join(' '), cls: 'public', act: ['sec', '#landscape'] }));
+  (LAND ? LAND.deals || [] : []).forEach(d => D.push({ type: 'Deal', title: `${d.investor} → ${d.target}`, text: [d.type, d.what, d.date, d.status].join(' '), cls: 'public', act: ['sec', '#landscape'] }));
+  MI_SRC.forEach(s => D.push({ type: 'Source', title: s.n, text: [s.cat, s.ex, s.conn, s.acc, s.rule].join(' '), cls: 'public', act: ['src', s.k] }));
+  RESOURCES.forEach(r => D.push({ type: 'Resource', title: r[1], text: r[0] + ' ' + r[2], cls: 'public', act: ['sec', '#resources'] }));
+  PLAYBOOKS.forEach(p => D.push({ type: 'Playbook', title: p[0], text: p[1].join(' '), cls: 'public', act: ['sec', '#resources'] }));
+  GLOSSARY.forEach(g => D.push({ type: 'Glossary', title: g[0], text: g[1], cls: 'public', act: ['sec', '#resources'] }));
+  return D.concat(MI_DOCS, MI.extra);
+}
+function miExpand(q) {
+  const lo = q.toLowerCase(), terms = new Map(), words = lo.split(/[\s,;:]+/).filter(w => w.length > 1);
+  words.forEach(w => terms.set(w, 1));
+  Object.values(MI_CONCEPTS).forEach(list => { if (list.some(t => miHas(lo, t) || words.some(w => w.length > 2 && t.toLowerCase().startsWith(w)))) list.forEach(t => { if (!terms.has(t.toLowerCase())) terms.set(t.toLowerCase(), .5); }); });
+  Object.entries(MI_ALIAS).forEach(([a, n]) => { if (q.includes(a)) terms.set(n.toLowerCase(), 1); });
+  return terms;
+}
+function miAccess(d) {
+  const R = MI_ROLES[MI.role];
+  if (d.cls === 'licensed') return R.lic === 'none' ? 'hidden' : R.lic === 'summary' ? 'summary' : 'full';
+  if (d.cls === 'internal') return R.bu.includes(d.bu) ? 'full' : 'hidden';
+  return 'full';
+}
+function miSearch(q, type) {
+  const terms = miExpand(q); if (!terms.size) return { res: [], hidden: 0 };
+  let hidden = 0;
+  const res = miDocs().filter(d => type === 'all' || d.type === type).map(d => {
+    const ti = d.title.toLowerCase(), hay = ti + ' ' + d.text.toLowerCase(); let sc = 0, direct = 0;
+    terms.forEach((w, t) => { const inT = isCJKorAr(t) ? ti.includes(t) : miHas(ti, t) || (t.length > 3 && ti.includes(t)), inH = inT || (isCJKorAr(t) ? hay.includes(t) : miHas(hay, t) || (t.length > 4 && hay.includes(t))); if (inH) { sc += w * (inT ? 3 : 1); if (w === 1) direct++; } });
+    if (d.type === 'Signal' && sc) sc += 2 * fresh(events.find(e => e.id === d.act[1]) || { t: 0, tpl: { hl: 24 } });
+    return { d, sc, direct };
+  }).filter(r => r.sc > 0).sort((a, b) => b.direct - a.direct || b.sc - a.sc);
+  const out = [];
+  res.forEach(r => { const a = miAccess(r.d); if (a === 'hidden') hidden++; else out.push(Object.assign(r, { a })); });
+  return { res: out.slice(0, 14), hidden, total: res.length, expanded: [...terms.entries()].filter(([, w]) => w < 1).length };
+}
+function miRenderSearch() {
+  const el = $('#miResults'); if (!el) return;
+  const q = MI.q.trim();
+  if (!q) { el.innerHTML = '<p class="small muted">Try “price cut”, “e&amp;”, “أسعار”, “网速”, “private equity” or “spectrum”.</p>'; return; }
+  const R = miSearch(q, MI.type);
+  el.innerHTML = `<p class="tiny muted">${R.total} match${R.total === 1 ? '' : 'es'} · ${R.expanded} related terms added across languages${R.hidden ? ` · <b>${R.hidden} hidden by the access level of “${esc(MI_ROLES[MI.role].l)}”</b>` : ''}</p>` +
+    (R.res.map(r => `<button type="button" class="mi-res" data-act="${esc(r.d.act ? r.d.act.join('|') : '')}"><span class="mi-rt"><span class="rt">${esc(r.d.type)}</span>${r.d.cls !== 'public' ? `<span class="acc acc-${r.d.cls}">${r.d.cls === 'licensed' ? 'Licensed' : 'Internal'}${r.a === 'summary' ? ' · summary only' : ''}</span>` : ''}</span><b>${esc(r.d.title)}</b><span class="small muted">${esc((r.a === 'summary' ? 'Summary access: full text needs a licensed seat. ' : '') + r.d.text.slice(0, r.a === 'summary' ? 80 : 160))}${r.d.text.length > 160 ? '…' : ''}</span></button>`).join('') || '<p class="small muted">No results for this access level.</p>');
+}
+function miOpen(act) {
+  const [k, id] = act.split('|');
+  if (k === 'signal') { selId = id; selectTab('tab-cc'); renderFeed(); renderDetail(); $('#app').scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' }); }
+  else if (k === 'op' && POS) { const c = POS.operators.find(x => x.id === id); posS.map = 'ops'; if (c) posS.region = c.region; posSelect(id, true); }
+  else if (k === 'src') { MI.hit = id; miPanel('src'); const r = $('#mi-src-' + id); if (r) r.scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'center' }); }
+  else if (k === 'sec') { const s = $(id); if (s) s.scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' }); }
+}
+function miRenderTrends() {
+  const el = $('#miTrends'); if (!el) return;
+  const now = simMin, W = 12 * 60, cls = [...new Set(TPL.map(t => t.cls))];
+  const rows = cls.map(c => { const rec = sigLog.filter(s => s.cls === c && now - s.t <= W).length, base = sigLog.filter(s => s.cls === c && now - s.t > W && now - s.t <= W * 5).length / 4; return { c, rec, base, rising: rec >= 2 && rec > 1.5 * Math.max(base, .5) }; }).sort((a, b) => b.rec - a.rec || b.base - a.base);
+  const mx = Math.max(1, ...rows.map(r => Math.max(r.rec, r.base)));
+  el.innerHTML = rows.map(r => `<div class="mi-tr"><span>${esc(r.c)}</span><span class="bar"><i style="width:${(r.base / mx * 100).toFixed(0)}%;background:var(--line-strong)"></i></span><span class="bar"><i style="width:${(r.rec / mx * 100).toFixed(0)}%;background:${r.rising ? 'var(--signal)' : 'var(--accent)'}"></i></span><span class="mono tiny">${r.rec}${r.rising ? ' <b class="warn">rising</b>' : ''}</span></div>`).join('');
+  const by = {}; events.filter(e => now - e.t <= 72 * 60 && e.tpl.op !== 'all').forEach(e => { (by[e.tpl.op] = by[e.tpl.op] || []).push(e); });
+  $('#miStories').innerHTML = Object.entries(by).filter(([, l]) => l.length >= 2).sort((a, b) => b[1].length - a[1].length).slice(0, 3).map(([op, l]) => `<div class="mi-story"><b><span class="opt" style="--c:${opColor(op)}">${esc(OPS[op].name)}</span> · ${l.length} linked events in 72 h</b><ul class="cxl">${l.sort((a, b) => a.t - b.t).map(e => `<li><span class="mono tiny">${esc(fmtHM(e.t))}</span> ${esc(e.tpl.cls)}: ${esc(e.text)}</li>`).join('')}</ul></div>`).join('') || '<p class="small muted">No linked stories in the last 72 hours yet.</p>';
+}
+function miRenderAccess() {
+  const el = $('#miMatrix'); if (!el) return;
+  const cols = ['Public, regulatory & app data', 'Licensed research & media', 'Internal: UAE consumer', 'Internal: international consumer', 'Internal: enterprise', 'Customer-level data'];
+  const cell = (k, i) => { const R = MI_ROLES[k];
+    if (i === 0) return ['Full', 'ok'];
+    if (i === 1) return R.lic === 'full' ? ['Full (licensed seat)', 'ok'] : R.lic === 'summary' ? ['Summaries only', 'part'] : ['No access', 'no'];
+    if (i === 5) return k === 'ext' ? ['No access', 'no'] : ['Tokenized aggregates only', 'part'];
+    const bu = ['uae', 'intl', 'ent'][i - 2]; return R.bu.includes(bu) ? ['Full', 'ok'] : ['No access', 'no']; };
+  el.innerHTML = `<thead><tr><th>Role</th>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>` + Object.entries(MI_ROLES).map(([k, R]) => `<tr${k === MI.role ? ' class="hit"' : ''}><th scope="row">${esc(R.l)}</th>${cols.map((c, i) => { const [v, s] = cell(k, i); return `<td><span class="ac ac-${s}">${s === 'ok' ? '✓' : s === 'part' ? '◐' : '✕'}</span> ${esc(v)}</td>`; }).join('')}</tr>`).join('') + '</tbody>';
+}
+function miPanel(p) {
+  MI.panel = p;
+  $$('#miTabs [data-p]').forEach(b => { const on = b.dataset.p === p; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; $('#mi-' + b.dataset.p).hidden = !on; });
+  if (p === 'src') miRenderSources(); if (p === 'search') { miRenderSearch(); miRenderTrends(); } if (p === 'acc') miRenderAccess(); if (p === 'desk' && !MI.last) miAnalyze();
+}
+function initMI() {
+  if (!$('#miApp')) return;
+  events.forEach(e => sigLog.push({ t: e.t, cls: e.tpl.cls, op: e.tpl.op }));
+  $('#miRole').innerHTML = Object.entries(MI_ROLES).map(([k, R]) => `<option value="${k}">${esc(R.l)}</option>`).join('');
+  $('#miRole').value = MI.role;
+  $('#miRole').addEventListener('change', e => { MI.role = e.target.value; miRenderSearch(); miRenderAccess(); $('#miRoleNote').textContent = MI_ROLES[MI.role].l; });
+  $('#miRoleNote').textContent = MI_ROLES[MI.role].l;
+  const tabs = $$('#miTabs [data-p]');
+  tabs.forEach((b, i) => { b.addEventListener('click', () => miPanel(b.dataset.p)); b.addEventListener('keydown', e => { if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return; const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length]; miPanel(n.dataset.p); n.focus(); }); });
+  $('#miTarget').addEventListener('input', e => { MI.target = +e.target.value / 100; miRenderSources(); });
+  $('#miBudget').addEventListener('input', e => { MI.budget = +e.target.value; miRenderSources(); });
+  $('#miSamples').innerHTML = Object.entries(MI_SAMPLES).map(([k, s]) => `<button type="button" class="chip hl" data-s="${k}">${esc(s[0])}</button>`).join('');
+  $('#miSamples').addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (!b) return; $('#miText').value = MI_SAMPLES[b.dataset.s][1]; $('#miAi').innerHTML = ''; miAnalyze(); });
+  $('#miText').value = MI_SAMPLES.ar[1];
+  $('#miAnalyze').onclick = miAnalyze;
+  $('#miAsk').onclick = e => miClaude(e.currentTarget);
+  $('#miAdd').onclick = () => { const t = $('#miText').value.trim(); if (!t) return; miAnalyze(); const cls = $('#miCls').value; MI.extra.push({ type: 'Document', title: (MI.last.sum[0] || t).slice(0, 90), text: t, cls: cls === 'public' ? 'public' : cls === 'licensed' ? 'licensed' : 'internal', bu: cls.startsWith('internal-') ? cls.slice(9) : undefined, act: null }); toast('Added to the knowledge base for this visit; try it in Search'); };
+  let st; $('#miQ').addEventListener('input', e => { clearTimeout(st); st = setTimeout(() => { MI.q = e.target.value; miRenderSearch(); }, 140); });
+  $('#miType').addEventListener('change', e => { MI.type = e.target.value; miRenderSearch(); });
+  $('#miResults').addEventListener('click', e => { const b = e.target.closest('[data-act]'); if (b && b.dataset.act) miOpen(b.dataset.act); });
+  $('#miQuick').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (!b) return; $('#miQ').value = b.dataset.q; MI.q = b.dataset.q; miRenderSearch(); });
+  miPanel('src');
+}
+
 /* ---------- COMMAND CENTER ---------- */
 const feedEl = $('#feed'), detailEl = $('#detail');
 function kpis(tick) {
   const open = events.filter(e => fresh(e) > .1);
   const crit = events.filter(e => e.tpl.sev === 'crit' && fresh(e) > .25).length;
   const risk = open.reduce((s, e) => s + (e.tpl.risk || 0) * e.tpl.conf * fresh(e), 0);
-  if (tick || !riskHist.length) { riskHist.push(risk); if (riskHist.length > 60) riskHist.shift(); }
   const today = 37 + events.filter(e => simDate(e.t).toDateString() === simDate().toDateString()).length;
+  const P = pressure();
+  if (tick || !riskHist.length) [[riskHist, risk], [idxHist, P.idx], [sigHist, today], [portHist, netPorts], [critHist, crit]].forEach(([h, v]) => { h.push(v); if (h.length > 60) h.shift(); });
   const nim = PLANS.find(p => p.id === 'nim-u'), rivals = PLANS.filter(p => ['vtx-p', 'arc-p'].includes(p.id));
   const gap = nim.price - Math.min(...rivals.map(p => p.price));
+  const due = open.map(actBy).filter(a => a.left > 0).sort((a, b) => a.left - b.left), soon = due.filter(a => a.left <= 360).length;
+  const ladder = [nim, ...rivals].sort((a, b) => a.price - b.price);
+  const lad = `<div class="ladder">${ladder.map(p => `<span class="opt${p.op === 'nim' ? ' you' : ''}" style="--c:${opColor(p.op)}">${esc(OPS[p.op].short)} $${p.price}</span>`).join('')}</div>`;
   $('#kpis').innerHTML = [
-    ['Signals today', fmtInt(today), '<span class="muted">from 41 sources</span>'],
-    ['Critical, still fresh', crit, crit ? '<span class="down">act within hours</span>' : '<span class="up">all clear</span>'],
-    ['Revenue at risk (open)', fmtMoney(risk), '<span class="warn">confidence × freshness · live</span>' + spark(riskHist)],
-    ['Net port balance · 7d', (netPorts > 0 ? '+' : '−') + fmtInt(Math.abs(netPorts)), '<span class="down">vs −860 last week</span>'],
-    ['Premium price gap', (gap >= 0 ? '+$' : '−$') + Math.abs(gap), '<span class="muted">vs cheapest rival MNO</span>']
-  ].map(([l, v, d]) => `<div class="kpi"><span class="l">${l}</span><span class="v">${v}</span><span class="d">${d}</span></div>`).join('');
+    ['Signals today', fmtInt(today), '<span class="muted">from 41 sources</span>', deltaChip(sigHist, fmtInt, null), areaSpark(sigHist, 'var(--accent)')],
+    ['Critical, still fresh', crit, crit ? '<span class="down">act within hours</span>' : '<span class="up">all clear</span>', deltaChip(critHist, fmtInt, false), areaSpark(critHist, 'var(--crit)')],
+    ['Revenue at risk (open)', fmtMoney(risk), '<span class="muted">confidence × freshness</span>', deltaChip(riskHist, fmtMoney, false), areaSpark(riskHist, 'var(--signal)')],
+    ['Net port balance · 7d', (netPorts > 0 ? '+' : '−') + fmtInt(Math.abs(netPorts)), '<span class="down">vs −860 last week</span>', deltaChip(portHist, fmtInt, true), areaSpark(portHist, 'var(--crit)')],
+    ['Premium price gap', (gap >= 0 ? '+$' : '−$') + Math.abs(gap), '<span class="muted">vs cheapest rival network</span>', '<span class="dchip b">Arcline −$10</span>', lad],
+    ['Next act-by', due.length ? fmtLeft(due[0].left).replace(/^in /, '') : '—', due.length ? `<span class="muted">at ${esc(fmtHM(due[0].due))} · ${soon} due within 6h</span>` : '<span class="up">nothing pending</span>', '', `<div class="meter" aria-hidden="true"><i style="width:${Math.min(100, soon / Math.max(1, open.length) * 100).toFixed(0)}%"></i></div>`]
+  ].map(([l, v, d, c, viz]) => `<div class="kpi"><div class="kh"><span class="l">${l}</span>${c}</div><span class="v">${v}</span><span class="d">${d}</span>${viz}</div>`).join('');
   $('#critCount').textContent = crit; $('#critCount').hidden = !crit;
+  renderPulse(P); renderTape(P);
 }
 function evHTML(e) {
   const T = e.tpl, f = fresh(e), op = OPS[T.op];
-  return `<button type="button" class="ev${e.id === selId ? ' sel' : ''}${e.isNew ? ' new' : ''}" data-id="${e.id}">
+  return `<button type="button" class="ev${e.id === selId ? ' sel' : ''}${e.isNew ? ' new' : ''}${lensMatch(e) ? '' : ' dim'}" data-id="${e.id}">
     <span class="tm">${esc(fmtHM(e.t))}</span>
     <span class="body">
       <span class="line1"><span class="sev ${T.sev}">${SEVL[T.sev]}</span><span class="opt" style="--c:${opColor(T.op)}">${esc(op.short)}</span><span class="cls">${esc(T.cls)}</span>${e.rule ? '<span class="rulehit" title="' + esc(e.rule) + '">Rule</span>' : ''}</span>
       <span class="txt">${esc(e.text)}</span>
       <span class="meta"><span>${e.id}</span><span>${esc(T.src)}</span><span>conf ${Math.round(T.conf * 100)}%</span><span>${T.risk ? fmtMoney(T.risk) + ' at risk' : 'strategic'}</span></span>
+      <span class="routes"><span class="tiny muted">Routed to</span>${routeOf(e).map(k => `<span class="rt${lens === k ? ' on' : ''}">${esc(DEPT[k].short)}</span>`).join('')}</span>
       <span class="fresh${f < .25 ? ' stale' : ''}"><span>½-life ${fmtHL(T.hl)}</span><span class="track"><i style="width:${(f * 100).toFixed(1)}%"></i></span><span data-f>${Math.round(f * 100)}% fresh</span></span>
     </span></button>`;
 }
 function renderFeed() {
-  const list = [...events].sort((a, b) => score(b) - score(a));
+  const list = [...events].sort((a, b) => lensScore(b) - lensScore(a));
   feedEl.innerHTML = list.map(evHTML).join('');
-  $('#feedCount').textContent = events.length + ' signals';
+  $('#feedCount').textContent = lens === 'all' ? events.length + ' signals' : `${events.filter(lensMatch).length} of ${events.length} for ${DEPT[lens].short}`;
   events.forEach(e => { e.isNew = false; });
 }
 function refreshFreshness() {
@@ -323,10 +1601,11 @@ function renderDetail() {
     <div class="next"><b>Predicted next move</b>${esc(e.next)}</div>
     <div><div class="label" style="margin-bottom:8px">Recommended plays</div>
       <div class="plays">${e.plays.map(p => `<div class="play"><b>${esc(p[0])}</b><span class="eff">${esc(p[2])}</span><span class="tr">${esc(p[1])} · <i>${esc(p[3])}</i></span></div>`).join('')}</div></div>
-    <div class="row-btns"><button class="btn sm accent" type="button" id="draftBtn">Draft a counter-move with Claude</button>${WAR_OPS.includes(T.op) ? '<button class="btn sm" type="button" id="toWar">Simulate in War room</button>' : ''}</div>
+    <div class="row-btns"><button class="btn sm accent" type="button" id="draftBtn">Draft a counter-move with Claude</button>${WAR_OPS.includes(T.op) ? '<button class="btn sm" type="button" id="toWar">Simulate in War room</button>' : ''}<button class="btn sm" type="button" id="toWs">Add to my workspace</button></div>
     <div id="draftOut"></div>
   </div>`;
   $('#draftBtn').onclick = ev => draftCounter(e, ev.currentTarget, $('#draftOut'));
+  $('#toWs').onclick = ev => taskFromSignal(e.id, ev.currentTarget);
   const tw = $('#toWar'); if (tw) tw.onclick = () => { $('#wRival').value = T.op; if (T.op === 'kte') $('#wCut').value = 25; selectTab('tab-war'); runWar(); };
 }
 function offlinePlaybook(e, note) {
@@ -413,24 +1692,26 @@ function initRadar() {
 let live = !RM.matches, ticks = 0, lastTpl = 0;
 function setLive(v) {
   live = v; const b = $('#liveBtn');
-  b.setAttribute('aria-pressed', String(v)); $('span', b).textContent = v ? 'Live' : 'Paused';
+  b.setAttribute('aria-pressed', String(v)); $('span', b).textContent = v ? 'Live' : 'Paused'; renderStatus();
   $('#liveDot').style.background = v ? 'var(--good)' : 'var(--line-strong)'; $('#liveDot').classList.toggle('live', v);
 }
 $('#liveBtn').onclick = () => setLive(!live);
 function spawnEvent() {
   let i; do { i = Math.floor(rand() * TPL.length); } while (i === lastTpl);
   lastTpl = i;
-  const e = mkEvent(i, simMin); e.isNew = true; events.push(e); onNewEvent(e);
+  const e = mkEvent(i, simMin); e.isNew = true; events.push(e); sigLog.push({ t: e.t, cls: e.tpl.cls, op: e.tpl.op }); onNewEvent(e);
   if (TPL[i].cls === 'Port-outs') netPorts -= 120 + Math.round(rand() * 80); else netPorts -= Math.round(rand() * 25);
   if (events.length > 24) { const oldest = [...events].sort((a, b) => score(a) - score(b))[0]; if (oldest.id !== selId) events.splice(events.indexOf(oldest), 1); }
-  renderFeed(); kpis();
+  renderFeed(); kpis(); renderPriorities(); renderLensBrief(); renderStatus();
 }
 setInterval(() => {
   if (!live || document.hidden) return;
   simMin += 5; ticks++;
   $('#simClock').textContent = fmtClock();
   refreshFreshness();
-  if (ticks % 8 === 0) spawnEvent(); kpis(true); GEO.t++; if (ticks % 3 === 0) geoJitter(); geoTick();
+  if (ticks % 8 === 0) spawnEvent(); else if (ticks % 4 === 0 && !$('#prio').contains(document.activeElement)) renderPriorities();
+  if (MI.panel === 'search' && ticks % 6 === 0 && !$('#mi-search').hidden) miRenderTrends();
+  kpis(true); GEO.t++; if (ticks % 3 === 0) geoJitter(); geoTick();
 }, 1000);
 
 /* ---------- TARIFF DNA ---------- */
@@ -656,9 +1937,11 @@ const SERVICES = [
   { k: 'market_feed', name: 'Live market-data feed integration', turn: '2–4 weeks', desc: 'Connect a licensed real-time market-data feed so valuations update tick by tick.' },
   { k: 'geo_audit', name: 'Coverage Truth audit', turn: '10 business days', desc: 'Cell-level audit of advertised vs measured coverage for you and your rivals.' },
   { k: 'regulator', name: 'Regulator edition', turn: '2 weeks', desc: 'Tariff and coverage benchmarking for national regulators, with an open methodology.' },
-  { k: 'board_brief', name: 'Weekly board brief', turn: 'weekly', desc: 'An analyst-reviewed brief on rivals, capital moves and recommended responses.' }
+  { k: 'board_brief', name: 'Weekly board brief', turn: 'weekly', desc: 'An analyst-reviewed brief on rivals, capital moves and recommended responses.' },
+  { k: 'pilot', name: 'Pilot program (30-day shadow mode)', turn: 'kick-off within 2 weeks', desc: 'Run Cellvoyant next to your current process for 30 days and measure how much earlier it catches each competitor move.' }
 ];
 const svcByKey = k => SERVICES.find(s => s.k === k);
+WORKSHOPS.forEach(w => { if (!svcByKey(w.k)) SERVICES.push({ k: w.k, name: 'Academy: ' + w.name, turn: w.dur, desc: w.desc, ws: true }); });
 
 /* request queue: shared db when the viewer provides it, otherwise this visit only */
 let db = null, dbState = 'wait', reqs = [], readOnly = false;
@@ -706,7 +1989,7 @@ $('#reqList').addEventListener('click', async e => {
   else { const r = localReqs.find(x => x.id === id); if (r) r.status = 'withdrawn'; renderReqs(); }
 });
 function renderServices() {
-  $('#svcList').innerHTML = SERVICES.map(s => `<div class="svc"><div class="hd"><b>${esc(s.name)}</b><button type="button" class="btn sm" data-open="${s.k}" aria-expanded="false">Request</button></div>
+  $('#svcList').innerHTML = SERVICES.filter(s => !s.ws).map(s => `<div class="svc"><div class="hd"><b>${esc(s.name)}</b><button type="button" class="btn sm" data-open="${s.k}" aria-expanded="false">Request</button></div>
     <span class="tiny muted">${esc(s.desc)} · <span class="mono">${esc(s.turn)}</span></span>
     <form class="svc-form" data-k="${s.k}" hidden>
       <label class="sr" for="rq-${s.k}">Details for ${esc(s.name)}</label>
@@ -813,12 +2096,57 @@ const TOOLS = {
     const pick = LAND.companies.filter(c => (!n || c.name.toLowerCase().includes(n) || (c.investors || []).some(i => i.n.toLowerCase().includes(n))) && (!sg || c.seg.toLowerCase().includes(sg)) && (!want || (want === 'pe' ? flagsOf(c).pe || flagsOf(c).infra : want === 'hedge fund' ? flagsOf(c).hf : want === 'state' ? flagsOf(c).state : true)));
     return pick.sort((a, b) => sizeOf(b) - sizeOf(a)).slice(0, clamp(+limit || 8, 1, 25)).map(c => ({ name: c.name, segment: c.seg, hq: c.hq, ownership: c.own, ticker: c.ticker || null, investors: (c.investors || []).map(i => i.n + ' (' + i.t + ')'), market_cap_usd: c.mcap ? c.mcap.usd : null, market_cap_as_of: c.mcap ? c.mcap.asOf : null, valuation_usd: c.val ? c.val.usd : null, valuation_basis: c.val ? c.val.basis : null, revenue: c.rev ? (c.rev.usd ? fmtMoney(c.rev.usd) : c.rev.label) + ' ' + (c.rev.period || '') : null, capital_raised_usd: c.raised ? c.raised.usd : null, what: c.what, overlap_with_cellvoyant: c.rel, recent: c.recent || null, source: (c.sources || [])[0] || null }));
   },
+  market_position({ name, map, region, quadrant, limit, show_on_map } = {}) {
+    if (!POS) throw new Error('Positioning data is not loaded.');
+    const n = String(name || '').toLowerCase().trim();
+    const kinds = map === 'operators' ? ['ops'] : map === 'competitors' ? ['vendors'] : ['vendors', 'ops'];
+    let rows = kinds.flatMap(k => posItems(k).map(c => ({ c, k })));
+    const hitName = c => { const nm = c.name.toLowerCase(), sh = String(c.short || '').toLowerCase(); return nm === n || sh === n || (n.length > 2 && (nm.includes(n) || sh.includes(n))); };
+    if (n) rows = rows.filter(({ c }) => hitName(c));
+    if (region) rows = rows.filter(({ c, k }) => k === 'vendors' || String(c.region || '').toLowerCase().includes(String(region).toLowerCase().replace(/\s*\(gcc\)/, '')));
+    if (quadrant) rows = rows.filter(({ c, k }) => POSM[k].quad(c.x, c.y).toLowerCase().includes(String(quadrant).toLowerCase()));
+    rows = rows.filter(({ c }) => c.cls !== 'self' || n);
+    rows.sort((a, b) => (a.k === 'vendors' && b.k === 'vendors') ? b.c.threat - a.c.threat : revOf(b.c) - revOf(a.c));
+    rows = rows.slice(0, clamp(+limit || (n ? 3 : 8), 1, 30));
+    if (show_on_map && rows[0]) { const { c, k } = rows[0]; posS.map = k; if (k === 'ops') posS.region = c.region || 'All regions'; posS.seg = 'all'; posS.cls = 'all'; posS.sel[k] = c.id; posRender(); }
+    return rows.map(({ c, k }) => ({ name: c.name, map: k === 'vendors' ? "Cellvoyant's competitors" : 'Telecom operators', region: c.region || null, country: c.country || null,
+      quadrant: POSM[k].quad(c.x, c.y), x: c.x, y: c.y, axes: POSM[k].xl + ' / ' + POSM[k].yl, ownership: c.own || null,
+      owners: (c.investors || []).slice(0, 6).map(v => v.n + (v.pct != null && v.pct !== '' ? ' ' + String(v.pct).replace('%', '') + '%' : '') + ' (' + v.t + ')'),
+      private_equity_or_infra: !!(c.f.pe || c.f.infra), hedge_fund: !!c.f.hf, state: !!c.f.state,
+      market_cap_usd: c.mcap ? c.mcap.usd : null, revenue_usd: revOf(c) || null, revenue_growth_pct: c.growth ? c.growth.v : null,
+      threat_to_cellvoyant: k === 'vendors' && c.cls !== 'self' ? c.threat : undefined,
+      strengths: c.strengths || [], weaknesses: c.gaps || c.weaknesses || [], improve: c.improve || [], how_to_succeed: c.win || [], competitors: c.rivals || [],
+      recent: (c.moves || []).slice(0, 3).map(m => m.join(': ')), shown_on_map: !!show_on_map }));
+  },
   capital_deals({ investor_type, target, investor, limit } = {}) {
     if (!LAND) throw new Error('Landscape data is not loaded.');
     const t = String(investor_type || '').toLowerCase(), tg = String(target || '').toLowerCase(), iv = String(investor || '').toLowerCase();
     const map = { pe: 'pe', 'private equity': 'pe', 'hedge fund': 'hf', hf: 'hf', activist: 'hf', infrastructure: 'infra', infra: 'infra', state: 'state', sovereign: 'state' };
     return (LAND.deals || []).filter(d => (!t || typeKey(d.type) === (map[t] || t)) && (!tg || String(d.target).toLowerCase().includes(tg)) && (!iv || String(d.investor).toLowerCase().includes(iv))).slice(0, clamp(+limit || 10, 1, 30))
       .map(d => ({ date: d.date, investor: d.investor, investor_type: d.type, target: d.target, what: d.what, value_usd: d.usd || null, status: d.status, source: d.src }));
+  },
+  contact_plan({ customer_id, goal, channel, limit } = {}) {
+    rtEnsure(); const g = RT_GN[goal] ? goal : 'retention';
+    if (customer_id) {
+      const c = RT.cust.find(x => x.id.toLowerCase() === String(customer_id).toLowerCase()); if (!c) throw new Error('Unknown customer token. Tokens look like ' + RT.hold[0].id + '.');
+      const b = rtBest(c, g, RT_CHN[channel] ? channel : undefined), f = rtFixed(c, g);
+      return { customer: c.id, segment: c.seg.l, churn_score_pct: Math.round(c.risk * 100), goal: RT_GN[g], best_window: b ? { slot: rtSlot(b), channel: RT_CHN[b.ch], engage_probability_pct: Math.round(b.p * 100), reasons: rtReasons(c, b, g) } : null,
+        fixed_schedule: f ? { slot: 'Tue 10:00', channel: RT_CHN[f.ch], engage_probability_pct: f.bl ? null : Math.round(f.p * 100), blocked_by: f.bl || null } : null, data: 'synthetic, tokenized' };
+    }
+    const I = rtImpact(g);
+    return { goal: RT_GN[g], model: { auc: +RT.m.auc.toFixed(3), baseline_auc: +RT.m.bAuc.toFixed(3), lift_top20: +RT.m.lift.toFixed(2), brier: +RT.m.brier.toFixed(3) },
+      policy: { fixed_schedule_engagement_pct: +(I.pf * 100).toFixed(1), right_time_engagement_pct: +(I.pm * 100).toFixed(1), uplift_pct: Math.round(I.uplift * 100), not_contacted_by_guardrails: I.blocked },
+      next_4_hours: rtQueue(g, clamp(+limit || 6, 1, 12)).map(r => ({ customer: r.c.id, segment: r.c.seg.l, slot: rtSlot(r.z), channel: RT_CHN[r.z.ch], engage_probability_pct: Math.round(r.z.p * 100) })), data: 'synthetic, tokenized' };
+  },
+  intel_search({ query, type } = {}) {
+    const R = miSearch(String(query || ''), type || 'all');
+    return { access_level: MI_ROLES[MI.role].l, matches: R.total || 0, hidden_by_access_level: R.hidden || 0, results: R.res.slice(0, 8).map(r => ({ type: r.d.type, title: r.d.title, access: r.a, snippet: r.d.text.slice(0, r.a === 'summary' ? 80 : 160) })) };
+  },
+  async add_workspace_task({ title, department, priority } = {}) {
+    const dk = DEPTS.find(d => d.k === department || d.short.toLowerCase() === String(department || '').toLowerCase() || d.name.toLowerCase() === String(department || '').toLowerCase());
+    const r = await addTask({ title, kind: 'manual', dept: dk ? dk.k : 'st', prio: priority === 'high' ? 'high' : 'normal' });
+    if (!r) throw new Error('The task could not be added (view-only access, or no title).');
+    return { task: r.title, department: DEPT[r.dept].name, priority: r.prio, board: tasksDb ? 'shared operator workspace' : 'workspace (this visit only)' };
   },
   async request_service({ service, details, urgency, related_signal } = {}) {
     const r = await createRequest({ service, details, urgency, signal: related_signal, via: 'assistant' });
@@ -830,6 +2158,8 @@ const TOOLDEFS = [
     inputSchema: { type: 'object', properties: { rival: { type: 'string', enum: ['arc', 'vtx', 'pls', 'kte'], description: 'arc = Arcline, vtx = Vertex, pls = Pulsar, kte = Kite' }, cut_pct: { type: 'number', description: '0–30' }, weeks: { type: 'integer', description: 'Promo duration, 4–16' }, esim_pct: { type: 'number', description: 'eSIM-ready share of base, 10–80 (default 45)' }, network_edge: { type: 'number', description: 'Our network perception edge, −10..10 (default 0)' }, early_warning: { type: 'boolean', description: 'true = respond in week 0; false = week 3' }, show_in_war_room: { type: 'boolean' } }, required: ['rival', 'cut_pct'] } },
   { name: 'list_signals', description: 'Freshest competitor signals, ranked by impact × confidence × freshness. Returns id, severity, operator, class, text, source, confidence, freshness, revenue at risk and predicted next move.',
     inputSchema: { type: 'object', properties: { limit: { type: 'integer', description: '1–20, default 8' }, operator: { type: 'string', description: 'Optional: Vertex, Arcline, Pulsar, Skyreach, Kite' }, severity: { type: 'string', enum: ['crit', 'high', 'watch'] } } } },
+  { name: 'market_position', description: 'Positioning quadrants. Map "competitors": Cellvoyant\'s competitors (telecom depth vs predictive & real-time) with threat scores. Map "operators": telecom operators in the Gulf (GCC), Middle East, Asia-Pacific, Europe, Africa, Americas and international groups (scale vs growth & innovation). Returns quadrant, owners with PE / hedge-fund / state flags, market cap, revenue, growth, strengths, weaknesses, what to improve, how to succeed and competitors. Filter by name, map, region or quadrant; show_on_map selects the company on the page.',
+    inputSchema: { type: 'object', properties: { name: { type: 'string' }, map: { type: 'string', enum: ['competitors', 'operators'] }, region: { type: 'string', description: 'Gulf (GCC), Middle East, Asia-Pacific, Europe, Africa, Americas, International group' }, quadrant: { type: 'string' }, limit: { type: 'integer' }, show_on_map: { type: 'boolean' } } } },
   { name: 'get_signal', description: 'Full detail for one signal: evidence chain with reliabilities, predicted next move, candidate plays.',
     inputSchema: { type: 'object', properties: { id: { type: 'string', description: 'Signal id like S-1032' } }, required: ['id'] } },
   { name: 'compare_plans', description: 'Tariff DNA. With plan_id: the 3 nearest rival plans and gene-by-gene differences. Without: every plan with value score and detected stealth mutations. Our plans: nim-u (Unlimited Plus), nim-e (Essential 20).',
@@ -846,6 +2176,12 @@ const TOOLDEFS = [
     inputSchema: { type: 'object', properties: { layer: { type: 'string', enum: ['churn', 'coverage', 'retail'] }, operator: { type: 'string', description: 'For coverage: Nimbus, Vertex, Arcline or Pulsar' } } } },
   { name: 'valuation_pulse', description: 'Capital radar: rank listed operators and tower companies by market cap, market cap ÷ revenue, or revenue, with the change since the previous verification (researched data).',
     inputSchema: { type: 'object', properties: { metric: { type: 'string', enum: ['mcap', 'mcap_to_revenue', 'revenue'] }, limit: { type: 'integer' } } } },
+  { name: 'contact_plan', description: 'Right-time engagement engine (synthetic, tokenized customers). With customer_id: the best day, hour and channel to contact that customer inside the guardrails (consent, quiet hours, frequency cap, cooling-off), with reasons and the fixed-schedule comparison. Without: model quality (AUC, lift), the policy uplift vs a fixed schedule, and the contact queue for the next 4 hours.',
+    inputSchema: { type: 'object', properties: { customer_id: { type: 'string', description: 'Token like C-1A2B3C' }, goal: { type: 'string', enum: ['retention', 'upsell', 'service'] }, channel: { type: 'string', enum: ['push', 'sms', 'email', 'call', 'inapp'] }, limit: { type: 'integer' } } } },
+  { name: 'intel_search', description: 'Market intelligence hub: multilingual concept search (English, Arabic, Chinese terms map to shared concepts) across signals, 108 operators, 140 companies, capital deals, data sources, documents and resources, filtered by the viewer’s access level.',
+    inputSchema: { type: 'object', properties: { query: { type: 'string' }, type: { type: 'string', enum: ['all', 'Signal', 'Operator', 'Company', 'Deal', 'Source', 'Document', 'Resource', 'Playbook', 'Glossary'] } }, required: ['query'] } },
+  { name: 'add_workspace_task', description: 'Add a task to the shared operator workspace (shift board). Call ONLY when the user asks to add a task, to-do or reminder.',
+    inputSchema: { type: 'object', properties: { title: { type: 'string' }, department: { type: 'string', description: 'Department name or short name, e.g. Marketing, CX & Retention, Network, Analytics' }, priority: { type: 'string', enum: ['normal', 'high'] } }, required: ['title'] } },
   { name: 'create_alert_rule', description: 'Create a team alert rule that flags new console signals matching operator, signal class and minimum severity. Call only when the user asks for an alert or rule.',
     inputSchema: { type: 'object', properties: { operator: { type: 'string' }, signal_class: { type: 'string', description: 'Pricing, Stealth pricing, Network, Devices, Enterprise, Regulatory, Social, Retail, Port-outs, Satellite or Hiring' }, min_severity: { type: 'string', enum: ['watch', 'high', 'critical'] } } } },
   { name: 'export_brief', description: 'Export the current console state as a Markdown brief; the viewer confirms the save. Call only when the user asks to export or download a brief.' },
@@ -919,6 +2255,19 @@ function matchService(s) {
   const m = map.find(([, re]) => re.test(s)); return m ? m[0] : null;
 }
 const STOP = new Set(['vertex', 'arcline', 'pulsar', 'skyreach', 'signal', 'signals', 'report', 'reports']);
+function posNamed(s) {
+  if (!POS) return null;
+  let best = null;
+  for (const k of ['ops', 'vendors']) for (const c of posItems(k)) {
+    if (c.cls === 'self') continue;
+    for (const cand of [c.name, c.short].filter(Boolean)) {
+      const t = String(cand).toLowerCase().split(' (')[0].trim(); if (t.length < 2) continue;
+      const rx = new RegExp('(^|[^a-z0-9&])' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '($|[^a-z0-9&])');
+      if (rx.test(s) && (!best || t.length > best.len)) best = { c, k, len: t.length };
+    }
+  }
+  return best;
+}
 async function runLocal(q, bubble, note) {
   const by = $('.by', bubble); if (by) by.textContent = 'Built-in assistant';
   const body = $('.body', bubble), s = q.toLowerCase();
@@ -936,6 +2285,26 @@ async function runLocal(q, bubble, note) {
         const r = await T('request_service', { service: svc, details: q, urgency: /urgent|asap|today|critical/.test(s) ? 'urgent' : 'standard', related_signal: sig });
         out = `Submitted **${r.request_id}**: ${r.service} (turnaround ${r.turnaround})${sig ? ', linked to [' + sig + ']' : ''}. ${r.saved_to_shared_queue ? 'It’s in the request queue on the right.' : 'It’s in the queue for this visit only; open the page in Claude to save requests.'}`;
       }
+    } else if (/^(please )?(search|find|look up|look for)\b|ابحث|搜索/.test(s)) {
+      const qq = q.replace(/^(please )?(search|find|look up|look for)( the knowledge base)?( for)?:?/i, '').replace(/ابحث عن|ابحث|搜索/g, '').replace(/["“”]/g, '').trim() || q;
+      const r = await T('intel_search', { query: qq });
+      out = `**${r.matches} match${r.matches === 1 ? '' : 'es'}** for “${qq}” (access level: ${r.access_level}${r.hidden_by_access_level ? `, ${r.hidden_by_access_level} hidden` : ''}):\n` + (r.results.map(x => `- **${x.type}:** ${x.title}${x.access === 'summary' ? ' (summary only)' : ''}`).join('\n') || '- nothing found') + '\nOpen **Challenge 2 › Search & trends** to filter and open results.';
+    } else if (/\bworkspace\b|to-?do|\badd (a )?task|my tasks?\b|remind me/.test(s)) {
+      const title = ((q.match(/["“](.+?)["”]/) || [])[1] || q.replace(/^(please )?(add|put|create)( a)?( task)?( to)?( my)?( workspace)?:?/i, '').replace(/\b(to|in|on) (my|the) (operator )?workspace\b/i, '').trim()) || q;
+      const r = await T('add_workspace_task', { title, priority: /urgent|high|critical|asap/.test(s) ? 'high' : 'normal', department: /network/.test(s) ? 'Network' : /price|pricing|marketing/.test(s) ? 'Marketing' : /churn|retention|save/.test(s) ? 'CX & Retention' : undefined });
+      out = `Added to the ${r.board}: **${r.task}** (${r.department}${r.priority === 'high' ? ', high priority' : ''}). Open the **My workspace** tab to move it through the shift.`;
+    } else if (/right.?time|best time|when (should|to|do|can) (we |i )?(contact|call|message|text|reach)|contact (queue|plan|window)|who should (we|i) (contact|call)|\bengag/.test(s)) {
+      const cid = ((q.match(/C-[0-9A-F]{6}/i) || [])[0] || '').toUpperCase(), g = /upsell|upgrade/.test(s) ? 'upsell' : /service|bill|remind/.test(s) ? 'service' : 'retention';
+      const r = await T('contact_plan', { customer_id: cid || undefined, goal: g });
+      out = cid ? (r.best_window ? `**${r.customer}** (${r.segment}, churn ${r.churn_score_pct}%): best ${r.goal.toLowerCase()} contact is **${r.best_window.channel}, ${r.best_window.slot}** at **${r.best_window.engage_probability_pct}%**${r.fixed_schedule && r.fixed_schedule.engage_probability_pct != null ? ` (fixed Tue 10:00 ${r.fixed_schedule.channel}: ${r.fixed_schedule.engage_probability_pct}%)` : ''}.\n` + r.best_window.reasons.map(x => '- ' + x).join('\n') : `**${r.customer}**: do not contact this week. Every slot is blocked by consent, a cap or a cooling-off rule.`)
+        : `**Right-time engine** (${r.goal}; synthetic, tokenized customers): AUC **${r.model.auc}** vs ${r.model.baseline_auc} for a one-size-fits-all rule; engagement **${r.policy.right_time_engagement_pct}%** vs ${r.policy.fixed_schedule_engagement_pct}% on a fixed schedule (**${r.policy.uplift_pct > 0 ? '+' : ''}${r.policy.uplift_pct}%**).\n**Next 4 hours:**\n` + (r.next_4_hours.map(x => `- ${x.customer} (${x.segment}): ${x.channel}, ${x.slot}, ${x.engage_probability_pct}%`).join('\n') || '- Nobody: quiet hours.') + '\nThe studio in the Challenge section shows the heatmap, guardrails and technical report.';
+    } else if (POS && (/quadrant|biggest competitor|main competitor|top competitor|who competes|competes with|what (should|to) improve|succeed|\bposition|biggest operator|largest operator/.test(s) || (posNamed(s) && !/hedge|private equity|\bpe\b|who owns|investor|market cap|valuation/.test(s)))) {
+      const named = posNamed(s);
+      const opsQ = (named && named.k === 'ops') || /operator|carrier|telco|gulf|gcc|middle east|asia|europe|africa|america/.test(s);
+      const region = /gulf|gcc|uae|emirates|saudi|qatar|kuwait|bahrain|oman/.test(s) ? 'Gulf' : /middle east/.test(s) ? 'Middle East' : /asia|apac|pacific/.test(s) ? 'Asia' : /europe/.test(s) ? 'Europe' : /africa/.test(s) ? 'Africa' : /america/.test(s) ? 'Americas' : undefined;
+      const r = await T('market_position', { name: named ? named.c.name : undefined, map: named ? (named.k === 'ops' ? 'operators' : 'competitors') : (opsQ ? 'operators' : 'competitors'), region: named ? undefined : region, limit: named ? 1 : 6, show_on_map: true });
+      if (named && r[0]) { const x = r[0]; out = `**${x.name}** is in **${x.quadrant}** (${x.axes}: ${x.x} / ${x.y}).\n**Owners:** ${x.owners.join(', ') || x.ownership || '—'}${x.private_equity_or_infra ? ' · **PE / infrastructure fund involved**' : ''}${x.hedge_fund ? ' · **hedge fund involved**' : ''}${x.state ? ' · state-backed' : ''}\n**What to improve:**\n${(x.improve || []).map(i => '- ' + i).join('\n') || '- —'}\n**How to succeed:**\n${(x.how_to_succeed || []).map(i => '- ' + i).join('\n') || '- —'}\n**Competitors:** ${(x.competitors || []).join(', ') || '—'}\nIt is selected on the positioning map.`; }
+      else out = (opsQ ? `**Biggest operators${region ? ' · ' + region : ''}** (by revenue):\n` : '**Biggest competitors to Cellvoyant** (by threat):\n') + r.map((x, i) => `- ${i + 1}. **${x.name}**: ${x.quadrant}${x.threat_to_cellvoyant != null ? ', threat ' + x.threat_to_cellvoyant + '/100' : x.revenue_usd ? ', revenue ' + fmtMoney(x.revenue_usd) : ''}${x.private_equity_or_infra ? ' · PE/infra' : ''}${x.hedge_fund ? ' · hedge fund' : ''}${x.state ? ' · state' : ''}`).join('\n') + '\nThe Positioning section shows each one’s quadrant, what to improve and its competitors.';
     } else if (/\balerts?\b|notify|\brules?\b|watchlist|tell me when|let me know when/.test(s) && !/brief/.test(s)) {
       const sev = /critical/.test(s) ? 'critical' : /\bwatch\b/.test(s) ? 'watch' : 'high';
       const cls = TPL.map(t => t.cls).find(c => s.includes(c.toLowerCase())) || (/pric/.test(s) ? 'Pricing' : undefined);
@@ -1004,10 +2373,11 @@ async function runLocal(q, bubble, note) {
 $('#askForm').addEventListener('submit', e => { e.preventDefault(); const v = $('#askInput').value; $('#askInput').value = ''; ask(v); });
 $('#askInput').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#askForm').requestSubmit(); } });
 $('#stopBtn').onclick = () => askCtl && askCtl.abort();
-const SUGG = ['What needs action today?', 'Where is churn spreading right now?', 'Rank operators by market cap to revenue', 'Alert me when Arcline makes a High pricing move', 'Export a brief', 'Which competitors are backed by hedge funds or private equity?', 'Simulate Arcline cutting 20% for 12 weeks and recommend a response', 'Compare our Unlimited Plus with the closest rival plans', 'What if we exclude the equipment filing from the Vertex FWA prediction?', 'Write a battlecard against Kite', 'Book an analyst to verify the Arcline price cut', 'Size the market for MVNOs and fiber ISPs only', 'Draft a 5-bullet exec brief for the CMO', 'What services can I request?'];
+const SUGG = ['Search for spectrum consultation', 'Who should we contact in the next 4 hours, and when?', 'Add "brief the save desk on Arcline" to my workspace', 'Who are Cellvoyant’s biggest competitors?', 'Which quadrant is du in, and what should it improve?', 'Who are the biggest operators in the Gulf?', 'What needs action today?', 'Where is churn spreading right now?', 'Rank operators by market cap to revenue', 'Alert me when Arcline makes a High pricing move', 'Export a brief', 'Which competitors are backed by hedge funds or private equity?', 'Simulate Arcline cutting 20% for 12 weeks and recommend a response', 'Compare our Unlimited Plus with the closest rival plans', 'What if we exclude the equipment filing from the Vertex FWA prediction?', 'Write a battlecard against Kite', 'Book an analyst to verify the Arcline price cut', 'Size the market for MVNOs and fiber ISPs only', 'Draft a 5-bullet exec brief for the CMO', 'What services can I request?'];
 $('#sugg').innerHTML = SUGG.map(s => `<button type="button">${esc(s)}</button>`).join('');
 $('#sugg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) ask(b.textContent); });
 const TOOLBOX = [
+  ['Market position', 'market_position', 'Which quadrant is du in, and what should it improve?'],
   ['Geo hotspots', 'geo_hotspots', 'Where is churn spreading right now?'],
   ['Valuation pulse', 'valuation_pulse', 'Rank operators by market cap to revenue.'],
   ['Alert rule', 'create_alert_rule', 'Alert me when Arcline makes a High pricing move.'],
@@ -1018,6 +2388,9 @@ const TOOLBOX = [
   ['Prediction what-if', 'predict_move', 'What if we exclude the equipment filing from the Vertex FWA prediction?'],
   ['War-room simulation', 'simulate_response', 'Simulate Arcline cutting 20% for 12 weeks and recommend a response.'],
   ['Market sizing', 'size_market', 'Size the market for MVNOs and fiber ISPs only.'],
+  ['Right-time contact plan', 'contact_plan', 'Who should we contact in the next 4 hours, and when?'],
+  ['Intelligence search', 'intel_search', 'Search for “private equity” deals in the Gulf'],
+  ['Workspace task', 'add_workspace_task', 'Add "verify the Arcline price cut" to my workspace.'],
   ['Service desk', 'request_service', 'Book an analyst to verify the Arcline price cut.']
 ];
 $('#toolbox').innerHTML = TOOLBOX.map(([n, t, p]) => `<button type="button" class="tool-btn" data-p="${esc(p)}"><span class="tb-h"><b>${esc(n)}</b><code>${t}</code></span><span>“${esc(p)}”</span></button>`).join('');
@@ -1030,6 +2403,8 @@ function selectTab(id) {
   if (id === 'tab-cc') radar && radar.draw();
   if (id === 'tab-geo') { geoSize(); geoTick(); }
   if (id === 'tab-cap') renderCapital();
+  if (id === 'tab-wb') wbRender();
+  if (id === 'tab-ws') renderWorkspace();
 }
 TABS.forEach((t, i) => {
   t.addEventListener('click', () => selectTab(t.id));
@@ -1089,7 +2464,7 @@ function geoSize() {
 const hexCenter = h => [GEO.s * Math.sqrt(3) * (h.q + .5 * (h.r & 1)) + GEO.s * Math.sqrt(3) / 2, GEO.s * 1.5 * h.r + GEO.s + 2];
 function drawGeo() {
   const cv = $('#geo'); if (!cv || !GEO.W || $('#p-geo').hidden) return;
-  const ctx = cv.getContext('2d'), css = getComputedStyle(document.documentElement), tok = n => css.getPropertyValue(n).trim();
+  const ctx = cv.getContext('2d'), css = getComputedStyle($('#app')), tok = n => css.getPropertyValue(n).trim();
   const cLo = hexToRgb(tok('--surface-2')), cMid = hexToRgb(tok('--signal')), cHi = hexToRgb(tok('--crit')), cGood = hexToRgb(tok('--good')), cAcc = hexToRgb(tok('--accent'));
   ctx.setTransform(GEO.dpr, 0, 0, GEO.dpr, 0, 0); ctx.clearRect(0, 0, GEO.W, GEO.H);
   const s = GEO.s * .96;
@@ -1272,9 +2647,19 @@ const LAB = [
   ['Services', 'svc', 'Launch Readiness Audit', 'Before you launch, simulate how each rival is likely to respond and pre-build your counters.', 'Launches ambushed by predictable responses'],
   ['Services', 'svc', 'Benchmark Consortium', 'Operators contribute KPIs to a privacy-preserving clean room and get peer benchmarks back.', 'No trustworthy peer benchmarks'],
   ['Trust & guardrails', 'core', 'Antitrust Guardrail', 'Lagged, k-anonymous aggregates only, and never forward-looking prices: competitive intelligence without collusion risk.', 'Legal risk that blocks data sharing'],
-  ['Trust & guardrails', '', 'Provenance Ledger', 'Every insight keeps a record of the sources, timestamps and reliability scores behind it.', 'Decisions that can’t be audited later']
+  ['Trust & guardrails', '', 'Provenance Ledger', 'Every insight keeps a record of the sources, timestamps and reliability scores behind it.', 'Decisions that can’t be audited later'],
+  ['Delivery', 'new', 'Department Lens & Signal Routing', 'Routes every signal to the departments that can act on it, re-ranks the console for the chosen department and sets an act-by time from each signal’s half-life.', 'Alerts that reach everyone and are owned by no one'],
+  ['Data & tools', 'new', 'Analyst Workbench', 'Peer benchmark of 108 real operators on revenue, valuation, growth, innovation and ownership with CSV export, plus a retention-offer unit-economics calculator.', 'Benchmarks rebuilt by hand in spreadsheets every quarter'],
+  ['Services', 'svc', 'Cellvoyant Academy', 'Twelve hands-on workshops, from a signals foundation course to a certified analyst program, for operators, analysts and executives.', 'Tools bought but never adopted by the teams that need them'],
+  ['AI engines', 'new', 'Right-Time Engagement Engine', 'Predicts the hour, day and channel each tokenized customer is most likely to engage, from behavioral, transactional and contextual data, and only recommends slots the consent, quiet-hour, cap and cooling-off guardrails allow.', 'Retention and upsell contacts sent at the wrong moment'],
+  ['Delivery', 'new', 'Operator Workspace', 'A shared shift board where operators turn signals and contact-queue entries into tasks, move them through the shift and export a handover note.', 'Insights that never become owned actions'],
+  ['Delivery', '', 'Resources & Templates Library', 'Templates (signal brief, battlecard, contact policy, handover, model card), playbooks, regulator and data links, and a glossary.', 'Every team reinventing the same documents'],
+  ['Data & tools', 'new', 'Source Registry & Refresh Planner', '14 source types, from competitor sites and app stores to central banks, regulators and internal databases, each with a connector, access method, compliance rule and a refresh interval optimized for freshness, reliability and cost.', 'Intelligence scattered across databases, subscriptions and spreadsheets'],
+  ['AI engines', 'new', 'Multilingual Intelligence Desk', 'Detects Arabic, English, Chinese and other scripts, scores sentiment, summarizes long reports and links companies to the knowledge base; Claude adds translation and abstractive summaries.', 'Arabic and Chinese content left unread'],
+  ['AI engines', 'new', 'Semantic Intelligence Search', 'One search across signals, operators, companies, deals, sources and documents, with terms in different languages mapped to shared concepts, plus emerging-signal detection and linked stories.', 'Historical intelligence nobody can find again'],
+  ['Trust & guardrails', 'new', 'Business-Unit Access Control', 'Role and business-unit rules for public, licensed, internal and customer data; search results filtered by access level; licensed credentials kept in a server-side vault.', 'Confidential and licensed data shared too widely']
 ];
-const LIVE = new Set(['Move Predictor', 'Tariff DNA Sequencer', 'Market Digital Twin (War Room)', 'Insight Half-Life Router', 'Churn Contagion Radar', 'Coverage Truth Engine', 'Activist & Capital Radar', 'Alert Rules & Watchlists', 'One-click Brief Export', 'Cellvoyant AI Assistant']);
+const LIVE = new Set(['Source Registry & Refresh Planner', 'Multilingual Intelligence Desk', 'Semantic Intelligence Search', 'Business-Unit Access Control', 'Right-Time Engagement Engine', 'Operator Workspace', 'Resources & Templates Library', 'Department Lens & Signal Routing', 'Analyst Workbench', 'Move Predictor', 'Tariff DNA Sequencer', 'Market Digital Twin (War Room)', 'Insight Half-Life Router', 'Churn Contagion Radar', 'Coverage Truth Engine', 'Activist & Capital Radar', 'Alert Rules & Watchlists', 'One-click Brief Export', 'Cellvoyant AI Assistant']);
 let labCat = 'All';
 function renderLab() {
   const cats = ['All', 'Live now', ...new Set(LAB.map(x => x[0]))];
@@ -1348,7 +2733,7 @@ function landDrawSegs() {
 function landVal(c, k) { return k === 'name' ? c.name.toLowerCase() : k === 'rev' ? ((c.rev && c.rev.usd) || 0) : k === 'raised' ? ((c.raised && c.raised.usd) || 0) : sizeOf(c); }
 function landDrawTable() {
   const C = LAND.companies, q = land.q;
-  const rows = C.map(c => ({ c, f: flagsOf(c) })).filter(({ c, f }) => (land.seg === 'All' || c.seg === land.seg) && (!land.capOnly || f.pe || f.hf || f.state || f.infra) && (!q || [c.name, c.hq, c.own, c.what, (c.investors || []).map(i => i.n).join(' ')].join(' ').toLowerCase().includes(q)))
+  const rows = C.map(c => ({ c, f: flagsOf(c) })).filter(({ c, f }) => (land.seg === 'All' || c.seg === land.seg) && (!land.capOnly || f.pe || f.hf || f.state || f.infra) && (!q || [c.name, c.hq, c.region, c.own, c.what, (c.investors || []).map(i => i.n).join(' ')].join(' ').toLowerCase().includes(q)))
     .sort((a, b) => { const x = landVal(a.c, land.sortK), y = landVal(b.c, land.sortK); return (x > y ? 1 : x < y ? -1 : 0) * land.dir; });
   const th = (k, l, cls) => `<th class="${cls || ''}"><button type="button" data-k="${k}" aria-sort="${land.sortK === k ? (land.dir > 0 ? 'ascending' : 'descending') : 'none'}">${l}</button></th>`;
   $('#landTable').innerHTML = `<thead><tr>${th('name', 'Company')}<th>Segment</th><th>Ownership</th><th>Key owners / investors</th>${th('size', 'Mkt cap / valuation', 'num')}${th('rev', 'Revenue', 'num')}${th('raised', 'Capital raised', 'num')}</tr></thead><tbody>` +
@@ -1374,7 +2759,7 @@ function landDrawTable() {
           ${c.emp ? `<div><span>Employees</span><b style="font-weight:500">${esc(c.emp)}</b></div>` : ''}
           <div class="srcs">${(c.sources || []).filter(safeUrl).slice(0, 6).map(u => srcLink(u, u.replace(/^https?:\/\/(www\.)?/, '').slice(0, 70))).join('')}</div>
         </div></div></td></tr>` : '';
-      return `<tr class="row${land.openId === c.id ? ' open' : ''}" data-id="${esc(c.id)}" tabindex="0" aria-expanded="${land.openId === c.id}"><td class="co"><b>${esc(c.name)}</b><span>${esc(c.hq || '')}${c.ticker ? ' · ' + esc(c.ticker) : ''}</span></td><td>${esc(c.seg)}</td><td>${esc(c.own || '—')}<br>${badges}</td><td class="inv-names">${inv.slice(0, 4).map(i => esc(i.n)).join(', ') || '—'}${inv.length > 4 ? ` +${inv.length - 4}` : ''}</td><td class="num">${sz}</td><td class="num">${rv}</td><td class="num">${showAmt(c.raised) || '—'}</td></tr>` + detail;
+      return `<tr class="row${land.openId === c.id ? ' open' : ''}" data-id="${esc(c.id)}" tabindex="0" aria-expanded="${land.openId === c.id}"><td class="co"><b>${esc(c.name)}</b><span>${esc(c.hq || '')}${c.region ? ' · ' + esc(c.region) : ''}${c.ticker ? ' · ' + esc(c.ticker) : ''}</span></td><td>${esc(c.seg)}</td><td>${esc(c.own || '—')}<br>${badges}</td><td class="inv-names">${inv.slice(0, 4).map(i => esc(i.n)).join(', ') || '—'}${inv.length > 4 ? ` +${inv.length - 4}` : ''}</td><td class="num">${sz}</td><td class="num">${rv}</td><td class="num">${showAmt(c.raised) || '—'}</td></tr>` + detail;
     }).join('') + '</tbody>';
   $('#landNote').textContent = `${rows.length} of ${C.length} shown. Market caps are point-in-time, in USD (FX: ${LAND.fx || 'approximate'}); ▲▼ shows the change since the previous verification. "—" means not disclosed or not verified.`;
 }
@@ -1418,7 +2803,7 @@ function renderCapital() {
   const now = new Date(), yr = now.getFullYear() + now.getMonth() / 12;
   $('#capHold').innerHTML = HOLDS.map(([n, o, y]) => { const held = yr - y; return `<div class="hold-row"><div class="hd"><b>${esc(n)}</b><span class="mono tiny">${held.toFixed(1)} yrs · ${esc(o)}</span></div><div class="hold-track"><i class="band"></i><i class="bar" style="width:${Math.min(100, held / 7 * 100).toFixed(1)}%"></i></div></div>`; }).join('') + '<p class="tiny muted" style="margin:8px 12px 12px">Shaded band: the 4–6-year window in which PE owners typically sell (our inference, not a sourced forecast).</p>';
 }
-function landRender() { if (!LAND) return; landDrawTiles(); landDrawSegs(); landDrawTable(); landDrawDeals(); landDrawInv(); renderCapital(); tickLandAge(); }
+function landRender() { if (!LAND) return; landDrawTiles(); landDrawSegs(); landDrawTable(); landDrawDeals(); landDrawInv(); renderCapital(); tickLandAge(); if (POS && $('#posTable') && $('#posTable').dataset.ready) posRender(); }
 function initLandscape() {
   if (!$('#landscape')) return;
   if (!LAND) { $('#landTable').innerHTML = '<tbody><tr><td>Landscape data is unavailable.</td></tr></tbody>'; return; }
@@ -1449,6 +2834,265 @@ function initLandscape() {
   });
 }
 
+/* ---------- POSITIONING: biggest competitors & quadrants (competitors + operators by region) ---------- */
+const POS = window.CV_POS || null;
+const POSM = {
+  vendors: {
+    xl: 'Telecom depth', yl: 'Predictive & real-time', home: 'Predictive telecom specialists',
+    quad: (x, y) => x >= 50 ? (y >= 50 ? 'Predictive telecom specialists' : 'Deep but periodic') : (y >= 50 ? 'Fast generalists' : 'General research & media'),
+    corners: ['Fast generalists', 'Predictive telecom specialists', 'General research & media', 'Deep but periodic'],
+    qd: { 'Predictive telecom specialists': 'Telecom-native and real-time: the corner Cellvoyant is built for.', 'Fast generalists': 'Real-time and AI-driven, but built for every industry, so they lack telecom data and semantics.', 'Deep but periodic': 'Deep telecom knowledge, delivered as reports, databases or single-source data, with little prediction.', 'General research & media': 'Broad research or media monitoring with neither telecom depth nor predictive alerts.' },
+    cls: { c1: 'Public or corporate-owned', c2: 'Private equity or hedge fund money', c3: 'VC-backed, independent or association' }
+  },
+  ops: {
+    xl: 'Scale & market strength', yl: 'Growth & innovation momentum', home: 'Scale leaders',
+    quad: (x, y) => x >= 50 ? (y >= 50 ? 'Scale leaders' : 'Defending incumbents') : (y >= 50 ? 'Fast challengers' : 'Under pressure'),
+    corners: ['Fast challengers', 'Scale leaders', 'Under pressure', 'Defending incumbents'],
+    qd: { 'Scale leaders': 'Large and strong at home, and still growing and innovating.', 'Fast challengers': 'Smaller or weaker at home, but growing fast or innovating quickly.', 'Defending incumbents': 'Large and strong at home, but growth and innovation are slowing.', 'Under pressure': 'Smaller and slower: the most exposed to price wars, consolidation or takeover.' },
+    cls: { c1: 'Listed, strategic or family-controlled', c2: 'Private equity, infrastructure fund or hedge fund involved', c3: 'State or sovereign-fund controlled' }
+  }
+};
+const INNOV = [['fiveG_SA', '5G standalone'], ['fwa', 'Fixed wireless'], ['fiber', 'Fiber'], ['satellite_d2d', 'Satellite-to-phone'], ['fintech', 'Fintech / wallet'], ['ai', 'AI products'], ['cloud_dc', 'Cloud / data centers']];
+const REG_ORDER = ['Gulf (GCC)', 'Middle East', 'Asia-Pacific', 'Europe', 'Africa', 'Americas', 'International group'];
+const posS = { map: 'vendors', region: 'Gulf (GCC)', seg: 'all', cls: 'all', sel: { vendors: null, ops: null }, sortK: { vendors: 'threat', ops: 'rev' }, dir: { vendors: -1, ops: -1 } };
+const landById = id => (LAND && id) ? LAND.companies.find(c => c.id === id) || null : null;
+function posItem(v, kind) {
+  const L = landById(v.landId || v.id);
+  const investors = (v.holders && v.holders.length ? v.holders : null) || (L ? L.investors : null) || v.investors || [];
+  const f = flagsOf({ investors });
+  const own = v.own || (L && L.own) || '';
+  let cls;
+  if (v.seg === 'self') cls = 'self';
+  else if (kind === 'vendors') cls = (f.pe || f.hf || f.infra || /PE-owned|private equity/i.test(own)) ? 'c2' : (/public|listed|subsidiary|corporate|division/i.test(own) && !/industry body|association/i.test(own)) ? 'c1' : 'c3';
+  else cls = (f.pe || f.hf || f.infra) ? 'c2' : f.state ? 'c3' : 'c1';
+  const mcap = (L && L.mcap) || v.mcap || null, rev = (L && L.rev) || v.rev || null, val = (L && L.val) || null;
+  return Object.assign({}, v, { kind, L, investors, f: { pe: f.pe || /PE-owned/i.test(own), hf: f.hf, state: f.state, infra: f.infra }, own: own || (L ? L.own : ''), cls, mcap, rev, val,
+    name: v.name || (L && L.name) || v.id, hq: v.hq || (L && L.hq) || v.country || '', ticker: v.ticker || (L && L.ticker) || '' });
+}
+function posItems(kind) {
+  if (!POS) return [];
+  return kind === 'vendors' ? (POS.vendors || []).map(v => posItem(v, 'vendors')) : (POS.operators || []).map(o => posItem(o, 'ops'));
+}
+const posVisible = (c, k) => c.seg === 'self' || (k === 'vendors' ? ((posS.seg === 'all' || c.seg === posS.seg) && (posS.cls === 'all' || c.cls === posS.cls)) : ((posS.region === 'All regions' || c.region === posS.region) && (posS.cls === 'all' || c.cls === posS.cls)));
+const revOf = c => (c.rev && c.rev.usd) || 0, mcapOf = c => (c.mcap && c.mcap.usd) || (c.val && c.val.usd) || 0;
+const pct = v => v == null || isNaN(v) ? '—' : (v > 0 ? '+' : '') + (+v).toFixed(1) + '%';
+const innovCount = c => INNOV.filter(([k]) => c.innov && c.innov[k] && c.innov[k][0] === true).length;
+function posBadges(c) { return [c.f.pe && fundBadge('PE'), c.f.infra && fundBadge('infrastructure fund'), c.f.hf && fundBadge('hedge fund'), c.f.state && fundBadge('state')].filter(Boolean).join(''); }
+
+function posDrawTabs() {
+  $$('#posTabs [data-map]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.map === posS.map)));
+  $('#posTV').textContent = (POS.vendors || []).length - 1; $('#posTO').textContent = (POS.operators || []).length;
+}
+function posDrawSummary(items) {
+  const k = posS.map, rv = items.filter(c => c.seg !== 'self');
+  const vis = k === 'ops' ? rv.filter(c => posS.region === 'All regions' || c.region === posS.region) : rv;
+  const tiles = k === 'vendors' ? [
+    [rv.length, 'competitors placed: telecom-native data, horizontal CI and adjacent analytics'],
+    [rv.filter(c => c.f.pe).length, 'have private-equity owners or backers, now or in the past'],
+    [rv.filter(c => c.f.hf).length, 'have hedge-fund, crossover or activist investors'],
+    [rv.filter(c => POSM.vendors.quad(c.x, c.y) === 'Predictive telecom specialists').length, 'sit in Cellvoyant’s target corner (predictive telecom specialists)'],
+    [rv.filter(c => c.threat >= 60).length, 'are serious threats (score 60+ out of 100)']
+  ] : [
+    [vis.length, `operators placed in ${posS.region === 'All regions' ? 'all regions' : posS.region}`],
+    [vis.filter(c => c.f.state).length, 'are state or sovereign-fund controlled or backed'],
+    [vis.filter(c => c.f.pe || c.f.infra).length, 'have private-equity or infrastructure-fund involvement'],
+    [vis.filter(c => c.f.hf).length, 'have hedge-fund or activist investors'],
+    [fmtMoney(vis.reduce((t, c) => t + revOf(c), 0)), 'combined annual revenue (latest year, USD)']
+  ];
+  $('#posSum').innerHTML = tiles.map(([b, t]) => `<div><b>${esc(b)}</b><span>${esc(t)}</span></div>`).join('');
+}
+function posDrawTop(items) {
+  const k = posS.map, M = POSM[k];
+  let list, title;
+  if (k === 'vendors') { list = items.filter(c => c.seg !== 'self').sort((a, b) => b.threat - a.threat).slice(0, 6); title = 'The biggest competitors to Cellvoyant, ranked by threat'; }
+  else { list = items.filter(c => posVisible(c, k) && c.seg !== 'self').sort((a, b) => revOf(b) - revOf(a)).slice(0, 6); title = `The biggest operators in ${posS.region === 'All regions' ? 'the world (in this dataset)' : posS.region}, by revenue`; }
+  $('#posTopTitle').textContent = title;
+  const mx = Math.max(...list.map(c => k === 'vendors' ? c.threat : revOf(c)), 1);
+  $('#posTop').innerHTML = list.map((c, i) => {
+    const v = k === 'vendors' ? c.threat : revOf(c);
+    const sub = k === 'vendors' ? c.why : `${M.quad(c.x, c.y)} · growth ${pct(c.growth && c.growth.v)} · competes with ${(c.rivals || []).slice(0, 3).join(', ') || '—'}`;
+    return `<button type="button" class="threat" data-id="${esc(c.id)}">
+      <span class="rk mono">${i + 1}</span>
+      <span class="tn"><b>${esc(k === 'vendors' ? c.name : (c.short || c.name))}</b><span class="tiny muted">${esc(k === 'vendors' ? M.quad(c.x, c.y) + ' · ' + (c.own || '') : [c.country, (c.investors || []).filter(v => v.t !== 'public float').slice(0, 2).map(v => v.n + (v.pct != null && v.pct !== '' ? ' ' + String(v.pct).replace('%', '') + '%' : '')).join(', ')].filter(Boolean).join(' · '))}</span></span>
+      <span class="tb" aria-hidden="true"><i style="width:${(v / mx * 100).toFixed(1)}%;${k === 'ops' ? 'background:var(--accent)' : ''}"></i></span>
+      <span class="ts mono">${k === 'vendors' ? c.threat : fmtMoney(v)}</span>
+      <span class="tw small">${esc(sub || '')}</span></button>`;
+  }).join('') || '<p class="small muted">No companies match this filter.</p>';
+}
+function posDrawFilters(items) {
+  const k = posS.map, M = POSM[k];
+  const first = k === 'vendors'
+    ? [['all', 'All segments'], ['telecom', 'Telecom-native'], ['horizontal', 'Horizontal CI'], ['adjacent', 'Adjacent']].map(([v, l]) => `<button type="button" data-seg="${v}" aria-pressed="${posS.seg === v}">${l}<span class="cnt">${items.filter(c => c.seg !== 'self' && (v === 'all' || c.seg === v)).length}</span></button>`).join('')
+    : ['All regions', ...REG_ORDER].filter(r => r === 'All regions' || items.some(c => c.region === r)).map(r => `<button type="button" data-reg="${esc(r)}" aria-pressed="${posS.region === r}">${esc(r)}<span class="cnt">${r === 'All regions' ? items.length : items.filter(c => c.region === r).length}</span></button>`).join('');
+  const clsB = [['all', 'All owners'], ...Object.entries(M.cls)].map(([v, l]) => `<button type="button" data-cls="${v}" aria-pressed="${posS.cls === v}">${v !== 'all' ? `<i class="sw sw-${v}" aria-hidden="true"></i>` : ''}${esc(l)}</button>`).join('');
+  $('#posFilters').innerHTML = `<div class="filters" role="group" aria-label="${k === 'vendors' ? 'Segment' : 'Region'}">${first}</div><div class="filters" role="group" aria-label="Ownership">${clsB}</div>`;
+}
+const PW = 680, PH = 560, PL = 48, PR = 14, PT = 18, PB = 46;
+const psx = v => PL + (PW - PL - PR) * v / 100, psy = v => PT + (PH - PT - PB) * (1 - v / 100);
+function posMark(c, r) {
+  const x = psx(c.x), y = psy(c.y);
+  if (c.cls === 'self') { const p = []; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * .5 : r * 1.25; p.push((x + Math.cos(a) * rr).toFixed(1) + ',' + (y + Math.sin(a) * rr).toFixed(1)); } return `<polygon class="mk mk-self" points="${p.join(' ')}"/>`; }
+  if (c.cls === 'c2') return `<rect class="mk mk-c2" x="${(x - r * .9).toFixed(1)}" y="${(y - r * .9).toFixed(1)}" width="${(r * 1.8).toFixed(1)}" height="${(r * 1.8).toFixed(1)}" rx="2"/>`;
+  if (c.cls === 'c3') return `<polygon class="mk mk-c3" points="${x},${(y - r * 1.15).toFixed(1)} ${(x + r * 1.05).toFixed(1)},${(y + r * .8).toFixed(1)} ${(x - r * 1.05).toFixed(1)},${(y + r * .8).toFixed(1)}"/>`;
+  return `<circle class="mk mk-c1" cx="${x}" cy="${y}" r="${r}"/>`;
+}
+function posPlaceLabels(list, selId) {
+  const placed = [], dots = list.map(c => ({ x: psx(c.x) - 8, y: psy(c.y) - 8, w: 16, h: 16 }));
+  const hit = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+  const order = list.map((c, i) => i).sort((i, j) => (list[j].id === selId) - (list[i].id === selId) || (list[j].cls === 'self') - (list[i].cls === 'self') || (posS.map === 'vendors' ? list[j].threat - list[i].threat : revOf(list[j]) - revOf(list[i])));
+  const out = new Array(list.length).fill(null);
+  for (const i of order) {
+    const c = list[i], x = psx(c.x), y = psy(c.y), t = c.short || c.name, w = t.length * (c.cls === 'self' ? 7.6 : 6.3) + 4, h = 14;
+    const cx = v => clamp(v, 2, PW - 2 - w);
+    const cands = [[x + 11, y - 7, 'start'], [x - 11 - w, y - 7, 'end'], [cx(x - w / 2), y - 24, 'middle'], [cx(x - w / 2), y + 10, 'middle'], [cx(x - w + 8), y - 24, 'middle'], [cx(x - w + 8), y + 10, 'middle'], [cx(x - 8), y - 24, 'middle'], [cx(x - 8), y + 10, 'middle']];
+    for (const [bx, by, a] of cands) {
+      const b = { x: bx, y: by, w, h };
+      if (bx < 2 || bx + w > PW - 2 || by < 2 || by + h > PH - PB) continue;
+      if (placed.some(o => hit(o, b)) || dots.some((d, j) => j !== i && hit(d, b))) continue;
+      placed.push(b); out[i] = { x: a === 'start' ? bx + 2 : a === 'end' ? bx + w - 2 : bx + w / 2, y: by + 11, a }; break;
+    }
+  }
+  return out;
+}
+function posDrawChart(items) {
+  const k = posS.map, M = POSM[k], sel = posS.sel[k];
+  const list = items.filter(c => posVisible(c, k));
+  let g = `<rect class="q-bg" x="${psx(50)}" y="${psy(100)}" width="${psx(100) - psx(50)}" height="${psy(50) - psy(100)}"/>`;
+  for (let v = 0; v <= 100; v += 25) g += `<line class="grid" x1="${psx(0)}" x2="${psx(100)}" y1="${psy(v)}" y2="${psy(v)}"/><line class="grid" x1="${psx(v)}" x2="${psx(v)}" y1="${psy(0)}" y2="${psy(100)}"/>`;
+  g += `<line class="mid" x1="${psx(50)}" x2="${psx(50)}" y1="${psy(0)}" y2="${psy(100)}"/><line class="mid" x1="${psx(0)}" x2="${psx(100)}" y1="${psy(50)}" y2="${psy(50)}"/>`;
+  const [tl, tr, bl, br] = M.corners;
+  g += `<text class="ql" x="${psx(1.5)}" y="${psy(97)}">${esc(tl)}</text><text class="ql ql-us" x="${psx(98.5)}" y="${psy(97)}" text-anchor="end">${esc(tr)}</text><text class="ql" x="${psx(1.5)}" y="${psy(2)}">${esc(bl)}</text><text class="ql" x="${psx(98.5)}" y="${psy(2)}" text-anchor="end">${esc(br)}</text>`;
+  g += `<text class="ax" x="${psx(50)}" y="${PH - 12}" text-anchor="middle">${esc(M.xl)} →</text><text class="ax" transform="translate(16 ${psy(50)}) rotate(-90)" text-anchor="middle">${esc(M.yl)} →</text>`;
+  const labels = posPlaceLabels(list, sel);
+  const ord = list.map((c, i) => i).sort((i, j) => (list[i].id === sel) - (list[j].id === sel));
+  for (const i of ord) {
+    const c = list[i], on = c.id === sel, r = c.cls === 'self' ? 9 : 7, L = labels[i];
+    g += `<g class="pt${on ? ' on' : ''}${c.cls === 'self' ? ' self' : ''}" data-id="${esc(c.id)}" tabindex="0" role="button" aria-label="${esc(c.name)}: ${esc(M.quad(c.x, c.y))}">
+      <circle class="hit" cx="${psx(c.x)}" cy="${psy(c.y)}" r="15"/>${on ? `<circle class="halo" cx="${psx(c.x)}" cy="${psy(c.y)}" r="${r + 7}"/>` : ''}${posMark(c, r)}
+      ${L ? `<text class="pl" x="${L.x.toFixed(1)}" y="${L.y.toFixed(1)}" text-anchor="${L.a}">${esc(c.short || c.name)}</text>` : ''}</g>`;
+  }
+  $('#posChart').innerHTML = g;
+  $('#posChart').setAttribute('aria-label', `${k === 'vendors' ? 'Competitor' : 'Operator'} positioning quadrant: ${list.length} companies`);
+  const hidden = labels.filter(l => !l).length;
+  $('#posLegend').innerHTML = Object.entries(M.cls).map(([v, l]) => `<span><i class="sw sw-${v}" aria-hidden="true"></i>${esc(l)}</span>`).join('') + (k === 'vendors' ? '<span><i class="star" aria-hidden="true"></i>Cellvoyant</span>' : '') + (hidden ? `<span class="muted">${hidden} label${hidden > 1 ? 's' : ''} hidden to avoid overlap: hover or use the table</span>` : '');
+  $('#posMethod').textContent = k === 'vendors'
+    ? 'Positions and threat scores are Cellvoyant’s assessment. Telecom depth = telecom-specific data and models; predictive & real-time = alert cadence and forecasting. Owners, investors and financials come from the sourced landscape data.'
+    : 'Scale & market strength = 60% revenue scale (log scale, $0.3B → $125B) + 40% home-market mobile share where a source gives one. Growth & innovation = 50% latest revenue growth (−5% → +15%, local currency) + 50% innovation checklist (5G standalone, fixed wireless, fiber, satellite-to-phone, fintech, AI, cloud/data centers). Recommendations are analyst assessments.';
+}
+const posTip = () => $('#posTip');
+function posShowTip(id, target) {
+  const c = posItems(posS.map).find(x => x.id === id); if (!c) return; const M = POSM[posS.map], t = posTip();
+  t.innerHTML = `<b>${esc(c.name)}</b><span>${esc(M.quad(c.x, c.y))}</span><span>${esc(c.own || '')}${c.f.pe ? ' · PE' : ''}${c.f.hf ? ' · hedge fund' : ''}${c.f.state ? ' · state' : ''}</span>${posS.map === 'vendors' ? (c.cls !== 'self' ? `<span>Threat to Cellvoyant: ${c.threat}/100</span>` : '') : `<span>Revenue ${revOf(c) ? fmtMoney(revOf(c)) : '—'} · growth ${pct(c.growth && c.growth.v)}</span>`}`;
+  t.hidden = false;
+  const box = $('#posChartBox').getBoundingClientRect(), pt = target.getBoundingClientRect();
+  let left = pt.left - box.left + pt.width / 2 + 14, top = pt.top - box.top - 8;
+  if (left > box.width - 230) left = pt.left - box.left - 236;
+  t.style.left = Math.max(4, left) + 'px'; t.style.top = Math.max(4, top) + 'px';
+}
+function posDrawProfile(items) {
+  const k = posS.map, M = POSM[k];
+  const c = items.find(x => x.id === posS.sel[k]); if (!c) { $('#posProfile').innerHTML = '<p class="small muted">Choose a company on the map.</p>'; return; }
+  const q = M.quad(c.x, c.y), home = q === M.home;
+  const li = a => (a || []).map(x => `<li>${esc(x)}</li>`).join('');
+  const inv = (c.investors || []).map(v => `<li>${fundBadge(v.t)} <b>${esc(v.n)}</b>${v.pct != null && v.pct !== '' ? ` · ${esc(v.pct)}${/%/.test(String(v.pct)) ? '' : '%'}` : ''}${v.r ? ' · ' + esc(v.r) : ''}${v.y ? ' (' + esc(v.y) + ')' : ''}${v.u ? ' ' + srcLink(v.u) : ''}</li>`).join('');
+  const all = items;
+  const riv = (c.rivals || []).map(r => { const lr = String(r).toLowerCase(); const m = all.find(x => x.id !== c.id && (x.name.toLowerCase() === lr || (x.short || '').toLowerCase() === lr || (lr.length > 3 && x.name.toLowerCase().startsWith(lr.split(' (')[0])) || (x.L && x.L.name.toLowerCase() === lr))); return m ? `<button type="button" class="chip hl" data-id="${esc(m.id)}">${esc(r)}</button>` : `<span class="chip">${esc(r)}</span>`; }).join('');
+  const figs = [];
+  if (c.mcap && c.mcap.usd) figs.push(`<div><span>Market cap</span><b>${fmtMoney(c.mcap.usd)}${deltaHTML(c.mcap)} <span class="tiny muted">${esc(c.mcap.asOf || '')}</span> ${srcLink(c.mcap.src)}</b></div>`);
+  else if (c.val && (c.val.usd || c.val.basis)) figs.push(`<div><span>Valuation / deal</span><b>${c.val.usd ? fmtMoney(c.val.usd) : 'undisclosed'} <span class="tiny muted">${esc(c.val.short || c.val.basis || '')}</span> ${srcLink(c.val.src)}</b></div>`);
+  if (c.rev && (c.rev.usd || c.rev.label)) figs.push(`<div><span>Revenue</span><b>${c.rev.usd ? fmtMoney(c.rev.usd) : esc(c.rev.label)} <span class="tiny muted">${esc(c.rev.period || '')}</span> ${srcLink(c.rev.src)}</b></div>`);
+  if (c.growth && c.growth.v != null) figs.push(`<div><span>Revenue growth</span><b>${pct(c.growth.v)} <span class="tiny muted">${esc(c.growth.period || '')}</span> ${srcLink(c.growth.src)}</b></div>`);
+  if (c.subs && c.subs.v) figs.push(`<div><span>Mobile subscribers</span><b>${esc(c.subs.v)} <span class="tiny muted">${esc(c.subs.asOf || '')}</span></b></div>`);
+  if (c.share && c.share.v != null) figs.push(`<div><span>Home-market share</span><b>${esc(c.share.v)}% <span class="tiny muted">${esc(c.share.basis || '')}</span> ${srcLink(c.share.src)}</b></div>`);
+  (c.scale || []).forEach(s => figs.push(`<div><span>Scale</span><b>${esc(s)}</b></div>`));
+  const innov = k === 'ops' && c.innov ? `<div><span class="label">Innovation checklist · ${innovCount(c)}/7</span><div class="innov">${INNOV.map(([key, l]) => { const v = c.innov[key] || [null, '']; return `<span class="iv ${v[0] === true ? 'yes' : v[0] === false ? 'no' : 'unk'}" title="${esc(v[1] || 'not found')}">${v[0] === true ? '✓' : v[0] === false ? '✗' : '?'} ${esc(l)}</span>`; }).join('')}</div></div>` : '';
+  const sc = k === 'ops' && c.sc ? `<span class="tiny mono muted">scale ${c.sc.scale} · home share ${c.sc.share == null ? 'n/a' : c.sc.share} · growth ${c.sc.growth == null ? 'n/a' : c.sc.growth} · innovation ${c.sc.innov}</span>` : '';
+  $('#posProfile').innerHTML = `
+    <label class="sr" for="posPick">Choose a company</label>
+    <select id="posPick">${[...items].sort((a, b) => a.name.localeCompare(b.name)).map(x => `<option value="${esc(x.id)}"${x.id === c.id ? ' selected' : ''}>${esc(x.name)}${x.cls === 'self' ? ' (us)' : ''}${k === 'ops' ? ' · ' + esc(x.region || '') : ''}</option>`).join('')}</select>
+    <div class="cxp-head"><h3>${esc(c.name)}</h3><span class="small muted">${esc(k === 'ops' ? [c.region, c.country, c.footprint && c.footprint !== c.country ? 'footprint: ' + String(c.footprint).replace(/,(?=\S)/g, ', ') : ''].filter(Boolean).join(' · ') : ({ telecom: 'Telecom-native data', horizontal: 'Horizontal CI', adjacent: 'Adjacent', self: 'Cellvoyant' }[c.seg] || '') + (c.hq ? ' · ' + c.hq : ''))}${c.ticker ? ' · ' + esc(c.ticker) : ''}${c.founded ? ' · founded ' + esc(c.founded) : ''}</span></div>
+    <div class="cxp-quad${home ? ' q-us' : ''}"><span class="label">Quadrant</span><b>${esc(q)}</b><span class="small">${esc(M.qd[q])}</span><span class="tiny mono muted">${esc(M.xl.toLowerCase())} ${c.x}/100 · ${esc(M.yl.toLowerCase())} ${c.y}/100</span>${sc}${c.judged ? `<span class="tiny warn">${esc(c.judged)}</span>` : ''}</div>
+    <div class="cxp-own"><span class="label">Owners &amp; money</span>${posBadges(c) ? `<div class="badges">${posBadges(c)}</div>` : ''}<p class="small">${esc(c.own && c.own !== 'listed' ? c.own : c.ticker ? 'Listed (' + c.ticker + ')' : c.own || '—')}</p>${c.group && c.group !== c.name ? `<p class="small muted">Group: ${esc(c.group)}</p>` : ''}${inv ? `<ul class="cx-inv">${inv}</ul>` : '<p class="small muted">No outside investors found.</p>'}</div>
+    ${figs.length ? `<div class="cx-figs">${figs.join('')}</div>` : ''}
+    ${innov}
+    ${c.telecom || (c.L && c.L.what) ? `<div><span class="label">What they do</span><p class="small">${esc(c.telecom || c.L.what)}</p></div>` : ''}
+    <div class="cxp-two"><div><span class="label">Strengths</span><ul class="cxl">${li(c.strengths)}</ul></div><div><span class="label">${k === 'ops' ? 'Weaknesses' : 'Gaps'}</span><ul class="cxl">${li(c.gaps || c.weaknesses)}</ul></div></div>
+    <div class="cxp-act"><span class="label">What to improve</span><ul class="cxl">${li(c.improve)}</ul></div>
+    <div class="cxp-act win"><span class="label">How to succeed${home ? '' : ' (and move toward the top-right)'}</span><ul class="cxl">${li(c.win)}</ul></div>
+    <div><span class="label">Their competitors</span><div class="chips" style="margin-top:6px">${riv || '<span class="small muted">—</span>'}</div></div>
+    ${k === 'vendors' && c.cls !== 'self' ? `<div class="cxp-threat"><span class="label">Threat to Cellvoyant · ${c.threat}/100</span><p class="small">${esc(c.why || '')}</p><p class="small"><b>How Cellvoyant wins:</b> ${esc(c.beat || '')}</p></div>` : ''}
+    ${k === 'ops' ? `<div class="cxp-threat cv"><span class="label">How Cellvoyant helps ${esc(c.short || c.name)}</span><p class="small">${esc(cvHelp(c, q))}</p></div>` : ''}
+    ${c.moves && c.moves.length ? `<div><span class="label">Recent moves</span><ul class="cxl moves">${c.moves.map(m => `<li><span class="mono tiny">${esc(m[0])}</span> ${esc(m[1])}</li>`).join('')}</ul></div>` : (c.L && c.L.recent ? `<div><span class="label">Recent</span><p class="small">${esc(c.L.recent)}</p></div>` : '')}
+    ${(c.src && c.src.length) || (c.L && c.L.sources && c.L.sources.length) ? `<div><span class="label">Sources</span><ul class="cxl src-l">${(c.src || []).map(s => `<li>${srcLink(s[0], s[1] || s[0].replace(/^https?:\/\/(www\.)?/, '').slice(0, 60))}</li>`).join('')}${(c.L && c.L.sources || []).filter(safeUrl).slice(0, 4).map(u => `<li>${srcLink(u, u.replace(/^https?:\/\/(www\.)?/, '').slice(0, 60))}</li>`).join('')}</ul></div>` : ''}
+    ${c.unverified && c.unverified.length ? `<p class="tiny muted">Unverified: ${esc(c.unverified.join('; '))}</p>` : ''}`;
+  $('#posPick').onchange = e => posSelect(e.target.value, false);
+}
+function cvHelp(c, q) {
+  const r = (c.rivals || []).slice(0, 2).join(' and ') || 'its rivals';
+  if (q === 'Scale leaders') return `Protect the lead: watch ${r} for pricing and launch moves 30–90 days early, and stress-test every response in the war room before matching anything.`;
+  if (q === 'Fast challengers') return `Pick the fights you can win: the Move Predictor flags where ${r} are slow to respond, and Tariff DNA shows where your plans already beat theirs.`;
+  if (q === 'Defending incumbents') return `Spot erosion before it shows in results: churn contagion and switch-intent signals show where ${r} are taking share, so retention spend goes only where it is needed.`;
+  return `Stretch a limited budget: targeted retention instead of price cuts, and early warning on ${r}'s promotions so you are never the last to react.`;
+}
+function posDrawTable(items) {
+  const k = posS.map, M = POSM[k], sk = posS.sortK[k], dir = posS.dir[k];
+  const list = items.filter(c => posVisible(c, k) && c.cls !== 'self');
+  const val = (c, key) => key === 'name' ? c.name.toLowerCase() : key === 'q' ? M.quad(c.x, c.y) : key === 'threat' ? c.threat : key === 'rev' ? revOf(c) : key === 'mcap' ? mcapOf(c) : key === 'growth' ? (c.growth && c.growth.v != null ? +c.growth.v : -999) : key === 'innov' ? innovCount(c) : key === 'region' ? (c.region || '') + (c.country || '') : 0;
+  list.sort((a, b) => { const x = val(a, sk), y = val(b, sk); return (x > y ? 1 : x < y ? -1 : 0) * dir; });
+  const th = (key, l, cls) => `<th class="${cls || ''}" aria-sort="${sk === key ? (dir > 0 ? 'ascending' : 'descending') : 'none'}"><button type="button" data-k="${key}">${l}${sk === key ? (dir > 0 ? ' ↑' : ' ↓') : ''}</button></th>`;
+  const head = k === 'vendors'
+    ? `${th('name', 'Company')}<th>Segment</th>${th('q', 'Quadrant')}<th>Owners &amp; money</th>${th('mcap', 'Mkt cap / valuation', 'num')}<th>Main competitors</th>${th('threat', 'Threat', 'num')}`
+    : `${th('name', 'Operator')}${th('region', 'Region · country')}${th('q', 'Quadrant')}<th>Owners &amp; money</th>${th('mcap', 'Mkt cap', 'num')}${th('rev', 'Revenue', 'num')}${th('growth', 'Growth', 'num')}${th('innov', 'Innovation', 'num')}<th>Main competitors</th>`;
+  $('#posTable').innerHTML = `<thead><tr>${head}</tr></thead><tbody>` + list.map(c => {
+    const owners = `${posBadges(c)}<span class="small">${esc((c.investors || []).slice(0, 3).map(v => v.n + (v.pct != null && v.pct !== '' ? ' ' + v.pct + (/%/.test(String(v.pct)) ? '' : '%') : '')).join(', ') || c.own || '—')}</span>`;
+    const rivals = esc((c.rivals || []).slice(0, 4).join(', ') || '—');
+    return k === 'vendors'
+      ? `<tr data-id="${esc(c.id)}" class="${c.id === posS.sel[k] ? 'on' : ''}"><td><button type="button" class="linkish" data-id="${esc(c.id)}">${esc(c.name)}</button></td><td class="small">${esc({ telecom: 'Telecom-native', horizontal: 'Horizontal CI', adjacent: 'Adjacent' }[c.seg] || '')}</td><td class="small">${esc(M.quad(c.x, c.y))}</td><td>${owners}</td><td class="num">${mcapOf(c) ? fmtMoney(mcapOf(c)) : '—'}</td><td class="small">${rivals}</td><td class="num mono">${c.threat}</td></tr>`
+      : `<tr data-id="${esc(c.id)}" class="${c.id === posS.sel[k] ? 'on' : ''}"><td><button type="button" class="linkish" data-id="${esc(c.id)}">${esc(c.name)}</button></td><td class="small">${esc(c.region || '')}<br>${esc(c.country || '')}</td><td class="small">${esc(M.quad(c.x, c.y))}</td><td>${owners}</td><td class="num">${c.mcap && c.mcap.usd ? fmtMoney(c.mcap.usd) : '—'}</td><td class="num">${revOf(c) ? fmtMoney(revOf(c)) : '—'}</td><td class="num">${pct(c.growth && c.growth.v)}</td><td class="num mono">${c.innov ? innovCount(c) + '/7' : '—'}</td><td class="small">${rivals}</td></tr>`;
+  }).join('') + '</tbody>';
+  $('#posTableTitle').textContent = k === 'vendors' ? 'Every competitor on this map' : `Every operator on this map${posS.region === 'All regions' ? '' : ' · ' + posS.region}`;
+  $('#posNote').textContent = `${list.length} shown. Click a row to open its profile. Market caps and revenue are in USD at the stated FX; "—" means not disclosed or not found.`;
+}
+function posDrawMarkets() {
+  const el = $('#posMarkets'); if (!el) return;
+  const ms = (POS.markets || []).filter(m => posS.map === 'ops' && (posS.region === 'All regions' ? false : m.region === posS.region));
+  el.hidden = !ms.length;
+  el.innerHTML = ms.length ? `<h3 class="cx-h3">Market structure · ${esc(posS.region)}</h3><div class="mkts">${ms.map(m => `<div class="mkt"><b>${esc(m.country)}</b><span class="small">${esc(m.structure || '')}</span>${m.regulator ? `<span class="tiny muted">Regulator: ${esc(m.regulator)}</span>` : ''}${m.events && m.events.length ? `<ul class="cxl">${m.events.map(e => `<li>${esc(e)}</li>`).join('')}</ul>` : ''}</div>`).join('')}</div>` : '';
+}
+function posRender() {
+  if (!POS || !$('#positioning')) return;
+  const k = posS.map, items = posItems(k);
+  if (!posS.sel[k] || !items.some(c => c.id === posS.sel[k] && posVisible(c, k))) {
+    const vis = items.filter(c => posVisible(c, k) && c.cls !== 'self');
+    posS.sel[k] = (k === 'vendors' ? vis.sort((a, b) => b.threat - a.threat)[0] : vis.sort((a, b) => revOf(b) - revOf(a))[0] || items[0] || {}).id;
+  }
+  posDrawTabs(); posDrawSummary(items); posDrawTop(items); posDrawFilters(items); posDrawChart(items); posDrawProfile(items); posDrawMarkets(); posDrawTable(items);
+}
+function posSelect(id, scroll) {
+  posS.sel[posS.map] = id; posRender();
+  if (scroll) $('#posChartBox').scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' });
+  else if (innerWidth < 980) $('#posProfile').scrollIntoView({ behavior: 'auto', block: 'start' });
+}
+function initPositioning() {
+  if (!POS || !$('#positioning')) return;
+  $('#posTabs').addEventListener('click', e => { const b = e.target.closest('[data-map]'); if (!b) return; posS.map = b.dataset.map; posS.cls = 'all'; posRender(); });
+  $('#posFilters').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.seg) posS.seg = b.dataset.seg; if (b.dataset.reg) posS.region = b.dataset.reg; if (b.dataset.cls) posS.cls = b.dataset.cls; posRender(); });
+  $('#posTop').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) posSelect(b.dataset.id, true); });
+  const chart = $('#posChart');
+  chart.addEventListener('mouseover', e => { const p = e.target.closest('.pt'); if (p) posShowTip(p.dataset.id, p); });
+  chart.addEventListener('mouseleave', () => { posTip().hidden = true; });
+  chart.addEventListener('click', e => { const p = e.target.closest('.pt'); if (p) posSelect(p.dataset.id, false); });
+  chart.addEventListener('keydown', e => { const p = e.target.closest('.pt'); if (p && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); posSelect(p.dataset.id, false); } });
+  $('#posProfile').addEventListener('click', e => { const b = e.target.closest('button[data-id]'); if (b) posSelect(b.dataset.id, false); });
+  $('#posTable').addEventListener('click', e => {
+    const h = e.target.closest('th button'); if (h) { const key = h.dataset.k, m = posS.map; posS.dir[m] = posS.sortK[m] === key ? -posS.dir[m] : (['name', 'q', 'region'].includes(key) ? 1 : -1); posS.sortK[m] = key; posDrawTable(posItems(m)); return; }
+    if (e.target.closest('a')) return;
+    const r = e.target.closest('[data-id]'); if (r) posSelect(r.dataset.id, true);
+  });
+  $('#posTable').dataset.ready = '1';
+  posRender();
+}
+
 /* ---------- nav highlight ---------- */
 function initNav() {
   const links = $$('.nav a'); const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
@@ -1460,7 +3104,7 @@ function initNav() {
 $('#simClock').textContent = fmtClock();
 setLive(live);
 renderFeed(); kpis(); renderDetail();
-renderDNA(); renderPred(); runWar(); renderLab(); initTAM(); initLandscape(); initGeo(); initRules(); initExport(); initNav();
+renderDNA(); renderPred(); runWar(); renderLab(); initTAM(); initLandscape(); initPositioning(); initGeo(); initRules(); initExport(); initDashboard(); initWorkbench(); initDepts(); initAcademy(); initWorkspace(); initRT(); initDeck(); initMI(); initResources(); initLaunch(); initNav();
 initSpectrum();
 const radar = initRadar();
 renderServices(); renderReqs();

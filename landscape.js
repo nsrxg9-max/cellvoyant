@@ -925,7 +925,8 @@ window.CV_LANDSCAPE = {
 "https://www.telekom.com/en/media/media-information/archive/t-mobile-us-1102078",
 "https://www.datacenterdynamics.com/en/news/softbank-scoops-92bn-from-partial-t-mobile-stake-sale/"
 ],
-"id": "t-mobile-us"
+"id": "t-mobile-us",
+"region": "Americas"
 },
 {
 "name": "Verizon",
@@ -958,7 +959,8 @@ window.CV_LANDSCAPE = {
 "https://www.sec.gov/Archives/edgar/data/0000732712/000073271226000023/vz-20260331.htm",
 "https://www.foxbusiness.com/lifestyle/verizon-cut-over-13k-jobs-seeks-cut-costs-under-new-ceo"
 ],
-"id": "verizon"
+"id": "verizon",
+"region": "Americas"
 },
 {
 "name": "AT&T",
@@ -991,7 +993,8 @@ window.CV_LANDSCAPE = {
 "https://about.att.com/story/2026/att-lumen-deal-close.html",
 "https://about.att.com/story/2026/echostar-spectrum.html"
 ],
-"id": "at-t"
+"id": "at-t",
+"region": "Americas"
 },
 {
 "name": "Comcast",
@@ -1023,7 +1026,8 @@ window.CV_LANDSCAPE = {
 "https://www.businesswire.com/news/home/20260129833192/en/Comcast-Reports-4th-Quarter-2025-Results",
 "https://en.wikipedia.org/wiki/Versant"
 ],
-"id": "comcast"
+"id": "comcast",
+"region": "Americas"
 },
 {
 "name": "Charter (now incl. Cox)",
@@ -1059,7 +1063,8 @@ window.CV_LANDSCAPE = {
 "https://www.sec.gov/Archives/edgar/data/0001091667/000114036126033909/ef20080687_ex99-1.htm",
 "https://deadline.com/2026/04/charter-q1-2026-earnings-shares-plummet-1236867922/"
 ],
-"id": "charter-now-incl-cox"
+"id": "charter-now-incl-cox",
+"region": "Americas"
 },
 {
 "name": "China Mobile",
@@ -1093,7 +1098,8 @@ window.CV_LANDSCAPE = {
 "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0326/2026032600468.pdf",
 "https://finimize.com/content/china-mobile-pivots-toward-ai-as-vat-changes-bite"
 ],
-"id": "china-mobile"
+"id": "china-mobile",
+"region": "Asia-Pacific"
 },
 {
 "name": "Deutsche Telekom",
@@ -1130,7 +1136,8 @@ window.CV_LANDSCAPE = {
 "https://www.telekom.com/en/media/media-information/archive/financial-report-2025-1102218",
 "https://www.telekom.com/en/investor-relations/share/shareholder-structure"
 ],
-"id": "deutsche-telekom"
+"id": "deutsche-telekom",
+"region": "Europe"
 },
 {
 "name": "NTT, Inc.",
@@ -1162,7 +1169,8 @@ window.CV_LANDSCAPE = {
 "https://group.ntt/en/ir/library/presentation/2025/260508e.pdf",
 "https://en.wikipedia.org/wiki/Nippon_Telegraph_and_Telephone"
 ],
-"id": "ntt-inc"
+"id": "ntt-inc",
+"region": "Asia-Pacific"
 },
 {
 "name": "SoftBank Corp.",
@@ -1194,7 +1202,8 @@ window.CV_LANDSCAPE = {
 "https://www.softbank.jp/en/sbnews/entry/20260511_01",
 "https://www.softbank.jp/en/sbnews/entry/20251105_01"
 ],
-"id": "softbank-corp"
+"id": "softbank-corp",
+"region": "Asia-Pacific"
 },
 {
 "name": "KDDI",
@@ -1231,7 +1240,8 @@ window.CV_LANDSCAPE = {
 "https://www.japantimes.co.jp/business/2026/04/01/companies/kddi-fictitious-transactions/",
 "https://www.moomoo.com/news/post/72610357/toyota-motor-reported-a-change-in-its-shareholding-in-kddi"
 ],
-"id": "kddi"
+"id": "kddi",
+"region": "Asia-Pacific"
 },
 {
 "name": "Bharti Airtel",
@@ -1269,7 +1279,8 @@ window.CV_LANDSCAPE = {
 "https://www.adgully.com/post/17977/bharti-airtel-consolidated-revenue-surges-162-to-inr211-trillion-in-fy26",
 "https://www.business-standard.com/companies/news/singtel-sells-0-8-stake-in-bharti-airtel-for-about-1-2-billion-125110700459_1.html"
 ],
-"id": "bharti-airtel"
+"id": "bharti-airtel",
+"region": "Asia-Pacific"
 },
 {
 "name": "Jio Platforms (Reliance Jio)",
@@ -1339,7 +1350,8 @@ window.CV_LANDSCAPE = {
 "https://startuptalky.com/jio-platforms-just-got-sebis-go-ahead-for-indias-biggest-ever-ipo/",
 "https://www.ril.com/sites/default/files/2026-06/Jio_Factsheet_2026.pdf"
 ],
-"id": "jio-platforms-reliance-jio"
+"id": "jio-platforms-reliance-jio",
+"region": "Asia-Pacific"
 },
 {
 "name": "stc (Saudi Telecom)",
@@ -1373,7 +1385,8 @@ window.CV_LANDSCAPE = {
 "https://www.argaam.com/sa-en/financial-reports/company-report/30/2025/1",
 "https://www.pif.gov.sa/en/news-and-insights/press-releases/2024/pif-announces-sale-of-100-million-shares-in-stc/"
 ],
-"id": "stc-saudi-telecom"
+"id": "stc-saudi-telecom",
+"region": "Gulf (GCC)"
 },
 {
 "name": "e& (Emirates Telecom)",
@@ -1406,7 +1419,8 @@ window.CV_LANDSCAPE = {
 "https://www.eand.com/en/news/24-feb-26-eand-delivers-record-revenue-and-net-profit-in-FY-2025.html",
 "https://www.thenationalnews.com/business/markets/2026/07/10/uaes-e-sells-its-entire-stake-in-vodafone-for-595bn/"
 ],
-"id": "e-emirates-telecom"
+"id": "e-emirates-telecom",
+"region": "Gulf (GCC)"
 },
 {
 "name": "Vodafone Group",
@@ -1443,7 +1457,8 @@ window.CV_LANDSCAPE = {
 "https://techafricanews.com/2026/05/12/vodafone-posts-strong-fy26-growth-as-revenue-hits-e40-5bn-and-profit-recovers/",
 "https://www.thenationalnews.com/business/markets/2026/07/10/uaes-e-sells-its-entire-stake-in-vodafone-for-595bn/"
 ],
-"id": "vodafone-group"
+"id": "vodafone-group",
+"region": "Europe"
 },
 {
 "name": "Orange",
@@ -1477,7 +1492,8 @@ window.CV_LANDSCAPE = {
 "https://www.tradingview.com/news/reuters.com,2026:newsml_L8N43X0H6:0-french-state-bank-bpifrance-sells-2-5-stake-in-orange-for-1-3-billion/",
 "https://www.cnbc.com/2026/06/06/bouygues-led-consortium-signs-23point44-billion-deal-to-buy-sfr-from-altice-france.html"
 ],
-"id": "orange"
+"id": "orange",
+"region": "Europe"
 },
 {
 "name": "Telefónica",
@@ -1523,7 +1539,8 @@ window.CV_LANDSCAPE = {
 "https://www.advanced-television.com/2026/02/24/telefonica-loses-e4-3bn-in-2025/",
 "https://thecorner.eu/companies/bbva-reduces-stake-in-telefonica-from-5-to-1-9-no-longer-significant-shareholder/126563/"
 ],
-"id": "telef-nica"
+"id": "telef-nica",
+"region": "Europe"
 },
 {
 "name": "América Movil",
@@ -1557,7 +1574,8 @@ window.CV_LANDSCAPE = {
 "https://www.stocktitan.net/sec-filings/AMX/20-f-america-movil-sab-de-cv-files-annual-report-foreign-issuer-0a45a7df87d4.html",
 "https://telecomlead.com/telecom-services/america-movil-2025-results-revenue-grows-as-5g-fiber-and-enterprise-services-drive-growth-124532"
 ],
-"id": "am-rica-movil"
+"id": "am-rica-movil",
+"region": "Americas"
 },
 {
 "name": "Singtel",
@@ -1594,7 +1612,8 @@ window.CV_LANDSCAPE = {
 "https://www.singtel.com/about-us/media-centre/news-releases/singtel-posts-fy26-net-profit",
 "https://www.lightreading.com/finance/singtel-confirms-optus-stake-sale-talks-as-acma-sues-over-outage"
 ],
-"id": "singtel"
+"id": "singtel",
+"region": "Asia-Pacific"
 },
 {
 "name": "Swisscom",
@@ -1627,7 +1646,8 @@ window.CV_LANDSCAPE = {
 "https://www.swisscom.ch/en/about/news/2026/02/12-results-2025.html",
 "https://www.advanced-television.com/2026/02/12/swisscom-fy-revenue-up-37/"
 ],
-"id": "swisscom"
+"id": "swisscom",
+"region": "Europe"
 },
 {
 "name": "American Tower",
@@ -1733,7 +1753,3135 @@ window.CV_LANDSCAPE = {
 "https://www.cellnex.com/news/cellnex-h1-2026-results/",
 "https://uk.investing.com/news/stock-market-news/activist-hedge-fund-tci-gains-cellnex-board-seat-2998181"
 ],
-"id": "cellnex-telecom"
+"id": "cellnex-telecom",
+"region": "Europe"
+},
+{
+"id": "du",
+"name": "du (Emirates Integrated Telecommunications Co.)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "UAE",
+"what": "Telecom operator in UAE",
+"rel": "Potential customer; competes with e&",
+"own": "listed",
+"investors": [
+{
+"n": "Emirates Investment Authority (50.12%)",
+"t": "state"
+},
+{
+"n": "Emirates Communications & Technology Co (ECT) (19.7%)",
+"t": "state"
+},
+{
+"n": "Mamoura Diversified Global Holding (Mubadala) (10.06%)",
+"t": "state"
+}
+],
+"ticker": "DFM: DU",
+"recent": "FY2025 revenue +8.7%, beat 5-7% guidance; net profit AED 2.9bn (+16.8%); secondary public offering to raise liquidity (per release; size not verified)",
+"sources": [
+"https://www.du.ae/about/media-centre/newsdetail/du-reports-its-q4-and-2025-results-sustaining-strong-growth",
+"https://en.wikipedia.org/wiki/Du_(company)",
+"https://www.agbi.com/telecoms/2026/02/du-says-2025-revenue-rises-9-to-beat-guidance/"
+],
+"mcap": {
+"usd": 14980000000.0,
+"asOf": "retrieved 2026-10-06 (page undated)",
+"src": null
+},
+"rev": {
+"usd": 4330000000.0,
+"period": "FY2025",
+"note": "AED 3.6725/USD",
+"src": null
+},
+"subs": "9.7m (Dec 2025; 2.0m postpaid, 7.7m prepaid); fixed 735k mobile ()"
+},
+{
+"id": "virgin-mobile-uae",
+"name": "Virgin Mobile UAE",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "UAE",
+"what": "Part of du (EITC) - brand operated by du under Virgin licence",
+"rel": "Potential customer; competes with e&, du",
+"own": "listed",
+"investors": [
+{
+"n": "du (operator); Virgin brand licence (n/a%)",
+"t": "strategic"
+}
+],
+"ticker": "n/a (part of DU)",
+"recent": "",
+"sources": [
+"https://www.du.ae/about/media-centre/newsdetail/du-reports-its-q4-and-2025-results-sustaining-strong-growth"
+],
+"subs": "not disclosed separately mobile ()"
+},
+{
+"id": "mobily",
+"name": "Mobily (Etihad Etisalat Co.)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Saudi Arabia",
+"what": "Part of e& is the largest shareholder and has management ties",
+"rel": "Potential customer; competes with stc, Zain KSA, MVNOs",
+"own": "listed",
+"investors": [
+{
+"n": "e& (Emirates Telecommunications Group) (27.45%)",
+"t": "strategic"
+},
+{
+"n": "GOSI (11.85%)",
+"t": "state"
+}
+],
+"ticker": "Tadawul: 7020",
+"recent": ">USD 900m AI/digital-infrastructure investment plan (data centres, cables); FY2025 net profit +11.6% to SAR 3.47bn",
+"sources": [
+"https://tools.eurolandir.com/tools/Pressreleases/GetPressRelease/?ID=7903346&lang=en-GB&companycode=sa-7020&v=",
+"https://en.wikipedia.org/wiki/Mobily",
+"https://companiesmarketcap.com/saudi-arabia/largest-companies-in-saudi-arabia-by-market-cap/"
+],
+"mcap": {
+"usd": 13200000000.0,
+"asOf": "retrieved 2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 5240000000.0,
+"period": "FY2025",
+"note": "SAR 3.75/USD",
+"src": null
+},
+"subs": "14.4m (Dec 2025; 12.3m prepaid, 2.1m postpaid); FTTH 305k mobile ()"
+},
+{
+"id": "zain-ksa",
+"name": "Zain KSA (Mobile Telecommunication Co. Saudi Arabia)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Saudi Arabia",
+"what": "Part of Zain Group (37%, management control)",
+"rel": "Potential customer; competes with stc, Mobily, MVNOs incl. Salam Mobile (reportedly on Zain)",
+"own": "listed",
+"investors": [
+{
+"n": "Zain Group (37%)",
+"t": "strategic"
+}
+],
+"ticker": "Tadawul: 7030",
+"recent": "record FY2025 revenue SAR 11bn; dividend proposed; 2026 Q1: net profit +11% (Zain press-release headline)",
+"sources": [
+"https://sa.zain.com/about/zain-ksa-achieves-highest-ever-revenue-of-sar-11-bn-in-2025-net-profit-amounts-to-sar-604-mn/",
+"https://techafricanews.com/2026/02/18/zain-group-reports-fy-2025-revenue-of-usd-7-44-billion-net-income-surges-103/",
+"https://www.zain.com/en/press-release/zain-ksa-2026q1"
+],
+"mcap": {
+"usd": 2370000000.0,
+"asOf": "retrieved 2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 2930000000.0,
+"period": "FY2025",
+"note": "Zain-reported USD",
+"src": null
+},
+"subs": "8.1m (Dec 2025) mobile ()"
+},
+{
+"id": "salam",
+"name": "Salam (Integrated Telecom Co., ITC)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Saudi Arabia",
+"what": "Part of Mawarid Holding Group (per Wikipedia)",
+"rel": "Potential customer; competes with stc, Mobily, Zain KSA",
+"own": "listed",
+"investors": [
+{
+"n": "Mawarid Holding Group (n/a%)",
+"t": "other"
+}
+],
+"ticker": "unlisted (IPO reportedly being prepared)",
+"recent": "IPO preparation reported ('Ittihad Salam for Communications', BSF Capital, ~SAR 15bn valuation); date and status unverified",
+"sources": [
+"https://en.wikipedia.org/wiki/Integrated_Telecom_Company",
+"https://www.spectrum-tracker.com/Saudi-Arabia/Salam",
+"https://www.arabnews.com/node/1872901/corporate-news"
+]
+},
+{
+"id": "ksa-mvnos",
+"name": "KSA MVNOs (Virgin Mobile KSA, Lebara KSA, redbull MOBILE)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Saudi Arabia",
+"what": "Part of Virgin Mobile KSA: Virgin Mobile Middle East & Africa (Beyond ONE / Priora); Lebara and redbull MOBILE: not verified",
+"rel": "Potential customer; competes with stc, Mobily, Zain KSA",
+"own": "listed",
+"investors": [
+{
+"n": "Beyond ONE (Priora Management Holding, Dubai) via VMMEA; acquired Feb 2023 (majority (n/a)%)",
+"t": "other"
+},
+{
+"n": "Sanabil Investments (PIF) - Virgin Mobile KSA (minority%)",
+"t": "state"
+}
+],
+"ticker": "unlisted",
+"recent": "Beyond ONE acquired Virgin Mobile Middle East & Africa",
+"sources": [
+"https://en.wikipedia.org/wiki/Virgin_Mobile_Saudi_Arabia",
+"https://www.thenationalnews.com/business/2023/02/08/dubai-investment-company-acquires-virgin-mobile-middle-east-and-africa/",
+"https://gulfbusiness.com/sanabil-investments-acquires-minority-stake-virgin-mobiles-saudi-operations/"
+]
+},
+{
+"id": "ooredoo-group",
+"name": "Ooredoo Group (Ooredoo Q.P.S.C.)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Qatar",
+"what": "Part of Ooredoo Group",
+"rel": "Potential customer; competes with Vodafone Qatar (in Qatar)",
+"own": "listed",
+"investors": [
+{
+"n": "Qatar Investment Authority (~52-53%)",
+"t": "state"
+},
+{
+"n": "Other Qatar government entities (~15%)",
+"t": "state"
+},
+{
+"n": "Abu Dhabi investment entity (ADIA/ADIC) (~10%)",
+"t": "state"
+}
+],
+"ticker": "QSE: ORDS",
+"recent": "TowerCo with Zain and TASC created (FY2025 release); Syntys acquired Q Data",
+"sources": [
+"https://www.qatar-tribune.com/article/218708/business/ooredoo-group-net-profit-rises-12-to-qr39-billion-in-2025",
+"https://www.ooredoo.com/en/media/news_view/ooredoo-group-fy-2025/",
+"https://www.investing.com/equities/qa-telecom-ownership",
+"https://tasctowers.com/about/zain-ooredoo-and-tasc-towers-merge-telecom-tower-assets-in-22-billion-deal/",
+"https://companiesmarketcap.com/qatar/largest-companies-in-qatar-by-market-cap/"
+],
+"mcap": {
+"usd": 10390000000.0,
+"asOf": "retrieved 2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 6760000000.0,
+"period": "FY2025",
+"note": "QAR 3.64/USD",
+"src": null
+},
+"subs": "~51.8m group customers (Dec 2025) mobile ()"
+},
+{
+"id": "ooredoo-qatar",
+"name": "Ooredoo Qatar",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Qatar",
+"what": "Part of Ooredoo Group (100%)",
+"rel": "Potential customer; competes with Vodafone Qatar",
+"own": "listed",
+"investors": [
+{
+"n": "Ooredoo Group (100%)",
+"t": "strategic"
+}
+],
+"ticker": "n/a (within ORDS)",
+"recent": "Q Data acquisition (via Syntys)",
+"sources": [
+"https://www.qatar-tribune.com/article/218708/business/ooredoo-group-net-profit-rises-12-to-qr39-billion-in-2025"
+],
+"rev": {
+"usd": 1990000000.0,
+"period": "FY2025",
+"note": "QAR 3.64/USD",
+"src": null
+},
+"subs": "3.0m customers (Dec 2025) mobile ()"
+},
+{
+"id": "vodafone-qatar",
+"name": "Vodafone Qatar P.Q.S.C.",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Qatar",
+"what": "Part of Qatar Foundation-controlled; Vodafone brand partner (no Vodafone equity since 2018)",
+"rel": "Potential customer; competes with Ooredoo Qatar",
+"own": "listed",
+"investors": [
+{
+"n": "Vodafone and Qatar Foundation LLC (QF-owned) (45.00%)",
+"t": "state"
+},
+{
+"n": "General Retirement and Social Insurance Authority (6.81%)",
+"t": "state"
+},
+{
+"n": "Qatar Foundation Endowment LLC (5.00%)",
+"t": "state"
+}
+],
+"ticker": "QSE: VFQS",
+"recent": "FY2025 net profit +16.8%; 12% dividend; quarterly interim dividends approved for 2026",
+"sources": [
+"https://www.vodafone.qa/en/investor-relations/q4-2025-earnings-release",
+"https://www.vodafone.qa/en/investor-relations/shareholder-structure/major-shareholders",
+"https://www.qna.org.qa/en/News-Area/News/2018-02/27/qatar-foundation-acquires-vodafone-group-shares-in-vodafone-qatar"
+],
+"mcap": {
+"usd": 2790000000.0,
+"asOf": "retrieved 2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 934000000.0,
+"period": "FY2025",
+"note": "QAR 3.64/USD",
+"src": null
+},
+"subs": "2.2m (Dec 2025, +3.2%) mobile ()"
+},
+{
+"id": "zain-group",
+"name": "Zain Group (Mobile Telecommunications Co. K.S.C.P.)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Kuwait",
+"what": "Part of Zain Group (Omantel is its largest shareholder and consolidates it)",
+"rel": "Potential customer; competes with Ooredoo Kuwait, stc Kuwait",
+"own": "listed",
+"investors": [
+{
+"n": "Omantel (21.9%)",
+"t": "strategic"
+},
+{
+"n": "Kuwait Investment Authority (15.9 (per Wikipedia, as of 2024)%)",
+"t": "state"
+}
+],
+"ticker": "Boursa Kuwait: ZAIN",
+"recent": "Syria licence secured (Wikipedia); 2026-07 AGBI: Zain to invest USD 1.5bn in Syria network; Acquisitions of Jawwal (Palestine) and MTN Syria reported (status unverified)",
+"sources": [
+"https://techafricanews.com/2026/02/18/zain-group-reports-fy-2025-revenue-of-usd-7-44-billion-net-income-surges-103/",
+"https://www.tradearabia.com/News/389407/Zain-Group-revenue-hits-$7.44bn-for-2025;-net-income-doubles-to-$777m--",
+"https://en.wikipedia.org/wiki/Zain_Group",
+"https://www.agbi.com/telecoms/2026/07/zain-to-invest-1-5bn-in-syria-mobile-network-upgrade/"
+],
+"mcap": {
+"usd": 8290000000.0,
+"asOf": "retrieved 2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 7440000000.0,
+"period": "FY2025",
+"note": "Zain-reported USD",
+"src": null
+},
+"subs": "50.9m group customers (Dec 2025) mobile ()"
+},
+{
+"id": "zain-kuwait",
+"name": "Zain Kuwait",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Kuwait",
+"what": "Part of Zain Group (100%)",
+"rel": "Potential customer; competes with Ooredoo Kuwait, stc Kuwait",
+"own": "listed",
+"investors": [
+{
+"n": "Zain Group (100%)",
+"t": "strategic"
+}
+],
+"ticker": "n/a (within ZAIN)",
+"recent": "FY2025 net income -21% to KWD 87m",
+"sources": [
+"https://techafricanews.com/2026/02/18/zain-group-reports-fy-2025-revenue-of-usd-7-44-billion-net-income-surges-103/"
+],
+"rev": {
+"usd": 1300000000.0,
+"period": "FY2025",
+"note": "Zain-reported",
+"src": null
+},
+"subs": "2.6m (Dec 2025) mobile ()"
+},
+{
+"id": "ooredoo-kuwait",
+"name": "Ooredoo Kuwait (National Mobile Telecommunications Co.)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Kuwait",
+"what": "Part of Ooredoo Group (majority)",
+"rel": "Potential customer; competes with Zain Kuwait, stc Kuwait",
+"own": "listed",
+"investors": [
+{
+"n": "Ooredoo Group (majority (~92, unverified)%)",
+"t": "strategic"
+}
+],
+"ticker": "Boursa Kuwait (listing status unverified)",
+"recent": "",
+"sources": [
+"https://www.qatar-tribune.com/article/218708/business/ooredoo-group-net-profit-rises-12-to-qr39-billion-in-2025"
+],
+"rev": {
+"usd": 894000000.0,
+"period": "FY2025",
+"note": "QAR 3.64/USD",
+"src": null
+},
+"subs": "2.9m customers (Dec 2025) mobile ()"
+},
+{
+"id": "stc-kuwait",
+"name": "stc Kuwait (Kuwait Telecommunications Co.)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Kuwait",
+"what": "Part of stc group (majority)",
+"rel": "Potential customer; competes with Zain Kuwait, Ooredoo Kuwait",
+"own": "listed",
+"investors": [
+{
+"n": "stc group (majority (~51.8, unverified)%)",
+"t": "strategic"
+}
+],
+"ticker": "Boursa Kuwait: STC (unverified)",
+"recent": "FY2025 EBITDA at multi-year high; dividend 38 fils",
+"sources": [
+"https://kuwaittimes.com/article/39081/business/stc-reports-kd-3425-million-revenues-kd-341-million-net-profit-for-2025/"
+],
+"rev": {
+"usd": 1120000000.0,
+"period": "FY2025",
+"note": "KWD 1 = USD 3.26 (approx.)",
+"src": null
+},
+"subs": "2.3m customers (Dec 2025) mobile ()"
+},
+{
+"id": "beyon",
+"name": "Beyon (formerly Batelco Group)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Bahrain",
+"what": "Part of Beyon (Batelco is its Bahrain operator)",
+"rel": "Potential customer; competes with Zain Bahrain, stc Bahrain",
+"own": "listed",
+"investors": [
+{
+"n": "Bahrain state entities (Mumtalakat, SIO, Amber Holding) plus public (not verified%)",
+"t": "state"
+}
+],
+"ticker": "Bahrain Bourse: BEYON",
+"recent": "brand unification (Umniah by Beyon, Sure by Beyon); FY2025 results; dividend 32.5 fils/share",
+"sources": [
+"https://beyon.com/2026/02/26/beyon-announces-2025-financial-results/",
+"https://en.wikipedia.org/wiki/Batelco",
+"https://bahrainbourse.com/NewAttachments/01032026090936/01032026090936_File1.pdf"
+],
+"rev": {
+"usd": 1317000000.0,
+"period": "FY2025",
+"note": "company-stated (BHD 0.376)",
+"src": null
+},
+"subs": "4.6m group telecom subscribers (Dec 2025); Bahrain-only n/a mobile ()"
+},
+{
+"id": "zain-bahrain",
+"name": "Zain Bahrain",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Bahrain",
+"what": "Part of Zain Group (majority)",
+"rel": "Potential customer; competes with Batelco/Beyon, stc Bahrain",
+"own": "listed",
+"investors": [
+{
+"n": "Zain Group (56.25 (old Wikipedia figure, unverified)%)",
+"t": "strategic"
+}
+],
+"ticker": "Bahrain Bourse (unverified)",
+"recent": "",
+"sources": [
+"https://techafricanews.com/2026/02/18/zain-group-reports-fy-2025-revenue-of-usd-7-44-billion-net-income-surges-103/",
+"https://en.wikipedia.org/wiki/List_of_mobile_network_operators_of_the_Middle_East_and_Africa"
+],
+"rev": {
+"usd": 219000000.0,
+"period": "FY2025",
+"note": "Zain-reported",
+"src": null
+},
+"subs": "n/a mobile ()"
+},
+{
+"id": "stc-bahrain",
+"name": "stc Bahrain",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Bahrain",
+"what": "Part of stc group (100% per Wikipedia)",
+"rel": "Potential customer; competes with Batelco/Beyon, Zain Bahrain",
+"own": "listed",
+"investors": [
+{
+"n": "stc group (100%)",
+"t": "strategic"
+}
+],
+"ticker": "unlisted",
+"recent": "",
+"sources": [
+"https://en.wikipedia.org/wiki/Stc_Group"
+],
+"subs": "n/a mobile ()"
+},
+{
+"id": "omantel",
+"name": "Omantel (Oman Telecommunications Co.)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Oman",
+"what": "Part of Omantel Group (consolidates Zain Group via 21.9%)",
+"rel": "Potential customer; competes with Ooredoo Oman, Vodafone Oman, MVNOs (Renna, FRiENDi)",
+"own": "listed",
+"investors": [
+{
+"n": "Oman Investment Authority (~51 (unverified)%)",
+"t": "state"
+}
+],
+"ticker": "MSX: OTEL (unverified)",
+"recent": "mobile royalty cut from 12% to 10%; Fitch upgraded to BBB- (investment grade)",
+"sources": [
+"https://www.zawya.com/en/press-release/companies-news/omantel-delivers-double-digit-revenue-growth-in-fy-2025-ninktn61",
+"https://www.muscatdaily.com/2026/03/11/omantel-groups-net-profit-surges-88-to-ro371mn-in-2025/"
+],
+"rev": {
+"usd": 8880000000.0,
+"period": "FY2025 group (incl. Zain)",
+"note": "OMR 0.3845/USD",
+"src": null
+},
+"subs": "Domestic: 769k postpaid + 1,371k prepaid + 1,097k M2M (Dec 2025); 3.655m total subs mobile ()"
+},
+{
+"id": "ooredoo-oman",
+"name": "Ooredoo Oman (Omani Qatari Telecommunications Co.)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Oman",
+"what": "Part of Ooredoo Group (55%)",
+"rel": "Potential customer; competes with Omantel, Vodafone Oman, MVNOs",
+"own": "listed",
+"investors": [
+{
+"n": "Ooredoo Q.P.S.C. (55%)",
+"t": "strategic"
+}
+],
+"ticker": "MSX: ORDS (per Wikipedia)",
+"recent": "",
+"sources": [
+"https://en.wikipedia.org/wiki/Ooredoo_Oman",
+"https://www.qatar-tribune.com/article/218708/business/ooredoo-group-net-profit-rises-12-to-qr39-billion-in-2025"
+],
+"rev": {
+"usd": 630000000.0,
+"period": "FY2025",
+"note": "QAR 3.64/USD",
+"src": null
+},
+"subs": "2.9m customers (Dec 2025) mobile ()"
+},
+{
+"id": "vodafone-oman",
+"name": "Vodafone Oman (Oman Future Telecommunications Co. SAOC)",
+"seg": "Operator",
+"region": "Gulf (GCC)",
+"hq": "Oman",
+"what": "Part of Vodafone Partner Market (non-equity)",
+"rel": "Potential customer; competes with Omantel, Ooredoo Oman, MVNOs",
+"own": "listed",
+"investors": [
+{
+"n": "Omani institutions (government pension and investment funds) plus private investors; Vodafone Group holds no equity (n/a%)",
+"t": "state"
+}
+],
+"ticker": "unlisted",
+"recent": "Reached 16% subscriber share by Jun 2025 (launched Jan 2022, Class I licence Jan 2021)",
+"sources": [
+"https://www.telecomreview.com/articles/reports-and-coverage/28115-inside-omans-rapidly-evolving-mobile-and-connectivity-market/",
+"https://www.vodafone.om/royal-decree-license-vodafone"
+],
+"subs": "n/a mobile ()"
+},
+{
+"id": "turkcell",
+"name": "Turkcell",
+"seg": "Operator",
+"region": "Middle East",
+"hq": "Türkiye",
+"what": [
+"Türkiye (>91% of group revenue)",
+"TRNC (small intl ops)"
+],
+"rel": "Potential customer; competes with Türk Telekom, Vodafone Türkiye",
+"own": "listed",
+"investors": [
+{
+"n": "Türkiye Wealth Fund (TVF) (26.2%)",
+"t": "state"
+},
+{
+"n": "IMTIS Holdings (LetterOne group) (19.8%)",
+"t": "other"
+}
+],
+"ticker": "NYSE: TKC; BIST: TCELL",
+"recent": "FY2025 revenue TRY 241.5bn, +10.7% real; TRY 8.8bn dividend proposed; Q2-26 revenue +2.5% real to TRY 71.8bn; crossed 40m mobile subs",
+"sources": [
+"https://www.businesswire.com/news/home/20260305283495/en/Turkcell-Iletisim-Hizmetleri-A.S.-Full-Year-2025-Results",
+"https://www.telecompaper.com/news/turkcell-revenue-grows-25-hits-40-million-mobile-subscribes-milestone-in-q2--1580051",
+"https://www.stocktitan.net/news/TKC/turkcell-iletisim-hizmetleri-second-quarter-2026-qkonccshq7ze.html",
+"https://www.mobileworldlive.com/operators/turkish-fund-explores-turkcell-stake-sale/",
+"https://techafricanews.com/2026/03/20/turkcell-unveils-try-8-8bn-dividend-after-strong-2025-performance/"
+],
+"mcap": {
+"usd": 4500000000.0,
+"asOf": "2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 5620000000.0,
+"period": "FY2025 (TRY 241.5bn, IAS 29)",
+"note": "TRY 43.0",
+"src": null
+},
+"subs": "40m+ mobile (Q2 2026)"
+},
+{
+"id": "turk-telekom",
+"name": "Türk Telekom",
+"seg": "Operator",
+"region": "Middle East",
+"hq": "Türkiye",
+"what": [
+"Türkiye"
+],
+"rel": "Potential customer; competes with Turkcell, Vodafone Türkiye",
+"own": "listed",
+"investors": [
+{
+"n": "Türkiye Wealth Fund (61.68%)",
+"t": "state"
+},
+{
+"n": "Turkish Treasury (25.0%)",
+"t": "state"
+}
+],
+"ticker": "BIST: TTKOM",
+"recent": "Extended fixed-line concession agreement; Acquired spectrum in 5G tender; 5G launch planned 2026",
+"sources": [
+"https://www.ttyatirimciiliskileri.com.tr/media/pjcnyrhd/ttkom_earnings-release_q4-25.pdf",
+"https://ttinvestorrelations.com/media/cythrdpu/turk-telekom-transcript_-fy25.pdf",
+"https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2"
+],
+"mcap": {
+"usd": 3810000000.0,
+"asOf": "2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 5630000000.0,
+"period": "FY2025 (TRY 242.2bn, IAS 29)",
+"note": "TRY 43.0",
+"src": null
+},
+"subs": "31.5m mobile (Q4 2025)"
+},
+{
+"id": "asiacell",
+"name": "Asiacell",
+"seg": "Operator",
+"region": "Middle East",
+"hq": "Iraq",
+"what": [
+"Iraq"
+],
+"rel": "Potential customer; competes with Zain Iraq, Korek Telecom",
+"own": "listed",
+"investors": [
+{
+"n": "Ooredoo",
+"t": "strategic"
+}
+],
+"ticker": "ISX: TASC",
+"recent": "FY2024: revenue IQD 1.9trn (+12.8%), subs 19.1m; FY2025: revenue IQD 2,024bn (+8.1%), net profit +32%",
+"sources": [
+"https://www.asiacell.com/en/about-us/news-and-event/press-releases/PR2025/AsiacellFinancialResults",
+"https://www.asiacell.com/en/about-us/investor-relations/SFP-ARFS/AnnualPerformance"
+],
+"rev": {
+"usd": 1545000000.0,
+"period": "FY2025 (IQD 2,024bn)",
+"note": "IQD 1,310",
+"src": null
+},
+"subs": "19.1m mobile (Dec 2024)"
+},
+{
+"id": "partner",
+"name": "Partner Communications",
+"seg": "Operator",
+"region": "Middle East",
+"hq": "Israel",
+"what": [
+"Israel"
+],
+"rel": "Potential customer; competes with Cellcom Israel, Pelephone (Bezeq), Hot Mobile",
+"own": "listed",
+"investors": [
+{
+"n": "Amphissa Holdings LP (largest holder) (21.38%)",
+"t": "other"
+}
+],
+"ticker": "TASE: PTNR",
+"recent": "Q3-25 net profit +6% to NIS 90m; adj. EBITDA +4%; Fiber base 457k, +5k in Q3-25",
+"sources": [
+"https://stockanalysis.com/quote/tlv/PTNR/revenue/",
+"https://www.ifi.today/communication/365-Partner-Communications-Reports-Q3-2025-Results-Profitability-Up-Across-All-Indicators.html",
+"https://en.wikipedia.org/wiki/Partner_Communications_Company"
+],
+"mcap": {
+"usd": 2120000000.0,
+"asOf": "2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 930000000.0,
+"period": "FY2025 (~NIS 3.2bn)",
+"note": "ILS 3.45",
+"src": null
+},
+"subs": "2.50m postpaid mobile (mid-2025)"
+},
+{
+"id": "cellcom-israel",
+"name": "Cellcom Israel",
+"seg": "Operator",
+"region": "Middle East",
+"hq": "Israel",
+"what": [
+"Israel"
+],
+"rel": "Potential customer; competes with Partner, Pelephone (Bezeq), Hot Mobile",
+"own": "listed",
+"investors": [
+{
+"n": "Discount Investment Corp",
+"t": "other"
+}
+],
+"ticker": "TASE: CEL",
+"recent": "FY25 FCF NIS 350m (+22.8%); net debt NIS 1,119m; +~70k cellular and +22k fibre subs over year",
+"sources": [
+"https://www.bakshi-finance.co.il/stocks/cel.en.html",
+"https://investors.cellcom.co.il/wp-content/uploads/2025/05/Cellcom-Israel-Ltd.-Periodic-Report-for-2024-1.pdf"
+],
+"mcap": {
+"usd": 1900000000.0,
+"asOf": "2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 1230000000.0,
+"period": "FY2025 (NIS 4.24bn)",
+"note": "ILS 3.45",
+"src": null
+},
+"subs": "3.61m mobile (Dec 2024)"
+},
+{
+"id": "bezeq",
+"name": "Bezeq",
+"seg": "Operator",
+"region": "Middle East",
+"hq": "Israel",
+"what": [
+"Israel"
+],
+"rel": "Potential customer; competes with Hot, Partner, Cellcom",
+"own": "listed",
+"investors": [
+{
+"n": "B Communications (Searchlight Capital & Fuhrer family) (26.34%)",
+"t": "PE"
+}
+],
+"ticker": "TASE: BEZQ",
+"recent": "Q2-26 profit +38%; fiber 1.06m subs; 5GMAX at 217k; target ~300k by YE2026",
+"sources": [
+"https://stockanalysis.com/quote/otc/BZQIY/",
+"https://www.investing.com/news/company-news/bezeq-q2-2026-slides-profit-surges-38-on-fiber-5g-gains-93CH-4837668",
+"https://en.globes.co.il/en/article-searchlight-fuhrer-buy-control-of-bezeq-parent-co-1001290879"
+],
+"mcap": {
+"usd": 6690000000.0,
+"asOf": "2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 2520000000.0,
+"period": "FY2025 (NIS 8.70bn)",
+"note": "ILS 3.45",
+"src": null
+},
+"subs": "~2.37m Pelephone postpaid (derived) mobile (Q2 2026)"
+},
+{
+"id": "telecom-egypt",
+"name": "Telecom Egypt (WE)",
+"seg": "Operator",
+"region": "Middle East",
+"hq": "Egypt",
+"what": [
+"Egypt"
+],
+"rel": "Potential customer; competes with Vodafone Egypt, Orange Egypt, e& Egypt",
+"own": "listed",
+"investors": [
+{
+"n": "Government of Egypt",
+"t": "state"
+}
+],
+"ticker": "EGX: ETEL",
+"recent": "FY25 revenue +31%, EBITDA +46%, net profit +123%; Paid EGP 1.50/share FY25 dividend",
+"sources": [
+"https://ir.te.eg/en/CorporateNews/PressRelease/235/FY-2025-Results-Telecom-Egypt-Delivers-Growth-Ahead-of-Expectations",
+"https://ir.te.eg/IRMedia/Share_Information/2026/Share_Information9f052b3e-ab38-4dfd-8440-86e6df61d2eb.pdf",
+"https://telecomlead.com/5g/egypt-awards-5g-licenses-to-vodafone-orange-and-e-egypt-boosting-rollout-118430"
+],
+"rev": {
+"usd": 2110000000.0,
+"period": "FY2025 (EGP 106.7bn)",
+"note": "EGP 50.5",
+"src": null
+},
+"subs": "13.1m mobile (Q2 2024 (secondary))"
+},
+{
+"id": "vodafone-egypt",
+"name": "Vodafone Egypt",
+"seg": "Operator",
+"region": "Middle East",
+"hq": "Egypt",
+"what": [
+"Egypt"
+],
+"rel": "Potential customer; competes with Orange Egypt, e& Egypt, WE",
+"own": "listed",
+"investors": [
+{
+"n": "Vodacom Group (55%)",
+"t": "strategic"
+},
+{
+"n": "Telecom Egypt (45%)",
+"t": "strategic"
+}
+],
+"ticker": "unlisted",
+"recent": "Commercial 5G launch with other carriers; FY26 service revenue +36.2%, EBITDA +44.5%",
+"sources": [
+"https://en.wikipedia.org/wiki/Vodafone_Egypt",
+"https://tech.africa/vodacom-5g-mpesa-fy2026/"
+],
+"subs": "51.5m active mobile (2025)"
+},
+{
+"id": "orange-egypt",
+"name": "Orange Egypt",
+"seg": "Operator",
+"region": "Middle East",
+"hq": "Egypt",
+"what": [
+"Egypt"
+],
+"rel": "Potential customer; competes with Vodafone Egypt, e& Egypt, WE",
+"own": "listed",
+"investors": [
+{
+"n": "Orange SA (99.96%)",
+"t": "strategic"
+}
+],
+"ticker": "unlisted",
+"recent": "Won 5G licence; commercial 5G mid-2025",
+"sources": [
+"https://en.wikipedia.org/wiki/Orange_Egypt",
+"https://telecomlead.com/5g/egypt-awards-5g-licenses-to-vodafone-orange-and-e-egypt-boosting-rollout-118430"
+],
+"subs": "30.2m mobile (Q2 2024 (secondary))"
+},
+{
+"id": "eand-egypt",
+"name": "e& Egypt",
+"seg": "Operator",
+"region": "Middle East",
+"hq": "Egypt",
+"what": [
+"Egypt"
+],
+"rel": "Potential customer; competes with Vodafone Egypt, Orange Egypt, WE",
+"own": "listed",
+"investors": [
+{
+"n": "e& group (majority)",
+"t": "strategic"
+}
+],
+"ticker": "unlisted",
+"recent": "Won 5G licence; commercial 5G mid-2025",
+"sources": [
+"https://www.eand.com/en/investors/financial-highlights.html",
+"https://telecomlead.com/5g/egypt-awards-5g-licenses-to-vodafone-orange-and-e-egypt-boosting-rollout-118430"
+],
+"subs": "30.4m mobile (Q2 2024 (secondary))"
+},
+{
+"id": "jordan-market",
+"name": "Jordan market (Zain Jordan / Orange Jordan / Umniah)",
+"seg": "Operator",
+"region": "Middle East",
+"hq": "Jordan",
+"what": [
+"Jordan"
+],
+"rel": "Potential customer; competes with Zain Jordan, Orange Jordan, Umniah",
+"own": "listed",
+"investors": [
+{
+"n": "Zain Group (Zain Jordan)",
+"t": "strategic"
+},
+{
+"n": "Orange SA (Orange Jordan)",
+"t": "strategic"
+},
+{
+"n": "Beyon (Umniah)",
+"t": "strategic"
+}
+],
+"ticker": "Orange Jordan: ASE: JTEL",
+"recent": "",
+"sources": [
+"https://en.wikipedia.org/wiki/Telecommunications_in_Jordan"
+]
+},
+{
+"id": "mtn-group",
+"name": "MTN Group",
+"seg": "Operator",
+"region": "Africa",
+"hq": "South Africa",
+"what": [
+"~16-19 markets incl. Nigeria, South Africa, Ghana, Uganda, Cameroon, Côte d'Ivoire, Iran (Irancell)"
+],
+"rel": "Potential customer; competes with Airtel Africa, Glo, Vodacom",
+"own": "listed",
+"investors": [
+{
+"n": "Public Investment Corporation (largest)",
+"t": "state"
+}
+],
+"ticker": "JSE: MTN",
+"recent": "Proposed acquisition of remaining 75% of IHS (~USD 6.2bn value); ACS filed ~EUR 4bn 'Mobile Money' trademark suit",
+"sources": [
+"https://www.mtn.com/investors/",
+"https://mtn-investor.com/fy-2025-reporting-suite/index.php",
+"https://en.wikipedia.org/wiki/MTN_Group",
+"https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+],
+"mcap": {
+"usd": 20390000000.0,
+"asOf": "2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 6590000000.0,
+"period": "H1 2026 service revenue (ZAR 115.3bn)",
+"note": "ZAR 17.5",
+"src": null
+},
+"subs": "317.7m mobile (H1 2026)"
+},
+{
+"id": "vodacom",
+"name": "Vodacom Group",
+"seg": "Operator",
+"region": "Africa",
+"hq": "South Africa",
+"what": [
+"South Africa",
+"Egypt",
+"Tanzania",
+"DRC",
+"Mozambique",
+"Lesotho",
+"Kenya/Ethiopia via Safaricom"
+],
+"rel": "Potential customer; competes with MTN, Cell C, Telkom",
+"own": "listed",
+"investors": [
+{
+"n": "Vodafone Group",
+"t": "strategic"
+}
+],
+"ticker": "JSE: VOD",
+"recent": "Agreed 15% (Govt) + 5% (Vodafone) Safaricom stakes for USD 2.1bn; Maziv fibre transaction completed",
+"sources": [
+"https://tech.africa/vodacom-5g-mpesa-fy2026/",
+"https://www.cnbcafrica.com/media/7778499296755/vodacom-s-fy26-heps-up-229-on-africa-wide-growth-",
+"https://www.vodacom.com/news-article.php?articleID=16544",
+"https://allafrica.com/stories/202609160220.html"
+],
+"mcap": {
+"usd": 17760000000.0,
+"asOf": "2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 9520000000.0,
+"period": "FY26 to Mar-2026 (ZAR 167.6bn)",
+"note": "ZAR 17.6",
+"src": null
+},
+"subs": "237m customers mobile (Mar 2026)"
+},
+{
+"id": "airtel-africa",
+"name": "Airtel Africa",
+"seg": "Operator",
+"region": "Africa",
+"hq": "United Kingdom (ops in Africa)",
+"what": [
+"Chad",
+"DRC",
+"Gabon",
+"Kenya",
+"Madagascar",
+"Malawi",
+"Niger",
+"Nigeria",
+"Rep. Congo",
+"Rwanda",
+"Seychelles",
+"Tanzania",
+"Uganda",
+"Zambia"
+],
+"rel": "Potential customer; competes with MTN, Vodacom, Safaricom",
+"own": "listed",
+"investors": [
+{
+"n": "Bharti Airtel (67.2%)",
+"t": "strategic"
+}
+],
+"ticker": "LSE: AAF; NGX: AIRTELAFRI",
+"recent": "FY26 revenue USD 6.415bn, net income USD 0.813bn",
+"sources": [
+"https://en.wikipedia.org/wiki/Airtel_Africa",
+"https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+],
+"mcap": {
+"usd": 15000000000.0,
+"asOf": "2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 6415000000.0,
+"period": "FY26 to Mar-2026",
+"note": "USD reported",
+"src": null
+}
+},
+{
+"id": "safaricom",
+"name": "Safaricom",
+"seg": "Operator",
+"region": "Africa",
+"hq": "Kenya",
+"what": [
+"Kenya",
+"Ethiopia"
+],
+"rel": "Potential customer; competes with Airtel Kenya, Telkom Kenya, Ethio Telecom (Ethiopia)",
+"own": "listed",
+"investors": [
+{
+"n": "Vodacom Group (incl. 15% contested) (55%)",
+"t": "strategic"
+},
+{
+"n": "Government of Kenya (20%)",
+"t": "state"
+}
+],
+"ticker": "NSE: SCOM",
+"recent": "FY26 net income KES 100bn (+67.3%); Vodacom completed 15% Govt stake purchase (to ~55%)",
+"sources": [
+"https://www.safaricom.co.ke/media-center-landing/press-releases/safaricom-group-revenue-hits-kes414billion-with-net-income-of-kes100-billion-in-fy26",
+"https://www.safaricom.et/en/whats-new/latest/news-and-blogs/safaricom-ethiopia-records-1309-service-revenue-growth-in-fy26",
+"https://hapakenya.com/2026/09/16/high-court-nullifies-governments-ksh-204b-safaricom-stake-sale-to-vodacom/",
+"https://www.bloomberg.com/news/articles/2026-09-15/kenya-court-rules-safaricom-stake-should-return-to-treasury"
+],
+"rev": {
+"usd": 3210000000.0,
+"period": "FY26 to Mar-2026 service revenue (KES 414.1bn)",
+"note": "KES 129.2",
+"src": null
+}
+},
+{
+"id": "orange-mea",
+"name": "Orange Middle East & Africa",
+"seg": "Operator",
+"region": "Africa",
+"hq": "Morocco/France (segment of Orange)",
+"what": [
+"~17-18 MEA countries incl. Egypt, Morocco, Jordan, Côte d'Ivoire, Senegal, DRC"
+],
+"rel": "Potential customer; competes with MTN, Moov Africa (Maroc Telecom), Airtel",
+"own": "listed",
+"investors": [
+{
+"n": "Orange SA (100%)",
+"t": "strategic"
+}
+],
+"ticker": "segment of Orange (Euronext: ORA)",
+"recent": "Orange Maroc launched 5G with IAM and inwi; Orange Egypt won 5G licence, launched mid-2025",
+"sources": [
+"https://en.wikipedia.org/wiki/Maroc_Telecom",
+"https://en.wikipedia.org/wiki/Orange_Egypt"
+]
+},
+{
+"id": "maroc-telecom",
+"name": "Maroc Telecom (Itissalat Al-Maghrib)",
+"seg": "Operator",
+"region": "Africa",
+"hq": "Morocco",
+"what": [
+"Morocco",
+"Moov Africa: Burkina Faso, Mali, Gabon, Côte d'Ivoire, Benin, Togo, Niger, CAR, Chad",
+"Mauritania (Mauritel)"
+],
+"rel": "Potential customer; competes with Orange Maroc, inwi, MTN/Orange in Moov markets",
+"own": "listed",
+"investors": [
+{
+"n": "e& (Emirates Telecommunications Group) (53%)",
+"t": "strategic"
+},
+{
+"n": "Kingdom of Morocco (22%)",
+"t": "state"
+}
+],
+"ticker": "CSE: IAM; Euronext Paris: IAM",
+"recent": "Launched 5G in major Moroccan cities; Launched 1 Gbit/s fiber offer",
+"sources": [
+"https://en.wikipedia.org/wiki/Maroc_Telecom",
+"https://www.eand.com/en/investors/financial-highlights.html"
+]
+},
+{
+"id": "ethio-telecom",
+"name": "Ethio Telecom",
+"seg": "Operator",
+"region": "Africa",
+"hq": "Ethiopia",
+"what": [
+"Ethiopia"
+],
+"rel": "Potential customer; competes with Safaricom Ethiopia",
+"own": "listed",
+"investors": [
+{
+"n": "Government of Ethiopia (EIH)",
+"t": "state"
+}
+],
+"ticker": "unlisted",
+"recent": "5G expanded to 26 cities; Promised first dividend to small shareholders",
+"sources": [
+"https://en.wikipedia.org/wiki/Ethio_Telecom",
+"https://www.riotimesonline.com/ethio-telecom-dividend-shareholders-2026/"
+],
+"rev": {
+"usd": 1350000000.0,
+"period": "FY2024/25 (ETB 162bn)",
+"note": "ETB ~120 (highly uncertain)",
+"src": null
+},
+"subs": "83.2m voice subs mobile (2025)"
+},
+{
+"id": "telkom-sa",
+"name": "Telkom SA",
+"seg": "Operator",
+"region": "Africa",
+"hq": "South Africa",
+"what": [
+"South Africa"
+],
+"rel": "Potential customer; competes with Vodacom, MTN, Cell C",
+"own": "listed",
+"investors": [
+{
+"n": "Government of South Africa (40.52%)",
+"t": "state"
+},
+{
+"n": "GEPF (via PIC) (15.89%)",
+"t": "state"
+},
+{
+"n": "PSG Financial Services (3.97%)",
+"t": "other"
+},
+{
+"n": "Treasury shares (4.72%)",
+"t": "other"
+}
+],
+"ticker": "JSE: TKG",
+"recent": "Q1 FY27: revenue +2.6%, data revenue +8.8%; Launched Openserve ISP retail channel",
+"sources": [
+"https://group.telkom.co.za/documents/ir/financial-information/q1-fy2027/Q1-FY2027-trading-update.pdf",
+"https://group.telkom.co.za/ir/overview.html",
+"https://en.wikipedia.org/wiki/Telkom_(South_Africa)"
+],
+"mcap": {
+"usd": 1490000000.0,
+"asOf": "2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 634000000.0,
+"period": "Q1 FY27 (Apr-Jun 2026, ZAR 11.1bn)",
+"note": "ZAR 17.5",
+"src": null
+},
+"subs": "25.3m mobile (Jun 2026)"
+},
+{
+"id": "globacom",
+"name": "Globacom (Glo)",
+"seg": "Operator",
+"region": "Africa",
+"hq": "Nigeria",
+"what": [
+"Nigeria",
+"Benin"
+],
+"rel": "Potential customer; competes with MTN Nigeria, Airtel Nigeria, 9mobile",
+"own": "private",
+"investors": [
+{
+"n": "Mike Adenuga",
+"t": "family/founder"
+}
+],
+"ticker": "private",
+"recent": "",
+"sources": [
+"https://en.wikipedia.org/wiki/Globacom"
+],
+"subs": "19.1m mobile (Sep 2024)"
+},
+{
+"id": "cell-c",
+"name": "Cell C",
+"seg": "Operator",
+"region": "Africa",
+"hq": "South Africa",
+"what": [
+"South Africa"
+],
+"rel": "Potential customer; competes with Vodacom, MTN, Telkom",
+"own": "listed",
+"investors": [
+{
+"n": "Blu Label Unlimited (49.53%)",
+"t": "strategic"
+}
+],
+"ticker": "not verified",
+"recent": "Blue Label cites successful Cell C turnaround",
+"sources": [
+"https://en.wikipedia.org/wiki/Cell_C"
+],
+"rev": {
+"usd": 720000000.0,
+"period": "latest FY (ZAR 12.64bn; period unclear)",
+"note": "ZAR 17.6",
+"src": null
+},
+"subs": "~8.8m mobile (2026)"
+},
+{
+"id": "ihs-towers",
+"name": "IHS Towers",
+"seg": "Tower & infrastructure",
+"region": "Africa",
+"hq": "United Kingdom/Nigeria",
+"what": [
+"Nigeria",
+"Cameroon",
+"Côte d'Ivoire",
+"Zambia",
+"South Africa"
+],
+"rel": "Potential customer; competes with Helios Towers, American Tower, operator-owned towers",
+"own": "listed",
+"investors": [
+{
+"n": "MTN Group (25%)",
+"t": "strategic"
+},
+{
+"n": "Wendel",
+"t": "PE"
+},
+{
+"n": "GIC",
+"t": "state"
+},
+{
+"n": "Korea Investment Corp",
+"t": "state"
+},
+{
+"n": "Goldman Sachs",
+"t": "PE"
+},
+{
+"n": "Emerging Capital Partners",
+"t": "PE"
+},
+{
+"n": "IFC",
+"t": "other"
+}
+],
+"ticker": "NYSE: IHS",
+"recent": "Sold Rwanda business to Paradigm; MTN proposed buying remaining 75% (~USD 6.2bn value)",
+"sources": [
+"https://en.wikipedia.org/wiki/IHS_Towers",
+"https://en.wikipedia.org/wiki/MTN_Group",
+"https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2"
+],
+"mcap": {
+"usd": 2850000000.0,
+"asOf": "2026-10-06",
+"src": null
+},
+"subs": "n/a (towerco) mobile (None)"
+},
+{
+"id": "helios-towers",
+"name": "Helios Towers",
+"seg": "Tower & infrastructure",
+"region": "Africa",
+"hq": "United Kingdom",
+"what": [
+"Tanzania",
+"DRC",
+"Ghana",
+"Congo-Brazzaville",
+"South Africa",
+"Senegal",
+"Madagascar",
+"Malawi",
+"Oman"
+],
+"rel": "Potential customer; competes with IHS Towers, American Tower Africa, operator-owned towers",
+"own": "listed",
+"investors": [
+{
+"n": "Not found",
+"t": "other"
+}
+],
+"ticker": "LSE: HTWS",
+"recent": "FY2025: revenue USD 854.1m, net income USD 39.4m",
+"sources": [
+"https://en.wikipedia.org/wiki/Helios_Towers",
+"https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2"
+],
+"mcap": {
+"usd": 2920000000.0,
+"asOf": "2026-10-06",
+"src": null
+},
+"rev": {
+"usd": 854100000.0,
+"period": "FY2025",
+"note": "USD reported",
+"src": null
+},
+"subs": "n/a (towerco) mobile (None)"
+},
+{
+"id": "china-telecom",
+"name": "China Telecom",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "China",
+"what": "Mainland China (mobile, broadband, Tianyi Cloud); small international arm",
+"rel": "Potential customer; competes with China Mobile, China Unicom, China Broadnet",
+"own": "listed",
+"investors": [
+{
+"n": "China Telecommunications Corp (state parent, majority)",
+"t": "state"
+}
+],
+"ticker": "0728 (HKEX); 601728 (SSE)",
+"recent": "FY25: revenue RMB529.6bn; service revenue +0.7%; US$1.7bn order for 40,000 AI servers (Huawei partners)",
+"sources": [
+"https://www.chinatelecom-h.com/en/media/press/p260324.pdf",
+"https://doc.irasia.com/listco/hk/chinatelecom/annual/2025/res.pdf",
+"https://stockanalysis.com/quote/hkg/0728/",
+"https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+],
+"mcap": {
+"usd": 52360000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 74590000000.0,
+"period": "FY2025 operating revenue RMB529.6bn",
+"note": "CNY 7.10/USD (assumed)",
+"src": "https://www.chinatelecom-h.com/en/media/press/p260324.pdf"
+},
+"subs": "439000000 mobile (2025-12-31 (5G penetration 68.8%))"
+},
+{
+"id": "china-unicom",
+"name": "China Unicom",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "China",
+"what": "Mainland China (mobile, broadband, Unicom Cloud, data centres)",
+"rel": "Potential customer; competes with China Mobile, China Telecom, China Broadnet",
+"own": "listed",
+"investors": [
+{
+"n": "China Unicom Group via A-share co/BVI chain (state)",
+"t": "state"
+},
+{
+"n": "Tencent, Alibaba, Baidu, JD (2017 reform, in A-share co)",
+"t": "strategic"
+}
+],
+"ticker": "0762 (HKEX); 600050 (SSE, A-share parent)",
+"recent": "FY25: revenue RMB392.2bn (+0.7%); FCF RMB36bn (+28.5%); Obtained satellite mobile permit; pushing D2D apps",
+"sources": [
+"http://www.irasia.com/listco/hk/chinaunicom/annual/2025/respress.htm",
+"http://en.c114.com.cn/576/a1307257.html",
+"https://www.chinadailyhk.com/hk/article/630766",
+"https://stockanalysis.com/quote/hkg/0762/"
+],
+"mcap": {
+"usd": 21250000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 55240000000.0,
+"period": "FY2025 operating revenue RMB392.22bn",
+"note": "CNY 7.10/USD (assumed)",
+"src": "http://en.c114.com.cn/576/a1307257.html"
+}
+},
+{
+"id": "rakuten-mobile",
+"name": "Rakuten Mobile (Rakuten Group)",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Japan",
+"what": "Japan (MNO); Rakuten Symphony sells Open RAN globally",
+"rel": "Potential customer; competes with NTT Docomo, KDDI (au/UQ/povo), SoftBank (Y!mobile/LINEMO)",
+"own": "listed",
+"investors": [
+{
+"n": "Hiroshi Mikitani & family entities",
+"t": "family/founder"
+},
+{
+"n": "Japan Post Holdings",
+"t": "strategic"
+}
+],
+"ticker": "4755 (TSE)",
+"recent": "FY25: Mobile first full-year EBITDA profit; 10.01m subs; Satellite project wins up to $912m govt grant",
+"sources": [
+"https://global.rakuten.com/corp/news/press/2026/0212_01.html",
+"https://rakuten.today/blog/rakuten-announces-fy2025-and-q4-results.html",
+"https://stockanalysis.com/quote/tyo/4755/"
+],
+"mcap": {
+"usd": 9110000000.0,
+"asOf": "2026-10-06 (Rakuten Group, JPY1.44trn)",
+"src": "https://stockanalysis.com/quote/tyo/4755/"
+},
+"rev": {
+"usd": 2370000000.0,
+"period": "FY2025 Rakuten Mobile revenue JPY374.7bn (Group JPY2.5trn)",
+"note": "JPY 158/USD",
+"src": "https://global.rakuten.com/corp/news/press/2026/0212_01.html"
+},
+"subs": "10010000 mobile (2025-12-31)"
+},
+{
+"id": "sk-telecom",
+"name": "SK Telecom",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "South Korea",
+"what": "South Korea (mobile; SK Broadband fixed)",
+"rel": "Potential customer; competes with KT, LG Uplus, MVNOs",
+"own": "listed",
+"investors": [
+{
+"n": "SK Inc. (30.6%)",
+"t": "strategic"
+},
+{
+"n": "KKR & IMM (in SK Horizon AI-DC unit, not parent)",
+"t": "PE"
+}
+],
+"ticker": "017670 (KRX); SKM (NYSE)",
+"recent": "USIM breach (~27m users); new sales halted May 5-Jun 23; Record regulator fine (~$97m) over breach",
+"sources": [
+"https://news.sktelecom.com/en/2706",
+"https://www.rcrwireless.com/20260205/business/sk-telecom-fy2025",
+"https://www.koreaherald.com/article/10703405",
+"https://www.theregister.com/2025/08/28/sk_telecom_regulator_fine/",
+"https://stockanalysis.com/stocks/skm/"
+],
+"mcap": {
+"usd": 13980000000.0,
+"asOf": "2026-10-05",
+"src": "https://stockanalysis.com/stocks/skm/"
+},
+"rev": {
+"usd": 11020000000.0,
+"period": "TTM to Jun-2026 (FY2025 KRW17.10trn)",
+"note": "source USD",
+"src": "https://stockanalysis.com/stocks/skm/"
+},
+"subs": "31000000 mobile (2026-Q1 (total MNO base))"
+},
+{
+"id": "kt-corp",
+"name": "KT Corp",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "South Korea",
+"what": "South Korea (mobile, fixed, cloud, BC Card)",
+"rel": "Potential customer; competes with SK Telecom, LG Uplus",
+"own": "listed",
+"investors": [
+{
+"n": "BlackRock (6.15%)",
+"t": "other"
+},
+{
+"n": "Hyundai Motor Group",
+"t": "strategic"
+},
+{
+"n": "National Pension Service",
+"t": "state"
+}
+],
+"ticker": "030200 (KRX); KT (NYSE)",
+"recent": "FY25: revenue KRW28.24trn (+6.9%), op. profit +205%; ~KRW54bn fine over femtocell hack (~16k users)",
+"sources": [
+"https://www.digitaltoday.co.kr/en/view/3536/kt-2025-operating-profit-up-200-percent-subscriber-gains-despite-hacking",
+"https://news.sbs.co.kr/english/article.do?news_id=N1008682301",
+"https://www.koreaherald.com/article/10706762",
+"https://stockanalysis.com/stocks/kt/"
+],
+"mcap": {
+"usd": 9120000000.0,
+"asOf": "2026-10-05",
+"src": "https://stockanalysis.com/stocks/kt/"
+},
+"rev": {
+"usd": 17710000000.0,
+"period": "TTM to Jun-2026 (FY2025 KRW28.24trn)",
+"note": "source USD",
+"src": "https://stockanalysis.com/stocks/kt/"
+}
+},
+{
+"id": "lg-uplus",
+"name": "LG Uplus",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "South Korea",
+"what": "South Korea (mobile, broadband, smart home, AIDC)",
+"rel": "Potential customer; competes with SK Telecom, KT",
+"own": "listed",
+"investors": [
+{
+"n": "LG Corp. (37.7%)",
+"t": "strategic"
+}
+],
+"ticker": "032640 (KRX)",
+"recent": "FY25: revenue KRW15.45trn (+5.7%); op. profit +3.4%; Confirmed cybersecurity incident",
+"sources": [
+"https://www.digitaltoday.co.kr/en/view/3080/lg-uplus-2025-operating-profit-8921-billion-won-up-3-4-percent",
+"https://cm.asiae.co.kr/en/article/2026020509471602652",
+"https://stockanalysis.com/quote/krx/032640/"
+],
+"mcap": {
+"usd": 4600000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 10660000000.0,
+"period": "FY2025 KRW15.45trn",
+"note": "KRW 1,450/USD (assumed)",
+"src": "https://www.digitaltoday.co.kr/en/view/3080/lg-uplus-2025-operating-profit-8921-billion-won-up-3-4-percent"
+},
+"subs": "30000000 mobile (2025-12 (>30m wireless lines incl. IoT))"
+},
+{
+"id": "vodafone-idea",
+"name": "Vodafone Idea (Vi)",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "India",
+"what": "India",
+"rel": "Potential customer; competes with Reliance Jio, Bharti Airtel, BSNL",
+"own": "listed",
+"investors": [
+{
+"n": "Government of India (48.99%)",
+"t": "state"
+},
+{
+"n": "Vodafone Group",
+"t": "strategic"
+},
+{
+"n": "Aditya Birla Group",
+"t": "family/founder"
+},
+{
+"n": "Tillman Global Holdings (talks only)",
+"t": "infrastructure fund"
+}
+],
+"ticker": "IDEA (NSE); 532822 (BSE)",
+"recent": "Q4 FY26: ~INR52k cr profit on govt AGR relief; Holders approve INR4,730cr ABG fundraise",
+"sources": [
+"https://stockanalysis.com/quote/nse/IDEA/",
+"https://finance.yahoo.com/markets/stocks/articles/vodafone-idea-ltd-bom-532822-170725495.html",
+"https://www.storyboard18.com/digital/vi-narrows-net-loss-sees-revenue-and-arpu-growth-in-q1-fy27-ws-l-107307.htm",
+"https://telecomtalk.info/tillman-global-holdings-invest-in-vodafone-idea/1001274/",
+"https://en.wikipedia.org/wiki/Telecommunications_in_India"
+],
+"mcap": {
+"usd": 14780000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 4840000000.0,
+"period": "TTM to Jun-2026 (INR454.63bn)",
+"note": "INR 94/USD",
+"src": "https://stockanalysis.com/quote/nse/IDEA/"
+},
+"subs": "193100000 mobile (2026-06-30 (4G/5G 130.1m))"
+},
+{
+"id": "telkom-indonesia",
+"name": "Telkom Indonesia / Telkomsel",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Indonesia",
+"what": "Indonesia (Telkomsel mobile+IndiHome, fibre, towers via Mitratel, DCs)",
+"rel": "Potential customer; competes with Indosat Ooredoo Hutchison, XLSmart",
+"own": "listed",
+"investors": [
+{
+"n": "Republic of Indonesia (now via Danantara) (52.1%)",
+"t": "state"
+},
+{
+"n": "Singtel (~30% of Telkomsel only)",
+"t": "strategic"
+}
+],
+"ticker": "TLKM (IDX); TLK (NYSE)",
+"recent": "FY25: revenue IDR146.7trn, net income IDR17.8trn; op. profit down; EGM approves fibre spin-off to InfraNexia (IDR85.7trn)",
+"sources": [
+"https://www.stocktitan.net/sec-filings/TLK/6-k-perusahaan-perseroan-persero-pt-telekomunikasi-indonesia-tbk-curr-8bb5ab6a6744.html",
+"https://www.telkom.co.id/minio/show/data/lampiran/1761838522183_original_TLKM-9M25-Info-Memo.pdf",
+"https://www.telkom.co.id/sites/berita/id_ID/news/rupslb-telkom-2026-setujui-spin-off-infraco-dan-perubahan-pengurus-tunjuk-dirut-baru-perseroan-3968",
+"https://www.cnnindonesia.com/ekonomi/20261001094733-625-1410327/fokus-ai-ready-telkom-spin-off-bisnis-fiber-rp857-t-ke-infranexia",
+"https://stockanalysis.com/quote/idx/TLKM/"
+],
+"mcap": {
+"usd": 12700000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 8200000000.0,
+"period": "FY2025 IDR146.7trn",
+"note": "IDR 17,900/USD",
+"src": "https://www.stocktitan.net/sec-filings/TLK/6-k-perusahaan-perseroan-persero-pt-telekomunikasi-indonesia-tbk-curr-8bb5ab6a6744.html"
+},
+"subs": "153700000 mobile (2026-Q1 (Telkomsel))"
+},
+{
+"id": "indosat-ooredoo-hutchison",
+"name": "Indosat Ooredoo Hutchison",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Indonesia",
+"what": "Indonesia (mobile, Lintasarta ICT/AI cloud)",
+"rel": "Potential customer; competes with Telkomsel, XLSmart",
+"own": "listed",
+"investors": [
+{
+"n": "Ooredoo Hutchison Asia (65.6%)",
+"t": "strategic"
+},
+{
+"n": "Republic of Indonesia (9.6%)",
+"t": "state"
+}
+],
+"ticker": "ISAT (IDX)",
+"recent": "FY25: revenue IDR56.5trn; net profit +12.2%; ARPU +6.4%; Neocloud contracted revenue passes $1bn",
+"sources": [
+"https://www.thejakartapost.com/business/2026/02/11/indosat-ooredoo-hutchison-shows-healthy-fundamentals-in-2025-with-12-2-net-profit-growth",
+"https://www.fierce-network.com/cloud/indosat-ooredoo-hutchinson-bags-1b-contracted-neocloud-revenue",
+"https://www.telecompaper.com/news/indosats-profit-jumps-more-than-12-in-2025-arpu-climbs-64--1561793",
+"https://stockanalysis.com/quote/idx/ISAT/"
+],
+"mcap": {
+"usd": 3980000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 3370000000.0,
+"period": "FY2025 IDR56.5trn",
+"note": "source USD",
+"src": "https://www.thejakartapost.com/business/2026/02/11/indosat-ooredoo-hutchison-shows-healthy-fundamentals-in-2025-with-12-2-net-profit-growth"
+},
+"subs": "94000000 mobile (2026-Q1)"
+},
+{
+"id": "xlsmart",
+"name": "XLSmart",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Indonesia",
+"what": "Indonesia (mobile; Link Net fixed)",
+"rel": "Potential customer; competes with Telkomsel, Indosat Ooredoo Hutchison",
+"own": "listed",
+"investors": [
+{
+"n": "Axiata (34.8%)",
+"t": "strategic"
+},
+{
+"n": "Sinar Mas (34.8%)",
+"t": "family/founder"
+}
+],
+"ticker": "EXCL (IDX)",
+"recent": "Shareholders approve XL Axiata-Smartfren merger; FY25: revenue IDR42.5trn (+23%); EBITDA +13%",
+"sources": [
+"https://jakartaglobe.id/tech/xlsmart-posts-25-billion-revenue-in-2025-after-xl-axiatasmartfren-merger",
+"https://www.itbeat.id/en/xlsmart-pendapatan-425-triliun-pasca-merger-2025/",
+"https://www.thestar.com.my/business/business-news/2025/03/26/axiata-sinar-mas-get-shareholders-nod-on-xlsmart-merger",
+"https://stockanalysis.com/quote/idx/EXCL/"
+],
+"mcap": {
+"usd": 2360000000.0,
+"asOf": "2026-10-06 (IDR42.22trn)",
+"src": "https://stockanalysis.com/quote/idx/EXCL/"
+},
+"rev": {
+"usd": 2500000000.0,
+"period": "FY2025 IDR42.5trn",
+"note": "source USD",
+"src": "https://jakartaglobe.id/tech/xlsmart-posts-25-billion-revenue-in-2025-after-xl-axiatasmartfren-merger"
+},
+"subs": "69400000 mobile (2026-Q1 (~73m at end-2025))"
+},
+{
+"id": "axiata",
+"name": "Axiata Group",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Malaysia",
+"what": "Bangladesh (Robi), Sri Lanka (Dialog), Cambodia (Smart), Indonesia (XLSmart JV, Link Net), EDOTCO towers; CelcomDigi stake",
+"rel": "Potential customer; competes with Grameenphone/Banglalink (BD), SLT-Mobitel (LK), Telkomsel/IOH (ID)",
+"own": "listed",
+"investors": [
+{
+"n": "Khazanah Nasional (36.7%)",
+"t": "state"
+},
+{
+"n": "Malaysian state funds (EPF/PNB/KWAP)",
+"t": "state"
+}
+],
+"ticker": "AXIATA (Bursa)",
+"recent": "FY25 PAT MYR364.6m; net debt/EBITDA 2.46x; Plans EDOTCO and Link Net divestments",
+"sources": [
+"https://www.axiata.com/media/news/2026/axiata-posts-rm365-million-in-profits-for-fy25",
+"https://theedgemalaysia.com/node/809143",
+"https://theedgemalaysia.com/node/773932",
+"https://stockanalysis.com/quote/klse/AXIATA/"
+],
+"mcap": {
+"usd": 3710000000.0,
+"asOf": "2026-10-05 (MYR15.07bn)",
+"src": "https://stockanalysis.com/quote/klse/AXIATA/"
+},
+"rev": {
+"usd": 2850000000.0,
+"period": "TTM to Jun-2026 (MYR11.57bn)",
+"note": "MYR 4.06/USD",
+"src": "https://stockanalysis.com/quote/klse/AXIATA/"
+}
+},
+{
+"id": "celcomdigi",
+"name": "CelcomDigi",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Malaysia",
+"what": "Malaysia",
+"rel": "Potential customer; competes with Maxis, U Mobile, Yes (YTL)",
+"own": "listed",
+"investors": [
+{
+"n": "Axiata (33.1%)",
+"t": "strategic"
+},
+{
+"n": "Telenor (33.1%)",
+"t": "strategic"
+}
+],
+"ticker": "CDB (Bursa)",
+"recent": "Q4-25 results published; Q1-26 results",
+"sources": [
+"https://stockanalysis.com/quote/klse/CDB/",
+"https://en.wikipedia.org/wiki/CelcomDigi",
+"https://en.wikipedia.org/wiki/List_of_mobile_network_operators_of_the_Asia_Pacific_region"
+],
+"mcap": {
+"usd": 7290000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 3210000000.0,
+"period": "TTM to Jun-2026 (MYR13.04bn)",
+"note": "MYR 4.06/USD",
+"src": "https://stockanalysis.com/quote/klse/CDB/"
+},
+"subs": "20309000 mobile (2026-Q2)"
+},
+{
+"id": "maxis",
+"name": "Maxis",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Malaysia",
+"what": "Malaysia",
+"rel": "Potential customer; competes with CelcomDigi, U Mobile, TM Unifi",
+"own": "listed",
+"investors": [
+{
+"n": "Binariang GSM (Usaha Tegas) (62.4%)",
+"t": "family/founder"
+}
+],
+"ticker": "MAXIS (Bursa)",
+"recent": "Regulator probe over customer privacy leak; Q2-26 results",
+"sources": [
+"https://stockanalysis.com/quote/klse/MAXIS/",
+"https://en.wikipedia.org/wiki/List_of_mobile_network_operators_of_the_Asia_Pacific_region"
+],
+"mcap": {
+"usd": 6750000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 2670000000.0,
+"period": "TTM to Jun-2026 (MYR10.85bn)",
+"note": "MYR 4.06/USD",
+"src": "https://stockanalysis.com/quote/klse/MAXIS/"
+},
+"subs": "13697000 mobile (2026-Q2)"
+},
+{
+"id": "ais",
+"name": "AIS (Advanced Info Service)",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Thailand",
+"what": "Thailand (mobile, 3BB fixed broadband, enterprise cloud)",
+"rel": "Potential customer; competes with True Corporation, NT (National Telecom)",
+"own": "listed",
+"investors": [
+{
+"n": "Gulf Development (ex-Intouch) (40.45%)",
+"t": "strategic"
+},
+{
+"n": "Singtel (incl. nominees) (23.32%)",
+"t": "strategic"
+}
+],
+"ticker": "ADVANC (SET)",
+"recent": "Launched AIS Cloud with Oracle (THB4bn); Investor Day: sovereign cloud, virtual bank, fibre",
+"sources": [
+"https://stockanalysis.com/quote/bkk/ADVANC/",
+"https://en.wikipedia.org/wiki/Advanced_Info_Service"
+],
+"mcap": {
+"usd": 30240000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 6780000000.0,
+"period": "TTM to Jun-2026 (THB228.6bn)",
+"note": "THB 33.7/USD",
+"src": "https://stockanalysis.com/quote/bkk/ADVANC/"
+}
+},
+{
+"id": "true-corp",
+"name": "True Corporation",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Thailand",
+"what": "Thailand (True|dtac mobile, broadband, TrueVisions)",
+"rel": "Potential customer; competes with AIS, NT (National Telecom)",
+"own": "listed",
+"investors": [
+{
+"n": "Charoen Pokphand Group (30%)",
+"t": "family/founder"
+},
+{
+"n": "Telenor Asia (30%)",
+"t": "strategic"
+},
+{
+"n": "China Mobile",
+"t": "strategic"
+}
+],
+"ticker": "TRUE (SET)",
+"recent": "Completed True-dtac network integration; FY25: first full year of profit post-merger",
+"sources": [
+"https://stockanalysis.com/quote/bkk/TRUE/",
+"https://en.wikipedia.org/wiki/True_Corporation"
+],
+"mcap": {
+"usd": 13150000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 5550000000.0,
+"period": "TTM to Jun-2026 (THB186.93bn)",
+"note": "THB 33.7/USD",
+"src": "https://stockanalysis.com/quote/bkk/TRUE/"
+}
+},
+{
+"id": "pldt",
+"name": "PLDT / Smart",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Philippines",
+"what": "Philippines (Smart mobile, fibre, ePLDT data centres, Maya)",
+"rel": "Potential customer; competes with Globe Telecom, DITO Telecommunity, Converge ICT",
+"own": "listed",
+"investors": [
+{
+"n": "First Pacific (Salim), economic (25.6%)",
+"t": "family/founder"
+},
+{
+"n": "NTT Docomo entities (voting) (11.97%)",
+"t": "strategic"
+},
+{
+"n": "JG Summit (voting) (6.65%)",
+"t": "strategic"
+},
+{
+"n": "Social Security System (voting) (3.33%)",
+"t": "state"
+}
+],
+"ticker": "TEL (PSE); PHI (NYSE)",
+"recent": "Q2-26 results; TD Cowen cuts PT to $13; UiPath agentic-AI customer-service rollout",
+"sources": [
+"https://stockanalysis.com/quote/pse/TEL/",
+"https://en.wikipedia.org/wiki/PLDT"
+],
+"mcap": {
+"usd": 4240000000.0,
+"asOf": "2026-10-06 (PHP237.66bn)",
+"src": "https://stockanalysis.com/quote/pse/TEL/"
+},
+"rev": {
+"usd": 3940000000.0,
+"period": "TTM to Jun-2026 (PHP220.89bn)",
+"note": "PHP 56.0/USD",
+"src": "https://stockanalysis.com/quote/pse/TEL/"
+}
+},
+{
+"id": "globe-telecom",
+"name": "Globe Telecom",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Philippines",
+"what": "Philippines (mobile, GFiber, 45% of Mynt/GCash)",
+"rel": "Potential customer; competes with PLDT/Smart, DITO Telecommunity, Converge ICT",
+"own": "listed",
+"investors": [
+{
+"n": "Asiacom (Ayala-Singtel JV, voting) (52.32%)",
+"t": "strategic"
+},
+{
+"n": "Singtel (22.24%)",
+"t": "strategic"
+},
+{
+"n": "Ayala Corporation (14.61%)",
+"t": "family/founder"
+}
+],
+"ticker": "GLO (PSE)",
+"recent": "Non-voting preferred share offering; Launched Globe Cloud with Synchronoss",
+"sources": [
+"https://stockanalysis.com/quote/pse/GLO/",
+"https://en.wikipedia.org/wiki/Globe_Telecom"
+],
+"mcap": {
+"usd": 4000000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 3280000000.0,
+"period": "TTM to Jun-2026 (PHP183.82bn)",
+"note": "PHP 56.0/USD",
+"src": "https://stockanalysis.com/quote/pse/GLO/"
+},
+"subs": "63100000 mobile (2025-11)"
+},
+{
+"id": "viettel",
+"name": "Viettel",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Vietnam",
+"what": "Vietnam + Laos, Cambodia, Myanmar, Timor-Leste, Peru, Haiti, Mozambique, Tanzania, Burundi, Cameroon",
+"rel": "Potential customer; competes with VNPT (Vinaphone), MobiFone",
+"own": "listed",
+"investors": [
+{
+"n": "Ministry of National Defence (state) (100%)",
+"t": "state"
+}
+],
+"ticker": "unlisted",
+"recent": "No 2025-26 items verified",
+"sources": [
+"https://en.wikipedia.org/wiki/Viettel"
+],
+"rev": {
+"usd": 7250000000.0,
+"period": "2023 (latest found)",
+"note": "source USD",
+"src": "https://en.wikipedia.org/wiki/Viettel"
+}
+},
+{
+"id": "chunghwa-telecom",
+"name": "Chunghwa Telecom",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Taiwan",
+"what": "Taiwan (mobile, fixed, enterprise ICT); small international",
+"rel": "Potential customer; competes with Taiwan Mobile, Far EasTone",
+"own": "listed",
+"investors": [
+{
+"n": "Ministry of Transportation and Communications (35.3%)",
+"t": "state"
+}
+],
+"ticker": "2412 (TWSE); CHT (NYSE)",
+"recent": "FY26 EPS guidance NT$4.82-5.02; Q2-26 beat; record mobile share; AI DC build",
+"sources": [
+"https://stockanalysis.com/stocks/cht/"
+],
+"mcap": {
+"usd": 35550000000.0,
+"asOf": "2026-10-05",
+"src": "https://stockanalysis.com/stocks/cht/"
+},
+"rev": {
+"usd": 7700000000.0,
+"period": "TTM to Jun-2026",
+"note": "source USD",
+"src": "https://stockanalysis.com/stocks/cht/"
+}
+},
+{
+"id": "telstra",
+"name": "Telstra",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Australia",
+"what": "Australia; Telstra International (Asia-Pacific); Pacific (Digicel Pacific)",
+"rel": "Potential customer; competes with Optus (Singtel), TPG Telecom, NBN-based retailers",
+"own": "listed",
+"investors": [],
+"ticker": "TLS (ASX)",
+"recent": "JV to cut 200+ jobs amid AI rollout; Major outage; review blames network timing system",
+"sources": [
+"https://stockanalysis.com/quote/asx/TLS/",
+"https://en.wikipedia.org/wiki/List_of_mobile_network_operators_of_the_Asia_Pacific_region"
+],
+"mcap": {
+"usd": 37350000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 16060000000.0,
+"period": "TTM to Jun-2026 / FY26 (AUD22.94bn)",
+"note": "AUD 0.70 USD",
+"src": "https://stockanalysis.com/quote/asx/TLS/"
+},
+"subs": "20700000 mobile (2024-08 (Wikipedia, stale))"
+},
+{
+"id": "hkt",
+"name": "HKT",
+"seg": "Operator",
+"region": "Asia-Pacific",
+"hq": "Hong Kong",
+"what": "Hong Kong (csl/1O1O mobile, fixed, enterprise); some mainland/intl",
+"rel": "Potential customer; competes with China Mobile Hong Kong, 3HK (CK Hutchison), SmarTone",
+"own": "listed",
+"investors": [
+{
+"n": "PCCW (Richard Li; China Unicom ~18% of PCCW)",
+"t": "strategic"
+}
+],
+"ticker": "6823 (HKEX)",
+"recent": "FY25: revenue +5%, EBITDA +4%; H1-26: revenue +8% (enterprise, broadband, mobile)",
+"sources": [
+"https://stockanalysis.com/quote/hkg/6823/",
+"https://en.wikipedia.org/wiki/List_of_mobile_network_operators_of_the_Asia_Pacific_region"
+],
+"mcap": {
+"usd": 11510000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 4860000000.0,
+"period": "TTM to Jun-2026 (HKD37.92bn)",
+"note": "HKD 7.80/USD",
+"src": "https://stockanalysis.com/quote/hkg/6823/"
+},
+"subs": "4764000 mobile (2023-12 (csl, Wikipedia, stale))"
+},
+{
+"id": "bt-group",
+"name": "BT Group",
+"seg": "Operator",
+"region": "Europe",
+"hq": "United Kingdom",
+"what": "UK (EE mobile, Openreach fibre, BT Business); shrinking International",
+"rel": "Potential customer; competes with VodafoneThree, Virgin Media O2, Sky",
+"own": "listed",
+"investors": [
+{
+"n": "Bharti (Bharti Global/Airtel) (24.5%)",
+"t": "strategic"
+},
+{
+"n": "Deutsche Telekom (12.0%)",
+"t": "strategic"
+},
+{
+"n": "Carlos Slim (3.2%)",
+"t": "other"
+}
+],
+"ticker": "BT.A (LSE)",
+"recent": "FY26: record fibre build; revenue -3%, EBITDA flat GBP 8.2bn; International divestments cut revenue (per FY26 release)",
+"sources": [
+"https://www.investegate.co.uk/announcement/rns/bt-group--bt.a/results-for-the-full-year-to-31-march-2026/9578811",
+"https://www.investing.com/equities/bt-group-ownership",
+"https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+],
+"mcap": {
+"usd": 25970000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 26050000000.0,
+"period": "FY to 31 Mar 2026 (reported GBP 19.7bn)",
+"note": "GBP->USD 1.3225 (ECB ref 2026-10-05)",
+"src": "https://www.investegate.co.uk/announcement/rns/bt-group--bt.a/results-for-the-full-year-to-31-march-2026/9578811"
+}
+},
+{
+"id": "vodafonethree",
+"name": "VodafoneThree",
+"seg": "Operator",
+"region": "Europe",
+"hq": "United Kingdom",
+"what": "UK (Vodafone, Three, VOXI, SMARTY, Talkmobile)",
+"rel": "Potential customer; competes with BT/EE, Virgin Media O2, Sky Mobile",
+"own": "listed",
+"investors": [
+{
+"n": "Vodafone Group (100%)",
+"t": "strategic"
+},
+{
+"n": "CK Hutchison (49% bought out for GBP 4.3bn, 2026) (0%)",
+"t": "strategic"
+}
+],
+"ticker": "unlisted (parent VOD)",
+"recent": "Vodafone UK-Three UK merger completed (51/49 JV); Vodafone agrees GBP 4.3bn buyout of CKH 49%",
+"sources": [
+"https://www.investegate.co.uk/announcement/rns/vodafone-group--vod/fy26-preliminary-results/9562943",
+"https://www.vodafone.com/news/newsroom/corporate-and-financial/vodafone-takes-full-ownership-of-vodafonethree"
+],
+"rev": {
+"usd": 10310000000.0,
+"period": "FY to Mar 2026, Vodafone UK segment EUR 9.2bn (Three consolidated from 1 Jun 2025)",
+"note": "EUR->USD 1.1204 (ECB ref 2026-10-05)",
+"src": "https://www.investegate.co.uk/announcement/rns/vodafone-group--vod/fy26-preliminary-results/9562943"
+},
+"subs": "28m+ customers (all brands) mobile (2026-05)"
+},
+{
+"id": "virgin-media-o2",
+"name": "Virgin Media O2",
+"seg": "Operator",
+"region": "Europe",
+"hq": "United Kingdom",
+"what": "UK (O2 mobile, Virgin Media cable/fibre, O2 Daisy B2B)",
+"rel": "Potential customer; competes with BT/EE, VodafoneThree, Sky",
+"own": "listed",
+"investors": [
+{
+"n": "Liberty Global (50%)",
+"t": "strategic"
+},
+{
+"n": "Telefonica (50%)",
+"t": "strategic"
+},
+{
+"n": "InfraVia (co-owner of nexfibre fibre JV, not VMO2)",
+"t": "infrastructure fund"
+}
+],
+"ticker": "unlisted (parents LBTYA/TEF)",
+"recent": "B2B combined with Daisy to form O2 Daisy; Owners agree ~GBP 2bn Netomnia deal into nexfibre",
+"sources": [
+"https://news.virginmediao2.co.uk/wp-content/uploads/2026/02/Virgin-Media-O2-Q4-2025-Earnings-Release.pdf",
+"https://www.ispreview.co.uk/index.php/2026/02/netomnia-agree-uk-broadband-merger-deal-with-owners-of-virgin-media-o2.html",
+"https://uk.finance.yahoo.com/news/virgin-media-o2-warns-over-121629381.html"
+],
+"rev": {
+"usd": 13370000000.0,
+"period": "FY2025 total revenue GBP 10,113.1m",
+"note": "GBP->USD 1.3225 (ECB ref 2026-10-05)",
+"src": "https://news.virginmediao2.co.uk/wp-content/uploads/2026/02/Virgin-Media-O2-Q4-2025-Earnings-Release.pdf"
+},
+"subs": "46.7m mobile connections (-397.5k in 2025) mobile (2025-12-31)"
+},
+{
+"id": "tim",
+"name": "TIM (Telecom Italia)",
+"seg": "Operator",
+"region": "Europe",
+"hq": "Italy",
+"what": "Italy (TIM Domestic) + Brazil (~67% of TIM S.A.)",
+"rel": "Potential customer; competes with Fastweb+Vodafone, WindTre, Iliad Italia",
+"own": "listed",
+"investors": [
+{
+"n": "Poste Italiane (state-controlled) (85.82%)",
+"t": "state"
+},
+{
+"n": "KKR (controls FiberCop, ex-NetCo; not TIM equity)",
+"t": "PE"
+},
+{
+"n": "Vivendi (exited to Poste 2025) (0%)",
+"t": "strategic"
+}
+],
+"ticker": "TIT (Borsa Italiana)",
+"recent": "Poste OPA reaches 85.82%; misses 90% delisting threshold; Preliminary RAN-sharing deal with Fastweb+Vodafone (~60% pop.)",
+"sources": [
+"https://www.marketscreener.com/news/telecom-italia-boosts-revenues-in-2025-eur400-million-buyback-announced-ce7e5cdade8bf620",
+"https://live.euronext.com/en/financial-news/poste-falls-short-telecom-italia-delisting-threshold-after-takeover-bid",
+"https://www.agcom.it/comunicazione/comunicati-stampa/osservatorio-sulle-comunicazioni-n-2-2026",
+"https://www.swisscom.ch/en/about/news/2026/01/07-vodafone-italia.html"
+],
+"mcap": {
+"usd": 14900000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 15380000000.0,
+"period": "FY2025 EUR 13.73bn",
+"note": "EUR->USD 1.1204 (ECB ref 2026-10-05)",
+"src": "https://www.marketscreener.com/news/telecom-italia-boosts-revenues-in-2025-eur400-million-buyback-announced-ce7e5cdade8bf620"
+}
+},
+{
+"id": "iliad",
+"name": "Iliad Group",
+"seg": "Operator",
+"region": "Europe",
+"hq": "France",
+"what": "France (Free), Italy (iliad), Poland (Play, UPC Polska)",
+"rel": "Potential customer; competes with Orange, SFR, Bouygues Telecom",
+"own": "listed",
+"investors": [
+{
+"n": "Xavier Niel / Iliad Holding (controlling)",
+"t": "family/founder"
+},
+{
+"n": "InfraVia (50% of OpCore data centres) (50%)",
+"t": "infrastructure fund"
+}
+],
+"ticker": "unlisted (bond issuer)",
+"recent": "InfraVia buys 50% of OpCore; EUR 2.5bn DC build plan; Ended merger talks with TIM",
+"sources": [
+"https://uk.investing.com/news/transcripts/earnings-call-transcript-iliads-q4-2025-growth-outpaces-european-telecom-peers-93CH-4574574",
+"https://www.iliad.fr/media/CP_270826_Eng_123e089aef.pdf",
+"https://www.datacenterdynamics.com/en/news/infravia-to-acquire-50-percent-of-iliads-opcore-data-center-unit/",
+"https://www.verdict.co.uk/vega-acquisition-vodafone-stake/"
+],
+"rev": {
+"usd": 11600000000.0,
+"period": "FY2025 EUR 10.35bn",
+"note": "EUR->USD 1.1204 (ECB ref 2026-10-05)",
+"src": "https://uk.investing.com/news/transcripts/earnings-call-transcript-iliads-q4-2025-growth-outpaces-european-telecom-peers-93CH-4574574"
+},
+"subs": "52m total subscribers (all services, group) mobile (2025)"
+},
+{
+"id": "bouygues-telecom",
+"name": "Bouygues Telecom",
+"seg": "Operator",
+"region": "Europe",
+"hq": "France",
+"what": "France",
+"rel": "Potential customer; competes with Orange, SFR, Free (iliad)",
+"own": "listed",
+"investors": [
+{
+"n": "Bouygues SA (parent)",
+"t": "strategic"
+},
+{
+"n": "SCDM (Bouygues family) in Bouygues SA (28.1%)",
+"t": "family/founder"
+}
+],
+"ticker": "EN (Euronext Paris, parent)",
+"recent": "La Poste Telecom (~2.4m subs) acquisition completed; SFR MoU: ~42% of price; takes B2B and rural network",
+"sources": [
+"https://www.bouygues.com/app/uploads/2026/02/press-release.pdf",
+"https://www.bouygues.com/app/uploads/2026/07/First-half-2026-financial-report.pdf",
+"https://totaltele.com/bouygues-telecom-completes-acquisition-of-la-poste-telecom-after-shareholder-squabble/",
+"https://www.orange.com/en/press-release/signature-dun-protocole-daccord-en-vue-de-lacquisition-de-sfr-476232-476232"
+],
+"rev": {
+"usd": 7280000000.0,
+"period": "FY2025 sales billed to customers EUR 6.5bn (total sales not found)",
+"note": "EUR->USD 1.1204 (ECB ref 2026-10-05)",
+"src": "https://www.bouygues.com/app/uploads/2026/02/press-release.pdf"
+},
+"subs": "18.6m mobile plan customers excl. MtoM mobile (2025-12-31)"
+},
+{
+"id": "sfr-altice-france",
+"name": "SFR / Altice France",
+"seg": "Operator",
+"region": "Europe",
+"hq": "France",
+"what": "France",
+"rel": "Potential customer; competes with Orange, Bouygues Telecom, Free (iliad)",
+"own": "listed",
+"investors": [
+{
+"n": "Altice Group (Patrick Drahi) (55%)",
+"t": "family/founder"
+},
+{
+"n": "Ex-creditors (incl. BlackRock, Fidelity, PIMCO) via debt-for-equity (45%)",
+"t": "other"
+}
+],
+"ticker": "unlisted (bond issuer)",
+"recent": "Restructuring done; creditors get 45% equity; Infracos sale closed; EUR 279m to debt",
+"sources": [
+"https://static.s-sfr.fr/AlticeFrance/investors/results-presentation/altice-france-q4-fy2025-press-release.pdf",
+"https://www.cnbc.com/2026/06/06/bouygues-led-consortium-signs-23point44-billion-deal-to-buy-sfr-from-altice-france.html",
+"https://www.orange.com/en/press-release/signature-dun-protocole-daccord-en-vue-de-lacquisition-de-sfr-476232-476232"
+],
+"rev": {
+"usd": 10340000000.0,
+"period": "FY2025 EUR 9,229m",
+"note": "EUR->USD 1.1204 (ECB ref 2026-10-05)",
+"src": "https://static.s-sfr.fr/AlticeFrance/investors/results-presentation/altice-france-q4-fy2025-press-release.pdf"
+}
+},
+{
+"id": "kpn",
+"name": "KPN",
+"seg": "Operator",
+"region": "Europe",
+"hq": "Netherlands",
+"what": "Netherlands",
+"rel": "Potential customer; competes with VodafoneZiggo (Ziggo Group), Odido",
+"own": "listed",
+"investors": [
+{
+"n": "ABP/APG (49% of Althio TowerCo) (49%)",
+"t": "infrastructure fund"
+}
+],
+"ticker": "KPN (Euronext Amsterdam)",
+"recent": "Althio TowerCo (KPN 51%/ABP 49%) launched post ACM approval; FY25: +10% DPS, new EUR 250m buyback",
+"sources": [
+"https://ir.kpn.com/news-and-events/news/news-details/2026/KPN-delivered-on-FY-2025-outlook-fully-on-track-to-achieve-mid-term-ambitions/default.aspx",
+"https://www.telecomrevieweurope.com/articles/telecom-operators/kpn-and-abp-launch-althio-tower-company/"
+],
+"mcap": {
+"usd": 16750000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+}
+},
+{
+"id": "telia",
+"name": "Telia Company",
+"seg": "Operator",
+"region": "Europe",
+"hq": "Sweden",
+"what": "Sweden, Finland, Norway, Estonia, Lithuania",
+"rel": "Potential customer; competes with Tele2, Telenor, Tre (Hi3G)",
+"own": "listed",
+"investors": [
+{
+"n": "Swedish state (41.1%)",
+"t": "state"
+},
+{
+"n": "Brookfield & Alecta (49% of Telia Towers SE/NO/FI) (49%)",
+"t": "infrastructure fund"
+}
+],
+"ticker": "TELIA (Nasdaq Stockholm)",
+"recent": "Completed Bredband2 acquisition (96.7%); Agreed to buy MVNO Telness for B2B",
+"sources": [
+"https://news.cision.com/telia-company/r/telia-company-year-end-report-january---december-2025,c4299511",
+"https://www.teliacompany.com/en/articles/shareholdings",
+"https://www.datacenterdynamics.com/en/news/telia-to-acquire-mvno-telness-in-sweden/"
+],
+"mcap": {
+"usd": 17270000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 8070000000.0,
+"period": "FY2025 SEK 81.0bn",
+"note": "SEK->USD 0.09957 (ECB ref 2026-10-05)",
+"src": "https://news.cision.com/telia-company/r/telia-company-year-end-report-january---december-2025,c4299511"
+}
+},
+{
+"id": "telenor",
+"name": "Telenor",
+"seg": "Operator",
+"region": "Europe",
+"hq": "Norway",
+"what": "Nordics (NO, SE, DK, FI) + Asia (Bangladesh, Malaysia)",
+"rel": "Potential customer; competes with Telia, Ice, Tele2",
+"own": "listed",
+"investors": [
+{
+"n": "Norwegian state (54%)",
+"t": "state"
+}
+],
+"ticker": "TEL (Oslo Bors)",
+"recent": "Telenor Pakistan divestment completed; Sold 24.95% True Corp stake (~USD 3.9bn)",
+"sources": [
+"https://www.telenor.com/binaries/investors/reports-and-information/quarterly/2025/Report-Q4-and-Full-Year-2025.pdf",
+"https://konkurransetilsynet.no/telenors-acquisition-of-globalconnect-approved-with-remedies/?lang=en",
+"https://www.investmentmonitor.ai/news/telenor-to-sell-true-corporation-stake/"
+],
+"mcap": {
+"usd": 17860000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 7970000000.0,
+"period": "FY2025 NOK 76,548m",
+"note": "NOK->USD 0.10415 (ECB ref 2026-10-05)",
+"src": "https://www.telenor.com/binaries/investors/reports-and-information/quarterly/2025/Report-Q4-and-Full-Year-2025.pdf"
+}
+},
+{
+"id": "tele2",
+"name": "Tele2",
+"seg": "Operator",
+"region": "Europe",
+"hq": "Sweden",
+"what": "Sweden, Estonia, Latvia, Lithuania",
+"rel": "Potential customer; competes with Telia, Telenor, Tre (Hi3G)",
+"own": "listed",
+"investors": [
+{
+"n": "Freya Investissement (iliad/NJJ, Xavier Niel) (19%)",
+"t": "strategic"
+}
+],
+"ticker": "TEL2-B (Nasdaq Stockholm)",
+"recent": "Legacy networks off; 5G unlocked across Sweden; FY25: eFCF +42%, proposes 65% dividend increase",
+"sources": [
+"https://www.tele2.com/investors/reports-and-presentations/tele2-reports-q4-and-fullyear-2025-results-delivering-42-efcf-growth-and-proposing-65-dividend-increase-/",
+"https://www.telecompaper.com/news/iliad-vehicle-freya-brings-tele2-stake-into-line-with-voting-rights-holding--1561674"
+],
+"mcap": {
+"usd": 11080000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 2980000000.0,
+"period": "FY2025 SEK 29,890m",
+"note": "SEK->USD 0.09957 (ECB ref 2026-10-05)",
+"src": "https://www.tele2.com/files/Public/3372/4298724/full-year-and-q4-report-2025.pdf"
+}
+},
+{
+"id": "proximus",
+"name": "Proximus",
+"seg": "Operator",
+"region": "Europe",
+"hq": "Belgium",
+"what": "Belgium, Luxembourg + Proximus Global (CPaaS, intl)",
+"rel": "Potential customer; competes with Telenet (Liberty Global/Ziggo Group), Orange Belgium (+VOO), Digi",
+"own": "listed",
+"investors": [
+{
+"n": "Belgian state (53.51%)",
+"t": "state"
+}
+],
+"ticker": "PROX (Euronext Brussels)",
+"recent": "Digi Belgium entry pressures mobile pricing; FY25: Global revenue -14.8% pro forma",
+"sources": [
+"https://www.proximus-cdn.com/dam/jcr:3db31e45-b08a-46b9-b586-d5f872bbafed/2025-q4-proximus-report-v2_en_fr_nl.pdf",
+"https://euperspectives.eu/2026/08/state-backed-telecom-monopoly-in-europe/",
+"https://www.telecompaper.com/research/belgian-total-communications-market-2025-q4--1565109"
+],
+"rev": {
+"usd": 7070000000.0,
+"period": "FY2025 underlying EUR 6,307m",
+"note": "EUR->USD 1.1204 (ECB ref 2026-10-05)",
+"src": "https://www.proximus-cdn.com/dam/jcr:3db31e45-b08a-46b9-b586-d5f872bbafed/2025-q4-proximus-report-v2_en_fr_nl.pdf"
+}
+},
+{
+"id": "masorange",
+"name": "MasOrange",
+"seg": "Operator",
+"region": "Europe",
+"hq": "Spain",
+"what": "Spain",
+"rel": "Potential customer; competes with Telefonica (Movistar), Vodafone Spain (Zegona), Digi",
+"own": "listed",
+"investors": [
+{
+"n": "Orange (100%)",
+"t": "strategic"
+},
+{
+"n": "Lorca (KKR/Cinven/Providence) - sold 50% for EUR 4.25bn (0%)",
+"t": "PE"
+}
+],
+"ticker": "unlisted (parent ORA)",
+"recent": "Orange agrees to buy PE funds' 50% for EUR 4.25bn; Orange completes 100% acquisition",
+"sources": [
+"https://www.cinven.com/news-insights/cinven-sell-stake-in-masorange/",
+"https://www.globenewswire.com/news-release/2026/06/08/3308329/0/en/orange-orange-acquires-100-ownership-of-masorange-the-leading-operator-in-spain.html",
+"https://www.cnmc.es/prensa/datos-diciembre-telecos-20260219"
+],
+"rev": {
+"usd": 8520000000.0,
+"period": "FY2025 EUR 7,601m",
+"note": "EUR->USD 1.1204 (ECB ref 2026-10-05)",
+"src": "https://quartr.com/events/masorange-masorange-q4-2025_FghRjnf8"
+},
+"subs": "33.4m mobile + fixed BB lines (excl. M2M) mobile (2025-12-31)"
+},
+{
+"id": "liberty-global",
+"name": "Liberty Global",
+"seg": "Operator",
+"region": "Europe",
+"hq": "Bermuda/UK (ops: BE, IE, SK, UK, NL JVs)",
+"what": "Telenet (BE), Virgin Media Ireland, Slovakia; JVs VMO2 (UK), VodafoneZiggo (NL)",
+"rel": "Potential customer; competes with KPN, Odido, Proximus",
+"own": "listed",
+"investors": [
+{
+"n": "John Malone (voting control, knowledge)",
+"t": "family/founder"
+}
+],
+"ticker": "LBTYA/LBTYB/LBTYK (Nasdaq)",
+"recent": "Buys Vodafone's 50% of VodafoneZiggo: EUR 1bn + 10% Ziggo Group; Dutch towers sold for EUR 669m to DigitalBridge-led group",
+"sources": [
+"https://www.libertyglobal.com/liberty-global-dutch-towers-ziggo-group/",
+"https://www.investing.com/news/company-news/vodafone-sells-50-stake-in-vodafoneziggo-to-liberty-global-for-1-billion-93CH-4510860",
+"https://stockanalysis.com/stocks/lbtyk/revenue/"
+],
+"mcap": {
+"usd": 4400000000.0,
+"asOf": "2026-10-06 (live page, undated)",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 4880000000.0,
+"period": "FY2025 consolidated",
+"note": "reported in USD",
+"src": "https://stockanalysis.com/stocks/lbtyk/revenue/"
+},
+"subs": "80m+ fixed+mobile connections incl. JVs mobile (2025)"
+},
+{
+"id": "fastweb-vodafone",
+"name": "Fastweb + Vodafone (Swisscom Italy)",
+"seg": "Operator",
+"region": "Europe",
+"hq": "Italy",
+"what": "Italy",
+"rel": "Potential customer; competes with TIM, WindTre, Iliad Italia",
+"own": "listed",
+"investors": [
+{
+"n": "Swisscom (51% Swiss Confederation) (100%)",
+"t": "strategic"
+}
+],
+"ticker": "unlisted (parent SCMN)",
+"recent": "Vodafone Italia legally merged into Fastweb; Preliminary RAN-sharing deal with TIM (~60% pop.)",
+"sources": [
+"https://www.fastweb.it/wholesale/news/fastweb-vodafone-chiude-2025-risultati-finanziari-in-linea-con-le-attese.php?lng=EN",
+"https://www.swisscom.ch/en/about/news/2026/01/07-vodafone-italia.html",
+"https://www.swisscom.ch/en/about/news/2026/03/19-italien.html",
+"https://www.agcom.it/comunicazione/comunicati-stampa/osservatorio-sulle-comunicazioni-n-2-2026"
+],
+"rev": {
+"usd": 8170000000.0,
+"period": "FY2025 EUR 7,291m",
+"note": "EUR->USD 1.1204 (ECB ref 2026-10-05)",
+"src": "https://www.fastweb.it/wholesale/news/fastweb-vodafone-chiude-2025-risultati-finanziari-in-linea-con-le-attese.php?lng=EN"
+},
+"subs": "20.054m mobile customers mobile (2025-12-31)"
+},
+{
+"id": "telus",
+"name": "TELUS",
+"seg": "Operator",
+"region": "Americas",
+"hq": "Canada",
+"what": "Canada (national); TELUS Health/Digital global",
+"rel": "Potential customer; competes with Rogers, Bell (BCE), Quebecor (Videotron/Freedom)",
+"own": "listed",
+"investors": [
+{
+"n": "La Caisse (CDPQ) - 49.9% of Terrion tower subsidiary, not TELUS parent (49.9%)",
+"t": "infrastructure fund"
+}
+],
+"ticker": "T (TSX) / TU (NYSE)",
+"recent": "Closed 49.9% Terrion tower stake sale to La Caisse, C$1.26B; Took TELUS Digital private (completed)",
+"sources": [
+"https://www.sec.gov/Archives/edgar/data/868675/000110465926013856/tm261121d3_ex99-1.htm",
+"https://companiesmarketcap.com/telus/marketcap/",
+"https://www.datacenterdynamics.com/en/news/telus-finalizes-sale-of-499-stake-in-tower-unit-to-la-caisse/",
+"https://www.ctvnews.ca/business/article/telus-reports-q2-loss-announces-dividend-to-shareholders/",
+"https://www.investing.com/news/transcripts/earnings-call-transcript-telus-cuts-dividend-and-2026-outlook-in-q2-2026-93CH-4829137"
+],
+"mcap": {
+"usd": 12410000000.0,
+"asOf": "2026-10-05",
+"src": "https://companiesmarketcap.com/telus/marketcap/"
+},
+"rev": {
+"usd": 14530000000.0,
+"period": "FY2025 (C$20.3B)",
+"note": "CAD 1.3973/USD",
+"src": "https://www.sec.gov/Archives/edgar/data/868675/000110465926013856/tm261121d3_ex99-1.htm"
+},
+"subs": "10300000.0 mobile (2025-12-31)"
+},
+{
+"id": "rogers",
+"name": "Rogers Communications",
+"seg": "Operator",
+"region": "Americas",
+"hq": "Canada",
+"what": "Canada (national wireless; cable ON/Atlantic, Shaw West)",
+"rel": "Potential customer; competes with Bell (BCE), TELUS, Quebecor (Videotron/Freedom)",
+"own": "listed",
+"investors": [
+{
+"n": "Rogers Control Trust (family) - Class A voting (97.5%)",
+"t": "family/founder"
+},
+{
+"n": "Blackstone-led consortium (CPP, La Caisse, PSP, BCI, IMCO) - 49.9% equity/20% vote in backhaul subsidiary (49.9%)",
+"t": "PE"
+}
+],
+"ticker": "RCI.B (TSX) / RCI (NYSE)",
+"recent": "Closed Blackstone-led C$7B backhaul equity deal; Raised MLSE stake to 75% (bought BCE's 37.5%)",
+"sources": [
+"https://www.sec.gov/Archives/edgar/data/733099/000073309926000006/rci-12312025xexhibit991.htm",
+"https://about.rogers.com/news-ideas/rogers-closes-cdn7-billion-equity-investment-transaction/",
+"https://www.theglobeandmail.com/business/article-rogers-blackstone-deal-wireless-infrastructure/",
+"https://playbackonline.ca/2025/07/03/rogers-closes-transaction-for-mlse-majority-stake/"
+],
+"mcap": {
+"usd": 16410000000.0,
+"asOf": "2026-10-05",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 15540000000.0,
+"period": "FY2025 (C$21,712M)",
+"note": "CAD 1.3973/USD",
+"src": "https://www.sec.gov/Archives/edgar/data/733099/000073309926000006/rci-12312025xexhibit991.htm"
+},
+"subs": "12195000.0 mobile (2025-12-31)"
+},
+{
+"id": "bce",
+"name": "BCE (Bell)",
+"seg": "Operator",
+"region": "Americas",
+"hq": "Canada",
+"what": "Canada (national); US fibre via Ziply (Pacific NW)",
+"rel": "Potential customer; competes with Rogers, TELUS, Quebecor (Videotron/Freedom)",
+"own": "listed",
+"investors": [
+{
+"n": "PSP Investments - Network FiberCo partner for Ziply US fibre build",
+"t": "infrastructure fund"
+}
+],
+"ticker": "BCE (TSX/NYSE)",
+"recent": "Closed Ziply Fiber acquisition; new Bell CTS U.S. segment; Sold 37.5% MLSE stake to Rogers for C$4.7B",
+"sources": [
+"https://www.bce.ca/news-and-media/newsroom?article=bce-reports-2025-q4-and-full-year-results-announces-2026-financial-targets",
+"https://www.bce.ca/cs-assets/2025-q4-presentation.pdf-blt9038a367c5799e48",
+"https://www.bnnbloomberg.ca/business/artificial-intelligence/2026/06/18/bell-cohere-sign-deal-to-operate-models-using-bell-ai-fabric-infrastructure/",
+"https://bnnbloomberg.ca/business/company-news/2026/09/29/bell-signs-agreement-with-cisco-to-collaborate-on-sovereign-ai-infrastructure",
+"https://ca.finance.yahoo.com/news/bce-stock-up-after-it-sells-minority-stake-in-mlse-to-rogers-for-47b-182330387.html"
+],
+"mcap": {
+"usd": 18400000000.0,
+"asOf": "2026-10-05",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 17510000000.0,
+"period": "FY2025 (C$24,468M)",
+"note": "CAD 1.3973/USD",
+"src": "https://www.bce.ca/news-and-media/newsroom?article=bce-reports-2025-q4-and-full-year-results-announces-2026-financial-targets"
+},
+"subs": "10450000.0 mobile (2025-12-31)"
+},
+{
+"id": "millicom",
+"name": "Millicom (Tigo)",
+"seg": "Operator",
+"region": "International group",
+"hq": "Luxembourg (HQ); Latin America ops",
+"what": "Guatemala, Honduras (JV), El Salvador, Nicaragua, Costa Rica, Panama, Colombia, Bolivia, Paraguay, Ecuador, Uruguay; Chile (49% JV)",
+"rel": "Potential customer; competes with Claro (America Movil), Liberty Latin America, Entel/Claro/WOM (Chile)",
+"own": "listed",
+"investors": [
+{
+"n": "Atlas Investissement (Xavier Niel) (49.5%)",
+"t": "strategic"
+},
+{
+"n": "NJJ Cactus (Niel) - 51% of Telefonica Chile JV (51%)",
+"t": "strategic"
+}
+],
+"ticker": "TIGO (Nasdaq US)",
+"recent": "Acquired Telefonica Ecuador (~US$380M); Uruguay also added 2025; Won EPM's UNE stake (~US$571M), full control of Tigo Colombia",
+"sources": [
+"https://www.globenewswire.com/news-release/2026/03/24/3261824/0/en/millicom-tigo-publishes-its-2025-annual-report-highlighting-record-financial-results-and-expanded-regional-footprint.html",
+"https://www.stocktitan.net/sec-filings/TIGO/schedule-13d-a-millicom-international-cellular-sa-amended-major-share-9642be999d7c.html",
+"https://www.globenewswire.com/news-release/2026/02/26/3245346/0/en/Millicom-Tigo-Q4-2025-Earnings-Release.html",
+"https://www.nasdaq.com/press-release/millicom-tigo-acquires-telefonica-operations-chile-jointly-njj-structured-capture",
+"https://www.marketscreener.com/news/millicom-secures-full-control-of-tigo-colombia-after-epm-exit-ce7e5bdfdc80f127"
+],
+"mcap": {
+"usd": 15290000000.0,
+"asOf": "2026-10-05",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 5800000000.0,
+"period": "FY2025",
+"note": "reported in USD",
+"src": "https://www.globenewswire.com/news-release/2026/03/24/3261824/0/en/millicom-tigo-publishes-its-2025-annual-report-highlighting-record-financial-results-and-expanded-regional-footprint.html"
+}
+},
+{
+"id": "liberty-latin-america",
+"name": "Liberty Latin America",
+"seg": "Operator",
+"region": "Americas",
+"hq": "Bermuda/US (HQ Denver); Caribbean & Central America",
+"what": "Puerto Rico, USVI, Panama, Costa Rica, C&W Caribbean (Jamaica etc.), Liberty Networks subsea",
+"rel": "Potential customer; competes with Claro (America Movil), Millicom/Tigo (Panama, Costa Rica), Digicel (Caribbean)",
+"own": "listed",
+"investors": [
+{
+"n": "John Malone (voting influence)",
+"t": "family/founder"
+}
+],
+"ticker": "LILA/LILAK (Nasdaq)",
+"recent": "Stated intent to separate Liberty Puerto Rico (e.g., spin-off); Agreement to launch Liberty-Starlink direct-to-cell in Costa Rica",
+"sources": [
+"https://www.sec.gov/Archives/edgar/data/1712184/000171218426000078/ex991toform_llaq12026earni.htm",
+"https://companiesmarketcap.com/liberty-latin-america/marketcap/",
+"https://www.businesswire.com/news/home/20260218360119/en/Liberty-Latin-America-Reports-Q4-and-FY-2025-Results",
+"https://www.gurufocus.com/news/8629579/liberty-latin-america-reports-q4-and-fy-2025-results"
+],
+"mcap": {
+"usd": 1720000000.0,
+"asOf": "2026-10-05",
+"src": "https://companiesmarketcap.com/liberty-latin-america/marketcap/"
+},
+"rev": {
+"usd": 4440000000.0,
+"period": "FY2025",
+"note": "reported in USD",
+"src": "https://www.gurufocus.com/news/8629579/liberty-latin-america-reports-q4-and-fy-2025-results"
+},
+"subs": "6810000.0 mobile (2026-03-31)"
+},
+{
+"id": "veon",
+"name": "VEON",
+"seg": "Operator",
+"region": "International group",
+"hq": "Bermuda/Netherlands (HQ Dubai)",
+"what": "Pakistan, Ukraine, Kazakhstan, Bangladesh, Uzbekistan",
+"rel": "Potential customer; competes with Zong, Ufone/PTCL (Pakistan), Vodafone Ukraine, lifecell, Grameenphone, Robi (Bangladesh)",
+"own": "listed",
+"investors": [
+{
+"n": "LetterOne Investment Holdings (45.5%)",
+"t": "other"
+},
+{
+"n": "Stichting Administratiekantoor Mobile Telecommunications Investor (7.9%)",
+"t": "other"
+},
+{
+"n": "Lingotto Investment Mgmt (Exor) (7.8%)",
+"t": "other"
+},
+{
+"n": "Shah Capital Management (6.7%)",
+"t": "hedge fund"
+}
+],
+"ticker": "VEON (Nasdaq); Kyivstar KYIV (Nasdaq)",
+"recent": "Listed Kyivstar Group on Nasdaq (first Ukrainian US listing); Starlink multi-country D2C framework; Banglalink deal",
+"sources": [
+"https://www.veon.com/fileadmin/user_upload/investors/reports/2026/FY25_4Q25_Earnings_Presentation.pdf",
+"https://www.veon.com/investors/equity-investors",
+"https://www.veon.com/newsroom/press-releases/veons-kyivstar-reaches-30-million-customers-with-starlink-direct-to-cell-services",
+"https://kyivindependent.com/kyivstar-makes-historic-nasdaq-debut-as-first-ukrainian-listing/"
+],
+"mcap": {
+"usd": 5290000000.0,
+"asOf": "2026-10-05",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 4400000000.0,
+"period": "FY2025",
+"note": "reported in USD",
+"src": "https://www.veon.com/fileadmin/user_upload/investors/reports/2026/FY25_4Q25_Earnings_Presentation.pdf"
+}
+},
+{
+"id": "telefonica-brasil",
+"name": "Telefônica Brasil (Vivo)",
+"seg": "Operator",
+"region": "Americas",
+"hq": "Brazil",
+"what": "Brazil (national)",
+"rel": "Potential customer; competes with Claro (America Movil), TIM Brasil, Regional fibre ISPs",
+"own": "listed",
+"investors": [
+{
+"n": "Telefónica S.A. (controlling)",
+"t": "strategic"
+}
+],
+"ticker": "VIVT3 (B3) / VIV (NYSE)",
+"recent": "Agreed to buy CDPQ's 50% of FiBrasil for R$850M; Took FiBrasil to 100% (bought Telefonica Infra's 24.99%)",
+"sources": [
+"https://www.sec.gov/Archives/edgar/data/1066119/000129281426000462/vivpr4q25_6k.htm",
+"https://telesintese.com.br/telefonica-vivo-registra-lucro-de-r-617-bilhoes-em-2025-alta-de-112/",
+"https://mx.investing.com/news/stock-market-news/telefonica-brasil-adquirira-50-de-fibrasil-de-cdpq-por-r850-millones-93CH-3205033",
+"https://www.df.cl/df-sud/multilatinas/telefonica-brasil-asume-el-control-total-de-operador-de-fibra-optica",
+"https://olhardigital.com.br/2026/01/20/pro/claro-lidera-crescimento-em-2025-mas-vivo-segue-maior-operadora/"
+],
+"mcap": {
+"usd": 20160000000.0,
+"asOf": "2026-10-05",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 10660000000.0,
+"period": "FY2025 (R$59.6B)",
+"note": "BRL 5.5891/USD",
+"src": "https://www.sec.gov/Archives/edgar/data/1066119/000129281426000462/vivpr4q25_6k.htm"
+},
+"subs": "103000000.0 mobile (2025-12-31)"
+},
+{
+"id": "tim-brasil",
+"name": "TIM Brasil (TIM S.A.)",
+"seg": "Operator",
+"region": "Americas",
+"hq": "Brazil",
+"what": "Brazil (national)",
+"rel": "Potential customer; competes with Vivo (Telefonica Brasil), Claro (America Movil), Regional fibre ISPs",
+"own": "listed",
+"investors": [
+{
+"n": "TIM S.p.A. (Telecom Italia) (66.6%)",
+"t": "strategic"
+},
+{
+"n": "Poste Italiane (Italian state-controlled) - indirect controller via TIM S.p.A. since Sep 2026",
+"t": "state"
+}
+],
+"ticker": "TIMS3 (B3) / TIMB (NYSE)",
+"recent": "Agreed to buy IHS's 51% of I-Systems; Completed I-Systems buyout, R$947M",
+"sources": [
+"https://www.tim.com.br/sobre-a-tim/sala-de-imprensa/press-releases/institucional/balanco-4T25",
+"https://teletime.com.br/10/02/2026/tim-tem-lucro-de-r-43-bilhoes-em-2025-alta-de-374/",
+"https://teletime.com.br/11/02/2026/tim-retoma-controle-da-i-systems-por-r-950-milhoes/",
+"https://www.tipranks.com/news/company-announcements/ihs-towers-completes-sale-of-majority-stake-in-brazils-i-systems-to-tim",
+"https://tecnoblog.net/noticias/estatal-italiana-assume-o-controle-indireto-da-tim-o-que-muda-no-brasil/"
+],
+"mcap": {
+"usd": 9160000000.0,
+"asOf": "2026-10-05",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+},
+"rev": {
+"usd": 4760000000.0,
+"period": "FY2025 (R$26.62B)",
+"note": "BRL 5.5891/USD",
+"src": "https://teletime.com.br/10/02/2026/tim-tem-lucro-de-r-43-bilhoes-em-2025-alta-de-374/"
+}
+},
+{
+"id": "entel",
+"name": "Entel",
+"seg": "Operator",
+"region": "Americas",
+"hq": "Chile",
+"what": "Chile, Peru",
+"rel": "Potential customer; competes with Movistar Chile (now Millicom/NJJ), Claro, WOM",
+"own": "listed",
+"investors": [
+{
+"n": "Almendral S.A. (54.86%)",
+"t": "family/founder"
+}
+],
+"ticker": "ENTEL (Santiago)",
+"recent": "2026 capex ~US$650M across Chile and Peru (5G); Starlink D2C messaging launched in Peru",
+"sources": [
+"https://stockanalysis.com/quote/snse/ENTEL/market-cap/",
+"https://informacioncorporativa.entel.cl/comunicados-de-prensa/utilidades-de-entel-alcanzan-los-dollar191-mil-millones-en-2025-gracias-al-incremento-en-ingresos-mejora-en-ebitda-y-efectos-no-operacionales-extraordinarios",
+"https://www.telesemana.com/blog/2026/04/23/entel-invertira-us650-millones-en-chile-y-peru-para-expandir-5g-en-2026/",
+"https://larepublica.pe/economia/2026/04/26/entel-da-el-salto-en-el-sector-telecomunicaciones-con-el-satelite-de-elon-musk-ya-se-envia-whatsapp-sin-senal-movil-hnews-2078850",
+"https://informacioncorporativa.entel.cl/inversionistas/informacion-bursatil"
+],
+"subs": "20400000.0 mobile (2025 (Chile+Peru))"
+},
+{
+"id": "sp-global-kagan",
+"name": "S&P Global Market Intelligence (Kagan)",
+"seg": "Telecom intelligence",
+"hq": "New York, USA",
+"founded": "Kagan 1969 (unverified)",
+"what": "Subscriber, ARPU, pricing and forecast datasets for wireless, broadband and video, plus US consumer surveys, delivered through Capital IQ Pro.",
+"rel": "It provides the standard subscriber and forecast datasets that investors and operators use, bundled into Capital IQ Pro, which many strategy teams already pay for.",
+"own": "Public (division of S&P Global, NYSE: SPGI)",
+"investors": [
+{
+"n": "Jana Partners",
+"t": "hedge fund"
+},
+{
+"n": "Public shareholders",
+"t": "public markets"
+}
+],
+"recent": "2025 H2 US consumer survey results; Kagan Media & Telecom Summit, New York",
+"sources": [
+"https://investor.spglobal.com/news-releases/news-details/2026/SP-Global-Provides-Pro-Forma-and-Recast-Financial-Results-and-Updated-Segment-Information/default.aspx",
+"https://www.spglobal.com/market-intelligence/en/solutions/products/resources/capital-iq-pro-tmt",
+"https://money.cnn.com/2011/09/12/markets/mcgraw_hill_split/index.htm"
+]
+},
+{
+"id": "telegeography",
+"name": "TeleGeography (PriMetrica)",
+"seg": "Telecom intelligence",
+"hq": "Washington, DC, USA",
+"founded": 1989,
+"what": "Databases and research on submarine cables, international bandwidth, IP transit and WAN pricing, plus the GlobalComms operator database.",
+"rel": "It is the authority on wholesale and subsea networks, but has little overlap with retail mobile and broadband competition.",
+"own": "PE-owned (Moa Capital since 2021)",
+"investors": [
+{
+"n": "Moa Capital",
+"t": "private equity"
+}
+],
+"recent": "30th-edition Submarine Cable Map (694 systems)",
+"sources": [
+"https://resources.telegeography.com/moa-capital-acquires-telegeography",
+"https://resources.telegeography.com/2026-submarine-cable-map"
+]
 }
 ],
 "deals": [

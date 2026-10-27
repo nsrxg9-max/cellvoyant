@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#08131C">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Cellvoyant">
-<meta property="og:description" content="Cellvoyant — AI market and competitor intelligence for telecom operators: research, working prototype, innovation catalog and provisional patent draft.">
+<meta property="og:description" content="Cellvoyant — AI market and competitor intelligence for telecom operators: research, a live operations console, departments and teams, a right-time customer engagement model, workshops, resources and a provisional patent draft.">
 <meta name="twitter:card" content="summary">
 <style>
 :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -16,7 +16,7 @@ body{margin:0}
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<meta name="description" content="Cellvoyant — AI market and competitor intelligence for telecom operators: research, working prototype, innovation catalog and provisional patent draft.">
+<meta name="description" content="Cellvoyant — AI market and competitor intelligence for telecom operators: research, a live operations console, departments and teams, a right-time customer engagement model, workshops, resources and a provisional patent draft.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
@@ -418,7 +418,9 @@ table.strat .best{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;
 
 /* patent */
 .patent-wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:clamp(20px,4vw,48px);align-items:start}
-@media (max-width:900px){.patent-wrap{grid-template-columns:1fr}}
+@media (max-width:900px){.patent-wrap{grid-template-columns:minmax(0,1fr)}}
+.patent-wrap > *{min-width:0}
+.patent-aside{overflow-wrap:anywhere}
 .patent-aside{position:sticky;top:84px;display:grid;gap:14px}
 @media (max-width:900px){.patent-aside{position:static}}
 .patent-aside .warnbox{border:1px solid color-mix(in srgb,var(--crit) 40%,transparent);background:var(--crit-soft);border-radius:10px;padding:14px;font-size:13.5px;display:grid;gap:6px}
@@ -652,8 +654,542 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
 .hold-track .bar{position:absolute;left:0;top:0;bottom:0;background:var(--ink-2);border-radius:4px;opacity:.85}
 .badge.live{background:var(--good-soft);color:var(--good)}
 .inno .badges{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+:root{--cx-1:#2a78d6;--cx-2:#eb6834;--cx-3:#1baf7a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--cx-1:#3987e5;--cx-2:#d95926;--cx-3:#199e70}}
+:root[data-theme="dark"]{--cx-1:#3987e5;--cx-2:#d95926;--cx-3:#199e70}
+.pos-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.pos-tabs [role=tab]{appearance:none;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-2);border-radius:10px;padding:11px 16px;font:700 15px var(--f-body);cursor:pointer;display:flex;align-items:center;gap:8px}
+.pos-tabs [role=tab][aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pos-tabs .cnt{font-family:var(--f-mono);font-weight:400;font-size:12px;opacity:.75}
+.cx-sum{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line);margin-bottom:clamp(26px,4vw,38px)}
+.cx-sum > div{padding:14px 14px 14px 0;display:grid;gap:4px;align-content:start}
+.cx-sum > div + div{border-left:1px solid var(--line);padding-left:14px}
+.cx-sum b{font-family:var(--f-display);font-weight:850;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.cx-sum span{font-size:13px;color:var(--ink-2)}
+@media (max-width:860px){.cx-sum{grid-template-columns:1fr 1fr}.cx-sum > div{border-left:0!important;padding-left:0!important;border-top:1px solid var(--line)}.cx-sum > div:first-child{grid-column:1/-1;border-top:0}}
+.cx-h3{margin:clamp(28px,4vw,42px) 0 14px}
+.threats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:860px){.threats{grid-template-columns:1fr}}
+.threat{appearance:none;display:grid;grid-template-columns:28px minmax(0,1fr) 110px 64px;gap:6px 12px;align-items:center;text-align:left;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:inherit;font:inherit;cursor:pointer}
+.threat:hover{border-color:var(--accent)}
+.threat .rk{font-size:13px;color:var(--muted)}
+.threat .tn{display:grid;gap:1px;min-width:0}
+.threat .tn b{font-size:15px}
+.threat .tn .tiny{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.threat .tb{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
+.threat .tb i{display:block;height:100%;background:var(--crit);border-radius:0 3px 3px 0}
+.threat .ts{font-size:13px;text-align:right}
+.threat .tw{grid-column:2/-1;color:var(--ink-2)}
+@media (max-width:480px){.threat{grid-template-columns:24px minmax(0,1fr) 60px}.threat .tb{display:none}}
+#posFilters{display:grid;gap:8px;margin-bottom:14px}
+#posFilters .filters{margin:0}
+.sw{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px;flex:none}
+.sw-c1{background:var(--cx-1);border-radius:50%}
+.sw-c2{background:var(--cx-2);border-radius:2px}
+.sw-c3{background:var(--cx-3);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.cx-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:980px){.cx-grid{grid-template-columns:1fr}}
+#posChartBox{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px}
+#posChart{width:100%;height:auto;display:block}
+#posChart .q-bg{fill:var(--accent-soft)}
+#posChart .grid{stroke:var(--grid);stroke-width:1}
+#posChart .mid{stroke:var(--line-strong);stroke-width:1.2}
+#posChart .ql{fill:var(--muted);font:italic 11.5px var(--f-body)}
+#posChart .ql-us{fill:var(--ink);font-weight:600;font-style:normal}
+#posChart .ax{fill:var(--muted);font:11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+#posChart .pt{cursor:pointer;outline:none}
+#posChart .hit{fill:transparent}
+#posChart .halo{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-dasharray:3 3}
+#posChart .mk{stroke:var(--surface);stroke-width:2}
+#posChart .mk-c1{fill:var(--cx-1)}
+#posChart .mk-c2{fill:var(--cx-2)}
+#posChart .mk-c3{fill:var(--cx-3)}
+#posChart .mk-self{fill:var(--ink)}
+#posChart .pl{fill:var(--ink-2);font:600 11px var(--f-body);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+#posChart .pt.on .pl{fill:var(--ink);font-weight:700}
+#posChart .pt.self .pl{fill:var(--ink);font:850 13px var(--f-display)}
+#posChart .pt:hover .mk,#posChart .pt:focus-visible .mk{stroke:var(--ink);stroke-width:2}
+.cx-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--ink-2);padding:8px 6px 2px}
+.cx-legend span{display:inline-flex;align-items:center}
+.cx-legend .star{display:inline-block;width:12px;height:12px;background:var(--ink);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);margin-right:6px}
+.cx-tip{position:absolute;z-index:5;width:226px;background:var(--ink);color:var(--bg);border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.4;display:grid;gap:2px;pointer-events:none;box-shadow:var(--shadow)}
+.cx-profile{background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--r);padding:16px;display:grid;gap:14px;box-shadow:var(--shadow);min-width:0;overflow-wrap:anywhere}
+.cx-profile > *{min-width:0}
+@media (min-width:981px){.cx-profile{position:sticky;top:76px;max-height:calc(100vh - 96px);overflow-y:auto}}
+.cx-profile select{width:100%}
+.cxp-head{display:grid;gap:2px}
+.cxp-head h3{font-size:22px}
+.cxp-quad{display:grid;gap:3px;padding:10px 12px;border-radius:0 8px 8px 0;border-left:3px solid var(--line-strong);background:var(--surface-2)}
+.cxp-quad.q-us{border-left-color:var(--accent);background:var(--accent-soft)}
+.cxp-quad b{font-family:var(--f-display);font-size:17px;font-stretch:108%;font-variation-settings:"wdth" 108}
+.cxp-own .badges{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.ib{display:inline-block;font-family:var(--f-mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+.cx-inv,.cxl{margin:6px 0 0;padding-left:18px;display:grid;gap:5px;font-size:13.5px;color:var(--ink-2)}
+.cx-inv{padding-left:0;list-style:none}
+.cxl.moves,.cxl.src-l{font-size:13px}
+.cxl.src-l{overflow-wrap:anywhere}
+.cx-figs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.cx-figs > div{background:var(--surface);padding:8px 10px;display:grid;gap:2px;font-size:13px}
+.cx-figs > div > span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cx-figs b{font-weight:600;font-variant-numeric:tabular-nums}
+@media (max-width:520px){.cx-figs{grid-template-columns:1fr}}
+.innov{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.iv{font-size:12px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.iv.yes{background:var(--good-soft);color:var(--good);border-color:transparent}
+.iv.no{background:var(--surface-2);color:var(--muted)}
+.iv.unk{background:var(--surface);color:var(--muted);border-style:dashed}
+.cxp-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.cxp-two{grid-template-columns:1fr}}
+.cxp-act{padding:10px 12px;border:1px solid var(--line);border-radius:8px}
+.cxp-act.win{background:var(--accent-soft);border-color:transparent}
+.cxp-threat{padding:10px 12px;border-radius:8px;background:var(--crit-soft);display:grid;gap:4px}
+.cxp-threat.cv{background:var(--surface-2);border:1px solid var(--line)}
+.mkts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:900px){.mkts{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.mkts{grid-template-columns:1fr}}
+.mkt{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:4px;align-content:start}
+#posTable{min-width:1040px}
+#posTable th button{appearance:none;background:none;border:0;padding:0;font:inherit;color:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}
+#posTable tbody tr{cursor:pointer}
+#posTable tbody tr:hover td{background:var(--surface-2)}
+#posTable tbody tr.on td{background:var(--accent-soft)}
+#posTable td .fund{margin-right:4px}
+.linkish{appearance:none;background:none;border:0;padding:0;font:600 14.5px var(--f-body);color:var(--accent);cursor:pointer;text-align:left;text-decoration:underline;text-underline-offset:3px}
+.pos-link{display:grid;gap:8px;align-content:start;text-decoration:none;color:var(--ink);border-left:3px solid var(--accent)}
+.pos-link b{font-family:var(--f-display);font-size:22px;font-weight:800}
+.pos-link:hover{box-shadow:var(--shadow)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* ===== v0.6 · operations-center console (always dark), departments, workbench, academy, sponsors ===== */
+.console{
+  --bg:#0A1118; --band:#0E161E; --surface:#0F1922; --surface-2:#15222D;
+  --ink:#E6EEF4; --ink-2:#B9C7D3; --muted:#8597A8; --line:#1F2E3C; --line-strong:#2D4254;
+  --accent:#3CCFD9; --accent-ink:#03171B; --accent-soft:#0F3237;
+  --signal:#FFB547; --signal-soft:#3A2A10; --crit:#FF6F63; --crit-soft:#3D1815; --good:#4ACF98; --good-soft:#0F3224;
+  --grid:rgba(228,236,242,.07);
+  --op-nim:#3CCFD9; --op-vtx:#9690FF; --op-arc:#FF80A7; --op-pls:#E2B84C; --op-sky:#72B2FF; --op-kte:#A9D45C;
+  --cx-1:#3987e5; --cx-2:#d95926; --cx-3:#199e70;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px -16px rgba(0,0,0,.7);
+  color-scheme:dark;color:var(--ink);
+  background:radial-gradient(120% 50% at 0% 0%,rgba(60,207,217,.09),transparent 60%),linear-gradient(180deg,#0B141C,#081017);
+  border:1px solid #22384A;border-radius:18px;
+  box-shadow:0 34px 80px -34px rgba(3,23,27,.6),inset 0 1px 0 rgba(255,255,255,.04)
+}
+.console .c-bar{background:linear-gradient(180deg,rgba(255,255,255,.035),transparent);padding:14px 18px;gap:12px 20px}
+.c-id{display:flex;align-items:center;gap:12px;min-width:0}
+.c-mark{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex:none;color:var(--accent);background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+.c-mark svg{width:24px;height:24px}
+.console .c-title{font-size:17px;letter-spacing:.005em}
+.c-sub{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);margin-top:2px}
+.c-clock{display:grid;gap:1px;padding-left:18px;border-left:1px solid var(--line)}
+.c-clock b{font-family:var(--f-mono);font-weight:600;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.lens{display:flex;align-items:center;gap:8px}
+.lens select{min-width:200px}
+@media (max-width:640px){.c-clock{padding-left:0;border-left:0}.c-right{margin-left:0}.lens select{min-width:0}}
+.tape{display:flex;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--line);background:rgba(0,0,0,.22);font-family:var(--f-mono);font-size:12px}
+.tape::-webkit-scrollbar{display:none}
+.tp{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-right:1px solid var(--line);white-space:nowrap}
+.tp .tl{color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:10.5px}
+.tp b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.dchip{font-family:var(--f-mono);font-size:10.5px;font-weight:500;padding:1px 6px;border-radius:4px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.dchip.g{color:var(--good);background:var(--good-soft)}
+.dchip.b{color:var(--crit);background:var(--crit-soft)}
+.console .tabs{padding:4px 12px 0;background:rgba(0,0,0,.14)}
+.ti{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.console .tab[aria-selected="true"]{background:linear-gradient(180deg,transparent,rgba(60,207,217,.08))}
+.console .tab[aria-selected="true"] .ti{color:var(--accent)}
+.lens-brief{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:10px 14px;margin-bottom:14px;border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));border-radius:10px;background:linear-gradient(90deg,rgba(60,207,217,.1),transparent 70%)}
+.lb-k{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.lb-tools{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+button.chip{appearance:none;cursor:pointer;font-family:var(--f-body);line-height:1.3}
+button.chip:hover{border-color:var(--accent)}
+.cc-top{display:grid;grid-template-columns:minmax(280px,.95fr) minmax(0,2.05fr);gap:14px;margin-bottom:16px}
+@media (max-width:1040px){.cc-top{grid-template-columns:1fr}}
+.pulse{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;padding:14px;align-items:center;background:linear-gradient(160deg,rgba(60,207,217,.07),transparent 55%),var(--surface)}
+@media (max-width:420px){.pulse{grid-template-columns:1fr}.pulse-g{max-width:200px}}
+.pulse-g{position:relative}
+.pulse-g svg{display:block;width:100%;height:auto}
+.pulse-v{position:absolute;inset:auto 0 0;text-align:center;display:grid;line-height:1}
+.pulse-v b{font-family:var(--f-display);font-weight:850;font-size:36px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.pulse-v span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
+.pulse-v .crit{color:var(--crit)}
+.pulse-t{display:grid;gap:6px;min-width:0}
+.pulse-t p{line-height:1.4}
+.area{display:block;width:100%;height:28px}
+.drv{display:grid;gap:5px;margin-top:2px}
+.drv > div{display:grid;grid-template-columns:70px minmax(0,1fr) 34px;gap:8px;align-items:center}
+.drv .bar{height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden}
+.drv .bar i{display:block;height:100%;border-radius:3px}
+.console .kpis{grid-template-columns:repeat(3,minmax(0,1fr));margin:0}
+@media (max-width:640px){.console .kpis{grid-template-columns:1fr 1fr}}
+.console .kpi{padding:11px 12px 9px;gap:2px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--surface);align-content:start}
+.kpi .kh{display:flex;justify-content:space-between;align-items:center;gap:6px;min-width:0}
+.kpi .area{margin-top:6px;height:24px}
+.ladder{display:flex;flex-wrap:wrap;gap:3px 10px;margin-top:7px}
+.ladder .opt{font-size:11.5px;font-weight:500}
+.ladder .you{color:var(--ink);font-weight:700}
+.meter{height:5px;border-radius:3px;background:var(--surface-2);margin-top:14px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--signal);border-radius:3px}
+.prio-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;margin:0 2px 8px}
+.prio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+@media (max-width:900px){.prio{grid-template-columns:1fr}}
+.pcard{border:1px solid var(--line);border-top:3px solid var(--line-strong);border-radius:10px;padding:12px;display:grid;gap:8px;align-content:start;background:var(--surface)}
+.pcard.s-crit{border-top-color:var(--crit);background:linear-gradient(180deg,rgba(255,111,99,.07),transparent 60%),var(--surface)}
+.pcard.s-high{border-top-color:var(--signal)}
+.pcard .ph{display:flex;justify-content:space-between;align-items:center;color:var(--muted)}
+.pcard .pt{font-size:14px;font-weight:600;line-height:1.35}
+.pcard .pm{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;align-items:center}
+.pcard .btn{justify-self:start}
+.routes{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.rt{font-family:var(--f-mono);font-size:10.5px;line-height:1.5;padding:0 6px;border-radius:4px;border:1px solid var(--line);color:var(--ink-2);white-space:nowrap}
+.rt.on{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.ev.dim{opacity:.5}
+.ev.dim:hover,.ev.dim.sel,.ev.dim:focus-visible{opacity:1}
+.c-status{display:flex;flex-wrap:wrap;gap:4px 18px;padding:9px 18px;border-top:1px solid var(--line);font-family:var(--f-mono);font-size:11px;color:var(--muted);background:rgba(0,0,0,.22)}
+.c-status span{display:inline-flex;align-items:center;gap:6px}
+
+/* analyst workbench */
+.wb-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:1040px){.wb-grid{grid-template-columns:1fr}}
+.wb-body{padding:14px;display:grid;gap:12px;min-width:0}
+.wb-ctl{display:grid;gap:10px}
+.wb-ctl > div{display:grid;gap:6px;justify-items:start}
+.wb-add .inp{max-width:340px;background-image:none;padding-right:11px}
+.wbc{display:inline-flex;align-items:center;gap:4px}
+.wbc button{appearance:none;border:0;background:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;padding:0 2px}
+.wbc button:hover{color:var(--crit)}
+.wb-chart{width:100%;height:auto;display:block}
+.legend-row{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--ink-2)}
+.legend-row span{display:inline-flex;align-items:center}
+.tbl-wrap{overflow-x:auto}
+.wb-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.wb-table th,.wb-table td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.wb-table th{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.wb-table td:nth-child(n+3):nth-child(-n+7){font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.ue-sliders{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+@media (max-width:480px){.ue-sliders{grid-template-columns:1fr}}
+.ue-sl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;font-size:13px;color:var(--ink-2)}
+.ue-sl output{font-family:var(--f-mono);font-size:12px;color:var(--ink)}
+.ue-sl input{grid-column:1/-1}
+.ue-out{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (max-width:480px){.ue-out{grid-template-columns:1fr 1fr}}
+.ue-out div{border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:grid;gap:2px;min-width:0}
+.ue-out span{font-size:11.5px;color:var(--muted);line-height:1.3}
+.ue-out b{font-family:var(--f-display);font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+.ue-out .good{border-color:color-mix(in srgb,var(--good) 45%,transparent);background:var(--good-soft)}
+.ue-out .good b{color:var(--good)}
+.ue-out .bad{border-color:color-mix(in srgb,var(--crit) 45%,transparent);background:var(--crit-soft)}
+.ue-out .bad b{color:var(--crit)}
+.ue-chart{width:100%;height:auto;display:block}
+
+/* departments & sectors */
+.hub-bar{margin-bottom:14px}
+.hub{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.hub{grid-template-columns:1fr}}
+.hub-list{display:grid;gap:6px}
+@media (max-width:860px){.hub-list{grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr))}}
+.hub-list button{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;display:grid;gap:2px}
+.hub-list button b{font-size:14.5px}
+.hub-list button span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.hub-list button:hover{border-color:var(--line-strong)}
+.hub-list button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.hub-panel{background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--r);padding:clamp(16px,2.4vw,24px);display:grid;gap:20px;box-shadow:var(--shadow);min-width:0}
+.hp-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px}
+.hp-head h3{margin:4px 0 6px}
+.hp-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px}
+@media (max-width:640px){.hp-grid{grid-template-columns:1fr}}
+.rhythm{display:grid;margin-top:6px}
+.rhythm div{display:grid;grid-template-columns:110px 1fr;gap:8px;font-size:13.5px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.rhythm b{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+.hp-ws{display:grid;gap:3px;padding:12px 14px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line)}
+.route-wrap{margin-top:26px;display:grid;gap:10px}
+.route-map{width:100%;border-collapse:collapse;font-size:13px;background:var(--surface)}
+.route-map th,.route-map td{padding:8px;border-bottom:1px solid var(--line);text-align:center;position:relative}
+.route-map thead th{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500;white-space:nowrap}
+.route-map tbody th{text-align:left;font-weight:600;white-space:nowrap}
+.route-map tbody tr:hover{background:var(--surface-2)}
+.rm-dot{display:inline-block;width:9px;height:9px;border-radius:50%;border:1.5px solid var(--accent);vertical-align:middle}
+.rm-dot.lead{background:var(--accent);width:12px;height:12px}
+
+/* academy */
+.path{list-style:none;margin:0 0 22px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+@media (max-width:820px){.path{grid-template-columns:1fr 1fr}}
+@media (max-width:460px){.path{grid-template-columns:1fr}}
+.path li{padding:14px 16px;display:grid;gap:4px;background:var(--surface);align-content:start}
+.path li .label{color:var(--accent)}
+.path li b{font-family:var(--f-display);font-size:16px;font-weight:750;line-height:1.2}
+.path li span:last-child{font-size:13px;color:var(--ink-2)}
+.ws-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:14px}
+.ws-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:14px;margin-bottom:14px}
+.ws{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:10px;align-content:start;scroll-margin-top:84px}
+.ws:target{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.ws-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.ws-aud{display:flex;gap:4px;flex-wrap:wrap}
+.ws h4{font-size:17px}
+.ws-meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.ws .cxl{margin-top:0}
+.ws-out{border-left:3px solid var(--accent);padding:7px 10px;background:var(--accent-soft);border-radius:0 8px 8px 0;display:grid;gap:2px}
+.ws-form{display:grid;gap:8px;border-top:1px dashed var(--line);padding-top:10px}
+.ws-form textarea{border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font:14px/1.4 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical;width:100%}
+.ws-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+
+/* sponsors */
+.sponsor-strip{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;padding:18px 0 2px}
+.sponsor-strip ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 28px;align-items:center}
+.wm{font-family:var(--f-display);font-weight:800;font-stretch:115%;font-variation-settings:"wdth" 115;letter-spacing:.08em;font-size:15px;color:var(--ink-2);line-height:1.2}
+.sponsor-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+@media (max-width:760px){.sponsor-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:420px){.sponsor-grid{grid-template-columns:1fr}}
+.sponsor-grid li{display:grid;place-items:center;align-content:center;gap:8px;min-height:132px;padding:20px;background:var(--surface);text-align:center}
+.sponsor-grid .wm{font-size:clamp(17px,2vw,22px);color:var(--ink);overflow-wrap:anywhere}
+/* ===== v0.6 · teams, operator workspace, right-time studio, challenge, resources ===== */
+.teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:8px;margin-top:8px}
+.teams div{display:grid;gap:2px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2)}
+.teams b{font-size:14px}
+.teams span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.tab .n.t{background:var(--accent);color:var(--accent-ink)}
+.ws-wrap{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(260px,1fr);gap:14px;align-items:start}
+@media (max-width:1040px){.ws-wrap{grid-template-columns:1fr}}
+.ws-add{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ws-add .inp{flex:1 1 260px;width:auto;background-image:none;padding-right:11px}
+.wboard{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:start}
+@media (max-width:760px){.wboard{grid-template-columns:1fr}}
+.wcol{background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:10px;padding:8px;display:grid;gap:8px;min-height:120px;align-content:start}
+.wcol-h{display:flex;justify-content:space-between;align-items:center;padding:2px 4px;font-size:13px}
+.wcard{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--line-strong);border-radius:8px;padding:9px 10px;display:grid;gap:5px}
+.wcard.p-high{border-left-color:var(--crit)}
+.wcard > b{font-size:13.5px;font-weight:600;line-height:1.35}
+.wbtns{display:flex;gap:6px;flex-wrap:wrap}
+.wbtns .btn{padding:5px 9px;font-size:12px}
+.ws-stats{grid-template-columns:1fr 1fr}
+.ws-wrap textarea{width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font:14px/1.45 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical}
+.wsq{display:flex;flex-wrap:wrap;gap:6px}
+.ch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:22px}
+@media (max-width:980px){.ch-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.ch-grid{grid-template-columns:1fr}}
+.ch-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:10px;align-content:start}
+.ch-card .label{color:var(--accent)}
+.ch-card h3{font-size:19px}
+.ch-card .cxl{margin-top:0}
+.ch-card.deliv{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.dl-list{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:13.5px;color:var(--ink-2)}
+.dl-list li{display:grid;grid-template-columns:20px 1fr;gap:6px}
+.dl-list i{font-style:normal;color:var(--good);font-weight:700}
+.ch-card .btn{justify-self:start}
+.rt-app .c-bar{border-bottom:1px solid var(--line)}
+.rt-ctl{display:flex;flex-wrap:wrap;gap:12px 22px;padding:12px 18px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.14);align-items:flex-start}
+.rt-f{display:grid;gap:6px;justify-items:start}
+.rt-f select{max-width:100%}
+.rt-ctx{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:13px;color:var(--ink-2)}
+.rt-ctx legend{width:100%;padding:0;margin-bottom:6px}
+.rt-ctx label{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.rt-ctx input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px}
+.rt-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,1fr);gap:14px;align-items:start;margin-bottom:14px}
+@media (max-width:1040px){.rt-grid{grid-template-columns:1fr}}
+.rt-grid2{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;align-items:start;margin-bottom:14px}
+@media (max-width:1040px){.rt-grid2{grid-template-columns:1fr}}
+.rt-hm{padding:12px 12px 10px;overflow-x:auto}
+.rt-heat{display:block;width:100%;min-width:560px;height:auto}
+.rt-legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;color:var(--ink-2);margin-top:8px}
+.rt-legend span{display:inline-flex;align-items:center;gap:6px}
+.rt-ramp{display:inline-block;width:110px;height:9px;border-radius:3px;background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 6%,var(--surface-2)),var(--accent))}
+.rt-hatch{display:inline-block;width:14px;height:10px;border-radius:2px;background:repeating-linear-gradient(45deg,var(--surface) 0 2px,var(--line-strong) 2px 3.5px)}
+.rt-bk{display:inline-block;width:14px;height:10px;border-radius:2px;border:2px solid var(--ink)}
+.rt-best{display:grid;gap:3px;padding:12px 14px;border-radius:10px;background:linear-gradient(135deg,rgba(60,207,217,.14),transparent 70%);border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line))}
+.rt-best b{font-family:var(--f-display);font-size:20px;font-weight:800;line-height:1.15}
+.rt-p{font-size:13px;color:var(--ink-2)}
+.rt-p .mono{color:var(--accent);font-weight:600;font-size:15px}
+.rt-cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rt-cmp div{border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:grid;gap:2px}
+.rt-cmp b{font-size:13.5px}
+.rt-rules{display:grid;gap:4px;margin-top:6px}
+.rt-rules div{display:grid;grid-template-columns:18px 104px 1fr;gap:6px;font-size:12.5px;align-items:baseline}
+.rt-rules i{font-style:normal;font-weight:700}
+.rt-rules .ok i{color:var(--good)}
+.rt-rules .stop i,.rt-rules .stop b{color:var(--crit)}
+.rt-rules span{color:var(--ink-2)}
+.rt-prof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line)}
+.rt-prof div{background:var(--surface);padding:9px 12px;display:grid;gap:1px}
+.rt-prof span{font-size:11.5px;color:var(--muted)}
+.rt-prof b{font-size:14px}
+.rt-act{padding:10px 12px;display:grid;gap:2px}
+.rt-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:14px;align-items:start}
+@media (max-width:560px){.rt-two{grid-template-columns:1fr}}
+.rt-cal{width:100%;height:auto;display:block;background:var(--surface-2);border-radius:8px}
+.rt-w{display:grid;gap:5px;margin-top:6px}
+.rt-w div{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(40px,1fr) 44px;gap:8px;align-items:center;font-size:12px;color:var(--ink-2)}
+.rt-w .bar,.rt-bar .bar{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden}
+.rt-w .bar i,.rt-bar .bar i{display:block;height:100%;border-radius:3px}
+.rt-bar{display:grid;grid-template-columns:130px minmax(0,1fr) 56px;gap:10px;align-items:center;font-size:13px}
+.rt-bar .bar{height:12px}
+.rt-bar b{text-align:right}
+#rtQueue .wb-table td{vertical-align:middle;font-family:var(--f-body)}
+#rtQueue .wb-table td.mono{font-family:var(--f-mono)}
+#rtQueue .wb-table td.small{white-space:normal;min-width:220px;font-size:12.5px;color:var(--ink-2)}
+.res-bar{display:grid;gap:10px;margin-bottom:16px}
+.res-bar .inp{max-width:460px;background-image:none;padding-right:11px}
+.res-bar .filters{margin:0}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:12px}
+.res{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:8px;align-content:start}
+.res .btn{justify-self:start;margin-top:4px}
+.res-h{margin:26px 0 12px;font-size:20px}
+.res-pb{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:12px;align-items:start}
+.res-pb summary{cursor:pointer;font-size:15px}
+.res-pb .cxl{margin-top:10px}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:0}
+.gloss div{background:var(--surface);padding:12px 14px}
+.gloss dt{font-weight:700;font-size:14.5px}
+.gloss dd{margin:3px 0 0;font-size:13.5px;color:var(--ink-2)}
+/* ===== v1.0 · fairness, deck, launch, FAQ ===== */
+.skip{position:absolute;left:-9999px;top:8px;z-index:100;background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-weight:600;text-decoration:none}
+.skip:focus{left:16px}
+.rt-verdict{display:grid;gap:2px;padding:10px 12px;border-radius:9px;border:1px solid var(--line)}
+.rt-verdict.good{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 40%,transparent)}
+.rt-verdict.good b{color:var(--good)}
+.rt-verdict.bad{background:var(--crit-soft);border-color:color-mix(in srgb,var(--crit) 40%,transparent)}
+.rt-verdict.bad b{color:var(--crit)}
+#rtPilot .rt-two .cxl{margin-top:6px}
+.deck-wrap{margin-top:28px;display:grid;gap:12px}
+.deck-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px}
+.deck-head h3{margin-top:4px}
+.deck{display:grid;grid-template-rows:1fr auto;min-height:clamp(380px,46vw,520px);outline:none}
+.deck:focus-visible{box-shadow:0 0 0 3px var(--accent)}
+.deck:fullscreen{border-radius:0;min-height:100vh;padding:4vh 4vw}
+.deck:fullscreen .dk-slide h3{font-size:clamp(34px,4vw,56px)}
+.deck-stage{padding:clamp(20px,4vw,48px);display:grid;align-items:center;min-width:0}
+.dk-slide{display:grid;gap:16px;align-content:center;max-width:980px}
+.dk-slide h3{font-size:clamp(24px,3.4vw,40px);font-weight:850;font-stretch:115%;font-variation-settings:"wdth" 115;line-height:1.05}
+.dk-slide .label{color:var(--accent)}
+.dk-lede{font-size:clamp(16px,1.7vw,20px);color:var(--ink-2);max-width:60ch}
+.dk-slide ul{margin:0;padding-left:20px;display:grid;gap:8px;font-size:clamp(14.5px,1.4vw,17px);color:var(--ink-2)}
+.dk-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:12px}
+.dk-stats div{border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:4px;background:linear-gradient(160deg,rgba(60,207,217,.08),transparent 60%),var(--surface)}
+.dk-stats b{font-family:var(--f-display);font-weight:850;font-size:clamp(26px,3.2vw,40px);line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.dk-stats span{font-size:13px;color:var(--muted)}
+.dk-flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.dk-flow div{flex:1 1 140px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);font-size:13.5px;display:grid;gap:4px;color:var(--ink)}
+.dk-flow div .mono{color:var(--accent)}
+.dk-flow > i{font-style:normal;color:var(--muted)}
+@media (max-width:640px){.dk-flow > i{display:none}}
+.dk-bars{display:grid;gap:12px}
+.dk-bg{display:grid;grid-template-columns:150px 1fr;gap:4px 12px;align-items:center;font-size:14px}
+.dk-bg > span{grid-row:span 2;color:var(--ink-2)}
+.dk-bg > div{display:flex;align-items:center;gap:8px}
+.dk-bg i{display:block;height:14px;border-radius:4px;min-width:2px}
+.dk-bg b{font-size:13px;color:var(--ink)}
+@media (max-width:480px){.dk-bg{grid-template-columns:1fr}.dk-bg > span{grid-row:auto}}
+.dk-key{display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--ink-2)}
+.dk-key span{display:inline-flex;align-items:center;gap:6px}
+.dk-key i{display:inline-block;width:12px;height:10px;border-radius:2px}
+.deck-nav{display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid var(--line);background:rgba(0,0,0,.2)}
+.deck-dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap}
+.deck-dots button{appearance:none;border:0;width:9px;height:9px;border-radius:50%;background:var(--line-strong);cursor:pointer;padding:0}
+.deck-dots button[aria-current="true"]{background:var(--accent);width:22px;border-radius:5px}
+.launch-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,3vw,32px);align-items:start}
+@media (max-width:900px){.launch-grid{grid-template-columns:1fr}}
+.lsteps{list-style:none;margin:0;padding:0;display:grid;gap:0;border-left:2px solid var(--accent)}
+.lsteps li{display:grid;gap:3px;padding:4px 0 20px 20px;position:relative}
+.lsteps li::before{content:"";position:absolute;left:-7px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--accent)}
+.lsteps li .label{color:var(--accent)}
+.lsteps li b{font-family:var(--f-display);font-size:18px;font-weight:780}
+.lsteps li span:last-child{color:var(--ink-2);font-size:14.5px}
+.pilot-form{display:grid;gap:12px}
+.pf-row{display:grid;gap:6px}
+.pilot-form textarea{width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:9px 11px;font:14px/1.45 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical}
+.pf-mods{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px}
+.pf-mods legend{width:100%;padding:0;margin-bottom:6px}
+.pf-mods label{display:inline-flex;align-items:center;gap:7px}
+.pf-mods input{accent-color:var(--accent);width:16px;height:16px}
+.lcheck{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.lcheck{grid-template-columns:1fr}}
+.lc-col{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:10px;align-content:start}
+.lc{display:grid;grid-template-columns:20px 1fr;gap:6px;font-size:14px;color:var(--ink-2)}
+.lc i{font-style:normal;font-weight:700}
+.lc.ok i{color:var(--good)}
+.lc.todo i{color:var(--signal)}
+.lc.todo b{color:var(--ink)}
+.faq{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(380px,100%),1fr));gap:10px;align-items:start}
+.faq summary{cursor:pointer;font-weight:650;font-size:15px}
+.faq details p{margin-top:8px;color:var(--ink-2)}
+/* ===== solution map & claims table ===== */
+.solve{margin:0 0 22px;display:grid;gap:4px}
+.solve-t th[scope="row"]{font:650 14px/1.4 var(--f-body);letter-spacing:0;text-transform:none;color:var(--ink);background:var(--surface);min-width:180px}
+.solve-t td{min-width:150px}
+.solve-t td:nth-child(2){min-width:280px}
+.solve-t tr.grp th{background:var(--accent-soft);color:var(--ink);font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-align:left}
+.claim-t td{vertical-align:top}
+table.t.claim-t{min-width:560px}
+.claim-t td:first-child{width:44px}
+.claim-t td:nth-child(2){width:120px}
+.claim-t td:nth-child(3){min-width:220px}
+.claim-t td:nth-child(4){width:150px}
+.claim-t .chips{flex-wrap:wrap}
+.claim-t tr.ind-row td{background:var(--accent-soft)}
+/* ===== challenge 2: market intelligence hub ===== */
+.stc{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;padding:2px 8px;border-radius:999px;white-space:nowrap;font-weight:600}
+.st-live{background:var(--good-soft);color:var(--good)}
+.st-proto{background:var(--signal-soft);color:var(--signal)}
+.st-prod{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line-strong)}
+.solve-t th[scope="row"] .tiny{display:block;font-weight:400;margin-top:3px}
+.mi-app .tabs{border-top:1px solid var(--line)}
+.mi-sl{margin-bottom:12px}
+.mi-sum{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:12px}
+@media (max-width:640px){.mi-sum{grid-template-columns:1fr 1fr}}
+.mi-src-t td{vertical-align:top;white-space:normal}
+.mi-src-t td:first-child{min-width:200px}
+.mi-src-t td:nth-child(2){min-width:190px}
+.mi-src-t td:last-child{min-width:200px;color:var(--ink-2)}
+.wb-table.mi-src-t td.small{font-family:var(--f-body)!important}
+.mi-src-t td > span.tiny{display:block;margin-top:2px}
+.mi-src-t tr.hit td,.mi-matrix tr.hit th,.mi-matrix tr.hit td{background:var(--accent-soft)}
+.acc{display:inline-block;font-family:var(--f-mono);font-size:11px;padding:2px 7px;border-radius:5px;white-space:nowrap;border:1px solid var(--line)}
+.acc-public{color:var(--good);border-color:color-mix(in srgb,var(--good) 40%,transparent)}
+.acc-api{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+.acc-licensed{color:var(--signal);border-color:color-mix(in srgb,var(--signal) 45%,transparent)}
+.acc-internal{color:var(--crit);border-color:color-mix(in srgb,var(--crit) 45%,transparent)}
+.fbar{display:inline-block;width:64px;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden;vertical-align:middle;margin-right:6px}
+.fbar i{display:block;height:100%;background:var(--accent)}
+.mi-desk{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:900px){.mi-desk{grid-template-columns:1fr}}
+.mi-desk textarea{width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:10px 12px;font:15px/1.6 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical}
+.mi-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+.mi-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.mi-two{grid-template-columns:1fr}}
+.mi-two .chips{margin-top:6px}
+.sentp{font-family:var(--f-mono);font-size:10.5px;padding:1px 6px;border-radius:4px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.sentp.positive{background:var(--good-soft);color:var(--good)}
+.sentp.negative{background:var(--crit-soft);color:var(--crit)}
+.sentp.mixed{background:var(--signal-soft);color:var(--signal)}
+.mi-search{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:14px;align-items:start}
+@media (max-width:1040px){.mi-search{grid-template-columns:1fr}}
+.mi-qrow{display:flex;gap:8px;flex-wrap:wrap}
+.mi-qrow .inp{flex:1 1 240px;width:auto;background-image:none;padding-right:11px}
+.mi-results{display:grid;gap:6px}
+.mi-res{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:10px 12px;cursor:pointer;display:grid;gap:3px}
+.mi-res:hover{border-color:var(--accent)}
+.mi-res b{font-size:14px;font-weight:600}
+.mi-rt{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.mi-tr{display:grid;grid-template-columns:110px minmax(0,1fr) minmax(0,1fr) 70px;gap:8px;align-items:center;font-size:12.5px;color:var(--ink-2);margin-top:5px}
+.mi-tr .bar{height:7px;background:var(--surface-2);border-radius:3px;overflow:hidden}
+.mi-tr .bar i{display:block;height:100%;border-radius:3px}
+.mi-story{display:grid;gap:4px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.mi-story:last-child{border-bottom:0}
+.mi-story b{font-size:13.5px}
+.mi-matrix th[scope="row"]{white-space:nowrap;font-weight:600;text-align:left;font-family:var(--f-body);font-size:12.5px;text-transform:none;letter-spacing:0;color:var(--ink)}
+.mi-matrix td{white-space:normal;min-width:120px;font-family:var(--f-body)!important;font-size:12.5px}
+.ac{font-weight:700}
+.ac-ok{color:var(--good)}.ac-part{color:var(--signal)}.ac-no{color:var(--crit)}
+.mi-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+@media (max-width:900px){.mi-controls{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.mi-controls{grid-template-columns:1fr}}
+.mi-controls div{border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:4px;background:var(--surface)}
+.mi-controls b{font-size:14px}
+.mi-controls span{font-size:12.5px;color:var(--ink-2)}
+.mi-more{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+@media (max-width:820px){.mi-more{grid-template-columns:1fr}}
+.mi-more .cxl{margin-top:10px}
 </style>
+
+<a class="skip" href="#top">Skip to content</a>
 </head>
 <body>
 <header class="top">
@@ -666,11 +1202,19 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
       <a href="#problem">Problem</a>
       <a href="#market">Market</a>
       <a href="#landscape">Landscape</a>
+      <a href="#positioning">Positioning</a>
       <a href="#platform">Platform</a>
+      <a href="#departments">Departments</a>
       <a href="#console">Live console</a>
+      <a href="#challenge">Challenge 1</a>
+      <a href="#challenge2">Challenge 2</a>
+      <a href="#academy">Academy</a>
+      <a href="#resources">Resources</a>
       <a href="#lab">Innovation lab</a>
       <a href="#patent">Patent</a>
       <a href="#business">Business</a>
+      <a href="#launch">Launch</a>
+      <a href="#sponsors">Sponsors</a>
       <a href="#sources">Sources</a>
     </nav>
   </div>
@@ -686,6 +1230,8 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
         <p class="lede">Cellvoyant pulls tariffs, network speed tests, regulatory filings, job posts, app updates, retail activity and social chatter into one live picture of your market. Then it predicts what each competitor will do next and simulates your best response, fast enough to act on.</p>
         <div class="cta-row">
           <a class="btn primary" href="#console">Open the live console</a>
+          <a class="btn accent" href="#launch">Join the pilot</a>
+          <a class="btn" href="#challenge">Right-time challenge</a>
           <a class="btn" href="#patent">Read the patent draft</a>
         </div>
         <div class="meta-row">
@@ -705,6 +1251,11 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
       <div><b>68%</b><span>of operators turned data growth into ARPU growth, although 93% saw usage rise</span><cite><a href="#src-5">Tefficient, 1H 2025</a></cite></div>
       <div><b>−2%</b><span>Forecast global telecom capex for 2026, so every investment has to count</span><cite><a href="#src-7">Dell'Oro, Apr 2026</a></cite></div>
       <div><b>2×</b><span>CI teams that share insights weekly are twice as likely to see revenue impact (79% vs 41%)</span><cite><a href="#src-24">Crayon, 2026</a></cite></div>
+    </div>
+    <div class="sponsor-strip">
+      <span class="label">Sponsored by</span>
+      <ul aria-label="Sponsors"><li class="wm">PAINITE</li><li class="wm">M.A.I.I</li><li class="wm">SPACE42</li><li class="wm">G42 AI</li><li class="wm">BLOOMBERG</li><li class="wm">MC INTERNATIONAL INVESTMENTS</li></ul>
+      <a class="small" href="#sponsors">Our sponsors →</a>
     </div>
   </div>
 </section>
@@ -809,28 +1360,12 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
 
     <h3 style="margin:clamp(40px,5vw,56px) 0 18px">Competitive landscape</h3>
     <div class="matrix-wrap">
-      <div>
-        <div class="matrix" role="img" aria-label="Positioning map: generic CI tools sit top-left, telecom research firms bottom-right, Cellvoyant top-right">
-          <div class="q"></div><div class="mid-x"></div><div class="mid-y"></div>
-          <span class="qlab" style="left:10px;top:10px">Fast, but generic</span>
-          <span class="qlab" style="right:10px;top:10px;text-align:right">Where Cellvoyant plays</span>
-          <span class="qlab" style="left:10px;bottom:10px">General research</span>
-          <span class="qlab" style="right:10px;bottom:10px">Deep, but periodic or single-source</span>
-          <span class="mpt" style="left:15%;top:24%"><i></i>Similarweb</span>
-          <span class="mpt" style="left:17%;top:36%"><i></i>Crayon</span>
-          <span class="mpt" style="left:28%;top:45%"><i></i>Klue</span>
-          <span class="mpt" style="left:13%;top:55%"><i></i>Kompyte</span>
-          <span class="mpt" style="left:28%;top:66%"><i></i>AlphaSense</span>
-          <span class="mpt l" style="left:76%;top:34%"><i></i>Ookla (Accenture)</span>
-          <span class="mpt l" style="left:86%;top:47%"><i></i>Opensignal</span>
-          <span class="mpt l" style="left:74%;top:60%"><i></i>Tarifica</span>
-          <span class="mpt" style="left:58%;top:74%"><i></i>Tefficient</span>
-          <span class="mpt l" style="left:90%;top:68%"><i></i>GSMA Intelligence</span>
-          <span class="mpt l" style="left:88%;top:83%"><i></i>Analysys Mason</span>
-          <span class="mpt us l" style="left:86%;top:19%"><i></i>Cellvoyant</span>
-        </div>
-        <p class="note"><span class="mono">x</span> = telecom depth → &nbsp; <span class="mono">y</span> = predictive, real-time ↑ · Our positioning view, based on public product descriptions.</p>
-      </div>
+      <a class="panel pos-link" href="#positioning">
+        <span class="label">Interactive</span>
+        <b>See the positioning quadrant</b>
+        <span class="small">32 competitors and 100+ operators placed by quadrant, with owners (private equity, hedge funds, state funds), what each should improve, how it can succeed and who it competes with.</span>
+        <span class="small mono">Open Positioning →</span>
+      </a>
       <div class="table-scroll">
         <table class="t" style="min-width:520px">
           <thead><tr><th>Vendor</th><th>Strength</th><th>What's missing for telecom teams</th></tr></thead>
@@ -868,7 +1403,7 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
       <div class="filters" id="landSegs" role="group" aria-label="Filter by segment"></div>
       <div class="land-tools">
         <label class="sr" for="landQ">Search companies</label>
-        <input class="inp-search" id="landQ" type="search" placeholder="Search company, investor, country…">
+        <input class="inp-search" id="landQ" type="search" placeholder="Search company, investor, country or region (e.g. Gulf)…">
         <label class="check small" for="landCap"><input type="checkbox" id="landCap"><span>Only PE, hedge-fund or state involvement</span></label>
       </div>
     </div>
@@ -905,7 +1440,38 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
   </div>
 </section>
 
-<section class="sec" id="platform">
+<section class="sec" id="positioning">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Positioning · researched Oct 2026</div>
+      <h2>The biggest competitors, and the quadrant every company sits in</h2>
+      <p class="lede">Two maps. The first places Cellvoyant's own competitors. The second places telecom operators across the Gulf, the wider Middle East, Asia-Pacific, Europe, Africa and the Americas, plus international groups. Click any company to see its quadrant, who owns it (state funds, private equity, hedge funds), what it should improve, how it can succeed, and who it competes with.</p>
+    </div>
+    <div class="pos-tabs" id="posTabs" role="group" aria-label="Choose a map">
+      <button type="button" data-map="vendors" aria-pressed="true">Cellvoyant's competitors <span class="cnt" id="posTV"></span></button>
+      <button type="button" data-map="ops" aria-pressed="false">Telecom operators worldwide <span class="cnt" id="posTO"></span></button>
+    </div>
+    <div class="cx-sum" id="posSum"></div>
+    <h3 class="cx-h3" id="posTopTitle">The biggest competitors</h3>
+    <div class="threats" id="posTop"></div>
+    <h3 class="cx-h3">Positioning quadrant</h3>
+    <div id="posFilters"></div>
+    <div class="cx-grid">
+      <div>
+        <div id="posChartBox"><svg id="posChart" viewBox="0 0 680 560" role="img" aria-label="Positioning quadrant"></svg><div class="cx-tip" id="posTip" hidden></div></div>
+        <div class="cx-legend" id="posLegend"></div>
+        <p class="note" id="posMethod"></p>
+      </div>
+      <aside class="cx-profile" id="posProfile" aria-live="polite"></aside>
+    </div>
+    <div id="posMarkets" hidden></div>
+    <h3 class="cx-h3" id="posTableTitle">Every company on this map</h3>
+    <div class="table-scroll"><table class="t" id="posTable"></table></div>
+    <p class="note" id="posNote"></p>
+  </div>
+</section>
+
+<section class="sec band" id="platform">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">The solution</div>
@@ -962,18 +1528,39 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
   </div>
 </section>
 
+<section class="sec" id="departments">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Departments &amp; sectors</div>
+      <h2>Nine departments, 36 teams, six lines of business</h2>
+      <p class="lede">Every signal is routed to the teams that can act on it, with a lead owner and an act-by time. Pick a department to see the questions it answers, its tools, the KPIs it watches and its operating rhythm, then open the console with that department’s lens. Or switch to business sectors to see what Cellvoyant watches in each line of business.</p>
+    </div>
+    <div class="hub-bar"><div class="seg-btns" id="deptMode" role="group" aria-label="View by"><button type="button" data-m="dept" aria-pressed="true">Departments</button><button type="button" data-m="sector" aria-pressed="false">Business sectors</button></div></div>
+    <div class="hub" id="deptHub"></div>
+    <div class="route-wrap">
+      <div class="label-row"><span class="label">Signal routing map · who owns each signal type</span><span class="tiny muted"><i class="rm-dot lead"></i> lead owner &nbsp; <i class="rm-dot"></i> informed</span></div>
+      <div class="panel" style="padding:0;overflow-x:auto"><table class="route-map" id="routeMap"></table></div>
+    </div>
+  </div>
+</section>
+
 <section class="sec band" id="console">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Working prototype</div>
       <h2>The Cellvoyant console</h2>
-      <p class="lede">Click an alert to see its evidence, sequence a tariff, toggle the weak signals behind a prediction, war-game a price cut, or have the AI assistant run any of it and book a service. The console runs live and updates every second. Its figures are simulated for six fictional operators in one fictional metro market, and you play <b>Nimbus Mobile</b>. The Capital radar and Landscape use real, sourced market data.</p>
+      <p class="lede">Click an alert to see its evidence, sequence a tariff, toggle the weak signals behind a prediction, war-game a price cut, or have the AI assistant run any of it and book a service. The console runs live and updates every second. Its figures are simulated for six fictional operators in one fictional metro market, and you play <b>Nimbus Mobile</b>. The Capital radar, the Analyst workbench and the Landscape use real, sourced market data. Pick a department in <b>Lens</b> to re-rank everything for that team.</p>
     </div>
 
     <div class="console" id="app">
       <div class="c-bar">
-        <div class="c-title">Metro North <small id="simClock">—</small> <small title="Simulated market time runs 300 times faster than real time">sim ×300</small></div>
+        <div class="c-id">
+          <span class="c-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2" opacity=".45"/><circle cx="16" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="2" opacity=".7"/><path d="M16 16L26 9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="16" cy="16" r="2.4" fill="currentColor"/></svg></span>
+          <div><div class="c-title">Market operations center</div><div class="c-sub">Metro North · you are Nimbus Mobile · <span title="Simulated market time runs 300 times faster than real time">sim ×300</span></div></div>
+        </div>
+        <div class="c-clock"><span class="label">Market time</span><b id="simClock">—</b></div>
         <div class="c-right">
+          <label class="lens"><span class="label">Lens</span><select id="lensSel" class="mini" aria-label="Department lens"></select></label>
           <span class="pill sim">Simulated data</span>
           <span class="pill ai-off" id="aiPill">AI: connecting…</span>
           <span class="pill" id="rulePill">Rule hits: 0</span>
@@ -981,19 +1568,28 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
           <button class="btn sm" id="liveBtn" type="button" aria-pressed="true"><i class="dot live" id="liveDot"></i><span>Live</span></button>
         </div>
       </div>
+      <div class="tape" id="tape" role="group" aria-label="Market tape: live headline numbers"></div>
       <div class="tabs" role="tablist" aria-label="Console views">
-        <button class="tab" role="tab" id="tab-cc" aria-controls="p-cc" aria-selected="true">Command center <span class="n" id="critCount">0</span></button>
-        <button class="tab" role="tab" id="tab-dna" aria-controls="p-dna" aria-selected="false">Tariff DNA</button>
-        <button class="tab" role="tab" id="tab-pred" aria-controls="p-pred" aria-selected="false">Move predictor</button>
-        <button class="tab" role="tab" id="tab-war" aria-controls="p-war" aria-selected="false">War room</button>
-        <button class="tab" role="tab" id="tab-geo" aria-controls="p-geo" aria-selected="false">Geo radar</button>
-        <button class="tab" role="tab" id="tab-cap" aria-controls="p-cap" aria-selected="false">Capital radar</button>
-        <button class="tab" role="tab" id="tab-ask" aria-controls="p-ask" aria-selected="false">AI assistant</button>
+        <button class="tab" role="tab" id="tab-cc" aria-controls="p-cc" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v4h-7zM14 11h7v10h-7zM3 14h7v7H3z"/></svg>Command center <span class="n" id="critCount">0</span></button>
+        <button class="tab" role="tab" id="tab-ws" aria-controls="p-ws" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v3H9zM9 11h6M9 15h4"/></svg>My workspace <span class="n t" id="taskCount" hidden>0</span></button>
+        <button class="tab" role="tab" id="tab-dna" aria-controls="p-dna" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3c0 9 12 9 12 18M18 3c0 9-12 9-12 18M8.5 7h7M8.5 17h7"/></svg>Tariff DNA</button>
+        <button class="tab" role="tab" id="tab-pred" aria-controls="p-pred" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Move predictor</button>
+        <button class="tab" role="tab" id="tab-war" aria-controls="p-war" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>War room</button>
+        <button class="tab" role="tab" id="tab-geo" aria-controls="p-geo" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0114 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Geo radar</button>
+        <button class="tab" role="tab" id="tab-cap" aria-controls="p-cap" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/></svg>Capital radar</button>
+        <button class="tab" role="tab" id="tab-wb" aria-controls="p-wb" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="7" cy="18" r="2"/></svg>Analyst workbench</button>
+        <button class="tab" role="tab" id="tab-ask" aria-controls="p-ask" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>AI assistant</button>
       </div>
 
       <!-- COMMAND CENTER -->
       <div class="tpanel" role="tabpanel" id="p-cc" aria-labelledby="tab-cc">
-        <div class="kpis" id="kpis"></div>
+        <div class="lens-brief" id="lensBrief"></div>
+        <div class="cc-top">
+          <div class="box pulse" id="pulseBox" role="group" aria-label="Competitive pressure index"></div>
+          <div class="kpis" id="kpis"></div>
+        </div>
+        <div class="prio-h"><span class="label">Act-by priorities · top 3 for your lens</span><span class="tiny muted">Act-by = signal time + half-life, when it has lost half its value</span></div>
+        <div class="prio" id="prio"></div>
         <div class="cc-grid">
           <div class="box">
             <div class="box-h"><span><b>Signal feed</b> · ranked by impact × confidence × freshness</span><span id="feedCount"></span></div>
@@ -1017,6 +1613,30 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
                 </form>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPERATOR WORKSPACE -->
+      <div class="tpanel" role="tabpanel" id="p-ws" aria-labelledby="tab-ws" hidden>
+        <div class="ws-wrap">
+          <div class="box">
+            <div class="box-h"><span><b>Shift board</b> · operator workspace</span><span class="tiny" id="wsNote">Connecting…</span></div>
+            <div class="wb-body">
+              <form id="wsForm" class="ws-add">
+                <label class="sr" for="wsTitle">New task</label><input class="inp" id="wsTitle" maxlength="200" autocomplete="off" placeholder="New task, e.g. Brief the save desk on the Arcline cut">
+                <label class="sr" for="wsDept">Department</label><select id="wsDept" class="mini"></select>
+                <label class="sr" for="wsPrio">Priority</label><select id="wsPrio" class="mini"><option value="normal">Normal</option><option value="high">High</option></select>
+                <button class="btn sm accent" type="submit">Add task</button>
+              </form>
+              <div class="wboard" id="wsBoard"></div>
+              <p class="tiny muted">Add signals from the Command center (“Add to workspace”) or customers from the right-time contact queue. The board is shared with everyone who can open this page.</p>
+            </div>
+          </div>
+          <div class="side">
+            <div class="box"><div class="box-h"><span><b>This shift</b></span></div><div class="wb-body"><div class="ue-out ws-stats" id="wsStats"></div><button class="btn sm accent" id="wsHandover" type="button">Export shift handover</button></div></div>
+            <div class="box"><div class="box-h"><span><b>My notes</b> · this browser only</span></div><div class="wb-body"><label class="sr" for="wsNotes">My notes</label><textarea id="wsNotes" rows="5" placeholder="Notes for this shift…"></textarea></div></div>
+            <div class="box"><div class="box-h"><span><b>Quick launch</b></span></div><div class="wb-body"><div class="chips" id="wsQuick"><button type="button" class="chip hl" data-go="tab-cc">Command center</button><button type="button" class="chip hl" data-go="#challenge">Right-time studio</button><button type="button" class="chip hl" data-go="tab-geo">Geo radar</button><button type="button" class="chip hl" data-go="tab-war">War room</button><button type="button" class="chip hl" data-go="tab-ask">AI assistant</button><button type="button" class="chip hl" data-go="#resources">Templates &amp; playbooks</button></div></div></div>
           </div>
         </div>
       </div>
@@ -1134,6 +1754,46 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
         </div>
       </div>
 
+      <!-- ANALYST WORKBENCH -->
+      <div class="tpanel" role="tabpanel" id="p-wb" aria-labelledby="tab-wb" hidden>
+        <div class="wb-grid">
+          <div class="box">
+            <div class="box-h"><span><b>Peer benchmark</b> · real operator data</span><a class="tiny" href="#positioning">sources in Positioning</a></div>
+            <div class="wb-body">
+              <div class="wb-ctl">
+                <div><span class="label">Preset</span><div class="seg-btns" id="wbPreset" role="group" aria-label="Region preset"></div></div>
+                <div><span class="label">Metric</span><div class="seg-btns" id="wbMetric" role="group" aria-label="Metric"></div></div>
+                <div class="wb-add"><label class="label" for="wbFind">Add an operator (up to 12)</label><input class="inp" id="wbFind" list="wbOps" autocomplete="off" placeholder="Type a name, e.g. Vodafone, then Enter"><datalist id="wbOps"></datalist></div>
+              </div>
+              <div class="chips" id="wbChips"></div>
+              <svg id="wbChart" class="wb-chart" role="img" aria-label="Bar chart of the selected operators on the chosen metric"></svg>
+              <div class="legend-row tiny"><span><i class="sw sw-c1"></i>Listed, strategic or family-controlled</span><span><i class="sw sw-c2"></i>Private equity, infrastructure or hedge fund involved</span><span><i class="sw sw-c3"></i>State or sovereign-fund controlled</span></div>
+              <div class="tbl-wrap"><table class="wb-table" id="wbTable"></table></div>
+              <div class="row-btns"><button class="btn sm" id="wbCopy" type="button">Copy as CSV</button><button class="btn sm accent" id="wbSave" type="button">Download CSV</button></div>
+            </div>
+          </div>
+          <div class="box">
+            <div class="box-h"><span><b>Unit economics</b> · retention offer calculator</span><button class="btn sm" id="ueReset" type="button">Reset</button></div>
+            <div class="wb-body">
+              <div class="ue-sliders">
+                <div class="ue-sl"><label for="ueArpu">Monthly revenue per line (ARPU)</label><output id="o-ueArpu" for="ueArpu"></output><input type="range" id="ueArpu" min="10" max="120" step="1" value="46"></div>
+                <div class="ue-sl"><label for="ueChurn">Base monthly churn</label><output id="o-ueChurn" for="ueChurn"></output><input type="range" id="ueChurn" min="0.3" max="5" step="0.1" value="1.4"></div>
+                <div class="ue-sl"><label for="ueMargin">Gross margin</label><output id="o-ueMargin" for="ueMargin"></output><input type="range" id="ueMargin" min="20" max="80" step="1" value="55"></div>
+                <div class="ue-sl"><label for="ueCac">Cost to acquire a line</label><output id="o-ueCac" for="ueCac"></output><input type="range" id="ueCac" min="20" max="600" step="10" value="180"></div>
+                <div class="ue-sl"><label for="ueRisk">Chance an at-risk customer leaves</label><output id="o-ueRisk" for="ueRisk"></output><input type="range" id="ueRisk" min="5" max="80" step="1" value="35"></div>
+                <div class="ue-sl"><label for="ueOffer">Retention offer</label><output id="o-ueOffer" for="ueOffer"></output><input type="range" id="ueOffer" min="0" max="30" step="1" value="5"></div>
+                <div class="ue-sl"><label for="ueMonths">Offer length</label><output id="o-ueMonths" for="ueMonths"></output><input type="range" id="ueMonths" min="1" max="24" step="1" value="6"></div>
+                <div class="ue-sl"><label for="ueCut">Offer cuts the chance of leaving by</label><output id="o-ueCut" for="ueCut"></output><input type="range" id="ueCut" min="0" max="80" step="5" value="30"></div>
+              </div>
+              <div class="ue-out" id="ueOut" aria-live="polite"></div>
+              <svg id="ueChart" class="ue-chart" viewBox="0 0 600 92" role="img" aria-label="Bars comparing value saved, offer cost and net value per targeted customer"></svg>
+              <p class="small" id="ueNote"></p>
+              <p class="tiny muted">Illustrative inputs: replace them with your own. Lifetime value = monthly revenue × margin ÷ monthly churn. Value saved = chance of leaving × churn cut × lifetime value.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ASSISTANT -->
       <div class="tpanel" role="tabpanel" id="p-ask" aria-labelledby="tab-ask" hidden>
         <div class="ask-grid">
@@ -1170,7 +1830,217 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
           </div>
         </div>
       </div>
+      <div class="c-status" id="cStatus"></div>
     </div>
+  </div>
+</section>
+
+<section class="sec" id="challenge">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Challenge 1 · right-time engagement</div>
+      <h2>Reach every customer at the right moment</h2>
+      <p class="lede">Telecom companies often reach customers at the wrong moment and miss chances to keep them, sell them more and make them happier. The challenge: an AI solution that predicts the best time to contact each customer from behavioral, transactional and contextual data, so engagement goes up and churn goes down, without ever becoming intrusive. Students, analysts and operators can all work on it, and the prototype below solves it end to end.</p>
+    </div>
+    <div class="ch-grid">
+      <article class="ch-card"><span class="label">01 · Challenge summary</span><h3>Right moment, right channel, right reason</h3><p class="small">Predict the optimal time and channel to contact each customer for retention, upsell or service, and turn it into a contact strategy that maximizes engagement and minimizes churn.</p><p class="small"><b>Why it matters:</b> a well-timed contact gets answered; a badly timed one is ignored, annoys the customer, or pushes them toward a rival.</p></article>
+      <article class="ch-card"><span class="label">02 · Problem background</span><h3>Fixed schedules ignore real lives</h3><p class="small">Customer engagement drives loyalty and revenue in telecom. Traditional outreach relies on fixed schedules or generic triggers and ignores individual preferences and real-time context. As digital interactions grow, so does the need for personal, timely outreach.</p><p class="small">It answers the industry shift toward hyper-personalization and data-driven decisions, to improve customer experience and reduce churn.</p></article>
+      <article class="ch-card"><span class="label">03 · Stakeholders</span><h3>Who it affects and who solves it</h3><ul class="cxl"><li><b>Customer experience &amp; retention teams</b>: save offers and care</li><li><b>Marketing &amp; sales</b>: campaigns, upsell, channel mix</li><li><b>Consumer analytics</b>: model, monitoring, experiments</li><li><b>Customers</b>: fewer, better-timed contacts, easy opt-out</li><li><b>Regulatory &amp; compliance bodies</b>: consent, privacy, marketing rules</li></ul><a class="small" href="#departments">See these departments and their teams →</a></article>
+      <article class="ch-card"><span class="label">04 · Constraints &amp; limitations</span><h3>Built in, not bolted on</h3><ul class="cxl"><li><b>Anonymized or tokenized data only.</b> The studio uses random tokens such as C-1A2B3C; no names, numbers or message content.</li><li><b>Privacy and telecom rules.</b> Consent per channel, quiet hours (calls and SMS 08:00–21:00) and opt-outs are enforced in code.</li><li><b>No intrusive or spam-like contact.</b> At most 2 marketing contacts a week, and none after a complaint or during an outage.</li></ul></article>
+      <article class="ch-card"><span class="label">05 · Confidentiality</span><h3>Handled as highly confidential</h3><ul class="cxl"><li>All operator data is treated as highly confidential and never leaves the operator’s environment in production.</li><li>Legal, ethical and cultural guidelines are respected, including configurable rest days (Sat–Sun or Fri–Sat) and a Ramadan schedule.</li><li>This page uses synthetic data only.</li></ul></article>
+      <article class="ch-card deliv"><span class="label">06 · Expected deliverables</span><h3>All four delivered, plus a pilot plan</h3><ul class="dl-list">
+        <li><i aria-hidden="true">✓</i><span><b>AI model for optimal contact times</b>: logistic regression on 28 features, trained in your browser on synthetic contacts</span></li>
+        <li><i aria-hidden="true">✓</i><span><b>Prototype dashboard</b>: the right-time engagement studio below</span></li>
+        <li><i aria-hidden="true">✓</i><span><b>Presentation of methodology, findings and business impact</b>: the 8-slide deck below the studio, also downloadable</span></li>
+        <li><i aria-hidden="true">✓</i><span><b>Technical report</b>: data sources, modeling approach and evaluation metrics</span></li></ul>
+        <button class="btn sm accent" type="button" data-rtreport>Download technical report</button></article>
+    </div>
+
+    <div class="solve">
+      <div class="label-row"><span class="label">How we solved the challenge · problem by problem</span><span class="tiny muted">Results update live from the studio below</span></div>
+      <div class="table-scroll"><table class="t solve-t" id="chSolve"></table></div>
+    </div>
+
+    <div class="console rt-app" id="rtApp">
+      <div class="c-bar">
+        <div class="c-id"><span class="c-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16 9v7.5l5 3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M26.5 6.5l2-2M5.5 6.5l-2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".6"/></svg></span><div><div class="c-title">Right-time engagement studio</div><div class="c-sub">Synthetic, tokenized customers · model trained in your browser · <span id="rtSeed">loading…</span></div></div></div>
+        <div class="c-right"><span class="pill sim">Synthetic data</span><button class="btn sm" id="rtRetrain" type="button">Retrain on a new sample</button><button class="btn sm" id="rtPlan" type="button">Download contact plan (CSV)</button><button class="btn sm accent" id="rtReport" type="button">Download technical report</button></div>
+      </div>
+      <div class="rt-ctl">
+        <label class="rt-f"><span class="label">Customer (token)</span><select id="rtCust" class="mini"></select></label>
+        <div class="rt-f"><span class="label">Channel</span><div class="seg-btns" id="rtCh" role="group" aria-label="Channel"></div></div>
+        <div class="rt-f"><span class="label">Goal</span><div class="seg-btns" id="rtGoal" role="group" aria-label="Goal"></div></div>
+        <fieldset class="rt-f rt-ctx"><legend class="label">Context</legend>
+          <label><input type="checkbox" id="rtOutage"> Outage in area today</label>
+          <label><input type="checkbox" id="rtBill"> Bill due within 3 days</label>
+          <label><input type="checkbox" id="rtRoam"> Roaming now</label>
+          <label><input type="checkbox" id="rtRam"> Ramadan schedule</label>
+          <label>Rest days <select id="rtWknd" class="mini"><option value="ss">Sat–Sun</option><option value="fs">Fri–Sat</option></select></label>
+        </fieldset>
+      </div>
+      <div class="tpanel">
+        <div class="rt-grid">
+          <div class="box"><div class="box-h"><span><b>Engagement heatmap</b> · predicted chance of engaging by day and hour</span><span id="rtHmNote"></span></div>
+            <div class="rt-hm"><svg id="rtHeat" class="rt-heat" role="img" aria-label="Heatmap of predicted engagement by day and hour; hatched cells are blocked by guardrails"></svg>
+              <div class="rt-legend tiny"><span>0%</span><i class="rt-ramp" aria-hidden="true"></i><span>50%+</span><span><i class="rt-hatch" aria-hidden="true"></i>blocked by a guardrail</span><span><i class="rt-bk" aria-hidden="true"></i>best slot</span></div></div></div>
+          <div class="side"><div class="box" id="rtRec"></div><div class="box" id="rtProfile"></div></div>
+        </div>
+        <div class="rt-grid2"><div class="box" id="rtEval"></div><div class="box" id="rtImpact"></div></div>
+        <div class="box" id="rtQueue"></div>
+        <div class="rt-grid2" style="margin:14px 0 0">
+          <div class="box" id="rtFair"></div>
+          <div class="box" id="rtPilot">
+            <div class="box-h"><span><b>Pilot planner</b> · A/B test before launch</span><span>5% significance</span></div>
+            <div class="wb-body">
+              <div class="ue-sliders">
+                <div class="ue-sl"><label for="plUp">Smallest engagement uplift worth detecting</label><output id="o-plUp" for="plUp"></output><input type="range" id="plUp" min="5" max="60" step="5" value="15"></div>
+                <div class="ue-sl"><label for="plDaily">Contacts a day per group</label><output id="o-plDaily" for="plDaily"></output><input type="range" id="plDaily" min="500" max="20000" step="500" value="2000"></div>
+              </div>
+              <div class="rt-f"><span class="label">Power</span><div class="seg-btns" id="plPw" role="group" aria-label="Statistical power"><button type="button" data-p="0.8" aria-pressed="true">80%</button><button type="button" data-p="0.9" aria-pressed="false">90%</button></div></div>
+              <div class="ue-out" id="rtPilotOut" aria-live="polite"></div>
+              <div class="rt-two"><div><span class="label">Success metrics</span><ul class="cxl"><li>Engagement rate</li><li>Accepted offers and saves</li><li>Churn over 90 days</li></ul></div><div><span class="label">Guardrail metrics</span><ul class="cxl"><li>Opt-outs and complaints</li><li>Contacts per customer</li><li>Stop if either guardrail rises 20% vs control</li></ul></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="c-status"><span><i class="dot"></i>Tokenized IDs only</span><span>No names, numbers or message content</span><span>Guardrails run before any score is used</span><span>Data: synthetic</span></div>
+    </div>
+
+    <div class="deck-wrap">
+      <div class="deck-head"><div><span class="label">Deliverable · presentation</span><h3>Methodology, findings and business impact in 8 slides</h3><p class="small muted">Numbers update live from the studio above. Use the arrow keys to move between slides.</p></div>
+        <div class="row-btns"><button class="btn sm" id="deckFs" type="button">Present full screen</button><button class="btn sm accent" id="deckDl" type="button">Download presentation (.md)</button></div></div>
+      <div class="console deck" id="deck" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Findings presentation">
+        <div class="deck-stage" id="deckStage" aria-live="polite"><p class="small muted" style="padding:24px">The slides load with the studio.</p></div>
+        <div class="deck-nav"><button class="btn sm" id="deckPrev" type="button" aria-label="Previous slide">←</button><div class="deck-dots" id="deckDots"></div><span class="mono tiny" id="deckNum"></span><button class="btn sm" id="deckNext" type="button" aria-label="Next slide">→</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="challenge2">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Challenge 2 · central market intelligence</div>
+      <h2>One AI-powered intelligence platform for a whole telecom group</h2>
+      <p class="lede">Large telecom groups such as e&amp; and their peers hold market intelligence in regional databases, vendor subscriptions, spreadsheets and public sources. The challenge: one central AI platform that automates collection, monitors competitors and delivers timely insights and recommended actions to every business unit, securely. This is the problem Cellvoyant was built for. Here is how each requirement is met.</p>
+      <p class="tiny muted">Challenge brief as provided. Cellvoyant is independent and is not affiliated with or endorsed by e&amp; or any operator named on this page.</p>
+    </div>
+    <div class="ch-grid">
+      <article class="ch-card"><span class="label">01 · Challenge summary</span><h3>No single place for market intelligence</h3><p class="small">Groups lack a centralized, AI-powered platform to automate market data collection, monitor competitor activity and deliver timely insights and recommended actions across business units.</p></article>
+      <article class="ch-card"><span class="label">02 · Main challenges</span><h3>Four gaps to close</h3><ul class="cxl"><li><b>Fragmented data</b> across databases, subscriptions, spreadsheets and public sources</li><li><b>Manual processes</b> for competitor, regulatory and financial updates</li><li><b>Delayed insights</b> from manual reporting</li><li><b>Limited analytics</b>: no semantic search, trends or signal detection</li></ul></article>
+      <article class="ch-card"><span class="label">03 · Data collection</span><h3>Sources to connect</h3><ul class="cxl"><li>Competitor websites, mobile apps and official social channels</li><li>App Store and Google Play ratings, reviews and indicators</li><li>Government, central bank, ministry and statistics sources</li><li>Regulators, trusted business media and licensed research</li></ul></article>
+      <article class="ch-card"><span class="label">04 · Technical challenges</span><h3>What the engine must do</h3><ul class="cxl"><li>Reliable connectors for structured and unstructured sources</li><li>Arabic, English, Chinese and more: sentiment and summaries</li><li>Link announcements, site changes and app updates</li><li>Search, alerts, dashboards and evidence-based actions</li><li>Refresh each source at the right frequency for its cost</li></ul></article>
+      <article class="ch-card"><span class="label">05 · Access, compliance &amp; security</span><h3>Safe by design</h3><ul class="cxl"><li>Respect site restrictions, access controls and terms</li><li>Licensed content through authorized accounts and APIs</li><li>Social media API limits</li><li>Confidential data and privacy</li><li>Secure access across UAE and international consumer divisions</li></ul></article>
+      <article class="ch-card deliv"><span class="label">06 · What we delivered</span><h3>All 18 requirements mapped</h3><ul class="dl-list"><li><i aria-hidden="true">✓</i><span><b>Market intelligence hub</b> with 4 views: sources, multilingual desk, search &amp; trends, access</span></li><li><i aria-hidden="true">✓</i><span><b>Solution map</b> below, with the status of each requirement</span></li><li><i aria-hidden="true">✓</i><span><b>Extra improvements</b> beyond the brief</span></li><li><i aria-hidden="true">✓</i><span><b>Production upgrade plan</b> for a real deployment</span></li></ul></article>
+    </div>
+
+    <div class="solve">
+      <div class="label-row"><span class="label">How we solved the challenge · requirement by requirement</span><span class="tiny muted"><span class="stc st-live">Live</span> works on this page · <span class="stc st-proto">Prototype</span> simulated feeds · <span class="stc st-prod">Production step</span> needs a real deployment</span></div>
+      <div class="table-scroll"><table class="t solve-t"><thead><tr><th scope="col">Requirement</th><th scope="col">How we solved it</th><th scope="col">Where to see it</th><th scope="col">Status</th></tr></thead><tbody><tr class="grp"><th colspan="4" scope="colgroup">Main challenges</th></tr><tr><th scope="row">Fragmented data<span class="tiny muted">Regional databases, vendor subscriptions, spreadsheets and public sources</span></th><td>One source registry and a unified knowledge base: 14 source types, including internal databases and vendor feeds, linked into one timeline per competitor</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Manual processes<span class="tiny muted">Analysts collect competitor, regulatory and financial updates by hand</span></th><td>Automated connectors on a planned refresh schedule; the AI assistant writes briefs and battlecards; the workspace turns signals into owned tasks</td><td><a href="#miApp">Hub › Sources · AI assistant</a></td><td><span class="stc st-proto">Prototype</span></td></tr><tr><th scope="row">Delayed insights<span class="tiny muted">Manual reporting limits proactive response</span></th><td>Real-time feed ranked by impact × confidence × freshness, act-by times, alert rules and routing to the right department</td><td><a href="#app">Console › Command center</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Limited advanced analytics<span class="tiny muted">No semantic search, trend detection or historical retrieval</span></th><td>Multilingual concept search across signals, operators, companies, deals and documents; emerging-signal detection; linked stories</td><td><a href="#miApp">Hub › Search & trends</a></td><td><span class="stc st-live">Live</span></td></tr></tbody><tbody><tr class="grp"><th colspan="4" scope="colgroup">Data collection</th></tr><tr><th scope="row">Competitor websites, apps and social<span class="tiny muted">Official channels of every competitor</span></th><td>Polite crawler with change detection, app listing monitor and official social APIs within rate limits</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-proto">Prototype</span></td></tr><tr><th scope="row">App Store and Google Play<span class="tiny muted">Ratings, reviews and performance indicators</span></th><td>Official developer APIs for your own apps, a licensed app-intelligence feed for competitors, and review sentiment in Arabic, English and Chinese</td><td><a href="#miApp">Hub › Sources · Desk</a></td><td><span class="stc st-proto">Prototype</span></td></tr><tr><th scope="row">Government and statistics<span class="tiny muted">Government, central bank, ministry and national statistics</span></th><td>Open-data APIs and publication monitors, e.g. Central Bank of the UAE, UAE FCSC and Saudi GASTAT</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-proto">Prototype</span></td></tr><tr><th scope="row">Regulators, media, research<span class="tiny muted">Regulatory announcements, trusted business media, licensed research</span></th><td>Regulator monitors (e.g. TDRA, CST), a licensed news API, and authorized research accounts with credentials kept in a vault</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-proto">Prototype</span></td></tr></tbody><tbody><tr class="grp"><th colspan="4" scope="colgroup">Technical</th></tr><tr><th scope="row">Reliable connectors<span class="tiny muted">Structured and unstructured sources</span></th><td>Each source has a connector type, format, reliability score and a minimum safe interval</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Many languages<span class="tiny muted">Arabic, English, Chinese and others; sentiment; long-report summaries</span></th><td>Language detection, sentiment and extractive summaries built in; Claude translates and writes abstractive summaries when available</td><td><a href="#miApp">Hub › Multilingual desk</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Unified knowledge base<span class="tiny muted">Connect announcements, website changes and app updates</span></th><td>Events are linked per competitor into stories; evidence chains and signal fusion in the Move predictor</td><td><a href="#miApp">Hub › Search & trends · Move predictor</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Search, alerts, dashboards, actions<span class="tiny muted">Searchable intelligence and evidence-based recommendations</span></th><td>Search, alert rules, department lens and role views, recommended plays and war-room simulations</td><td><a href="#app">Hub · Console</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Refresh frequencies<span class="tiny muted">Balance timeliness, reliability and cost</span></th><td>The planner sets each interval from the signal’s half-life, rate limits and a monthly budget, maximizing reliability-weighted freshness</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-live">Live</span></td></tr></tbody><tbody><tr class="grp"><th colspan="4" scope="colgroup">Access, compliance & security</th></tr><tr><th scope="row">Website restrictions<span class="tiny muted">Access controls and terms of service</span></th><td>robots.txt and crawl-delay honored, terms reviewed per source, no login-protected areas without authorization</td><td><a href="#miApp">Hub › Sources (compliance rule)</a></td><td><span class="stc st-live">Built-in policy</span></td></tr><tr><th scope="row">Licensed content<span class="tiny muted">Authorized accounts, APIs and credentials</span></th><td>Credentials in a server-side vault, never in the browser; use limited to licensed seats and territories</td><td><a href="#miApp">Hub › Access</a></td><td><span class="stc st-prod">Production step</span></td></tr><tr><th scope="row">Social API limits<span class="tiny muted">Restrictions and rate limits</span></th><td>Minimum intervals per platform and rate-limit budgets built into the planner</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Confidentiality and privacy<span class="tiny muted">Protect confidential information</span></th><td>Data classes (public, licensed, internal, customer), tokenized customer data, masking and UAE data residency</td><td><a href="#miApp">Hub › Access</a></td><td><span class="stc st-prod">Production step</span></td></tr><tr><th scope="row">Secure access across divisions<span class="tiny muted">UAE consumer, international consumer and other units</span></th><td>Role and business-unit access matrix; search filtered by access level; every query and export logged</td><td><a href="#miApp">Hub › Access · Search</a></td><td><span class="stc st-live">Live</span></td></tr></tbody></table></div>
+    </div>
+
+    <div class="console mi-app" id="miApp">
+      <div class="c-bar">
+        <div class="c-id"><span class="c-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="4.5" fill="currentColor"/><circle cx="6" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="26" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="24" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="26" cy="24" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 9.8l4 3.6M23.5 9.8l-4 3.6M8.5 22.2l4-3.6M23.5 22.2l-4-3.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div><div class="c-title">Market intelligence hub</div><div class="c-sub">Source catalogue and controls are real designs · feeds and documents are simulated</div></div></div>
+        <div class="c-right"><label class="lens"><span class="label">View as</span><select id="miRole" class="mini" aria-label="View as role"></select></label><span class="pill sim">Simulated feeds</span></div>
+      </div>
+      <div class="tabs" id="miTabs" role="tablist" aria-label="Hub views">
+        <button class="tab" role="tab" id="mt-src" data-p="src" aria-controls="mi-src" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Sources &amp; refresh</button>
+        <button class="tab" role="tab" id="mt-desk" data-p="desk" aria-controls="mi-desk" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h9M8.5 3v2M6 5c0 4 3 7 6 8M11 5c-1 4-4 7-7 8M13 21l4-9 4 9M14.5 18h5"/></svg>Multilingual desk</button>
+        <button class="tab" role="tab" id="mt-search" data-p="search" aria-controls="mi-search" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>Search &amp; trends</button>
+        <button class="tab" role="tab" id="mt-acc" data-p="acc" aria-controls="mi-acc" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>Access &amp; security</button>
+      </div>
+      <div class="tpanel" role="tabpanel" id="mi-src" aria-labelledby="mt-src">
+        <div class="ue-sliders mi-sl">
+          <div class="ue-sl"><label for="miTarget">Refresh each source at this share of its signal half-life</label><output id="o-miTarget" for="miTarget"></output><input type="range" id="miTarget" min="5" max="100" step="5" value="25"></div>
+          <div class="ue-sl"><label for="miBudget">Monthly collection budget</label><output id="o-miBudget" for="miBudget"></output><input type="range" id="miBudget" min="200" max="6000" step="100" value="2000"></div>
+        </div>
+        <div class="ue-out mi-sum" id="miSrcSum" aria-live="polite"></div>
+        <div class="tbl-wrap"><table class="wb-table mi-src-t" id="miSrcTable"></table></div>
+        <p class="tiny muted">Interval = a share of the signal’s half-life, never faster than the source’s rate-limit or terms floor. Over budget, the planner stretches the intervals that lose the least freshness per dollar. Unit costs are illustrative.</p>
+      </div>
+      <div class="tpanel" role="tabpanel" id="mi-desk" aria-labelledby="mt-desk" hidden>
+        <div class="mi-desk">
+          <div class="box"><div class="box-h"><span><b>Text</b> · any language</span></div><div class="wb-body">
+            <div class="chips" id="miSamples"></div>
+            <label class="sr" for="miText">Text to analyze</label><textarea id="miText" rows="8" dir="auto"></textarea>
+            <div class="row-btns"><button class="btn sm accent" id="miAnalyze" type="button">Analyze</button><button class="btn sm" id="miAsk" type="button">Translate &amp; summarize with Claude</button></div>
+            <div class="ws-row"><label class="small" for="miCls">Classify as</label><select id="miCls" class="mini"><option value="public">Public</option><option value="licensed">Licensed</option><option value="internal-uae">Internal: UAE consumer</option><option value="internal-intl">Internal: international consumer</option></select><button class="btn sm" id="miAdd" type="button">Add to knowledge base</button></div>
+          </div></div>
+          <div class="box"><div class="box-h"><span><b>Analysis</b> · built in</span></div><div class="wb-body" id="miOut" aria-live="polite"></div><div class="wb-body" id="miAi" style="padding-top:0"></div></div>
+        </div>
+      </div>
+      <div class="tpanel" role="tabpanel" id="mi-search" aria-labelledby="mt-search" hidden>
+        <div class="mi-search">
+          <div class="box"><div class="box-h"><span><b>Search the knowledge base</b> · any language</span><span id="miRoleNote"></span></div><div class="wb-body">
+            <div class="mi-qrow"><label class="sr" for="miQ">Search</label><input class="inp" id="miQ" type="search" dir="auto" autocomplete="off" placeholder="Search signals, operators, deals, sources, documents…"><label class="sr" for="miType">Result type</label><select id="miType" class="mini"><option value="all">All types</option><option>Signal</option><option>Operator</option><option>Company</option><option>Deal</option><option>Source</option><option>Document</option><option>Resource</option><option>Playbook</option><option>Glossary</option></select></div>
+            <div class="chips" id="miQuick"><button type="button" class="chip hl" data-q="price cut">price cut</button><button type="button" class="chip hl" data-q="e&amp;">e&amp;</button><button type="button" class="chip hl" data-q="أسعار" lang="ar">أسعار</button><button type="button" class="chip hl" data-q="网速" lang="zh">网速</button><button type="button" class="chip hl" data-q="private equity">private equity</button><button type="button" class="chip hl" data-q="spectrum consultation">spectrum consultation</button><button type="button" class="chip hl" data-q="pricing outlook">pricing outlook</button></div>
+            <div id="miResults" class="mi-results"></div>
+          </div></div>
+          <div class="side">
+            <div class="box"><div class="box-h"><span><b>Emerging signals</b> · last 12 h vs before</span></div><div class="wb-body"><div class="dk-key tiny"><span><i style="background:var(--line-strong)"></i>Earlier, per 12 h</span><span><i style="background:var(--accent)"></i>Last 12 h</span><span><i style="background:var(--signal)"></i>Rising</span></div><div id="miTrends"></div></div></div>
+            <div class="box"><div class="box-h"><span><b>Linked stories</b> · related events per competitor</span></div><div class="wb-body" id="miStories"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="tpanel" role="tabpanel" id="mi-acc" aria-labelledby="mt-acc" hidden>
+        <div class="tbl-wrap"><table class="wb-table mi-matrix" id="miMatrix"></table></div>
+        <div class="mi-controls">
+          <div><b>Identity</b><span>Single sign-on with multi-factor authentication; roles and business units come from the group directory.</span></div>
+          <div><b>Least privilege</b><span>Role and business-unit rules, row-level security by market, and masking of sensitive fields.</span></div>
+          <div><b>Licensed content</b><span>Credentials in a server-side vault, never in the browser; use limited to licensed seats and territories.</span></div>
+          <div><b>Privacy</b><span>Tokenized customer data, data minimization and hosting in a UAE region.</span></div>
+          <div><b>Audit</b><span>Every search, view and export is logged; exports are checked for confidential data.</span></div>
+          <div><b>Collection compliance</b><span>robots.txt, terms of service and rate limits respected; the source of every item is recorded.</span></div>
+        </div>
+        <p class="tiny muted">Change “View as” at the top, then search: results are filtered by that role’s access level.</p>
+      </div>
+      <div class="c-status"><span><i class="dot"></i>14 source types</span><span>Arabic · English · Chinese and more</span><span>Role-based access</span><span>Feeds simulated; source catalogue real</span></div>
+    </div>
+
+    <div class="mi-more">
+      <div class="panel"><span class="label">Extra improvements beyond the brief</span><ul class="cxl">
+        <li>Right-time customer engagement engine (Challenge 1)</li><li>Department lens: 9 departments, 36 teams, act-by routing</li><li>Operator workspace with shift handover</li><li>Analyst workbench: 108 real operators benchmarked</li><li>Capital radar with private-equity, hedge-fund and state ownership</li><li>War-room simulation of rival price moves</li><li>Academy (12 workshops) and resources library</li><li>Grounded AI with competition-law guardrails, plus a patent draft</li></ul></div>
+      <div class="panel"><span class="label">Upgrades needed for a production deployment</span><ol class="cxl">
+        <li><b>Real connectors:</b> build and legally review each one; sign media, research and app-intelligence licences</li>
+        <li><b>Identity:</b> single sign-on and directory groups for each division</li>
+        <li><b>Security:</b> encryption, secrets vault, audit logs, penetration test, ISO 27001-aligned controls</li>
+        <li><b>Data residency:</b> UAE hosting; each division’s confidential data in its own tenant</li>
+        <li><b>Language models:</b> production Arabic (including Gulf dialects), Chinese and other languages, tested on real samples</li>
+        <li><b>Search at scale:</b> vector embeddings plus keyword index over millions of documents, always with citations</li>
+        <li><b>Operations:</b> source health, freshness targets, cost tracking and human review of critical alerts</li></ol></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="academy">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Cellvoyant Academy</div>
+      <h2>Workshops for operators, analysts and executives</h2>
+      <p class="lede">Hands-on sessions built on the console and the real market data on this page. Each one ends with something your team can use the next day. Seat requests go into the same queue as the console’s services.</p>
+    </div>
+    <ol class="path" aria-label="Learning path">
+      <li><span class="label">Step 1 · Foundation</span><b>Competitive signals 101</b><span>Plus the AI analyst copilot bootcamp</span></li>
+      <li><span class="label">Step 2 · Practitioner</span><b>Tariff, churn, network and capital labs</b><span>One lab per department</span></li>
+      <li><span class="label">Step 3 · Advanced</span><b>War game, foresight studio, spectrum simulation</b><span>Cross-team strategy sessions</span></li>
+      <li><span class="label">Step 4 · Certification</span><b>Cellvoyant certified analyst</b><span>Six-week cohort with a capstone brief</span></li>
+    </ol>
+    <div class="ws-bar"><span class="label">Show workshops for</span><div class="seg-btns" id="wsAud" role="group" aria-label="Audience"><button type="button" data-a="all" aria-pressed="true">Everyone</button><button type="button" data-a="op" aria-pressed="false">Operators</button><button type="button" data-a="an" aria-pressed="false">Analysts</button><button type="button" data-a="ex" aria-pressed="false">Executives</button></div></div>
+    <div class="ws-grid" id="wsGrid"></div>
+    <p class="tiny muted">Workshops use public and simulated data and follow competition law: no confidential information is shared between competitors. Dates, format and price are confirmed after a request.</p>
+  </div>
+</section>
+
+<section class="sec band" id="resources">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Resources &amp; tools</div>
+      <h2>Templates, playbooks, tools and trusted sources</h2>
+      <p class="lede">Everything an operator or analyst needs next to the console: download a template, follow a playbook, open a tool, or go straight to the regulator or data source.</p>
+    </div>
+    <div class="res-bar"><label class="sr" for="resQ">Search resources</label><input class="inp" id="resQ" type="search" autocomplete="off" placeholder="Search templates, tools, regulators, terms…"><div class="filters" id="resCats" role="group" aria-label="Resource type"></div></div>
+    <div id="resGrid"></div>
   </div>
 </section>
 
@@ -1178,8 +2048,8 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Innovation lab</div>
-      <h2>31 tools, engines, services and guardrails</h2>
-      <p class="lede">Ten of them already run in the console above (filter by <b>Live now</b>). This is the full set Cellvoyant is designed to grow into, each tied to a specific telecom problem. Items marked <span class="badge core">Patent core</span> carry the inventive steps claimed in the draft below.</p>
+      <h2>41 tools, engines, services and guardrails</h2>
+      <p class="lede">Nineteen of them already run on this page (filter by <b>Live now</b>). This is the full set Cellvoyant is designed to grow into, each tied to a specific telecom problem. Items marked <span class="badge core">Patent core</span> carry the inventive steps claimed in the draft below.</p>
     </div>
     <div class="filters" id="labFilters" role="group" aria-label="Filter innovations"></div>
     <div class="lab" id="labGrid"></div>
@@ -1214,7 +2084,7 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
           <p class="small" style="color:var(--ink-2)">Software claims that look like "analyzing data" can be rejected as abstract ideas (35 U.S.C. §101 / <i>Alice</i>; in Europe, the "technical character" test). So each independent claim is tied to specific technical steps: dependence-adjusted fusion that reduces false alerts, decay-bounded routing latency, and event-triggered simulation that saves compute. <a href="#src-36">[36]</a> <a href="#src-37">[37]</a> <a href="#src-38">[38]</a></p>
         </div>
         <nav class="toc" aria-label="Patent sections">
-          <a href="#pt-field">Field</a><a href="#pt-bg">Background</a><a href="#pt-sum">Summary</a><a href="#pt-fig">Drawings</a><a href="#pt-det">Detailed description</a><a href="#pt-claims">Claims (20)</a><a href="#pt-abs">Abstract</a><a href="#pt-prior">Prior-art positioning</a>
+          <a href="#pt-field">Field</a><a href="#pt-bg">Background</a><a href="#pt-sum">Summary</a><a href="#pt-fig">Drawings</a><a href="#pt-det">Detailed description</a><a href="#pt-claimmap">Claims at a glance</a><a href="#pt-claims">Claims (20)</a><a href="#pt-abs">Abstract</a><a href="#pt-prior">Prior-art positioning</a>
         </nav>
       </aside>
 
@@ -1317,6 +2187,37 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
         <div class="para"><span>[0028]</span><p><b>Technical effects.</b> The dependence discount reduces false-positive alerts compared with independent-evidence fusion. Decay-bounded routing puts an upper bound on delivery latency for short-lived insights. Event-triggered simulation reduces processor time compared with continuous scenario modeling across all operators and action classes.</p></div>
         <div class="para"><span>[0029]</span><p><b>Alternatives.</b> The fusion may instead use a learned model such as gradient-boosted trees or a graph neural network over graph 130, provided dependence between signals is accounted for. The decay function may be non-exponential. The simulation may be agent-based, system-dynamics or a learned surrogate model. The techniques also apply to adjacent regulated network industries such as energy retail and pay-TV.</p></div>
 
+        <h4 id="pt-claimmap">Claims at a glance</h4>
+        <p class="small" style="margin-bottom:10px">A plain-English map of the 20 claims and where each one runs on this page. The legal wording below is what counts.</p>
+        <div class="table-scroll" style="font-family:var(--f-body)">
+          <table class="t claim-t" id="claimMap">
+            <thead><tr><th scope="col">Claim</th><th scope="col">Type</th><th scope="col">What it protects</th><th scope="col">Live on this page</th></tr></thead>
+            <tbody>
+              <tr class="ind-row"><td class="mono">1</td><td><b>Independent · method</b></td><td>The core loop: collect signals from many sources, link them in a time-aware knowledge graph, fuse them into a probability and time window for each rival move (discounting repeated evidence), rank by a half-life, simulate responses and route to the right role before the insight goes stale.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-cc">Command center</button><button type="button" class="chip hl" data-go="tab-pred">Move predictor</button><button type="button" class="chip hl" data-go="tab-war">War room</button></div></td></tr>
+              <tr><td class="mono">2</td><td>Builds on claim 1</td><td>Each plan becomes a “genome” of attributes; a stealth change (fees, allowances, lock-in) is flagged when the headline price stays the same.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-dna">Tariff DNA</button></div></td></tr>
+              <tr><td class="mono">3</td><td>Builds on claim 2</td><td>The real price effect of a stealth change is estimated with hedonic regression across the market’s plans.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-dna">Tariff DNA</button></div></td></tr>
+              <tr><td class="mono">4</td><td>Builds on claim 1</td><td>The first signal from a source cluster counts fully; repeats from the same origin are discounted.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-pred">Move predictor</button></div></td></tr>
+              <tr><td class="mono">5</td><td>Builds on claim 1</td><td>Source clusters are learned from how often source types appear together historically.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-pred">Move predictor</button></div></td></tr>
+              <tr><td class="mono">6</td><td>Builds on claim 1</td><td>The “decisive signal”: the one whose removal lowers the probability most is shown with the insight.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-pred">Move predictor</button></div></td></tr>
+              <tr><td class="mono">7</td><td>Builds on claim 1</td><td>The time window comes from historical lead times between signal types and real moves.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-pred">Move predictor</button></div></td></tr>
+              <tr><td class="mono">8</td><td>Builds on claim 1</td><td>Source reliability is updated from real outcomes using a proper scoring rule.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-cc">Evidence chain</button></div></td></tr>
+              <tr><td class="mono">9</td><td>Builds on claim 1</td><td>Responses include a full match, partial match, non-price perk and a targeted retention offer, each simulated for at least two response delays.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-war">War room</button></div></td></tr>
+              <tr><td class="mono">10</td><td>Builds on claim 1</td><td>The subscriber model splits customers by eSIM readiness and measured network experience in their area.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-war">War room</button></div></td></tr>
+              <tr><td class="mono">11</td><td>Builds on claim 1</td><td>Grounded AI explanations: every sentence must cite a signal, and unsupported sentences are removed.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-ask">AI assistant</button></div></td></tr>
+              <tr><td class="mono">12</td><td>Builds on claim 1</td><td>A collaboration room is created automatically for critical insights, pre-filled with evidence, options and owners.</td><td><div class="chips"><span class="small muted">Decision Rooms (service)</span></div></td></tr>
+              <tr><td class="mono">13</td><td>Builds on claim 1</td><td>Measured speeds per hexagonal cell are compared with an operator’s published coverage to flag false coverage claims.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-geo">Geo radar</button></div></td></tr>
+              <tr><td class="mono">14</td><td>Builds on claim 1</td><td>Reports from frontline retail staff are weighted by each reporter’s track record.</td><td><div class="chips"><span class="small muted">Voice-of-Store bot (service)</span></div></td></tr>
+              <tr><td class="mono">15</td><td>Builds on claim 1</td><td>Benchmarks are released only as aggregates from enough operators after a time lag, never with forward-looking prices.</td><td><div class="chips"><span class="small muted">Benchmark Consortium (service)</span></div></td></tr>
+              <tr class="ind-row"><td class="mono">16</td><td><b>Independent · system</b></td><td>The same method as a computer system.</td><td><div class="chips">—</div></td></tr>
+              <tr><td class="mono">17</td><td>Builds on claim 16</td><td>The system plus the tariff genome of claim 2.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-dna">Tariff DNA</button></div></td></tr>
+              <tr><td class="mono">18</td><td>Builds on claim 16</td><td>Back-testing: querying the knowledge graph as of a past date to check predictions against what happened.</td><td><div class="chips"><span class="small muted">Roadmap · H1 2027</span></div></td></tr>
+              <tr class="ind-row"><td class="mono">19</td><td><b>Independent · storage medium</b></td><td>The same method as software stored on a computer-readable medium.</td><td><div class="chips">—</div></td></tr>
+              <tr><td class="mono">20</td><td>Builds on claim 19</td><td>The stored software plus the grounded explanations of claim 11.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-ask">AI assistant</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note" style="margin:10px 0 18px"><b>Not yet claimed:</b> the right-time engagement engine (contact-time prediction limited by consent, quiet-hour, cap and cooling-off rules) and the department lens with act-by routing. Ask your patent attorney whether to add claims for them before filing.</p>
+
         <h4 id="pt-claims">Claims</h4>
         <p style="margin-bottom:12px">What is claimed is:</p>
         <ul class="claims">
@@ -1400,7 +2301,7 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
         <ul><li>Cross-country roll-ups, Spectrum Oracle</li><li>Benchmark consortium clean room</li><li>Dedicated analyst pod (4-hour verification)</li><li>Private deployment option</li></ul>
       </div>
     </div>
-    <p class="note">Other revenue: Insight API (per call), Analyst-on-Demand services, quarterly war-gaming sprints, launch-readiness audits.</p>
+    <p class="note">Other revenue: Right-time Engage module (priced per active customer scored), Insight API (per call), Analyst-on-Demand services, Academy workshops and certification, quarterly war-gaming sprints, launch-readiness audits.</p>
 
     <h3 style="margin:48px 0 16px">Go-to-market</h3>
     <div class="grid-2">
@@ -1416,7 +2317,7 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
 
     <h3 style="margin:48px 0 22px">Roadmap</h3>
     <div class="timeline">
-      <div class="phase now"><div class="when">Q4 2026 · now</div><h4>MVP in one market</h4><ul><li>Signal Mesh: 12 source types</li><li>Tariff DNA + stealth mutations</li><li>Feed, alerts, AI assistant</li><li>File provisional patent</li></ul></div>
+      <div class="phase now"><div class="when">Q4 2026 · now</div><h4>MVP in one market</h4><ul><li>Signal Mesh: 12 source types</li><li>Tariff DNA + stealth mutations</li><li>Operations console, department lens, workspace</li><li>Right-time engagement engine (pilot-ready)</li><li>Academy and resources library</li><li>File provisional patent</li></ul></div>
       <div class="phase"><div class="when">H1 2027</div><h4>Predict &amp; simulate</h4><ul><li>Move Predictor with back-testing</li><li>War Room digital twin (beta)</li><li>First 3 paying design partners</li></ul></div>
       <div class="phase"><div class="when">H2 2027</div><h4>Network &amp; B2B</h4><ul><li>Coverage Truth Engine</li><li>B2B Deal Radar</li><li>Decision Rooms, audio brief</li><li>Non-provisional / PCT filing</li></ul></div>
       <div class="phase"><div class="when">2028</div><h4>Scale</h4><ul><li>Multi-country groups</li><li>Benchmark consortium</li><li>Spectrum Auction Oracle</li><li>Insight API marketplace</li></ul></div>
@@ -1440,10 +2341,87 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
           <tr><td><b>AI errors</b>: made-up or overconfident claims</td><td>Grounded narrator with mandatory signal citations, calibrated probabilities, back-testing, and human verification for critical alerts</td></tr>
           <tr><td><b>Privacy</b>: social and first-party data</td><td>No personal data in competitive signals, aggregate before storing, GDPR/CCPA data processing agreements, customer data stays in the customer's tenant</td></tr>
           <tr><td><b>Patent eligibility</b></td><td>Claims tied to technical implementation, a professional prior-art search, and a PCT filing to keep options open</td></tr>
+          <tr><td><b>Customer contact</b>: intrusive or non-compliant outreach</td><td>Consent, quiet hours, frequency caps and cooling-off are enforced before any score is used; opt-outs are honored; pilots track opt-outs and complaints as stop rules</td></tr>
           <tr><td><b>Incumbents copy features</b></td><td>Speed of shipping, the reliability-calibration data moat, consortium network effects, and patent protection</td></tr>
         </tbody>
       </table>
     </div>
+  </div>
+</section>
+<section class="sec band" id="launch">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Launch</div>
+      <h2>Ready to launch: start with a 30-day pilot</h2>
+      <p class="lede">Cellvoyant runs next to your current process for 30 days in shadow mode. You see how much earlier it catches each competitor move, and the right-time engine is tested against your fixed schedule in a controlled A/B test.</p>
+    </div>
+    <div class="launch-grid">
+      <ol class="lsteps">
+        <li><span class="label">Week 0</span><b>Kick-off</b><span>Pick markets, rivals and departments; agree the contact policy with compliance.</span></li>
+        <li><span class="label">Weeks 1–4</span><b>Shadow mode</b><span>Signals, alerts and the workspace run next to your team; nothing changes for customers.</span></li>
+        <li><span class="label">Weeks 3–8</span><b>Right-time A/B test</b><span>Fixed schedule vs right-time on tokenized data, with opt-out and complaint guardrails.</span></li>
+        <li><span class="label">Week 8</span><b>Decision</b><span>Lead time gained, engagement and churn results, and a go/no-go for rollout.</span></li>
+      </ol>
+      <form class="panel lift pilot-form" id="pilotForm">
+        <h3>Join the pilot</h3>
+        <div class="pf-row"><label class="label" for="plOrg">Organization type</label><select id="plOrg"><option>Mobile network operator (MNO)</option><option>MVNO or digital brand</option><option>Fiber, cable or ISP</option><option>Tower, satellite or infrastructure</option><option>Analyst or consultancy</option><option>Investor (PE, infrastructure, hedge fund, sovereign)</option><option>Regulator or government</option><option>University or student team</option></select></div>
+        <div class="pf-row"><label class="label" for="plReg">Region</label><select id="plReg"><option>Gulf (GCC)</option><option>Middle East</option><option>Asia-Pacific</option><option>Europe</option><option>Africa</option><option>Americas</option><option>Global</option></select></div>
+        <fieldset class="pf-mods"><legend class="label">Modules</legend>
+          <label><input type="checkbox" name="plMod" value="Operations console" checked> Operations console</label>
+          <label><input type="checkbox" name="plMod" value="Right-time engagement"> Right-time engagement</label>
+          <label><input type="checkbox" name="plMod" value="Analyst workbench"> Analyst workbench</label>
+          <label><input type="checkbox" name="plMod" value="Academy workshops"> Academy workshops</label>
+          <label><input type="checkbox" name="plMod" value="Insight API and data feed"> Insight API and data feed</label>
+        </fieldset>
+        <div class="pf-row"><label class="label" for="plNotes">What should the pilot prove? (optional)</label><textarea id="plNotes" rows="3" maxlength="600" placeholder="e.g. catch rival price moves 2 weeks earlier in two markets"></textarea></div>
+        <p class="tiny muted">Requests are visible to everyone who can open this page, so don’t include names, phone numbers or e-mail addresses.</p>
+        <div class="ws-row"><button class="btn accent" type="submit">Request a pilot</button><span class="small" id="plMsg" aria-live="polite"></span></div>
+      </form>
+    </div>
+
+    <h3 class="res-h">Launch checklist</h3>
+    <div class="lcheck">
+      <div class="lc-col"><span class="label">Product</span>
+        <div class="lc ok"><i>✓</i><span>Operations console with 9 views, department lens, workspace and workbench</span></div>
+        <div class="lc ok"><i>✓</i><span>Right-time engagement model, studio, report, contact plan and presentation</span></div>
+        <div class="lc ok"><i>✓</i><span>AI assistant with <b id="lcTools">17</b> tools and a service desk</span></div>
+        <div class="lc ok"><i>✓</i><span>Market intelligence hub: 14 source types, multilingual desk, search and access control</span></div>
+        <div class="lc ok"><i>✓</i><span>9 departments, 36 teams, 12 workshops and a resources library</span></div></div>
+      <div class="lc-col"><span class="label">Data &amp; trust</span>
+        <div class="lc ok"><i>✓</i><span>140 companies and 108 operators with sources and check dates</span></div>
+        <div class="lc ok"><i>✓</i><span>Competition-law and customer-contact guardrails built in</span></div>
+        <div class="lc todo"><i>○</i><span><b>Refresh market data</b> on launch day (last checked 6 Oct 2026)</span></div>
+        <div class="lc todo"><i>○</i><span><b>Legal review</b> of the competition-law and privacy design</span></div></div>
+      <div class="lc-col"><span class="label">Business &amp; partners</span>
+        <div class="lc ok"><i>✓</i><span>Pricing, go-to-market, roadmap and a pilot offer</span></div>
+        <div class="lc todo"><i>○</i><span><b>File the provisional patent</b> before sharing the page widely</span></div>
+        <div class="lc todo"><i>○</i><span><b>Sponsor logos</b> and approval of how sponsor names are shown</span></div>
+        <div class="lc todo"><i>○</i><span><b>A private contact channel</b> for pilot leads (e-mail or CRM)</span></div></div>
+    </div>
+
+    <h3 class="res-h" id="faq">Frequently asked questions</h3>
+    <div class="faq">
+      <details class="panel"><summary>What is Cellvoyant?</summary><p class="small">An AI platform for telecom operators and analysts that brings market data, competitor activity and customer-engagement timing into one place, ranks what matters, predicts rivals’ next moves and simulates the best response.</p></details>
+      <details class="panel"><summary>Which data on this page is real?</summary><p class="small">The Landscape, Positioning, Capital radar and Analyst workbench use researched public data with sources and check dates. The console signals cover six fictional operators, and the right-time customers are synthetic, so no real customer appears anywhere.</p></details>
+      <details class="panel"><summary>Could it help competitors coordinate prices?</summary><p class="small">No. It uses public and licensed data only, never shares forward-looking prices, releases benchmark data only as lagged aggregates, and the assistant is barred from recommending coordination.</p></details>
+      <details class="panel"><summary>How is customer data protected in the right-time engine?</summary><p class="small">Customers are identified only by random tokens; no names, numbers or message content are needed. In production, customer data stays in the operator’s own environment.</p></details>
+      <details class="panel"><summary>Will customers get more messages?</summary><p class="small">No. The goal is fewer, better-timed contacts. Consent, quiet hours (calls and SMS 08:00–21:00), a cap of 2 marketing contacts a week and cooling-off after complaints or outages are enforced before any score is used.</p></details>
+      <details class="panel"><summary>Who is it for?</summary><p class="small">Marketing, pricing and sales; strategy; network; enterprise; regulatory; finance; customer experience; consumer analytics; and market and investment analysts. Each has its own lens in the console.</p></details>
+      <details class="panel"><summary>Which languages and sources does it handle?</summary><p class="small">Arabic, English, Chinese and other scripts are detected, scored for sentiment and summarized. The source registry covers 14 source types: competitor websites, apps and social channels, app-store reviews, government, central-bank, statistics and regulator sources, business media, licensed research, exchange filings, network tests and internal databases.</p></details>
+      <details class="panel"><summary>What does it cost?</summary><p class="small">Proposed plans start at $2,500 a month (Scout) and $12,000 a month (Operator Core), with custom group pricing. These are planning assumptions to validate with pilot customers.</p></details>
+      <details class="panel"><summary>Can we use our own data?</summary><p class="small">Yes. Operator Core joins your port-out and CRM data inside your tenant, and the Insight API pushes signals into your pricing engine, CRM or BI tools.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="sponsors">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Sponsors</div>
+      <h2>Supported by our sponsors</h2>
+      <p class="lede">Thank you to the organizations sponsoring Cellvoyant.</p>
+    </div>
+    <ul class="sponsor-grid" aria-label="Sponsors"><li><span class="wm">PAINITE</span><span class="label">Sponsor</span></li><li><span class="wm">M.A.I.I</span><span class="label">Sponsor</span></li><li><span class="wm">SPACE42</span><span class="label">Sponsor</span></li><li><span class="wm">G42 AI</span><span class="label">Sponsor</span></li><li><span class="wm">BLOOMBERG</span><span class="label">Sponsor</span></li><li><span class="wm">MC INTERNATIONAL INVESTMENTS</span><span class="label">Sponsor</span></li></ul>
   </div>
 </section>
 <section class="sec band sources" id="sources">
@@ -1513,8 +2491,8 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
 
 <footer class="foot">
   <div class="wrap">
-    <span>Cellvoyant is a concept by its author. The prototype uses simulated data for fictional operators. Research figures cite their sources below.</span>
-    <span class="mono">v0.4 · 29 Sep 2026</span>
+    <span>Cellvoyant is a concept by its author, sponsored by PAINITE, M.A.I.I, SPACE42, G42 AI, BLOOMBERG and MC INTERNATIONAL INVESTMENTS. The prototype uses simulated data for fictional operators. Research figures cite their sources below.</span>
+    <span class="mono">v1.0 launch candidate · 27 Oct 2026</span>
   </div>
 </footer>
 
@@ -1527,6 +2505,7 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
   </div>
 </div>
 <script src="landscape.js" charset="utf-8"></script>
+<script src="positioning.js" charset="utf-8"></script>
 <script src="cellvoyant.js" charset="utf-8"></script>
 </body>
 </html>
