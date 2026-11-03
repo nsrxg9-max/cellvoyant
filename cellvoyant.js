@@ -1728,7 +1728,6 @@ function initOD() {
   const sel = $('#odOp'); if (!sel || !POS) return;
   sel.innerHTML = odOps().map(c => `<option value="${esc(c.id)}">${c.id === 'e-emirates-telecom' ? 'e& UAE · special edition' : esc(c.name) + ' · ' + esc(c.country || c.region || '')}</option>`).join('');
   sel.value = OD.op;
-  if (EDITION === 'eand') sel.closest('label').hidden = true;
   document.addEventListener('click', e => { const b = e.target.closest('[data-odtab]'); if (!b) return; e.preventDefault(); OD.tab = b.dataset.odtab; odRender(); $('#operators').scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' }); });
   sel.addEventListener('change', () => { OD.op = sel.value; OD.gen = []; OD.sel = null; odRender(); });
   const tabs = $$('#odTabs [data-t]');
