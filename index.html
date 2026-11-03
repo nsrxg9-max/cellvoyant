@@ -95,6 +95,9 @@ p{margin:0}
 .nav a{font-size:13.5px;font-weight:500;color:var(--ink-2);text-decoration:none;padding:7px 11px;border-radius:999px;white-space:nowrap}
 .nav a:hover{background:var(--surface);color:var(--ink)}
 .nav a.on{background:var(--ink);color:var(--bg)}
+.nav-cta{flex:none;font-size:13.5px;font-weight:600;padding:9px 16px;border-radius:999px;background:var(--accent);color:var(--accent-ink);text-decoration:none;white-space:nowrap}
+.nav-cta:hover{filter:brightness(1.06)}
+@media (max-width:720px){.nav-cta{display:none}}
 @media (min-width:900px){.nav{mask-image:none}}
 
 /* hero */
@@ -214,6 +217,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font-size:12.5px;padding:4px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);white-space:nowrap}
 .chip.hl{background:var(--accent-soft);border-color:transparent;color:var(--ink)}
+.chips .chip{max-width:100%;white-space:normal;overflow-wrap:anywhere}
 .flow{display:flex;justify-content:center;color:var(--muted);height:14px;align-items:center}
 .flow svg{width:14px;height:14px}
 .layer.core{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
@@ -1187,6 +1191,96 @@ table.t.claim-t{min-width:560px}
 .mi-more{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
 @media (max-width:820px){.mi-more{grid-template-columns:1fr}}
 .mi-more .cxl{margin-top:10px}
+/* ===== operator desk (dark feature section) ===== */
+.op-sec{
+  --bg:#0A1118; --band:#0E161E; --surface:#0F1922; --surface-2:#15222D;
+  --ink:#E6EEF4; --ink-2:#B9C7D3; --muted:#8597A8; --line:#1F2E3C; --line-strong:#2D4254;
+  --accent:#3CCFD9; --accent-ink:#03171B; --accent-soft:#0F3237;
+  --signal:#FFB547; --signal-soft:#3A2A10; --crit:#FF6F63; --crit-soft:#3D1815; --good:#4ACF98; --good-soft:#0F3224;
+  --grid:rgba(228,236,242,.07); --cx-1:#3987e5; --cx-2:#d95926; --cx-3:#199e70;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px -16px rgba(0,0,0,.7);
+  color-scheme:dark;color:var(--ink);
+  background:radial-gradient(90% 60% at 100% 0%,rgba(60,207,217,.10),transparent 60%),linear-gradient(180deg,#0B141C,#081017)
+}
+.op-sec .sec-head h2{color:var(--ink)}
+.od-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-bottom:6px}
+.od-bar .lens{flex:1 1 280px;min-width:0}
+.od-bar select{min-width:0;width:100%;max-width:440px}
+.od-tabs{border-bottom:1px solid var(--line);margin-bottom:18px;padding:0}
+.od-body{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;min-width:0}
+.od-body > *,.od-body .panel{min-width:0}
+.od-body .panel{background:var(--surface);border-color:var(--line)}
+.od-facts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:1000px){.od-facts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.od-facts{grid-template-columns:1fr 1fr}}
+.od-facts div{border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:4px;align-content:start;background:linear-gradient(160deg,rgba(60,207,217,.08),transparent 60%),var(--surface)}
+.od-facts b{font-family:var(--f-display);font-size:clamp(22px,2.4vw,28px);font-weight:850;color:var(--accent);line-height:1.1;overflow-wrap:anywhere}
+.od-facts span{font-size:13px;color:var(--ink-2)}
+.od-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:860px){.od-two{grid-template-columns:1fr}}
+.od-swot{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:8px}
+@media (max-width:480px){.od-swot{grid-template-columns:1fr}}
+.od-swot b{font-size:13.5px;color:var(--accent)}
+.od-swot .cxl{margin-top:4px;font-size:13px}
+.od-note{border-left:3px solid var(--signal);padding:8px 12px;background:var(--signal-soft);border-radius:0 8px 8px 0}
+.od-segs,.od-hz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:980px){.od-segs,.od-hz{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media (max-width:620px){.od-segs,.od-hz{grid-template-columns:minmax(0,1fr)}}
+.od-card{border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:8px;align-content:start;background:var(--surface);min-width:0;overflow-wrap:anywhere}
+.od-card h4{font-size:17px}
+.od-card .cxl{margin-top:2px}
+.od-funnel{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+@media (max-width:900px){.od-funnel{grid-template-columns:1fr}}
+.od-funnel div{display:grid;gap:5px;align-content:start;padding:14px;background:var(--surface);border-left:1px solid var(--line)}
+.od-funnel div:first-child{border-left:0}
+@media (max-width:900px){.od-funnel div{border-left:0;border-top:1px solid var(--line)}.od-funnel div:first-child{border-top:0}}
+.od-funnel b{font-family:var(--f-display);font-size:18px}
+.od-funnel .mono{color:var(--accent)}
+.od-resp td{white-space:normal;font-family:var(--f-body)!important;vertical-align:top}
+.od-solve{display:grid;grid-template-columns:minmax(260px,.85fr) minmax(0,1.6fr);gap:14px;align-items:start}
+@media (max-width:980px){.od-solve{grid-template-columns:1fr}}
+.od-plist{display:grid;gap:6px;margin-top:8px}
+.od-plist button{appearance:none;text-align:left;font:500 13.5px/1.35 var(--f-body);color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:9px;padding:9px 11px;cursor:pointer}
+.od-plist button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.od-solve textarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:8px;padding:9px 11px;font:14px/1.45 var(--f-body);background:var(--surface-2);color:var(--ink);resize:vertical}
+.od-solve .row-btns{margin-top:10px}
+.od-sol{display:grid;gap:12px}
+.od-sol h3{font-size:20px}
+.od-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:620px){.od-three{grid-template-columns:1fr}}
+.od-three b{font-size:13.5px;color:var(--accent)}
+.od-three .cxl{margin-top:4px;font-size:13px}
+.od-opt td{white-space:normal;font-family:var(--f-body)!important;vertical-align:top}
+.od-rec{border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 12px;border-radius:0 8px 8px 0;font-size:14.5px}
+.od-plan{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (max-width:620px){.od-plan{grid-template-columns:1fr}}
+.od-plan div{border:1px solid var(--line);border-radius:9px;padding:10px;display:grid;gap:3px}
+.od-plan .mono{color:var(--accent)}
+.od-ideas{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:980px){.od-ideas{grid-template-columns:1fr}}
+.od-ibar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.od-mx{width:100%;height:auto;display:block;background:var(--surface-2);border-radius:10px}
+.od-pt{cursor:pointer;outline:none}
+.od-pt:focus-visible circle,.od-pt:focus-visible rect,.od-pt:focus-visible polygon{stroke:var(--ink);stroke-width:2}
+.od-ilist{display:grid;gap:8px;max-height:640px;overflow-y:auto;padding-right:4px}
+.od-idea{border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:5px;background:var(--surface)}
+.od-idea.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.od-ih{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.od-ih .mono{color:var(--accent);font-weight:600}
+/* ===== patent claims as tables ===== */
+table.t tr.grp th{background:var(--accent-soft);color:var(--ink);font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-align:left;padding:9px 14px}
+.claims-wrap{font-family:var(--f-body)}
+table.t.claims-t{min-width:540px;font-size:14px}
+.claims-t td{vertical-align:top;line-height:1.55}
+.claims-t td:first-child{width:56px;font-weight:600;font-size:14px}
+.claims-t td:nth-child(2){width:132px}
+.claims-t td:nth-child(2) b{display:block;font-size:13.5px}
+.claims-t td:nth-child(3){color:var(--ink-2)}
+.claims-t td:nth-child(3) b{color:var(--ink);font-weight:600}
+.claims-t tr.ind-row td{background:color-mix(in srgb,var(--accent-soft) 55%,var(--surface))}
+.claims-t ol{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:7px}
+.claims-t ol li{padding-left:12px;border-left:2px solid var(--line)}
+.claim-t tr.ind-row td{background:color-mix(in srgb,var(--accent-soft) 55%,var(--surface))}
 </style>
 
 <a class="skip" href="#top">Skip to content</a>
@@ -1201,22 +1295,15 @@ table.t.claim-t{min-width:560px}
     <nav class="nav" aria-label="Sections">
       <a href="#problem">Problem</a>
       <a href="#market">Market</a>
-      <a href="#landscape">Landscape</a>
-      <a href="#positioning">Positioning</a>
       <a href="#platform">Platform</a>
-      <a href="#departments">Departments</a>
+      <a href="#operators">Operator desk</a>
       <a href="#console">Live console</a>
-      <a href="#challenge">Challenge 1</a>
-      <a href="#challenge2">Challenge 2</a>
       <a href="#academy">Academy</a>
-      <a href="#resources">Resources</a>
-      <a href="#lab">Innovation lab</a>
+      <a href="#lab">Innovation</a>
       <a href="#patent">Patent</a>
       <a href="#business">Business</a>
-      <a href="#launch">Launch</a>
-      <a href="#sponsors">Sponsors</a>
-      <a href="#sources">Sources</a>
     </nav>
+    <a class="nav-cta" href="#launch">Join the pilot</a>
   </div>
 </header>
 
@@ -1231,7 +1318,7 @@ table.t.claim-t{min-width:560px}
         <div class="cta-row">
           <a class="btn primary" href="#console">Open the live console</a>
           <a class="btn accent" href="#launch">Join the pilot</a>
-          <a class="btn" href="#challenge">Right-time challenge</a>
+          <a class="btn" href="eand.html">e&amp; UAE edition →</a>
           <a class="btn" href="#patent">Read the patent draft</a>
         </div>
         <div class="meta-row">
@@ -1544,6 +1631,21 @@ table.t.claim-t{min-width:560px}
   </div>
 </section>
 
+<section class="sec op-sec" id="operators">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Operator desk · a department for operators</div>
+      <h2>Market, sell and win: a desk for every operator, with an e&amp; UAE edition</h2>
+      <p class="lede">Marketing plans by customer segment, a sales playbook, strategy horizons and rival-response playbooks, a studio that turns big problems into a 90-day plan, and an idea lab for new ways to attract customers. Pick any of 108 operators; e&amp; UAE has the deepest edition.</p>
+      <p class="tiny muted">Independent analysis from public sources plus Cellvoyant’s own assessment. Not affiliated with or endorsed by e&amp; or any operator named here.</p>
+      <p class="small"><a class="btn sm accent" href="eand.html">Open the full e&amp; UAE edition →</a> <span class="muted">It adds the right-time engagement and market intelligence solutions.</span></p>
+    </div>
+    <div class="od-bar"><label class="lens"><span class="label">Desk for</span><select id="odOp" class="mini" aria-label="Operator"></select></label><span class="pill sim" id="odBadge">Special edition · e&amp; UAE</span></div>
+    <div class="tabs od-tabs" id="odTabs" role="tablist" aria-label="Operator desk views"><button class="tab" role="tab" id="odt-overview" data-t="overview" aria-controls="odBody" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</button><button class="tab" role="tab" id="odt-marketing" data-t="marketing" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 001 1h3l6 4V6L7 10H4a1 1 0 00-1 1zM17 8a5 5 0 010 8"/></svg>Marketing plan</button><button class="tab" role="tab" id="odt-sales" data-t="sales" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>Sales playbook</button><button class="tab" role="tab" id="odt-strategy" data-t="strategy" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l5-7 4 4 7-11M15 6h5v5"/></svg>Strategy</button><button class="tab" role="tab" id="odt-solve" data-t="solve" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0012 3z"/></svg>Problem studio</button><button class="tab" role="tab" id="odt-ideas" data-t="ideas" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>Idea lab</button></div>
+    <div class="od-body" id="odBody" role="tabpanel" aria-labelledby="odt-overview"></div>
+  </div>
+</section>
+
 <section class="sec band" id="console">
   <div class="wrap">
     <div class="sec-head">
@@ -1835,184 +1937,6 @@ table.t.claim-t{min-width:560px}
   </div>
 </section>
 
-<section class="sec" id="challenge">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">Challenge 1 · right-time engagement</div>
-      <h2>Reach every customer at the right moment</h2>
-      <p class="lede">Telecom companies often reach customers at the wrong moment and miss chances to keep them, sell them more and make them happier. The challenge: an AI solution that predicts the best time to contact each customer from behavioral, transactional and contextual data, so engagement goes up and churn goes down, without ever becoming intrusive. Students, analysts and operators can all work on it, and the prototype below solves it end to end.</p>
-    </div>
-    <div class="ch-grid">
-      <article class="ch-card"><span class="label">01 · Challenge summary</span><h3>Right moment, right channel, right reason</h3><p class="small">Predict the optimal time and channel to contact each customer for retention, upsell or service, and turn it into a contact strategy that maximizes engagement and minimizes churn.</p><p class="small"><b>Why it matters:</b> a well-timed contact gets answered; a badly timed one is ignored, annoys the customer, or pushes them toward a rival.</p></article>
-      <article class="ch-card"><span class="label">02 · Problem background</span><h3>Fixed schedules ignore real lives</h3><p class="small">Customer engagement drives loyalty and revenue in telecom. Traditional outreach relies on fixed schedules or generic triggers and ignores individual preferences and real-time context. As digital interactions grow, so does the need for personal, timely outreach.</p><p class="small">It answers the industry shift toward hyper-personalization and data-driven decisions, to improve customer experience and reduce churn.</p></article>
-      <article class="ch-card"><span class="label">03 · Stakeholders</span><h3>Who it affects and who solves it</h3><ul class="cxl"><li><b>Customer experience &amp; retention teams</b>: save offers and care</li><li><b>Marketing &amp; sales</b>: campaigns, upsell, channel mix</li><li><b>Consumer analytics</b>: model, monitoring, experiments</li><li><b>Customers</b>: fewer, better-timed contacts, easy opt-out</li><li><b>Regulatory &amp; compliance bodies</b>: consent, privacy, marketing rules</li></ul><a class="small" href="#departments">See these departments and their teams →</a></article>
-      <article class="ch-card"><span class="label">04 · Constraints &amp; limitations</span><h3>Built in, not bolted on</h3><ul class="cxl"><li><b>Anonymized or tokenized data only.</b> The studio uses random tokens such as C-1A2B3C; no names, numbers or message content.</li><li><b>Privacy and telecom rules.</b> Consent per channel, quiet hours (calls and SMS 08:00–21:00) and opt-outs are enforced in code.</li><li><b>No intrusive or spam-like contact.</b> At most 2 marketing contacts a week, and none after a complaint or during an outage.</li></ul></article>
-      <article class="ch-card"><span class="label">05 · Confidentiality</span><h3>Handled as highly confidential</h3><ul class="cxl"><li>All operator data is treated as highly confidential and never leaves the operator’s environment in production.</li><li>Legal, ethical and cultural guidelines are respected, including configurable rest days (Sat–Sun or Fri–Sat) and a Ramadan schedule.</li><li>This page uses synthetic data only.</li></ul></article>
-      <article class="ch-card deliv"><span class="label">06 · Expected deliverables</span><h3>All four delivered, plus a pilot plan</h3><ul class="dl-list">
-        <li><i aria-hidden="true">✓</i><span><b>AI model for optimal contact times</b>: logistic regression on 28 features, trained in your browser on synthetic contacts</span></li>
-        <li><i aria-hidden="true">✓</i><span><b>Prototype dashboard</b>: the right-time engagement studio below</span></li>
-        <li><i aria-hidden="true">✓</i><span><b>Presentation of methodology, findings and business impact</b>: the 8-slide deck below the studio, also downloadable</span></li>
-        <li><i aria-hidden="true">✓</i><span><b>Technical report</b>: data sources, modeling approach and evaluation metrics</span></li></ul>
-        <button class="btn sm accent" type="button" data-rtreport>Download technical report</button></article>
-    </div>
-
-    <div class="solve">
-      <div class="label-row"><span class="label">How we solved the challenge · problem by problem</span><span class="tiny muted">Results update live from the studio below</span></div>
-      <div class="table-scroll"><table class="t solve-t" id="chSolve"></table></div>
-    </div>
-
-    <div class="console rt-app" id="rtApp">
-      <div class="c-bar">
-        <div class="c-id"><span class="c-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16 9v7.5l5 3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M26.5 6.5l2-2M5.5 6.5l-2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".6"/></svg></span><div><div class="c-title">Right-time engagement studio</div><div class="c-sub">Synthetic, tokenized customers · model trained in your browser · <span id="rtSeed">loading…</span></div></div></div>
-        <div class="c-right"><span class="pill sim">Synthetic data</span><button class="btn sm" id="rtRetrain" type="button">Retrain on a new sample</button><button class="btn sm" id="rtPlan" type="button">Download contact plan (CSV)</button><button class="btn sm accent" id="rtReport" type="button">Download technical report</button></div>
-      </div>
-      <div class="rt-ctl">
-        <label class="rt-f"><span class="label">Customer (token)</span><select id="rtCust" class="mini"></select></label>
-        <div class="rt-f"><span class="label">Channel</span><div class="seg-btns" id="rtCh" role="group" aria-label="Channel"></div></div>
-        <div class="rt-f"><span class="label">Goal</span><div class="seg-btns" id="rtGoal" role="group" aria-label="Goal"></div></div>
-        <fieldset class="rt-f rt-ctx"><legend class="label">Context</legend>
-          <label><input type="checkbox" id="rtOutage"> Outage in area today</label>
-          <label><input type="checkbox" id="rtBill"> Bill due within 3 days</label>
-          <label><input type="checkbox" id="rtRoam"> Roaming now</label>
-          <label><input type="checkbox" id="rtRam"> Ramadan schedule</label>
-          <label>Rest days <select id="rtWknd" class="mini"><option value="ss">Sat–Sun</option><option value="fs">Fri–Sat</option></select></label>
-        </fieldset>
-      </div>
-      <div class="tpanel">
-        <div class="rt-grid">
-          <div class="box"><div class="box-h"><span><b>Engagement heatmap</b> · predicted chance of engaging by day and hour</span><span id="rtHmNote"></span></div>
-            <div class="rt-hm"><svg id="rtHeat" class="rt-heat" role="img" aria-label="Heatmap of predicted engagement by day and hour; hatched cells are blocked by guardrails"></svg>
-              <div class="rt-legend tiny"><span>0%</span><i class="rt-ramp" aria-hidden="true"></i><span>50%+</span><span><i class="rt-hatch" aria-hidden="true"></i>blocked by a guardrail</span><span><i class="rt-bk" aria-hidden="true"></i>best slot</span></div></div></div>
-          <div class="side"><div class="box" id="rtRec"></div><div class="box" id="rtProfile"></div></div>
-        </div>
-        <div class="rt-grid2"><div class="box" id="rtEval"></div><div class="box" id="rtImpact"></div></div>
-        <div class="box" id="rtQueue"></div>
-        <div class="rt-grid2" style="margin:14px 0 0">
-          <div class="box" id="rtFair"></div>
-          <div class="box" id="rtPilot">
-            <div class="box-h"><span><b>Pilot planner</b> · A/B test before launch</span><span>5% significance</span></div>
-            <div class="wb-body">
-              <div class="ue-sliders">
-                <div class="ue-sl"><label for="plUp">Smallest engagement uplift worth detecting</label><output id="o-plUp" for="plUp"></output><input type="range" id="plUp" min="5" max="60" step="5" value="15"></div>
-                <div class="ue-sl"><label for="plDaily">Contacts a day per group</label><output id="o-plDaily" for="plDaily"></output><input type="range" id="plDaily" min="500" max="20000" step="500" value="2000"></div>
-              </div>
-              <div class="rt-f"><span class="label">Power</span><div class="seg-btns" id="plPw" role="group" aria-label="Statistical power"><button type="button" data-p="0.8" aria-pressed="true">80%</button><button type="button" data-p="0.9" aria-pressed="false">90%</button></div></div>
-              <div class="ue-out" id="rtPilotOut" aria-live="polite"></div>
-              <div class="rt-two"><div><span class="label">Success metrics</span><ul class="cxl"><li>Engagement rate</li><li>Accepted offers and saves</li><li>Churn over 90 days</li></ul></div><div><span class="label">Guardrail metrics</span><ul class="cxl"><li>Opt-outs and complaints</li><li>Contacts per customer</li><li>Stop if either guardrail rises 20% vs control</li></ul></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="c-status"><span><i class="dot"></i>Tokenized IDs only</span><span>No names, numbers or message content</span><span>Guardrails run before any score is used</span><span>Data: synthetic</span></div>
-    </div>
-
-    <div class="deck-wrap">
-      <div class="deck-head"><div><span class="label">Deliverable · presentation</span><h3>Methodology, findings and business impact in 8 slides</h3><p class="small muted">Numbers update live from the studio above. Use the arrow keys to move between slides.</p></div>
-        <div class="row-btns"><button class="btn sm" id="deckFs" type="button">Present full screen</button><button class="btn sm accent" id="deckDl" type="button">Download presentation (.md)</button></div></div>
-      <div class="console deck" id="deck" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Findings presentation">
-        <div class="deck-stage" id="deckStage" aria-live="polite"><p class="small muted" style="padding:24px">The slides load with the studio.</p></div>
-        <div class="deck-nav"><button class="btn sm" id="deckPrev" type="button" aria-label="Previous slide">←</button><div class="deck-dots" id="deckDots"></div><span class="mono tiny" id="deckNum"></span><button class="btn sm" id="deckNext" type="button" aria-label="Next slide">→</button></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="sec band" id="challenge2">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">Challenge 2 · central market intelligence</div>
-      <h2>One AI-powered intelligence platform for a whole telecom group</h2>
-      <p class="lede">Large telecom groups such as e&amp; and their peers hold market intelligence in regional databases, vendor subscriptions, spreadsheets and public sources. The challenge: one central AI platform that automates collection, monitors competitors and delivers timely insights and recommended actions to every business unit, securely. This is the problem Cellvoyant was built for. Here is how each requirement is met.</p>
-      <p class="tiny muted">Challenge brief as provided. Cellvoyant is independent and is not affiliated with or endorsed by e&amp; or any operator named on this page.</p>
-    </div>
-    <div class="ch-grid">
-      <article class="ch-card"><span class="label">01 · Challenge summary</span><h3>No single place for market intelligence</h3><p class="small">Groups lack a centralized, AI-powered platform to automate market data collection, monitor competitor activity and deliver timely insights and recommended actions across business units.</p></article>
-      <article class="ch-card"><span class="label">02 · Main challenges</span><h3>Four gaps to close</h3><ul class="cxl"><li><b>Fragmented data</b> across databases, subscriptions, spreadsheets and public sources</li><li><b>Manual processes</b> for competitor, regulatory and financial updates</li><li><b>Delayed insights</b> from manual reporting</li><li><b>Limited analytics</b>: no semantic search, trends or signal detection</li></ul></article>
-      <article class="ch-card"><span class="label">03 · Data collection</span><h3>Sources to connect</h3><ul class="cxl"><li>Competitor websites, mobile apps and official social channels</li><li>App Store and Google Play ratings, reviews and indicators</li><li>Government, central bank, ministry and statistics sources</li><li>Regulators, trusted business media and licensed research</li></ul></article>
-      <article class="ch-card"><span class="label">04 · Technical challenges</span><h3>What the engine must do</h3><ul class="cxl"><li>Reliable connectors for structured and unstructured sources</li><li>Arabic, English, Chinese and more: sentiment and summaries</li><li>Link announcements, site changes and app updates</li><li>Search, alerts, dashboards and evidence-based actions</li><li>Refresh each source at the right frequency for its cost</li></ul></article>
-      <article class="ch-card"><span class="label">05 · Access, compliance &amp; security</span><h3>Safe by design</h3><ul class="cxl"><li>Respect site restrictions, access controls and terms</li><li>Licensed content through authorized accounts and APIs</li><li>Social media API limits</li><li>Confidential data and privacy</li><li>Secure access across UAE and international consumer divisions</li></ul></article>
-      <article class="ch-card deliv"><span class="label">06 · What we delivered</span><h3>All 18 requirements mapped</h3><ul class="dl-list"><li><i aria-hidden="true">✓</i><span><b>Market intelligence hub</b> with 4 views: sources, multilingual desk, search &amp; trends, access</span></li><li><i aria-hidden="true">✓</i><span><b>Solution map</b> below, with the status of each requirement</span></li><li><i aria-hidden="true">✓</i><span><b>Extra improvements</b> beyond the brief</span></li><li><i aria-hidden="true">✓</i><span><b>Production upgrade plan</b> for a real deployment</span></li></ul></article>
-    </div>
-
-    <div class="solve">
-      <div class="label-row"><span class="label">How we solved the challenge · requirement by requirement</span><span class="tiny muted"><span class="stc st-live">Live</span> works on this page · <span class="stc st-proto">Prototype</span> simulated feeds · <span class="stc st-prod">Production step</span> needs a real deployment</span></div>
-      <div class="table-scroll"><table class="t solve-t"><thead><tr><th scope="col">Requirement</th><th scope="col">How we solved it</th><th scope="col">Where to see it</th><th scope="col">Status</th></tr></thead><tbody><tr class="grp"><th colspan="4" scope="colgroup">Main challenges</th></tr><tr><th scope="row">Fragmented data<span class="tiny muted">Regional databases, vendor subscriptions, spreadsheets and public sources</span></th><td>One source registry and a unified knowledge base: 14 source types, including internal databases and vendor feeds, linked into one timeline per competitor</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Manual processes<span class="tiny muted">Analysts collect competitor, regulatory and financial updates by hand</span></th><td>Automated connectors on a planned refresh schedule; the AI assistant writes briefs and battlecards; the workspace turns signals into owned tasks</td><td><a href="#miApp">Hub › Sources · AI assistant</a></td><td><span class="stc st-proto">Prototype</span></td></tr><tr><th scope="row">Delayed insights<span class="tiny muted">Manual reporting limits proactive response</span></th><td>Real-time feed ranked by impact × confidence × freshness, act-by times, alert rules and routing to the right department</td><td><a href="#app">Console › Command center</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Limited advanced analytics<span class="tiny muted">No semantic search, trend detection or historical retrieval</span></th><td>Multilingual concept search across signals, operators, companies, deals and documents; emerging-signal detection; linked stories</td><td><a href="#miApp">Hub › Search & trends</a></td><td><span class="stc st-live">Live</span></td></tr></tbody><tbody><tr class="grp"><th colspan="4" scope="colgroup">Data collection</th></tr><tr><th scope="row">Competitor websites, apps and social<span class="tiny muted">Official channels of every competitor</span></th><td>Polite crawler with change detection, app listing monitor and official social APIs within rate limits</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-proto">Prototype</span></td></tr><tr><th scope="row">App Store and Google Play<span class="tiny muted">Ratings, reviews and performance indicators</span></th><td>Official developer APIs for your own apps, a licensed app-intelligence feed for competitors, and review sentiment in Arabic, English and Chinese</td><td><a href="#miApp">Hub › Sources · Desk</a></td><td><span class="stc st-proto">Prototype</span></td></tr><tr><th scope="row">Government and statistics<span class="tiny muted">Government, central bank, ministry and national statistics</span></th><td>Open-data APIs and publication monitors, e.g. Central Bank of the UAE, UAE FCSC and Saudi GASTAT</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-proto">Prototype</span></td></tr><tr><th scope="row">Regulators, media, research<span class="tiny muted">Regulatory announcements, trusted business media, licensed research</span></th><td>Regulator monitors (e.g. TDRA, CST), a licensed news API, and authorized research accounts with credentials kept in a vault</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-proto">Prototype</span></td></tr></tbody><tbody><tr class="grp"><th colspan="4" scope="colgroup">Technical</th></tr><tr><th scope="row">Reliable connectors<span class="tiny muted">Structured and unstructured sources</span></th><td>Each source has a connector type, format, reliability score and a minimum safe interval</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Many languages<span class="tiny muted">Arabic, English, Chinese and others; sentiment; long-report summaries</span></th><td>Language detection, sentiment and extractive summaries built in; Claude translates and writes abstractive summaries when available</td><td><a href="#miApp">Hub › Multilingual desk</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Unified knowledge base<span class="tiny muted">Connect announcements, website changes and app updates</span></th><td>Events are linked per competitor into stories; evidence chains and signal fusion in the Move predictor</td><td><a href="#miApp">Hub › Search & trends · Move predictor</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Search, alerts, dashboards, actions<span class="tiny muted">Searchable intelligence and evidence-based recommendations</span></th><td>Search, alert rules, department lens and role views, recommended plays and war-room simulations</td><td><a href="#app">Hub · Console</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Refresh frequencies<span class="tiny muted">Balance timeliness, reliability and cost</span></th><td>The planner sets each interval from the signal’s half-life, rate limits and a monthly budget, maximizing reliability-weighted freshness</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-live">Live</span></td></tr></tbody><tbody><tr class="grp"><th colspan="4" scope="colgroup">Access, compliance & security</th></tr><tr><th scope="row">Website restrictions<span class="tiny muted">Access controls and terms of service</span></th><td>robots.txt and crawl-delay honored, terms reviewed per source, no login-protected areas without authorization</td><td><a href="#miApp">Hub › Sources (compliance rule)</a></td><td><span class="stc st-live">Built-in policy</span></td></tr><tr><th scope="row">Licensed content<span class="tiny muted">Authorized accounts, APIs and credentials</span></th><td>Credentials in a server-side vault, never in the browser; use limited to licensed seats and territories</td><td><a href="#miApp">Hub › Access</a></td><td><span class="stc st-prod">Production step</span></td></tr><tr><th scope="row">Social API limits<span class="tiny muted">Restrictions and rate limits</span></th><td>Minimum intervals per platform and rate-limit budgets built into the planner</td><td><a href="#miApp">Hub › Sources</a></td><td><span class="stc st-live">Live</span></td></tr><tr><th scope="row">Confidentiality and privacy<span class="tiny muted">Protect confidential information</span></th><td>Data classes (public, licensed, internal, customer), tokenized customer data, masking and UAE data residency</td><td><a href="#miApp">Hub › Access</a></td><td><span class="stc st-prod">Production step</span></td></tr><tr><th scope="row">Secure access across divisions<span class="tiny muted">UAE consumer, international consumer and other units</span></th><td>Role and business-unit access matrix; search filtered by access level; every query and export logged</td><td><a href="#miApp">Hub › Access · Search</a></td><td><span class="stc st-live">Live</span></td></tr></tbody></table></div>
-    </div>
-
-    <div class="console mi-app" id="miApp">
-      <div class="c-bar">
-        <div class="c-id"><span class="c-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="4.5" fill="currentColor"/><circle cx="6" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="26" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="24" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="26" cy="24" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 9.8l4 3.6M23.5 9.8l-4 3.6M8.5 22.2l4-3.6M23.5 22.2l-4-3.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div><div class="c-title">Market intelligence hub</div><div class="c-sub">Source catalogue and controls are real designs · feeds and documents are simulated</div></div></div>
-        <div class="c-right"><label class="lens"><span class="label">View as</span><select id="miRole" class="mini" aria-label="View as role"></select></label><span class="pill sim">Simulated feeds</span></div>
-      </div>
-      <div class="tabs" id="miTabs" role="tablist" aria-label="Hub views">
-        <button class="tab" role="tab" id="mt-src" data-p="src" aria-controls="mi-src" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Sources &amp; refresh</button>
-        <button class="tab" role="tab" id="mt-desk" data-p="desk" aria-controls="mi-desk" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h9M8.5 3v2M6 5c0 4 3 7 6 8M11 5c-1 4-4 7-7 8M13 21l4-9 4 9M14.5 18h5"/></svg>Multilingual desk</button>
-        <button class="tab" role="tab" id="mt-search" data-p="search" aria-controls="mi-search" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>Search &amp; trends</button>
-        <button class="tab" role="tab" id="mt-acc" data-p="acc" aria-controls="mi-acc" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>Access &amp; security</button>
-      </div>
-      <div class="tpanel" role="tabpanel" id="mi-src" aria-labelledby="mt-src">
-        <div class="ue-sliders mi-sl">
-          <div class="ue-sl"><label for="miTarget">Refresh each source at this share of its signal half-life</label><output id="o-miTarget" for="miTarget"></output><input type="range" id="miTarget" min="5" max="100" step="5" value="25"></div>
-          <div class="ue-sl"><label for="miBudget">Monthly collection budget</label><output id="o-miBudget" for="miBudget"></output><input type="range" id="miBudget" min="200" max="6000" step="100" value="2000"></div>
-        </div>
-        <div class="ue-out mi-sum" id="miSrcSum" aria-live="polite"></div>
-        <div class="tbl-wrap"><table class="wb-table mi-src-t" id="miSrcTable"></table></div>
-        <p class="tiny muted">Interval = a share of the signal’s half-life, never faster than the source’s rate-limit or terms floor. Over budget, the planner stretches the intervals that lose the least freshness per dollar. Unit costs are illustrative.</p>
-      </div>
-      <div class="tpanel" role="tabpanel" id="mi-desk" aria-labelledby="mt-desk" hidden>
-        <div class="mi-desk">
-          <div class="box"><div class="box-h"><span><b>Text</b> · any language</span></div><div class="wb-body">
-            <div class="chips" id="miSamples"></div>
-            <label class="sr" for="miText">Text to analyze</label><textarea id="miText" rows="8" dir="auto"></textarea>
-            <div class="row-btns"><button class="btn sm accent" id="miAnalyze" type="button">Analyze</button><button class="btn sm" id="miAsk" type="button">Translate &amp; summarize with Claude</button></div>
-            <div class="ws-row"><label class="small" for="miCls">Classify as</label><select id="miCls" class="mini"><option value="public">Public</option><option value="licensed">Licensed</option><option value="internal-uae">Internal: UAE consumer</option><option value="internal-intl">Internal: international consumer</option></select><button class="btn sm" id="miAdd" type="button">Add to knowledge base</button></div>
-          </div></div>
-          <div class="box"><div class="box-h"><span><b>Analysis</b> · built in</span></div><div class="wb-body" id="miOut" aria-live="polite"></div><div class="wb-body" id="miAi" style="padding-top:0"></div></div>
-        </div>
-      </div>
-      <div class="tpanel" role="tabpanel" id="mi-search" aria-labelledby="mt-search" hidden>
-        <div class="mi-search">
-          <div class="box"><div class="box-h"><span><b>Search the knowledge base</b> · any language</span><span id="miRoleNote"></span></div><div class="wb-body">
-            <div class="mi-qrow"><label class="sr" for="miQ">Search</label><input class="inp" id="miQ" type="search" dir="auto" autocomplete="off" placeholder="Search signals, operators, deals, sources, documents…"><label class="sr" for="miType">Result type</label><select id="miType" class="mini"><option value="all">All types</option><option>Signal</option><option>Operator</option><option>Company</option><option>Deal</option><option>Source</option><option>Document</option><option>Resource</option><option>Playbook</option><option>Glossary</option></select></div>
-            <div class="chips" id="miQuick"><button type="button" class="chip hl" data-q="price cut">price cut</button><button type="button" class="chip hl" data-q="e&amp;">e&amp;</button><button type="button" class="chip hl" data-q="أسعار" lang="ar">أسعار</button><button type="button" class="chip hl" data-q="网速" lang="zh">网速</button><button type="button" class="chip hl" data-q="private equity">private equity</button><button type="button" class="chip hl" data-q="spectrum consultation">spectrum consultation</button><button type="button" class="chip hl" data-q="pricing outlook">pricing outlook</button></div>
-            <div id="miResults" class="mi-results"></div>
-          </div></div>
-          <div class="side">
-            <div class="box"><div class="box-h"><span><b>Emerging signals</b> · last 12 h vs before</span></div><div class="wb-body"><div class="dk-key tiny"><span><i style="background:var(--line-strong)"></i>Earlier, per 12 h</span><span><i style="background:var(--accent)"></i>Last 12 h</span><span><i style="background:var(--signal)"></i>Rising</span></div><div id="miTrends"></div></div></div>
-            <div class="box"><div class="box-h"><span><b>Linked stories</b> · related events per competitor</span></div><div class="wb-body" id="miStories"></div></div>
-          </div>
-        </div>
-      </div>
-      <div class="tpanel" role="tabpanel" id="mi-acc" aria-labelledby="mt-acc" hidden>
-        <div class="tbl-wrap"><table class="wb-table mi-matrix" id="miMatrix"></table></div>
-        <div class="mi-controls">
-          <div><b>Identity</b><span>Single sign-on with multi-factor authentication; roles and business units come from the group directory.</span></div>
-          <div><b>Least privilege</b><span>Role and business-unit rules, row-level security by market, and masking of sensitive fields.</span></div>
-          <div><b>Licensed content</b><span>Credentials in a server-side vault, never in the browser; use limited to licensed seats and territories.</span></div>
-          <div><b>Privacy</b><span>Tokenized customer data, data minimization and hosting in a UAE region.</span></div>
-          <div><b>Audit</b><span>Every search, view and export is logged; exports are checked for confidential data.</span></div>
-          <div><b>Collection compliance</b><span>robots.txt, terms of service and rate limits respected; the source of every item is recorded.</span></div>
-        </div>
-        <p class="tiny muted">Change “View as” at the top, then search: results are filtered by that role’s access level.</p>
-      </div>
-      <div class="c-status"><span><i class="dot"></i>14 source types</span><span>Arabic · English · Chinese and more</span><span>Role-based access</span><span>Feeds simulated; source catalogue real</span></div>
-    </div>
-
-    <div class="mi-more">
-      <div class="panel"><span class="label">Extra improvements beyond the brief</span><ul class="cxl">
-        <li>Right-time customer engagement engine (Challenge 1)</li><li>Department lens: 9 departments, 36 teams, act-by routing</li><li>Operator workspace with shift handover</li><li>Analyst workbench: 108 real operators benchmarked</li><li>Capital radar with private-equity, hedge-fund and state ownership</li><li>War-room simulation of rival price moves</li><li>Academy (12 workshops) and resources library</li><li>Grounded AI with competition-law guardrails, plus a patent draft</li></ul></div>
-      <div class="panel"><span class="label">Upgrades needed for a production deployment</span><ol class="cxl">
-        <li><b>Real connectors:</b> build and legally review each one; sign media, research and app-intelligence licences</li>
-        <li><b>Identity:</b> single sign-on and directory groups for each division</li>
-        <li><b>Security:</b> encryption, secrets vault, audit logs, penetration test, ISO 27001-aligned controls</li>
-        <li><b>Data residency:</b> UAE hosting; each division’s confidential data in its own tenant</li>
-        <li><b>Language models:</b> production Arabic (including Gulf dialects), Chinese and other languages, tested on real samples</li>
-        <li><b>Search at scale:</b> vector embeddings plus keyword index over millions of documents, always with citations</li>
-        <li><b>Operations:</b> source health, freshness targets, cost tracking and human review of critical alerts</li></ol></div>
-    </div>
-  </div>
-</section>
-
 <section class="sec" id="academy">
   <div class="wrap">
     <div class="sec-head">
@@ -2048,8 +1972,8 @@ table.t.claim-t{min-width:560px}
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Innovation lab</div>
-      <h2>41 tools, engines, services and guardrails</h2>
-      <p class="lede">Nineteen of them already run on this page (filter by <b>Live now</b>). This is the full set Cellvoyant is designed to grow into, each tied to a specific telecom problem. Items marked <span class="badge core">Patent core</span> carry the inventive steps claimed in the draft below.</p>
+      <h2>44 tools, engines, services and guardrails</h2>
+      <p class="lede"><b id="labLiveN">17</b> of them already run on this page (filter by <b>Live now</b>). This is the full set Cellvoyant is designed to grow into, each tied to a specific telecom problem. Items marked <span class="badge core">Patent core</span> carry the inventive steps claimed in the draft below.</p>
     </div>
     <div class="filters" id="labFilters" role="group" aria-label="Filter innovations"></div>
     <div class="lab" id="labGrid"></div>
@@ -2193,7 +2117,7 @@ table.t.claim-t{min-width:560px}
           <table class="t claim-t" id="claimMap">
             <thead><tr><th scope="col">Claim</th><th scope="col">Type</th><th scope="col">What it protects</th><th scope="col">Live on this page</th></tr></thead>
             <tbody>
-              <tr class="ind-row"><td class="mono">1</td><td><b>Independent · method</b></td><td>The core loop: collect signals from many sources, link them in a time-aware knowledge graph, fuse them into a probability and time window for each rival move (discounting repeated evidence), rank by a half-life, simulate responses and route to the right role before the insight goes stale.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-cc">Command center</button><button type="button" class="chip hl" data-go="tab-pred">Move predictor</button><button type="button" class="chip hl" data-go="tab-war">War room</button></div></td></tr>
+              <tr class="grp"><th colspan="4" scope="colgroup">Method claims · 1–15</th></tr><tr class="ind-row"><td class="mono">1</td><td><b>Independent · method</b></td><td>The core loop: collect signals from many sources, link them in a time-aware knowledge graph, fuse them into a probability and time window for each rival move (discounting repeated evidence), rank by a half-life, simulate responses and route to the right role before the insight goes stale.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-cc">Command center</button><button type="button" class="chip hl" data-go="tab-pred">Move predictor</button><button type="button" class="chip hl" data-go="tab-war">War room</button></div></td></tr>
               <tr><td class="mono">2</td><td>Builds on claim 1</td><td>Each plan becomes a “genome” of attributes; a stealth change (fees, allowances, lock-in) is flagged when the headline price stays the same.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-dna">Tariff DNA</button></div></td></tr>
               <tr><td class="mono">3</td><td>Builds on claim 2</td><td>The real price effect of a stealth change is estimated with hedonic regression across the market’s plans.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-dna">Tariff DNA</button></div></td></tr>
               <tr><td class="mono">4</td><td>Builds on claim 1</td><td>The first signal from a source cluster counts fully; repeats from the same origin are discounted.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-pred">Move predictor</button></div></td></tr>
@@ -2208,10 +2132,10 @@ table.t.claim-t{min-width:560px}
               <tr><td class="mono">13</td><td>Builds on claim 1</td><td>Measured speeds per hexagonal cell are compared with an operator’s published coverage to flag false coverage claims.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-geo">Geo radar</button></div></td></tr>
               <tr><td class="mono">14</td><td>Builds on claim 1</td><td>Reports from frontline retail staff are weighted by each reporter’s track record.</td><td><div class="chips"><span class="small muted">Voice-of-Store bot (service)</span></div></td></tr>
               <tr><td class="mono">15</td><td>Builds on claim 1</td><td>Benchmarks are released only as aggregates from enough operators after a time lag, never with forward-looking prices.</td><td><div class="chips"><span class="small muted">Benchmark Consortium (service)</span></div></td></tr>
-              <tr class="ind-row"><td class="mono">16</td><td><b>Independent · system</b></td><td>The same method as a computer system.</td><td><div class="chips">—</div></td></tr>
+              <tr class="grp"><th colspan="4" scope="colgroup">System claims · 16–18</th></tr><tr class="ind-row"><td class="mono">16</td><td><b>Independent · system</b></td><td>The same method as a computer system.</td><td><div class="chips">—</div></td></tr>
               <tr><td class="mono">17</td><td>Builds on claim 16</td><td>The system plus the tariff genome of claim 2.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-dna">Tariff DNA</button></div></td></tr>
               <tr><td class="mono">18</td><td>Builds on claim 16</td><td>Back-testing: querying the knowledge graph as of a past date to check predictions against what happened.</td><td><div class="chips"><span class="small muted">Roadmap · H1 2027</span></div></td></tr>
-              <tr class="ind-row"><td class="mono">19</td><td><b>Independent · storage medium</b></td><td>The same method as software stored on a computer-readable medium.</td><td><div class="chips">—</div></td></tr>
+              <tr class="grp"><th colspan="4" scope="colgroup">Computer-readable medium claims · 19–20</th></tr><tr class="ind-row"><td class="mono">19</td><td><b>Independent · storage medium</b></td><td>The same method as software stored on a computer-readable medium.</td><td><div class="chips">—</div></td></tr>
               <tr><td class="mono">20</td><td>Builds on claim 19</td><td>The stored software plus the grounded explanations of claim 11.</td><td><div class="chips"><button type="button" class="chip hl" data-go="tab-ask">AI assistant</button></div></td></tr>
             </tbody>
           </table>
@@ -2220,8 +2144,9 @@ table.t.claim-t{min-width:560px}
 
         <h4 id="pt-claims">Claims</h4>
         <p style="margin-bottom:12px">What is claimed is:</p>
-        <ul class="claims">
-          <li><b>1.</b><div><span class="ind">A computer-implemented method comprising:</span>
+        <div class="table-scroll claims-wrap"><table class="t claims-t"><thead><tr><th scope="col">Claim</th><th scope="col">Type</th><th scope="col">Claim text (legal wording)</th></tr></thead><tbody>
+<tr class="grp"><th colspan="3" scope="colgroup">Method claims · 1–15</th></tr>
+<tr class="ind-row"><td class="mono">1</td><td><b>Independent</b><span class="tiny muted">method</span></td><td><b>A computer-implemented method comprising:</b>
             <ol>
               <li>(a) ingesting, from a plurality of heterogeneous data sources, signals associated with one or more telecommunications operators, the sources comprising at least two of: tariff publications, regulatory filings, radio equipment authorization records, network performance measurements, application release artifacts, employment postings, and domain name registrations;</li>
               <li>(b) resolving each signal to one or more nodes of a temporal knowledge graph comprising operator, offer, spectrum, geographic-cell and infrastructure nodes connected by edges having validity intervals;</li>
@@ -2230,27 +2155,29 @@ table.t.claim-t{min-width:560px}
               <li>(e) assigning the insight a half-life based at least on the action class and computing a priority score that decays over time according to the half-life;</li>
               <li>(f) in response to the priority score exceeding a simulation threshold, simulating a plurality of response strategies against the predicted action using a subscriber-level market model to estimate, for each strategy, a subscriber impact and a revenue impact; and</li>
               <li>(g) transmitting the insight and a ranking of the response strategies to a recipient selected by role, before a time at which the priority score is predicted to fall below a routing threshold for that role.</li>
-            </ol></div></li>
-          <li><b>2.</b><div>The method of claim 1, further comprising converting each offer into a genome vector of normalized attributes including price, data allowance, recurring fees and contract lock-in, and generating a stealth-mutation event when a non-price attribute changes beyond a threshold while the price attribute is unchanged.</div></li>
-          <li><b>3.</b><div>The method of claim 2, further comprising estimating an effective price change of the stealth mutation using a hedonic regression over genome vectors of offers in the market.</div></li>
-          <li><b>4.</b><div>The method of claim 1, wherein the dependence discount is zero for a first signal of a cluster and positive for each additional signal of the same cluster.</div></li>
-          <li><b>5.</b><div>The method of claim 1, wherein clustering further uses correlations between source types learned from historical co-occurrence.</div></li>
-          <li><b>6.</b><div>The method of claim 1, further comprising identifying a decisive signal as the signal whose removal most reduces the fused likelihood, and including it in the insight.</div></li>
-          <li><b>7.</b><div>The method of claim 1, wherein the time window is derived from an empirical distribution of lead times between signal types and realized actions of the action class.</div></li>
-          <li><b>8.</b><div>The method of claim 1, further comprising recording a realized outcome and updating the source-reliability scores based on a proper scoring rule.</div></li>
-          <li><b>9.</b><div>The method of claim 1, wherein the response strategies comprise at least a price match, a partial price match, a non-price benefit, and a retention offer targeted to subscribers having a predicted switching propensity above a threshold, and wherein the simulating is repeated for at least two response lags.</div></li>
-          <li><b>10.</b><div>The method of claim 1, wherein the subscriber-level market model segments subscribers at least by embedded-SIM capability and by measured network experience in the subscriber's geographic cell.</div></li>
-          <li><b>11.</b><div>The method of claim 1, further comprising generating, by a language model, a natural-language explanation constrained such that each sentence references at least one signal of the provenance chain, and removing unsupported sentences before transmission.</div></li>
-          <li><b>12.</b><div>The method of claim 1, further comprising, in response to the priority score exceeding a critical threshold, automatically creating a collaboration channel pre-populated with the insight, the ranking and proposed owners.</div></li>
-          <li><b>13.</b><div>The method of claim 1, wherein the network performance measurements are aggregated per hexagonal cell and compared with coverage representations published by an operator to generate a coverage-claim discrepancy signal.</div></li>
-          <li><b>14.</b><div>The method of claim 1, wherein the signals further comprise reports submitted by frontline retail personnel, each weighted by a reporter reliability learned from previously verified reports.</div></li>
-          <li><b>15.</b><div>The method of claim 1, further comprising receiving benchmark metrics from a plurality of operators and releasing an aggregate only when at least a minimum number of operators have contributed and a minimum time lag has elapsed, and excluding forward-looking pricing information from release.</div></li>
-          <li><b>16.</b><div class="ind">A system comprising one or more processors and memory storing instructions that, when executed, cause the one or more processors to perform operations comprising steps (a) through (g) of claim 1.</div></li>
-          <li><b>17.</b><div>The system of claim 16, wherein the operations further comprise the operations of claim 2.</div></li>
-          <li><b>18.</b><div>The system of claim 16, wherein the operations further comprise querying the temporal knowledge graph as of a past time to back-test the fused likelihood against realized actions.</div></li>
-          <li><b>19.</b><div class="ind">A non-transitory computer-readable medium storing instructions that, when executed by one or more processors, cause performance of the method of claim 1.</div></li>
-          <li><b>20.</b><div>The medium of claim 19, wherein the instructions further cause performance of the method of claim 11.</div></li>
-        </ul>
+            </ol></td></tr>
+<tr><td class="mono">2</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, further comprising converting each offer into a genome vector of normalized attributes including price, data allowance, recurring fees and contract lock-in, and generating a stealth-mutation event when a non-price attribute changes beyond a threshold while the price attribute is unchanged.</td></tr>
+<tr><td class="mono">3</td><td><b>Dependent</b><span class="tiny muted">on claim 2</span></td><td>The method of claim 2, further comprising estimating an effective price change of the stealth mutation using a hedonic regression over genome vectors of offers in the market.</td></tr>
+<tr><td class="mono">4</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, wherein the dependence discount is zero for a first signal of a cluster and positive for each additional signal of the same cluster.</td></tr>
+<tr><td class="mono">5</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, wherein clustering further uses correlations between source types learned from historical co-occurrence.</td></tr>
+<tr><td class="mono">6</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, further comprising identifying a decisive signal as the signal whose removal most reduces the fused likelihood, and including it in the insight.</td></tr>
+<tr><td class="mono">7</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, wherein the time window is derived from an empirical distribution of lead times between signal types and realized actions of the action class.</td></tr>
+<tr><td class="mono">8</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, further comprising recording a realized outcome and updating the source-reliability scores based on a proper scoring rule.</td></tr>
+<tr><td class="mono">9</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, wherein the response strategies comprise at least a price match, a partial price match, a non-price benefit, and a retention offer targeted to subscribers having a predicted switching propensity above a threshold, and wherein the simulating is repeated for at least two response lags.</td></tr>
+<tr><td class="mono">10</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, wherein the subscriber-level market model segments subscribers at least by embedded-SIM capability and by measured network experience in the subscriber's geographic cell.</td></tr>
+<tr><td class="mono">11</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, further comprising generating, by a language model, a natural-language explanation constrained such that each sentence references at least one signal of the provenance chain, and removing unsupported sentences before transmission.</td></tr>
+<tr><td class="mono">12</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, further comprising, in response to the priority score exceeding a critical threshold, automatically creating a collaboration channel pre-populated with the insight, the ranking and proposed owners.</td></tr>
+<tr><td class="mono">13</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, wherein the network performance measurements are aggregated per hexagonal cell and compared with coverage representations published by an operator to generate a coverage-claim discrepancy signal.</td></tr>
+<tr><td class="mono">14</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, wherein the signals further comprise reports submitted by frontline retail personnel, each weighted by a reporter reliability learned from previously verified reports.</td></tr>
+<tr><td class="mono">15</td><td><b>Dependent</b><span class="tiny muted">on claim 1</span></td><td>The method of claim 1, further comprising receiving benchmark metrics from a plurality of operators and releasing an aggregate only when at least a minimum number of operators have contributed and a minimum time lag has elapsed, and excluding forward-looking pricing information from release.</td></tr>
+<tr class="grp"><th colspan="3" scope="colgroup">System claims · 16–18</th></tr>
+<tr class="ind-row"><td class="mono">16</td><td><b>Independent</b><span class="tiny muted">system</span></td><td><b>A system comprising one or more processors and memory storing instructions that, when executed, cause the one or more processors to perform operations comprising steps (a) through (g) of claim 1.</b></td></tr>
+<tr><td class="mono">17</td><td><b>Dependent</b><span class="tiny muted">on claim 16</span></td><td>The system of claim 16, wherein the operations further comprise the operations of claim 2.</td></tr>
+<tr><td class="mono">18</td><td><b>Dependent</b><span class="tiny muted">on claim 16</span></td><td>The system of claim 16, wherein the operations further comprise querying the temporal knowledge graph as of a past time to back-test the fused likelihood against realized actions.</td></tr>
+<tr class="grp"><th colspan="3" scope="colgroup">Computer-readable medium claims · 19–20</th></tr>
+<tr class="ind-row"><td class="mono">19</td><td><b>Independent</b><span class="tiny muted">storage medium</span></td><td><b>A non-transitory computer-readable medium storing instructions that, when executed by one or more processors, cause performance of the method of claim 1.</b></td></tr>
+<tr><td class="mono">20</td><td><b>Dependent</b><span class="tiny muted">on claim 19</span></td><td>The medium of claim 19, wherein the instructions further cause performance of the method of claim 11.</td></tr>
+</tbody></table></div>
 
         <h4 id="pt-abs">Abstract</h4>
         <p>A system ingests heterogeneous signals about telecommunications operators, including tariffs, filings, equipment authorizations, app releases, job postings and network measurements, and resolves them into a temporal knowledge graph. A fusion engine computes the likelihood that an operator will take a specific competitive action within a time window by combining reliability-weighted log-likelihood ratios with dependence discounts for signals of common origin. Each resulting insight carries a provenance chain and a half-life, and its priority decays over time. Insights above a threshold trigger subscriber-level simulation of alternative responses, and the ranked responses are routed to role-specific recipients before the insight's priority decays below a routing threshold.</p>
@@ -2383,9 +2310,9 @@ table.t.claim-t{min-width:560px}
     <div class="lcheck">
       <div class="lc-col"><span class="label">Product</span>
         <div class="lc ok"><i>✓</i><span>Operations console with 9 views, department lens, workspace and workbench</span></div>
-        <div class="lc ok"><i>✓</i><span>Right-time engagement model, studio, report, contact plan and presentation</span></div>
+        <div class="lc ok"><i>✓</i><span>Client edition for e&amp; UAE with the right-time engagement and market intelligence solutions</span></div>
         <div class="lc ok"><i>✓</i><span>AI assistant with <b id="lcTools">17</b> tools and a service desk</span></div>
-        <div class="lc ok"><i>✓</i><span>Market intelligence hub: 14 source types, multilingual desk, search and access control</span></div>
+        <div class="lc ok"><i>✓</i><span>Operator desk with an e&amp; UAE edition, problem studio and idea lab</span></div>
         <div class="lc ok"><i>✓</i><span>9 departments, 36 teams, 12 workshops and a resources library</span></div></div>
       <div class="lc-col"><span class="label">Data &amp; trust</span>
         <div class="lc ok"><i>✓</i><span>140 companies and 108 operators with sources and check dates</span></div>
