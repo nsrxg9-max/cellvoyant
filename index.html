@@ -776,7 +776,7 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
 .pos-link b{font-family:var(--f-display);font-size:22px;font-weight:800}
 .pos-link:hover{box-shadow:var(--shadow)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-/* ===== v0.6 · operations-center console (always dark), departments, workbench, academy, sponsors ===== */
+/* ===== v0.6 · operations-center console (always dark), departments, workbench, academy ===== */
 .console{
   --bg:#0A1118; --band:#0E161E; --surface:#0F1922; --surface-2:#15222D;
   --ink:#E6EEF4; --ink-2:#B9C7D3; --muted:#8597A8; --line:#1F2E3C; --line-strong:#2D4254;
@@ -949,15 +949,6 @@ button.chip:hover{border-color:var(--accent)}
 .ws-form textarea{border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font:14px/1.4 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical;width:100%}
 .ws-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 
-/* sponsors */
-.sponsor-strip{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;padding:18px 0 2px}
-.sponsor-strip ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 28px;align-items:center}
-.wm{font-family:var(--f-display);font-weight:800;font-stretch:115%;font-variation-settings:"wdth" 115;letter-spacing:.08em;font-size:15px;color:var(--ink-2);line-height:1.2}
-.sponsor-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-@media (max-width:760px){.sponsor-grid{grid-template-columns:1fr 1fr}}
-@media (max-width:420px){.sponsor-grid{grid-template-columns:1fr}}
-.sponsor-grid li{display:grid;place-items:center;align-content:center;gap:8px;min-height:132px;padding:20px;background:var(--surface);text-align:center}
-.sponsor-grid .wm{font-size:clamp(17px,2vw,22px);color:var(--ink);overflow-wrap:anywhere}
 /* ===== v0.6 · teams, operator workspace, right-time studio, challenge, resources ===== */
 .teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:8px;margin-top:8px}
 .teams div{display:grid;gap:2px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2)}
@@ -1295,6 +1286,118 @@ table.t.claims-t{min-width:540px;font-size:14px}
 .claims-t ol li{padding-left:12px;border-left:2px solid var(--line)}
 .claim-t tr.ind-row td{background:color-mix(in srgb,var(--accent-soft) 55%,var(--surface))}
 
+/* AI agent departments */
+.ag-wrap{display:grid;grid-template-columns:minmax(220px,260px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.ag-wrap{grid-template-columns:minmax(0,1fr)}}
+.ag-depts{display:grid;gap:6px}
+@media (max-width:900px){.ag-depts{grid-template-columns:repeat(auto-fill,minmax(min(180px,100%),1fr))}}
+.ag-depts button{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;display:grid;gap:1px}
+.ag-depts button b{font-size:14px}
+.ag-depts button span{font-size:12px;color:var(--muted)}
+.ag-depts button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.ag-main{display:grid;gap:14px;min-width:0}
+.ag-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.ag-cards{grid-template-columns:minmax(0,1fr)}}
+.ag-card{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.ag-card[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.ag-av{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font:700 13px var(--f-mono)}
+.ag-meta{display:grid;gap:2px}
+.ag-meta b{font-size:14px}
+.ag-meta span{font-size:12.5px;color:var(--ink-2);line-height:1.35}
+.ag-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:14px}
+.ag-info .chips{margin-top:6px}
+.ag-task{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.ag-task textarea{flex:1 1 300px;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;font:14px/1.45 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical;min-height:52px}
+.ag-out{border:1px solid var(--line-strong);border-radius:14px;background:var(--surface);padding:16px;display:grid;gap:10px;min-height:120px}
+.ag-head{display:flex;gap:10px;align-items:center}
+.ag-head div{display:grid}
+.ag-sec{display:grid;gap:4px}
+.ag-sec .cxl{margin-top:2px}
+.ag-side{display:grid;gap:8px;align-content:start;min-width:0}
+.ag-depts{max-height:min(760px,80vh);overflow:auto;padding-right:2px}
+@media (max-width:900px){.ag-depts{max-height:none}}
+.ag-task{display:grid;gap:6px}
+.ag-task-row{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.ag-task-row textarea{flex:1 1 300px;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;font:14px/1.45 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical;min-height:52px}
+button.chip{font:inherit;font-size:12.5px;cursor:pointer;text-align:left}
+button.chip:hover{border-color:var(--accent);color:var(--ink)}
+/* terminals */
+.tm{background:var(--surface);color:var(--ink);border:1px solid var(--line-strong);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.tm-tabs{display:flex;align-items:flex-end;gap:2px;overflow-x:auto;scrollbar-width:thin;background:var(--surface-2);border-bottom:1px solid var(--line);padding:8px 8px 0}
+.tm-tab{display:flex;align-items:center;flex:none;border:1px solid transparent;border-bottom:0;border-radius:9px 9px 0 0}
+.tm-tab:has([aria-selected="true"]){background:var(--surface);border-color:var(--line)}
+.tm-tab button,.tm-new{appearance:none;border:0;background:transparent;color:var(--ink-2);font:500 13px var(--f-body);padding:9px 6px 10px 12px;cursor:pointer;white-space:nowrap}
+.tm-tab [aria-selected="true"]{color:var(--ink);font-weight:600}
+.tm-tab .tm-x{padding:9px 10px 10px 4px;color:var(--muted);font-size:15px;line-height:1}
+.tm-tab .tm-x:hover{color:var(--crit)}
+.tm-new{flex:none;color:var(--accent);font-weight:600;padding:9px 12px 10px}
+.tm-new[aria-selected="true"]{background:var(--surface);border-radius:9px 9px 0 0}
+.tm-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.tm-head h3{font-family:var(--f-display);font-size:19px;margin:0}
+.tm-head p{margin:2px 0 0}
+.tm-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.tm-clock{font-size:12px;color:var(--muted)}
+.tm-cmd{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--line);font:600 13px var(--f-mono);color:var(--accent)}
+.tm-cmd input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font:14px var(--f-mono)}
+.tm-cmd:focus-within{box-shadow:inset 0 0 0 2px var(--accent)}
+.tm-log{max-height:260px;overflow:auto;padding:0 16px;background:var(--bg);font:12.5px/1.6 var(--f-mono);color:var(--ink-2);overflow-wrap:anywhere}
+.tm-log:not(:empty){padding:10px 16px;border-bottom:1px solid var(--line)}
+.tm-l{padding:2px 0}
+.tm-l b{color:var(--ink)}
+.tm-in{color:var(--accent)}
+.tm-err{color:var(--crit)}
+.tm-log .ag-run{font-family:var(--f-body);margin:8px 0}
+.tm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(330px,100%),1fr));gap:12px;padding:14px;align-items:start}
+.tm-p{min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--surface);display:flex;flex-direction:column}
+.tm-wide{grid-column:span 2}
+@media (max-width:760px){.tm-wide{grid-column:auto}}
+.tm-p>header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);font:600 11.5px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tm-p>header b{color:var(--ink)}
+.tm-p>header span{text-transform:none;letter-spacing:0;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tm-pb{padding:10px 12px;display:grid;gap:6px;font-size:13.5px;min-width:0}
+.tm-pb .label{margin-top:4px}
+.tm-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:3px 0;border-bottom:1px dashed var(--line)}
+.tm-row>span:first-child{min-width:0;overflow-wrap:anywhere}
+.tm-row>span:last-child{flex:none;font-family:var(--f-mono);font-size:12.5px;text-align:right}
+.tm-up{color:var(--good)}
+.tm-dn{color:var(--crit)}
+.tm-line{appearance:none;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:baseline;text-align:left;border:0;border-bottom:1px dashed var(--line);background:transparent;color:var(--ink);font:13px/1.4 var(--f-body);padding:5px 0;cursor:pointer}
+.tm-line:hover{color:var(--accent)}
+.tm-sev{font:600 10.5px var(--f-mono);text-transform:uppercase;padding:2px 6px;border-radius:5px;background:var(--surface-2);color:var(--ink-2)}
+.tm-sev.s-crit{background:var(--crit-soft,#3D1815);color:var(--crit)}
+.tm-sev.s-high{background:var(--signal-soft);color:var(--signal)}
+.tm-kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.tm-kpis div{display:grid;gap:2px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2)}
+.tm-kpis b{font:700 20px var(--f-display)}
+.tm-kpis span{font-size:11.5px;color:var(--muted)}
+.tm-bar{display:grid;grid-template-columns:minmax(0,1fr) 90px auto;gap:4px 10px;align-items:center}
+.tm-bar>span:first-child{grid-column:1/-1;font-size:13px}
+.tm-bar i{display:block;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--accent) var(--w),var(--line) var(--w))}
+.tm-bar b{font:600 13px var(--f-mono)}
+.tm-bar .tiny{grid-column:1/-1}
+.tm-seg{display:flex;flex-wrap:wrap;gap:4px}
+.tm-war{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.tm-war label{display:grid;gap:4px}
+.tm-war output{font-family:var(--f-mono)}
+.tm-q{width:100%;border:1px solid var(--line-strong);border-radius:9px;padding:8px 10px;font:13.5px/1.45 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical}
+.tm-pb .inp{font-size:13px}
+.tm-ros{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.tm-ros>span{display:grid;min-width:0}
+.tm-agout:not(:empty){border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:8px;background:var(--surface-2)}
+.tm-launch{display:grid;gap:18px;padding:16px}
+.tm-launch h3{font-family:var(--f-display);font-size:19px;margin:0 0 4px}
+.tm-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:10px}
+.tm-card{appearance:none;display:grid;gap:4px;align-content:start;text-align:left;font:inherit;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer}
+button.tm-card:hover{border-color:var(--accent)}
+.tm-mine{cursor:default}
+.tm-build{display:grid;gap:12px}
+.tm-brow{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:10px}
+.tm-brow label{display:grid;gap:4px}
+.tm-pick{border:0;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:8px}
+.tm-opt{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:start;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.tm-opt>span{display:grid}
+.tm-opt select{grid-column:2}
+
 /* find anything (search dialog) */
 .find-btn{flex:none;display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 10px 0 12px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);color:var(--ink-2);font:500 13.5px/1 var(--f-body,inherit);cursor:pointer}
 .find-btn:hover{border-color:var(--accent);color:var(--ink)}
@@ -1339,6 +1442,8 @@ table.t.claims-t{min-width:540px;font-size:14px}
       <a href="#platform">Platform</a>
       <a href="#operators">Operator desk</a>
       <a href="#console">Live console</a>
+      <a href="#terminals">Terminals</a>
+      <a href="#agents">AI agents</a>
       <a href="#academy">Academy</a>
       <a href="#lab">Innovation</a>
       <a href="#patent">Patent</a>
@@ -1359,7 +1464,7 @@ table.t.claims-t{min-width:540px;font-size:14px}
         <div class="cta-row">
           <a class="btn primary" href="#console">Open the live console</a>
           <a class="btn accent" href="#launch">Join the pilot</a>
-          <a class="btn" href="eand.html">e&amp; UAE edition →</a>
+          <a class="btn" href="eand.html">etisalat UAE edition →</a>
           <a class="btn" href="#patent">Read the patent draft</a>
         </div>
         <div class="meta-row">
@@ -1379,11 +1484,6 @@ table.t.claims-t{min-width:540px;font-size:14px}
       <div><b>68%</b><span>of operators turned data growth into ARPU growth, although 93% saw usage rise</span><cite><a href="#src-5">Tefficient, 1H 2025</a></cite></div>
       <div><b>−2%</b><span>Forecast global telecom capex for 2026, so every investment has to count</span><cite><a href="#src-7">Dell'Oro, Apr 2026</a></cite></div>
       <div><b>2×</b><span>CI teams that share insights weekly are twice as likely to see revenue impact (79% vs 41%)</span><cite><a href="#src-24">Crayon, 2026</a></cite></div>
-    </div>
-    <div class="sponsor-strip">
-      <span class="label">Sponsored by</span>
-      <ul aria-label="Sponsors"><li class="wm">PAINITE</li><li class="wm">M.A.I.I</li><li class="wm">SPACE42</li><li class="wm">G42 AI</li><li class="wm">BLOOMBERG</li><li class="wm">MC INTERNATIONAL INVESTMENTS</li></ul>
-      <a class="small" href="#sponsors">Our sponsors →</a>
     </div>
   </div>
 </section>
@@ -1676,12 +1776,12 @@ table.t.claims-t{min-width:540px;font-size:14px}
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Operator desk · a department for operators</div>
-      <h2>Market, sell and win: a desk for every operator, with an e&amp; UAE edition</h2>
-      <p class="lede">Marketing plans by customer segment, a sales playbook, strategy horizons and rival-response playbooks, a studio that turns big problems into a 90-day plan, and an idea lab for new ways to attract customers. Pick any of 108 operators; e&amp; UAE has the deepest edition.</p>
-      <p class="tiny muted">Independent analysis from public sources plus Cellvoyant’s own assessment. Not affiliated with or endorsed by e&amp; or any operator named here.</p>
-      <p class="small"><a class="btn sm accent" href="eand.html">Open the full e&amp; UAE edition →</a> <span class="muted">It adds the right-time engagement and market intelligence solutions.</span></p>
+      <h2>Market, sell and win: a desk for every operator, with an etisalat UAE edition</h2>
+      <p class="lede">Marketing plans by customer segment, a sales playbook, strategy horizons and rival-response playbooks, a studio that turns big problems into a 90-day plan, and an idea lab for new ways to attract customers. Pick any of 108 operators; etisalat UAE has the deepest edition.</p>
+      <p class="tiny muted">Independent analysis from public sources plus Cellvoyant’s own assessment. Not affiliated with or endorsed by etisalat or any operator named here.</p>
+      <p class="small"><a class="btn sm accent" href="eand.html">Open the full etisalat UAE edition →</a> <span class="muted">It adds the right-time engagement and market intelligence solutions.</span></p>
     </div>
-    <div class="od-bar"><label class="lens"><span class="label">Desk for</span><select id="odOp" class="mini" aria-label="Operator"></select></label><span class="pill sim" id="odBadge">Special edition · e&amp; UAE</span></div>
+    <div class="od-bar"><label class="lens"><span class="label">Desk for</span><select id="odOp" class="mini" aria-label="Operator"></select></label><span class="pill sim" id="odBadge">Special edition · etisalat UAE</span></div>
     <div class="tabs od-tabs" id="odTabs" role="tablist" aria-label="Operator desk views"><button class="tab" role="tab" id="odt-overview" data-t="overview" aria-controls="odBody" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</button><button class="tab" role="tab" id="odt-marketing" data-t="marketing" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 001 1h3l6 4V6L7 10H4a1 1 0 00-1 1zM17 8a5 5 0 010 8"/></svg>Marketing plan</button><button class="tab" role="tab" id="odt-sales" data-t="sales" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>Sales playbook</button><button class="tab" role="tab" id="odt-strategy" data-t="strategy" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l5-7 4 4 7-11M15 6h5v5"/></svg>Strategy</button><button class="tab" role="tab" id="odt-solve" data-t="solve" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0012 3z"/></svg>Problem studio</button><button class="tab" role="tab" id="odt-ideas" data-t="ideas" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>Idea lab</button></div>
     <div class="od-body" id="odBody" role="tabpanel" aria-labelledby="odt-overview"></div>
   </div>
@@ -1974,6 +2074,44 @@ table.t.claims-t{min-width:540px;font-size:14px}
         </div>
       </div>
       <div class="c-status" id="cStatus"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="terminals">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Terminals</div>
+      <h2>A terminal for every job, and ones you build yourself</h2>
+      <p class="lede">Everything on the platform in one place. Open several terminals side by side as tabs: each puts live panels, the AI agents and a command line on one screen. Start from a ready-made terminal or build a custom one for a specific purpose; yours are saved in this browser. Type <b>HELP</b> in the command line to see what it can do.</p>
+    </div>
+    <div class="console tm" id="tmApp">
+      <div class="tm-tabs" id="tmTabs" role="tablist" aria-label="Open terminals"></div>
+      <div id="tmBody"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="agents">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">AI agent departments</div>
+      <h2><span id="agCount">216</span> AI agents in <span id="agDeptN">18</span> departments</h2>
+      <p class="lede">Every department has at least twelve agents. Each agent has a job, the sources it searches, the tools it runs, the services it can book and the resources it works with. Give it a task: it searches the knowledge base, runs its tools and writes a brief with findings and recommended actions, which go to the workspace in one click. In the Claude viewer agents reason with Claude; elsewhere a built-in agent runs the same tools. Every agent also runs from the terminals.</p>
+    </div>
+    <div class="ag-wrap" id="agApp">
+      <div class="ag-side">
+        <label class="sr" for="agFind">Find an agent</label>
+        <input class="inp-search" id="agFind" type="search" autocomplete="off" placeholder="Find an agent or a skill…">
+        <div class="ag-depts" id="agDepts" role="group" aria-label="Agent departments"></div>
+      </div>
+      <div class="ag-main">
+        <div class="ag-cards" id="agAgents" role="group" aria-label="Agents"></div>
+        <div class="panel ag-info" id="agInfo"></div>
+        <div class="ag-task"><label class="label" for="agTask" id="agSel">Task</label><div class="ag-task-row"><textarea id="agTask" rows="2"></textarea><button class="btn accent" id="agRun" type="button">Run agent</button></div></div>
+        <div class="ag-out ag-run" id="agOut" aria-live="polite"><p class="small muted">Pick an agent and run it.</p></div>
+        <p class="tiny muted">Console signals are simulated; positioning, landscape and capital data are researched. Agents never recommend coordinating with competitors, and every brief shows which tools and sources it used.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -2353,20 +2491,22 @@ table.t.claims-t{min-width:540px;font-size:14px}
         <div class="lc ok"><i>✓</i><span>Operations console with 9 views, department lens, workspace and workbench</span></div>
         <div class="lc ok"><i>✓</i><span>Client edition for etisalat (e&amp;) UAE with AI agents, an innovation lab and both solutions</span></div>
         <div class="lc ok"><i>✓</i><span>AI assistant with <b id="lcTools">17</b> tools and a service desk</span></div>
-        <div class="lc ok"><i>✓</i><span>Operator desk with an e&amp; UAE edition, problem studio and idea lab</span></div>
+        <div class="lc ok"><i>✓</i><span>Operator desk with an etisalat UAE edition, problem studio and idea lab</span></div>
         <div class="lc ok"><i>✓</i><span>9 departments, 36 teams, 12 workshops and a resources library</span></div>
+        <div class="lc ok"><i>✓</i><span>Terminals: 11 ready-made, custom ones and a command line</span></div>
+        <div class="lc ok"><i>✓</i><span>216 AI agents in 18 departments, each with tools, services and resources</span></div>
         <div class="lc ok"><i>✓</i><span>Search across the whole platform (Ctrl K or ⌘ K)</span></div>
         <div class="lc ok"><i>✓</i><span>Installable app with offline access and share previews (public site)</span></div></div>
       <div class="lc-col"><span class="label">Data &amp; trust</span>
         <div class="lc ok"><i>✓</i><span>140 companies and 108 operators with sources and check dates</span></div>
         <div class="lc ok"><i>✓</i><span>Competition-law and customer-contact guardrails built in</span></div>
         <div class="lc ok"><i>✓</i><span>UAE operator figures refreshed with Q3 2026 results (4 Nov 2026)</span></div>
-        <div class="lc todo"><i>○</i><span><b>Refresh the global landscape</b> (140 companies, 108 operators; last checked 6 Oct 2026)</span></div>
+        <div class="lc ok"><i>✓</i><span>Market values for 78 listed companies and 73 operators refreshed (4 Nov 2026); Gulf operators updated with Q3 2026 results</span></div>
+        <div class="lc todo"><i>○</i><span><b>Refresh the remaining operator results</b> outside the Gulf (last checked 6 Oct 2026)</span></div>
         <div class="lc todo"><i>○</i><span><b>Legal review</b> of the competition-law and privacy design</span></div></div>
       <div class="lc-col"><span class="label">Business &amp; partners</span>
         <div class="lc ok"><i>✓</i><span>Pricing, go-to-market, roadmap and a pilot offer</span></div>
         <div class="lc todo"><i>○</i><span><b>File the provisional patent</b> before sharing the page widely</span></div>
-        <div class="lc todo"><i>○</i><span><b>Sponsor logos</b> and approval of how sponsor names are shown</span></div>
         <div class="lc todo"><i>○</i><span><b>A private contact channel</b> for pilot leads (e-mail or CRM)</span></div></div>
     </div>
 
@@ -2385,16 +2525,6 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec" id="sponsors">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">Sponsors</div>
-      <h2>Supported by our sponsors</h2>
-      <p class="lede">Thank you to the organizations sponsoring Cellvoyant.</p>
-    </div>
-    <ul class="sponsor-grid" aria-label="Sponsors"><li><span class="wm">PAINITE</span><span class="label">Sponsor</span></li><li><span class="wm">M.A.I.I</span><span class="label">Sponsor</span></li><li><span class="wm">SPACE42</span><span class="label">Sponsor</span></li><li><span class="wm">G42 AI</span><span class="label">Sponsor</span></li><li><span class="wm">BLOOMBERG</span><span class="label">Sponsor</span></li><li><span class="wm">MC INTERNATIONAL INVESTMENTS</span><span class="label">Sponsor</span></li></ul>
-  </div>
-</section>
 <section class="sec band sources" id="sources">
   <div class="wrap">
     <div class="sec-head">
@@ -2462,8 +2592,8 @@ table.t.claims-t{min-width:540px;font-size:14px}
 
 <footer class="foot">
   <div class="wrap">
-    <span>Cellvoyant is a concept by its author, sponsored by PAINITE, M.A.I.I, SPACE42, G42 AI, BLOOMBERG and MC INTERNATIONAL INVESTMENTS. The prototype uses simulated data for fictional operators. Research figures cite their sources below.</span>
-    <span class="mono">v2.0 · 4 Nov 2026</span>
+    <span>Cellvoyant is a concept by its author. The prototype uses simulated data for fictional operators. Research figures cite their sources below.</span>
+    <span class="mono">v2.1 · 4 Nov 2026</span>
   </div>
 </footer>
 

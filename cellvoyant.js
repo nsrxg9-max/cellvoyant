@@ -1374,7 +1374,7 @@ const MI_CONCEPTS = {
   'Retail & stores': ['store', 'stores', 'kiosk', 'kiosks', 'retail', 'متجر', 'متاجر', '门店', '零售'],
   'Finance & capital': ['revenue', 'earnings', 'profit', 'ebitda', 'dividend', 'market cap', 'private equity', 'hedge fund', 'stake', 'acquisition', 'deal', 'إيرادات', 'أرباح', 'استحواذ', 'صفقة', '营收', '利润', '收购', '投资']
 };
-const MI_ALIAS = { 'أركلاين': 'Arcline', 'فيرتكس': 'Vertex', 'نيمبس': 'Nimbus', 'اتصالات': 'e&', '中国移动': 'China Mobile', '中国电信': 'China Telecom', '中国联通': 'China Unicom' };
+const MI_ALIAS = { 'أركلاين': 'Arcline', 'فيرتكس': 'Vertex', 'نيمبس': 'Nimbus', 'اتصالات': 'etisalat', '中国移动': 'China Mobile', '中国电信': 'China Telecom', '中国联通': 'China Unicom' };
 const isCJKorAr = w => /[؀-ۿ一-鿿]/.test(w);
 function miHas(hay, term) { if (isCJKorAr(term)) return hay.includes(term); const t = term.toLowerCase(); return new RegExp('(^|[^a-z0-9])' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^a-z0-9]|$)', 'i').test(hay); }
 function miCount(hay, list) { return list.reduce((n, w) => n + (miHas(hay, w) ? 1 : 0), 0); }
@@ -1478,7 +1478,7 @@ function miSearch(q, type) {
 function miRenderSearch() {
   const el = $('#miResults'); if (!el) return;
   const q = MI.q.trim();
-  if (!q) { el.innerHTML = '<p class="small muted">Try “price cut”, “e&amp;”, “أسعار”, “网速”, “private equity” or “spectrum”.</p>'; return; }
+  if (!q) { el.innerHTML = '<p class="small muted">Try “price cut”, “etisalat”, “أسعار”, “网速”, “private equity” or “spectrum”.</p>'; return; }
   const R = miSearch(q, MI.type);
   el.innerHTML = `<p class="tiny muted">${R.total} match${R.total === 1 ? '' : 'es'} · ${R.expanded} related terms added across languages${R.hidden ? ` · <b>${R.hidden} hidden by the access level of “${esc(MI_ROLES[MI.role].l)}”</b>` : ''}</p>` +
     (R.res.map(r => `<button type="button" class="mi-res" data-act="${esc(r.d.act ? r.d.act.join('|') : '')}"><span class="mi-rt"><span class="rt">${esc(r.d.type)}</span>${r.d.cls !== 'public' ? `<span class="acc acc-${r.d.cls}">${r.d.cls === 'licensed' ? 'Licensed' : 'Internal'}${r.a === 'summary' ? ' · summary only' : ''}</span>` : ''}</span><b>${esc(r.d.title)}</b><span class="small muted">${esc((r.a === 'summary' ? 'Summary access: full text needs a licensed seat. ' : '') + r.d.text.slice(0, r.a === 'summary' ? 80 : 160))}${r.d.text.length > 160 ? '…' : ''}</span></button>`).join('') || '<p class="small muted">No results for this access level.</p>');
@@ -1538,7 +1538,7 @@ function initMI() {
   miPanel('src');
 }
 
-/* ---------- OPERATOR DESK: a department for operators, with an e& UAE edition ---------- */
+/* ---------- OPERATOR DESK: a department for operators, with an etisalat UAE edition ---------- */
 const OD = { op: 'e-emirates-telecom', tab: 'overview', prob: 'p1', cat: 'all', gen: [], sel: null };
 const EAND = {
   facts: [['16.5m', 'UAE subscribers, Sep 2026 (14.8m mobile, 1.7m fixed)', 'etisalat Q3 2026 release', 'https://www.eand.com/content/dam/eand/assets/docs/earning-release/2026/earning-releases-q3-2026.pdf'],
@@ -1548,28 +1548,28 @@ const EAND = {
     ['2046', 'UAE licence renewed by TDRA for 20 years', 'etisalat Q3 2026 release', 'https://www.eand.com/content/dam/eand/assets/docs/earning-release/2026/earning-releases-q3-2026.pdf']],
   rivals: [['du', '9.5m mobile lines (7.4m prepaid, 2.0m postpaid) and 756k fixed, Sep 2026; revenue AED 12.3bn in 9M 2026, up 6.2%; growing in Home Wireless, fibre, du Pay, cloud and AI.'],
     ['Virgin Mobile UAE', 'Digital-only brand run by du on its network, aimed at app-first and price-conscious customers.']],
-  swot: { 'Strengths': ['Leading UAE share and high margins', 'Group scale: 254.8m subscribers', 'AED 21.9bn from the Vodafone stake sale and a UAE licence to 2046', 'Sovereign AI Compute with Core42, e& money and AI partnerships (AWS, IBM, Microsoft)'],
+  swot: { 'Strengths': ['Leading UAE share and high margins', 'Group scale: 254.8m subscribers', 'AED 21.9bn from the Vodafone stake sale and a UAE licence to 2046', 'Sovereign AI Compute with Core42, etisalat money and AI partnerships (AWS, IBM, Microsoft)'],
     'Watch-outs': ['du growing in fixed wireless and fibre', 'A digital-only rival brand targets youth and price-conscious users', 'eSIM makes switching a few taps away', 'A complex international portfolio competes for management attention'],
-    'Opportunities': ['Converged households: mobile, fibre and e& money in one account', 'Enterprise and SME demand for 5G, cloud and AI', 'Expatriate and visitor segments with specific needs', 'Right-moment, personalized offers instead of mass campaigns'],
+    'Opportunities': ['Converged households: mobile, fibre and etisalat money in one account', 'Enterprise and SME demand for 5G, cloud and AI', 'Expatriate and visitor segments with specific needs', 'Right-moment, personalized offers instead of mass campaigns'],
     'Threats': ['Price competition in prepaid and youth plans', 'Slower growth in a mature, two-network market', 'Regulatory or pricing changes', 'Customer fatigue from too many messages'] }
 };
 const OD_SEGS = [
-  { n: 'Young, digital-first', why: 'A digital-only rival brand targets them with app-first offers.', play: 'App-only plans with instant eSIM sign-up, gaming and creator data passes, and cashback in e& money.', ch: 'App, social creators, campus events', kpi: 'Gross adds under 30; app sign-up time', tool: ['Tariff DNA', 'tab-dna'] },
-  { n: 'Families & households', why: 'du is growing in Home Wireless and fibre.', play: 'One household account: mobile lines, fibre, entertainment and shared e& money allowances.', ch: 'Stores, home visits, app', kpi: 'Converged households; household churn', tool: ['War room', 'tab-war'] },
-  { n: 'Expatriate communities', why: 'International calling and money transfers matter every week.', play: 'Home-country bundles: calling, data and lower transfer fees through e& money.', ch: 'Community partners, WhatsApp, stores in key districts', kpi: 'Wallet active users; prepaid churn', tool: ['Right-time studio', '#challenge'] },
-  { n: 'Tourists & visitors', why: 'Short stays need connectivity the moment they land.', play: 'Tourist eSIM by QR code with a ready e& money wallet and city offers.', ch: 'Airports, hotels, travel partners', kpi: 'Visitor activations; revenue per visitor', tool: ['Intelligence hub', '#challenge2'] },
+  { n: 'Young, digital-first', why: 'A digital-only rival brand targets them with app-first offers.', play: 'App-only plans with instant eSIM sign-up, gaming and creator data passes, and cashback in etisalat money.', ch: 'App, social creators, campus events', kpi: 'Gross adds under 30; app sign-up time', tool: ['Tariff DNA', 'tab-dna'] },
+  { n: 'Families & households', why: 'du is growing in Home Wireless and fibre.', play: 'One household account: mobile lines, fibre, entertainment and shared etisalat money allowances.', ch: 'Stores, home visits, app', kpi: 'Converged households; household churn', tool: ['War room', 'tab-war'] },
+  { n: 'Expatriate communities', why: 'International calling and money transfers matter every week.', play: 'Home-country bundles: calling, data and lower transfer fees through etisalat money.', ch: 'Community partners, WhatsApp, stores in key districts', kpi: 'Wallet active users; prepaid churn', tool: ['Right-time studio', '#challenge'] },
+  { n: 'Tourists & visitors', why: 'Short stays need connectivity the moment they land.', play: 'Tourist eSIM by QR code with a ready etisalat money wallet and city offers.', ch: 'Airports, hotels, travel partners', kpi: 'Visitor activations; revenue per visitor', tool: ['Intelligence hub', '#challenge2'] },
   { n: 'Small businesses', why: 'Small firms buy connectivity, cloud and payments together.', play: 'SME growth pack: lines, fibre, cloud storage, an AI assistant and payment acceptance.', ch: 'SME telesales, accountants, business centres', kpi: 'SME gross adds; revenue per SME', tool: ['AI assistant', 'tab-ask'] },
   { n: 'High-value postpaid', why: 'They travel often and expect premium service.', play: 'Loyalty that travels: roaming passes, priority support and partner perks.', ch: 'Relationship managers, app', kpi: 'Postpaid churn; roaming revenue', tool: ['Right-time studio', '#challenge'] }
 ];
-const OD_FUNNEL = [['Attract', 'Right-moment offers, creator campaigns, tourist eSIM at arrival', 'Reach, app installs, store visits'], ['Convert', 'Four-minute app sign-up, store-to-app relay, instant eSIM', 'Conversion rate, time to activate'], ['Grow', 'Cross-sell fibre, e& money, devices and roaming passes at the right moment', 'Products per customer, ARPU'], ['Keep', 'Save desk routed to the districts where churn is spreading; loyalty perks', 'Churn, save rate'], ['Win back', 'Win-back offers when a rival’s promotion ends or its complaints spike', 'Win-back rate']];
+const OD_FUNNEL = [['Attract', 'Right-moment offers, creator campaigns, tourist eSIM at arrival', 'Reach, app installs, store visits'], ['Convert', 'Four-minute app sign-up, store-to-app relay, instant eSIM', 'Conversion rate, time to activate'], ['Grow', 'Cross-sell fibre, etisalat money, devices and roaming passes at the right moment', 'Products per customer, ARPU'], ['Keep', 'Save desk routed to the districts where churn is spreading; loyalty perks', 'Churn, save rate'], ['Win back', 'Win-back offers when a rival’s promotion ends or its complaints spike', 'Win-back rate']];
 const OD_CHANNELS = [['Stores', 'Staff report rival offers through the Voice-of-Store bot and finish sign-ups in the app with the customer.'], ['App & digital', 'Personal offers timed by the right-time engine; instant eSIM; AI assistant in Arabic and English.'], ['Telesales & SME desk', 'Call lists ranked by chance × value, inside quiet hours and consent rules.'], ['Partners', 'Airports, hotels, community groups and accountants as sign-up points.']];
-const OD_HORIZONS = [['Horizon 1 · 0–12 months', 'Defend and grow the core', ['Defend share with converged mobile, fibre and e& money bundles', 'Win back app-first youth with a digital offer', 'Right-time retention and save desks by district']],
-  ['Horizon 2 · 1–3 years', 'Build adjacent growth', ['Make e& money an everyday wallet', 'Sell 5G, cloud and AI to enterprises and SMEs', 'Household services on fibre: security, smart home, entertainment']],
+const OD_HORIZONS = [['Horizon 1 · 0–12 months', 'Defend and grow the core', ['Defend share with converged mobile, fibre and etisalat money bundles', 'Win back app-first youth with a digital offer', 'Right-time retention and save desks by district']],
+  ['Horizon 2 · 1–3 years', 'Build adjacent growth', ['Make etisalat money an everyday wallet', 'Sell 5G, cloud and AI to enterprises and SMEs', 'Household services on fibre: security, smart home, entertainment']],
   ['Horizon 3 · 3+ years', 'Create new markets', ['AI services for business and government', 'Use the Mobily stake and regional scale for a Gulf data-centre and AI-cloud platform', 'Satellite partnerships for remote and outdoor coverage']]];
 const OD_RESP = [['du cuts its Home Wireless price', 'Installer hiring, plan-page change', 'Targeted fibre upgrade offers in the affected districts; no blanket price cut'],
   ['A digital brand launches a youth promotion', 'App rank jump, social buzz', 'App-only counter-offer and a creator campaign within 48 hours'],
   ['du extends fibre to new areas', 'Site permits, field hiring', 'Household bundles in those districts before the rival launches'],
-  ['A rival bundles payments or a wallet', 'App release notes, partner news', 'Make e& money rewards visible on every bill and in the app']];
+  ['A rival bundles payments or a wallet', 'App release notes, partner news', 'Make etisalat money rewards visible on every bill and in the app']];
 const OD_PROBS = {
   p1: { t: 'Defend leadership as du grows in fixed wireless and fibre', causes: ['Households choose one provider for home and mobile', 'Fixed wireless is quick to install and easy to sell', 'Mobile-only customers have little reason to stay'], levers: ['Convergence', 'District targeting', 'Switching costs that customers value'],
     options: [['Match prices everywhere', 'Fast and simple', 'Costly; trains customers to wait for cuts'], ['Converged household bundles', 'Raises value and loyalty', 'Needs IT and store changes'], ['District-targeted offers', 'Spend only where risk is real', 'Needs good signal data']],
@@ -1578,7 +1578,7 @@ const OD_PROBS = {
     kpis: ['Converged households', 'Churn in pilot districts', 'Fixed-wireless share of new home connections'], risks: ['Cannibalizing existing revenue', 'Slow bundle set-up in IT systems'], tools: [['Geo radar', 'tab-geo'], ['War room', 'tab-war'], ['Move predictor', 'tab-pred']] },
   p2: { t: 'Grow revenue per customer while data use keeps rising', causes: ['Unlimited plans cap revenue', 'Customers compare headline prices only', 'Extras are sold too late or too often'], levers: ['Value-based tiers', 'Right-moment upsell', 'Services beyond data'],
     options: [['Raise headline prices', 'Quick revenue', 'Churn risk in a competitive market'], ['Tiered plans with clear extras', 'Customers trade up willingly', 'Needs clear communication'], ['Upsell at the right moment', 'Higher take-up, fewer messages', 'Needs the right-time model live']],
-    rec: 'Combine clear tiered plans with right-moment upsell of fibre, e& money and roaming passes.',
+    rec: 'Combine clear tiered plans with right-moment upsell of fibre, etisalat money and roaming passes.',
     plan: [['Days 1–30', 'Benchmark plans with Tariff DNA; define 3 tiers'], ['Days 31–60', 'A/B test right-time upsell vs the current schedule'], ['Days 61–90', 'Roll out the winners; track ARPU and complaints']],
     kpis: ['ARPU', 'Upsell take-up', 'Opt-outs and complaints'], risks: ['Customers see tiers as a hidden price rise', 'Message fatigue'], tools: [['Tariff DNA', 'tab-dna'], ['Right-time studio', '#challenge'], ['Analyst workbench', 'tab-wb']] },
   p3: { t: 'Win young, digital-first customers from digital-only brands', causes: ['Sign-up feels slower than an app-only brand', 'Offers feel built for older customers', 'Brand is seen as premium, not playful'], levers: ['Speed', 'Relevance', 'Community'],
@@ -1586,8 +1586,8 @@ const OD_PROBS = {
     rec: 'Launch a youth plan inside the app with instant eSIM, then add gaming and creator partnerships; review a flanker brand after 6 months of data.',
     plan: [['Days 1–30', 'Cut app sign-up to under 5 minutes; design the youth plan'], ['Days 31–60', 'Launch with 3 creator partners; measure under-30 gross adds'], ['Days 61–90', 'Add gaming passes; decide on a flanker brand']],
     kpis: ['Gross adds under 30', 'App sign-up time', 'Youth churn'], risks: ['Cannibalizing higher-value plans', 'Partner reputation risk'], tools: [['Tariff DNA', 'tab-dna'], ['Move predictor', 'tab-pred'], ['Intelligence hub', '#challenge2']] },
-  p4: { t: 'Turn e& money into a reason to choose and stay with e&', causes: ['The wallet is seen as separate from the phone plan', 'Rewards are not visible on the bill', 'Few everyday uses'], levers: ['Bundling', 'Visible rewards', 'Everyday use cases'],
-    options: [['Cashback on bills paid with e& money', 'Simple and visible', 'Margin cost'], ['Home-country transfer bundles for expatriates', 'Strong need and loyalty', 'Corridor partnerships needed'], ['Merchant offers through SMEs', 'Network effects', 'Slower to build']],
+  p4: { t: 'Turn etisalat money into a reason to choose and stay with etisalat', causes: ['The wallet is seen as separate from the phone plan', 'Rewards are not visible on the bill', 'Few everyday uses'], levers: ['Bundling', 'Visible rewards', 'Everyday use cases'],
+    options: [['Cashback on bills paid with etisalat money', 'Simple and visible', 'Margin cost'], ['Home-country transfer bundles for expatriates', 'Strong need and loyalty', 'Corridor partnerships needed'], ['Merchant offers through SMEs', 'Network effects', 'Slower to build']],
     rec: 'Start with bill cashback and expatriate transfer bundles, then grow merchant offers through the SME pack.',
     plan: [['Days 1–30', 'Pick 3 transfer corridors; design bill cashback'], ['Days 31–60', 'Launch in stores and the app; time offers with the right-time engine'], ['Days 61–90', 'Add SME merchant offers; measure wallet activity and churn']],
     kpis: ['Active wallet users', 'Churn of wallet users vs others', 'Transfers per user'], risks: ['Regulatory requirements for payments', 'Fraud and security'], tools: [['Right-time studio', '#challenge'], ['Capital radar', 'tab-cap'], ['AI assistant', 'tab-ask']] },
@@ -1598,20 +1598,20 @@ const OD_PROBS = {
     kpis: ['SME gross adds', 'Pilot-to-contract conversion', 'Enterprise revenue growth'], risks: ['Complex delivery', 'Competition from cloud providers'], tools: [['AI assistant', 'tab-ask'], ['Command center', 'tab-cc'], ['Landscape', '#landscape']] },
   p6: { t: 'Keep prepaid customers when switching is a few taps away', causes: ['eSIM makes leaving instant', 'Prepaid users chase the best weekly offer', 'Contacts arrive at the wrong time'], levers: ['Right-moment retention', 'Loyalty that builds over time', 'District-level save offers'],
     options: [['Bigger discounts for everyone', 'Easy to run', 'Expensive; no targeting'], ['Loyalty that grows with tenure', 'Rewards staying', 'Slow to show results'], ['Right-time save offers by district', 'Targeted and efficient', 'Needs model and guardrails']],
-    rec: 'Use right-time save offers in the districts where churn is spreading, plus tenure rewards paid in e& money.',
+    rec: 'Use right-time save offers in the districts where churn is spreading, plus tenure rewards paid in etisalat money.',
     plan: [['Days 1–30', 'Find churn hotspots; set the contact policy with compliance'], ['Days 31–60', 'A/B test right-time save offers (about 4,200 per group)'], ['Days 61–90', 'Scale if churn falls and opt-outs do not rise']],
     kpis: ['Prepaid churn', 'Save rate', 'Opt-outs and complaints'], risks: ['Over-contacting customers', 'Discount dependence'], tools: [['Geo radar', 'tab-geo'], ['Right-time studio', '#challenge'], ['Operator workspace', 'tab-ws']] }
 };
 const OD_IDEAS = [
-  ['mk', 'Right-moment offers', 'Send fibre, e& money and roaming offers when each customer is most likely to respond, inside the contact guardrails.', 4, 2, 'Offer take-up'],
-  ['mk', 'Household hub', 'One family account for mobile lines, fibre, entertainment and shared e& money allowances.', 5, 4, 'Converged households'],
+  ['mk', 'Right-moment offers', 'Send fibre, etisalat money and roaming offers when each customer is most likely to respond, inside the contact guardrails.', 4, 2, 'Offer take-up'],
+  ['mk', 'Household hub', 'One family account for mobile lines, fibre, entertainment and shared etisalat money allowances.', 5, 4, 'Converged households'],
   ['mk', 'Tourist eSIM at arrival', 'Scan a QR code at the airport to get a tourist eSIM with a ready wallet and city offers.', 3, 2, 'Visitor activations'],
   ['mk', 'Creator & gaming passes', 'Data passes for creators and low-latency gaming, sold through creator partners.', 3, 2, 'Gross adds under 30'],
   ['mk', 'Total-price promise', 'Show the full monthly price including every fee, next to the headline price.', 3, 1, 'Consideration and NPS'],
   ['sl', 'Store-to-app relay', 'Start in store, finish in the app with instant eSIM; staff log rival offers as they hear them.', 3, 2, 'Conversion rate'],
   ['sl', 'Save desk by district', 'Route save offers to the districts where churn is spreading, using the churn-contagion radar.', 4, 2, 'Save rate'],
   ['sl', 'SME growth pack', 'Lines, fibre, cloud storage, an AI assistant and payment acceptance in one pack.', 4, 3, 'SME gross adds'],
-  ['sl', 'Referral wallet rewards', 'Refer a friend and both get e& money credit when the friend activates.', 3, 1, 'Referred activations'],
+  ['sl', 'Referral wallet rewards', 'Refer a friend and both get etisalat money credit when the friend activates.', 3, 1, 'Referred activations'],
   ['st', 'AI concierge in the app', 'A multilingual assistant that answers, sells and solves in Arabic, English and other community languages.', 4, 3, 'Digital sales share'],
   ['st', 'Home-country bundles', 'Calling, data and lower transfer fees to the countries expatriate customers call most.', 4, 3, 'Wallet active users'],
   ['st', 'Event and venue slicing', 'Guaranteed-capacity connectivity for events and venues where 5G standalone is available.', 3, 4, 'Enterprise revenue'],
@@ -1620,7 +1620,7 @@ const OD_IDEAS = [
 ];
 const OD_CAT = { mk: ['Marketing', 'var(--cx-1)'], sl: ['Sales', 'var(--cx-2)'], st: ['Strategy & product', 'var(--cx-3)'] };
 const OD_GEN = { seg: ['young digital natives', 'expatriate families', 'tourists and visitors', 'small businesses', 'high-value postpaid customers', 'prepaid users', 'gamers', 'remote workers'],
-  hook: [['instant eSIM sign-up', 1], ['e& money cashback', 2], ['a shared household data pool', 2], ['5G gaming priority', 3], ['a fibre + mobile bundle', 3], ['an AI assistant in the app', 3], ['roaming passes', 1], ['loyalty points that turn into wallet credit', 2]],
+  hook: [['instant eSIM sign-up', 1], ['etisalat money cashback', 2], ['a shared household data pool', 2], ['5G gaming priority', 3], ['a fibre + mobile bundle', 3], ['an AI assistant in the app', 3], ['roaming passes', 1], ['loyalty points that turn into wallet credit', 2]],
   ch: ['the app at the right moment', 'store staff with a tablet', 'social creators', 'airport and hotel partners', 'SME telesales', 'WhatsApp business messaging', 'partner retailers'],
   kpi: ['gross adds', 'churn', 'ARPU', 'wallet active users', 'NPS', 'conversion rate'] };
 const odOps = () => posItems('ops').sort((a, b) => (b.id === 'e-emirates-telecom') - (a.id === 'e-emirates-telecom') || revOf(b) - revOf(a));
@@ -1643,21 +1643,21 @@ function odOverview(c) {
       <p class="tiny muted" style="margin-top:10px">Competitors: ${esc((c.rivals || c.competitors || []).join(', ') || '—')}. Full sources in the Positioning section.</p>
       <div class="row-btns" style="margin-top:10px"><button type="button" class="btn sm" data-odop="${esc(c.id)}">Open in Positioning</button><button type="button" class="btn sm accent" data-odreq="op_desk">Request a full desk for ${esc(c.short || c.name)}</button></div></div></div>`;
 }
-const odName = () => isEand() ? 'e& UAE' : (odCur().short || odCur().name);
+const odName = () => isEand() ? 'etisalat UAE' : (odCur().short || odCur().name);
 function odMarketing() {
-  const pre = isEand() ? '' : `<p class="small od-note">Starter plan for ${esc(odName())}, built from the e& UAE edition. Segments and channels need local research.</p>`;
-  return pre + `<div class="od-segs">${OD_SEGS.map(s => `<article class="od-card"><h4>${esc(s.n)}</h4><p class="small"><b>Insight:</b> ${esc(isEand() ? s.why : s.why.replace('du is growing', 'Rivals are growing').replace('A digital-only rival brand targets them', 'Digital-only brands compete for them'))}</p><p class="small"><b>Play:</b> ${esc(isEand() ? s.play : s.play.replace(/e& money/g, 'a wallet'))}</p><p class="tiny muted"><b>Channels:</b> ${esc(s.ch)} · <b>KPI:</b> ${esc(s.kpi)}</p>${hasTarget(s.tool[1]) ? `<div class="row-btns"><button type="button" class="chip hl" data-go="${s.tool[1]}">${esc(s.tool[0])}</button></div>` : ''}</article>`).join('')}</div>
+  const pre = isEand() ? '' : `<p class="small od-note">Starter plan for ${esc(odName())}, built from the etisalat UAE edition. Segments and channels need local research.</p>`;
+  return pre + `<div class="od-segs">${OD_SEGS.map(s => `<article class="od-card"><h4>${esc(s.n)}</h4><p class="small"><b>Insight:</b> ${esc(isEand() ? s.why : s.why.replace('du is growing', 'Rivals are growing').replace('A digital-only rival brand targets them', 'Digital-only brands compete for them'))}</p><p class="small"><b>Play:</b> ${esc(isEand() ? s.play : s.play.replace(/etisalat money/g, 'a wallet'))}</p><p class="tiny muted"><b>Channels:</b> ${esc(s.ch)} · <b>KPI:</b> ${esc(s.kpi)}</p>${hasTarget(s.tool[1]) ? `<div class="row-btns"><button type="button" class="chip hl" data-go="${s.tool[1]}">${esc(s.tool[0])}</button></div>` : ''}</article>`).join('')}</div>
     <div class="panel od-rules"><span class="label">Marketing rules that win trust</span><ul class="cxl"><li>Lead with the total monthly price, fees included.</li><li>Measure every campaign against a control group.</li><li>Time offers per customer with the right-time engine, never mass blasts.</li><li>At most 2 marketing contacts a week; respect quiet hours and consent.</li></ul></div>`;
 }
 function odSales() {
-  return `<div class="od-funnel">${OD_FUNNEL.map((f, i) => `<div><span class="mono tiny">${i + 1}</span><b>${esc(f[0])}</b><span class="small">${esc(isEand() ? f[1] : f[1].replace(/e& money/g, 'wallet'))}</span><span class="tiny muted">KPI: ${esc(f[2])}</span></div>`).join('')}</div>
+  return `<div class="od-funnel">${OD_FUNNEL.map((f, i) => `<div><span class="mono tiny">${i + 1}</span><b>${esc(f[0])}</b><span class="small">${esc(isEand() ? f[1] : f[1].replace(/etisalat money/g, 'wallet'))}</span><span class="tiny muted">KPI: ${esc(f[2])}</span></div>`).join('')}</div>
     <div class="od-two"><div class="panel"><span class="label">Channel plan</span>${OD_CHANNELS.map(c => `<p class="small" style="margin-top:8px"><b>${esc(c[0])}:</b> ${esc(c[1])}</p>`).join('')}</div>
     <div class="panel"><span class="label">Sales rhythm</span><div class="rhythm" style="margin-top:6px"><div><b>Daily</b><span>Save-desk queue and act-by priorities for the sales lens</span></div><div><b>Weekly</b><span>War-room review of rival promotions; contact queue for SMEs</span></div><div><b>Monthly</b><span>Funnel review by segment against control groups</span></div></div>
       <div class="row-btns" style="margin-top:12px"><button type="button" class="chip hl" data-go="tab-cc" data-lensto="pm">Open console with the sales lens</button><button type="button" class="chip hl" data-go="tab-ws">Operator workspace</button></div></div></div>`;
 }
 function odStrategy() {
-  return `<div class="od-hz">${OD_HORIZONS.map(h => `<div class="od-card"><span class="label">${esc(h[0])}</span><h4>${esc(h[1])}</h4><ul class="cxl">${h[2].map(x => `<li>${esc(isEand() ? x : x.replace(/e& money/g, 'a wallet').replace('Use the Mobily stake and regional scale for', 'Partner for'))}</li>`).join('')}</ul></div>`).join('')}</div>
-    <div class="panel"><span class="label">Response playbook: rival move → early signal → response</span><div class="tbl-wrap" style="margin-top:8px"><table class="wb-table od-resp"><thead><tr><th>Rival move</th><th>Early signal Cellvoyant watches</th><th>Recommended response</th></tr></thead><tbody>${OD_RESP.map(r => `<tr><td>${esc(isEand() ? r[0] : r[0].replace(/^du /, 'A rival '))}</td><td>${esc(r[1])}</td><td>${esc(r[2].replace(/e& money/g, isEand() ? 'e& money' : 'wallet'))}</td></tr>`).join('')}</tbody></table></div>
+  return `<div class="od-hz">${OD_HORIZONS.map(h => `<div class="od-card"><span class="label">${esc(h[0])}</span><h4>${esc(h[1])}</h4><ul class="cxl">${h[2].map(x => `<li>${esc(isEand() ? x : x.replace(/etisalat money/g, 'a wallet').replace('Use the Mobily stake and regional scale for', 'Partner for'))}</li>`).join('')}</ul></div>`).join('')}</div>
+    <div class="panel"><span class="label">Response playbook: rival move → early signal → response</span><div class="tbl-wrap" style="margin-top:8px"><table class="wb-table od-resp"><thead><tr><th>Rival move</th><th>Early signal Cellvoyant watches</th><th>Recommended response</th></tr></thead><tbody>${OD_RESP.map(r => `<tr><td>${esc(isEand() ? r[0] : r[0].replace(/^du /, 'A rival '))}</td><td>${esc(r[1])}</td><td>${esc(r[2].replace(/etisalat money/g, isEand() ? 'etisalat money' : 'wallet'))}</td></tr>`).join('')}</tbody></table></div>
     <p class="tiny muted" style="margin-top:8px">Responses are unilateral choices based on public signals; Cellvoyant never suggests coordinating with competitors.</p></div>`;
 }
 function odSolve() {
@@ -1686,12 +1686,12 @@ function odIdeas() {
         <text x="${sx(.6)}" y="${sy(5.3)}" style="font:600 11px var(--f-body);fill:var(--good)">Quick wins</text><text x="${sx(5.4)}" y="${sy(5.3)}" text-anchor="end" style="font:600 11px var(--f-body);fill:var(--ink-2)">Big bets</text><text x="${sx(.6)}" y="${sy(.7)}" style="font:600 11px var(--f-body);fill:var(--muted)">Fill-ins</text><text x="${sx(5.4)}" y="${sy(.7)}" text-anchor="end" style="font:600 11px var(--f-body);fill:var(--muted)">Avoid</text>
         <text x="${(W + P) / 2}" y="${H - 10}" text-anchor="middle" style="font:11px var(--f-mono);fill:var(--muted)">EFFORT →</text><text x="14" y="${(H - P) / 2}" transform="rotate(-90 14 ${(H - P) / 2})" text-anchor="middle" style="font:11px var(--f-mono);fill:var(--muted)">IMPACT →</text>${pts}</svg>
       <div class="legend-row tiny">${Object.entries(OD_CAT).map(([k, v]) => `<span><i class="sw sw-c${k === 'mk' ? 1 : k === 'sl' ? 2 : 3}"></i>${esc(v[0])}</span>`).join('')}<span>Shaded = quick wins</span></div></div>
-    <div class="od-ilist">${list.map((x, n) => `<article class="od-idea${OD.sel === x.i ? ' on' : ''}" id="od-idea-${x.i}"><div class="od-ih"><span class="mono tiny">${n + 1}</span><span class="rt">${esc(OD_CAT[x.c][0])}</span><span class="tiny muted">impact ${x.im}/5 · effort ${x.ef}/5</span></div><b>${esc(x.t)}</b><span class="small">${esc(isEand() || x.gen ? x.d : x.d.replace(/e& money/g, 'wallet'))}</span><span class="tiny muted">KPI: ${esc(x.k)}${x.gen ? ' · ' + esc(x.gen) : ''}</span><div><button type="button" class="btn sm" data-ideatask="${x.i}">Add to workspace</button></div></article>`).join('')}</div></div><div id="odIdeaAi"></div>`;
+    <div class="od-ilist">${list.map((x, n) => `<article class="od-idea${OD.sel === x.i ? ' on' : ''}" id="od-idea-${x.i}"><div class="od-ih"><span class="mono tiny">${n + 1}</span><span class="rt">${esc(OD_CAT[x.c][0])}</span><span class="tiny muted">impact ${x.im}/5 · effort ${x.ef}/5</span></div><b>${esc(x.t)}</b><span class="small">${esc(isEand() || x.gen ? x.d : x.d.replace(/etisalat money/g, 'wallet'))}</span><span class="tiny muted">KPI: ${esc(x.k)}${x.gen ? ' · ' + esc(x.gen) : ''}</span><div><button type="button" class="btn sm" data-ideatask="${x.i}">Add to workspace</button></div></article>`).join('')}</div></div><div id="odIdeaAi"></div>`;
 }
 function odRender() {
   const root = $('#odBody'); if (!root) return;
   const c = odCur();
-  $('#odBadge').textContent = isEand() ? 'Special edition · e& UAE' : 'Standard desk';
+  $('#odBadge').textContent = isEand() ? 'Special edition · etisalat UAE' : 'Standard desk';
   $('#odBadge').className = 'pill' + (isEand() ? ' sim' : '');
   $$('#odTabs [data-t]').forEach(b => { const on = b.dataset.t === OD.tab; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; });
   root.setAttribute('aria-labelledby', 'odt-' + OD.tab);
@@ -1704,7 +1704,7 @@ async function odClaude(btn, kind) {
     if (kind === 'solve') { const lo = free.toLowerCase(), best = Object.entries(OD_PROBS).map(([k, p]) => [k, [...p.causes, ...p.levers, p.t].join(' ').toLowerCase().split(/\W+/).filter(w => w.length > 4 && lo.includes(w)).length]).sort((a, b) => b[1] - a[1])[0]; if (best && best[1]) { OD.prob = best[0]; odRender(); $('#odAi').innerHTML = '<p class="small muted" style="margin-top:8px">Showing the closest built-in solution.</p>'; } }
     return; }
   btn.disabled = true; out.innerHTML = '<div class="ai-out" style="margin-top:10px"><span class="by">Claude · thinking</span><span class="muted">Working on it…</span></div>';
-  const ctx = isEand() ? `Operator: e& UAE. Facts: ${EAND.facts.map(f => f[0] + ' ' + f[1]).join('; ')}. Rivals: ${EAND.rivals.map(r => r[0] + ': ' + r[1]).join(' ')}` : `Operator: ${odCur().name} (${odCur().country || odCur().region}). Improve: ${(odCur().improve || []).join('; ')}. Win: ${(odCur().win || []).join('; ')}.`;
+  const ctx = isEand() ? `Operator: etisalat UAE. Facts: ${EAND.facts.map(f => f[0] + ' ' + f[1]).join('; ')}. Rivals: ${EAND.rivals.map(r => r[0] + ': ' + r[1]).join(' ')}` : `Operator: ${odCur().name} (${odCur().country || odCur().region}). Improve: ${(odCur().improve || []).join('; ')}. Win: ${(odCur().win || []).join('; ')}.`;
   try {
     if (kind === 'solve') {
       const d = await sample.json(`You are a senior telecom strategy consultant. ${ctx}\nProblem: ${free.slice(0, 1500)}\nRules: unilateral strategies only, never coordination with competitors; respect customer consent and privacy; no invented statistics.\nReply with only JSON: {"problem":"one sentence","root_causes":["3"],"options":[{"name":"","upside":"","downside":""}],"recommendation":"","plan_90_days":["days 1-30 ...","days 31-60 ...","days 61-90 ..."],"kpis":["3"],"risks":["2"]}`);
@@ -1720,13 +1720,13 @@ async function odClaude(btn, kind) {
 function odSpark() {
   const r = () => Math.random(), G = OD_GEN, pick = a => a[Math.floor(r() * a.length)];
   const seg = pick(G.seg), hook = pick(G.hook), ch = pick(G.ch), kpi = pick(G.kpi);
-  const h = isEand() ? hook[0] : hook[0].replace('e& money', 'wallet');
+  const h = isEand() ? hook[0] : hook[0].replace('etisalat money', 'wallet');
   OD.gen.push({ i: 'g' + OD.gen.length, c: /store|telesales|partner|retail/.test(ch) ? 'sl' : hook[1] >= 3 ? 'st' : 'mk', t: `${h[0].toUpperCase() + h.slice(1)} for ${seg}`, d: `Offer ${seg} ${h} through ${ch}; test it against a control group before scaling.`, im: 2 + Math.floor(r() * 3), ef: Math.min(5, hook[1] + (r() < .4 ? 1 : 0)), k: kpi, gen: 'idea starter: score it with your team' });
   OD.cat = 'all'; odRender();
 }
 function initOD() {
   const sel = $('#odOp'); if (!sel || !POS) return;
-  sel.innerHTML = odOps().map(c => `<option value="${esc(c.id)}">${c.id === 'e-emirates-telecom' ? 'e& UAE · special edition' : esc(c.name) + ' · ' + esc(c.country || c.region || '')}</option>`).join('');
+  sel.innerHTML = odOps().map(c => `<option value="${esc(c.id)}">${c.id === 'e-emirates-telecom' ? 'etisalat UAE · special edition' : esc(c.name) + ' · ' + esc(c.country || c.region || '')}</option>`).join('');
   sel.value = OD.op;
   document.addEventListener('click', e => { const b = e.target.closest('[data-odtab]'); if (!b) return; e.preventDefault(); OD.tab = b.dataset.odtab; odRender(); $('#operators').scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' }); });
   sel.addEventListener('change', () => { OD.op = sel.value; OD.gen = []; OD.sel = null; odRender(); });
@@ -1750,7 +1750,7 @@ function initOD() {
   odRender();
 }
 
-/* ---------- VALUE CALCULATOR (e& UAE edition) ---------- */
+/* ---------- VALUE CALCULATOR (etisalat UAE edition) ---------- */
 const VAL_DEF = { vN: 500000, vArpu: 100, vChurn: 1.5, vCut: 5, vUp: .5, vUpv: 20, vAn: 20, vHrs: 6, vCost: 150 };
 const aed = v => 'AED ' + (v >= 1e9 ? (v / 1e9).toFixed(2) + 'bn' : v >= 1e6 ? (v / 1e6).toFixed(1) + 'm' : v >= 1e3 ? Math.round(v / 1e3) + 'k' : Math.round(v));
 function valRun() {
@@ -1774,51 +1774,275 @@ function initValue() {
   valRun();
 }
 
-/* ---------- AI AGENT DEPARTMENTS (e& UAE edition): agents that search sources and data, run tools and brief a team ---------- */
-const AG_DEPTS = [
-  { k: 'mi', n: 'Market Intelligence', agents: [
-    { id: 'scout', n: 'Signal Scout', role: 'Finds the competitor moves that need action today', src: ['web', 'social', 'app', 'reg', 'media'], calls: [['list_signals', { limit: 5 }], ['intel_search', { query: 'price cut launch' }]], q: 'What changed in the market today, and what needs action first?', acts: ['Route each critical signal to its lead department with an act-by time', 'Open the evidence chain before responding', 'Put the top signal on the operator workspace'], learn: ['Licensed news feed', 'Store staff reports'] },
-    { id: 'profiler', n: 'Rival Profiler', role: 'Keeps a live profile of du, Virgin Mobile UAE and Gulf peers', src: ['web', 'fin', 'media', 'stats'], calls: [['market_position', { map: 'operators', region: 'Gulf (GCC)', limit: 6 }], ['intel_search', { query: 'du Virgin Mobile UAE' }]], q: 'Profile du and Virgin Mobile UAE: position, strengths and what they will do next.', acts: ['Refresh the du battlecard', 'Brief marketing and sales on what changed', 'Set alert rules for the rival’s next likely move'], learn: ['Exchange filings in real time', 'App-intelligence feed'] },
-    { id: 'capital', n: 'Capital Watcher', role: 'Tracks deals, valuations and investor moves across telecom', src: ['fin', 'media', 'research'], calls: [['capital_deals', { limit: 5 }], ['valuation_pulse', { metric: 'mcap', limit: 6 }]], q: 'Which deals and valuation moves matter for e& this quarter?', acts: ['Flag deals that change a rival’s capacity to invest', 'Update the peer valuation pack', 'Review tower and fibre carve-out options'], learn: ['Licensed deals database', 'Investor-call transcripts'] }] },
-  { k: 'mk', n: 'Marketing & Brand', agents: [
-    { id: 'segment', n: 'Segment Strategist', role: 'Finds the segments and offers with the most upside', src: ['social', 'ios', 'gplay', 'stats'], calls: [['intel_search', { query: 'youth eSIM app' }], ['contact_plan', { goal: 'upsell', limit: 5 }]], q: 'Which customer segments should e& target next, and with what offer?', acts: ['Test the youth app plan against a control group', 'Time offers with the right-time engine', 'Measure gross adds by segment weekly'], learn: ['Tokenized segment data', 'Campaign results'] },
-    { id: 'timer', n: 'Campaign Timer', role: 'Times every offer for the moment each customer is most likely to respond', src: ['int', 'app'], calls: [['contact_plan', { goal: 'upsell', limit: 6 }]], q: 'Who should we contact in the next four hours, and through which channel?', acts: ['Send the contact queue to the CRM', 'Keep caps, consent and quiet hours on', 'Compare engagement with the fixed schedule'], learn: ['Campaign response history', 'Consent records'] },
-    { id: 'listener', n: 'Brand Listener', role: 'Reads social posts and app reviews in Arabic, English and other languages', src: ['social', 'ios', 'gplay', 'media'], calls: [['intel_search', { query: 'complaints reviews outage' }], ['list_signals', { limit: 4 }]], q: 'What are customers saying about e& and its rivals this week?', acts: ['Answer the top complaint theme publicly and factually', 'Send product issues to the owning team', 'Track sentiment after each fix'], learn: ['Social listening feed', 'App-review feed'] }] },
-  { k: 'sl', n: 'Sales & Channels', agents: [
-    { id: 'pipeline', n: 'Pipeline Coach', role: 'Ranks enterprise and SME opportunities by chance and value', src: ['reg', 'media', 'int'], calls: [['intel_search', { query: 'tender enterprise private 5G' }]], q: 'Which enterprise opportunities should sales chase this month?', acts: ['Assign an owner to every open tender', 'Prepare a reference case for each bid', 'Review win/loss after each award'], learn: ['CRM pipeline', 'Tender portals'] },
-    { id: 'store', n: 'Store Intel Agent', role: 'Watches rival retail moves near e& stores', src: ['web', 'social', 'int'], calls: [['geo_hotspots', { layer: 'retail' }]], q: 'Where is rival retail pressure rising near our stores?', acts: ['Staff the stores under pressure at peak hours', 'Give store teams the talk track for the rival offer', 'Log rival offers through the Voice-of-Store bot'], learn: ['Store footfall', 'Staff reports'] },
-    { id: 'upsell', n: 'Upsell Planner', role: 'Finds customers ready for fibre, e& money or roaming passes', src: ['int', 'app'], calls: [['contact_plan', { goal: 'upsell', limit: 6 }]], q: 'Which customers are most likely to upgrade this week?', acts: ['Offer the upgrade at the predicted moment', 'Track take-up against a control group', 'Stop if opt-outs rise'], learn: ['Product holdings', 'Upgrade history'] }] },
-  { k: 'cx', n: 'Customer Experience & Retention', agents: [
-    { id: 'churn', n: 'Churn Sentinel', role: 'Spots where churn is spreading, district by district', src: ['int', 'social'], calls: [['geo_hotspots', { layer: 'churn' }], ['list_signals', { limit: 4 }]], q: 'Where is churn spreading, and why?', acts: ['Target save offers to the top two districts', 'Brief the save desk on the rival offer behind it', 'Re-measure port-outs after 7 days'], learn: ['Port-out records', 'Complaint logs'] },
-    { id: 'save', n: 'Save-Desk Agent', role: 'Builds today’s retention queue inside the contact guardrails', src: ['int'], calls: [['contact_plan', { goal: 'retention', limit: 6 }]], q: 'Who should the save desk call first today?', acts: ['Call the top of the queue at the predicted time', 'Use a tenure reward rather than a blanket discount', 'Log the outcome for the model'], learn: ['Save-desk outcomes', 'Tenure data'] },
-    { id: 'voc', n: 'Voice-of-Customer Agent', role: 'Turns complaints and reviews into fix-it lists', src: ['ios', 'gplay', 'social', 'int'], calls: [['intel_search', { query: 'complaints slow outage' }]], q: 'What are the top three things customers want fixed?', acts: ['Assign each issue to an owner with a date', 'Tell customers when it is fixed', 'Watch the review score after each fix'], learn: ['Contact-centre transcripts (tokenized)', 'Survey results'] }] },
-  { k: 'pr', n: 'Pricing & Offers', agents: [
-    { id: 'tariff', n: 'Tariff Analyst', role: 'Compares e&’s plans with rival plans gene by gene', src: ['web', 'app'], calls: [['compare_plans', { plan_id: 'nim-u' }]], q: 'How do our main plans compare with the closest rival plans?', acts: ['Fix any gene where a rival clearly wins', 'Show the total monthly price, fees included', 'Re-check after each rival change'], learn: ['Live tariff crawl of UAE operators', 'Plan take-up data'] },
-    { id: 'pricesim', n: 'Price-Move Simulator', role: 'Simulates a rival price cut and ranks the responses', src: ['web', 'int'], calls: [['simulate_response', { rival: 'arc', cut_pct: 15, weeks: 8 }]], q: 'A rival cuts 15% for 8 weeks: what should we do?', acts: ['Choose the response with the best net impact', 'Respond in week 0, not week 3', 'Avoid blanket price cuts'], learn: ['Elasticity from past campaigns', 'Port-out data'] },
-    { id: 'fee', n: 'Fee Watch', role: 'Catches hidden price changes in fees and allowances', src: ['web'], calls: [['intel_search', { query: 'fee stealth pricing' }]], q: 'Has any rival raised prices through fees or smaller allowances?', acts: ['Use the change in factual comparison ads', 'Offer switchers a clear total-price promise', 'Alert pricing on every new fee'], learn: ['Terms-and-conditions archive'] }] },
-  { k: 'en', n: 'Enterprise & Government', agents: [
-    { id: 'tender', n: 'Tender Hunter', role: 'Finds public and private tenders early', src: ['reg', 'gov', 'media'], calls: [['intel_search', { query: 'tender private 5G port' }]], q: 'Which tenders open in the next 90 days?', acts: ['Qualify each tender within 48 hours', 'Line up partners for gaps', 'Track rival bids'], learn: ['Government tender portals', 'Partner pipeline'] },
-    { id: 'architect', n: 'Solution Architect', role: 'Designs 5G, cloud and AI offers for each industry', src: ['research', 'media'], calls: [['intel_search', { query: 'cloud AI enterprise 5G' }]], q: 'Which industry solution should we lead with next quarter?', acts: ['Run a paid pilot with clear KPIs', 'Publish the result as a reference', 'Package it for similar clients'], learn: ['Pilot results', 'Licensed research'] },
-    { id: 'account', n: 'Account Planner', role: 'Builds account plans for the largest clients', src: ['fin', 'media', 'int'], calls: [['company_lookup', { segment: 'Operator', limit: 5 }], ['intel_search', { query: 'government enterprise contract' }]], q: 'Build an account plan for our largest enterprise client group.', acts: ['Map decision-makers and needs', 'Plan three offers for the next 12 months', 'Review quarterly with the client'], learn: ['CRM account data'] }] },
-  { k: 'nw', n: 'Network & Technology', agents: [
-    { id: 'coverage', n: 'Coverage Truth Agent', role: 'Checks advertised coverage against measured speeds', src: ['net', 'web'], calls: [['geo_hotspots', { layer: 'coverage', operator: 'Arcline' }]], q: 'Where does a rival’s coverage claim not match measured speeds?', acts: ['Fix our own gaps first', 'Use rival gaps in factual campaigns', 'Prioritize capex in contested cells'], learn: ['Licensed speed-test feed', 'Own network counters'] },
-    { id: 'build', n: 'Rival Build Watcher', role: 'Predicts rival network and fixed-wireless launches', src: ['web', 'reg', 'media'], calls: [['predict_move', { move_id: 'fwa' }]], q: 'How likely is a rival fixed-wireless launch, and when?', acts: ['Pre-empt with household bundles in target districts', 'Watch installer hiring weekly', 'Prepare a response plan now'], learn: ['Site permits', 'Job postings'] },
-    { id: 'capacity', n: 'Capacity Planner', role: 'Links rival network moves to e&’s capex priorities', src: ['net', 'reg'], calls: [['intel_search', { query: 'network 5G speed carriers' }], ['list_signals', { limit: 3 }]], q: 'Where should network capex go first, given rival moves?', acts: ['Rank contested cells for the next capex cycle', 'Coordinate with marketing on launch timing', 'Track speed after upgrades'], learn: ['Traffic forecasts', 'Capex plans'] }] },
-  { k: 'dg', n: 'Digital & e& money', agents: [
-    { id: 'appwatch', n: 'App Store Watcher', role: 'Tracks ratings, reviews and releases of every telecom app', src: ['ios', 'gplay', 'app'], calls: [['intel_search', { query: 'app rating reviews sign-up' }]], q: 'How do the UAE telecom apps compare this week?', acts: ['Fix the top-rated complaint in the next release', 'Copy what customers praise in rival apps, legally', 'Watch rank after each release'], learn: ['App-intelligence feed', 'Own app analytics'] },
-    { id: 'wallet', n: 'Wallet Growth Agent', role: 'Finds who is ready to use e& money and why', src: ['int', 'fin'], calls: [['contact_plan', { goal: 'upsell', limit: 5 }], ['intel_search', { query: 'wallet fintech payments' }]], q: 'How do we grow active e& money users this quarter?', acts: ['Launch bill cashback paid in e& money', 'Bundle home-country transfers for expatriates', 'Time wallet offers per customer'], learn: ['Wallet transaction data (tokenized)'] },
-    { id: 'journey', n: 'Digital Journey Agent', role: 'Finds where online sign-up and support journeys lose customers', src: ['app', 'ios', 'gplay'], calls: [['intel_search', { query: 'eSIM sign-up in-app' }]], q: 'Where do customers drop out of the digital sign-up journey?', acts: ['Cut sign-up to under five minutes', 'Add instant eSIM everywhere', 'Measure completion weekly'], learn: ['Journey analytics'] }] },
-  { k: 'st', n: 'Strategy & Investment', agents: [
-    { id: 'forecast', n: 'Move Forecaster', role: 'Forecasts rival moves 30–90 days ahead', src: ['web', 'reg', 'fin', 'media'], calls: [['predict_move', { move_id: 'fwa' }], ['predict_move', { move_id: 'cut' }]], q: 'Which rival moves are most likely in the next quarter?', acts: ['Plan a response for each likely move now', 'Set early-warning alert rules', 'Review the forecast monthly'], learn: ['Outcome history for back-testing'] },
-    { id: 'mna', n: 'M&A Scout', role: 'Screens deals, carve-outs and partners', src: ['fin', 'media', 'research'], calls: [['capital_deals', { investor_type: 'infrastructure', limit: 5 }]], q: 'Which deals or carve-outs should strategy look at?', acts: ['Screen each option against the capital plan', 'Model value with Finance', 'Brief the board'], learn: ['Licensed deals database'] },
-    { id: 'sizer', n: 'Market Sizer', role: 'Sizes markets and new business lines', src: ['stats', 'research'], calls: [['size_market', {}]], q: 'How big is the opportunity for our next business line?', acts: ['Validate the size with a pilot', 'Set a 3-year target', 'Decide build, partner or buy'], learn: ['National statistics', 'Licensed research'] }] },
-  { k: 'rg', n: 'Regulatory & Risk', agents: [
-    { id: 'consult', n: 'Consultation Tracker', role: 'Tracks consultations, decisions and deadlines', src: ['reg', 'gov'], calls: [['intel_search', { query: 'consultation spectrum regulator' }]], q: 'Which consultations need a response, and by when?', acts: ['Assign an owner to each consultation', 'Draft the response two weeks early', 'Brief strategy on the impact'], learn: ['Regulator notice feeds'] },
-    { id: 'compliance', n: 'Contact Compliance Agent', role: 'Checks every campaign against consent, quiet hours and caps', src: ['int'], calls: [['contact_plan', { goal: 'retention', limit: 3 }]], q: 'Are our contact plans within consent, quiet-hour and frequency rules?', acts: ['Block any slot that breaks a rule', 'Report opt-outs and complaints weekly', 'Review the policy quarterly'], learn: ['Consent records', 'Complaint logs'] },
-    { id: 'guard', n: 'Competition-Law Guard', role: 'Reviews recommendations for competition-law risk', src: ['reg'], calls: [['list_signals', { limit: 3 }]], q: 'Do our planned responses stay within competition law?', acts: ['Keep every response unilateral', 'Never share or use rivals’ confidential plans', 'Escalate doubtful cases to legal'], learn: ['Legal guidance library'] }] }
+/* ---------- AI AGENT DEPARTMENTS: 18 departments of 12 agents that search sources, run tools and brief a team ---------- */
+// {placeholders} name the operator in the etisalat edition and stay neutral on the main platform
+const AG_VARS = EDITION === 'eand'
+  ? { op: 'etisalat', opU: 'etisalat UAE', rival: 'du', rivals: 'du and Virgin Mobile UAE', wallet: 'etisalat money', mkt: 'UAE' }
+  : { op: 'the operator', opU: 'the operator', rival: 'the main rival', rivals: 'the main rivals', wallet: 'the wallet', mkt: 'home market' };
+const agT = s => String(s).replace(/\{(\w+)\}/g, (m, k) => AG_VARS[k] ?? m);
+// call shorthand: sig[:severity] kb:query geo:layer plan:id sim:rival:cut pred:move pos[:region] vend deals[:type] val:metric cp:goal size co[:segment|pe|state]
+const AG_CALL = t => {
+  const [k, a = '', b = ''] = t.split(':');
+  return ({
+    sig: ['list_signals', a ? { limit: 5, severity: a } : { limit: 5 }], kb: ['intel_search', { query: a }], geo: ['geo_hotspots', { layer: a || 'churn' }],
+    plan: ['compare_plans', { plan_id: a || 'nim-u' }], sim: ['simulate_response', { rival: a || 'arc', cut_pct: +b || 15, weeks: 8 }],
+    pred: ['predict_move', { move_id: a || 'fwa' }], pos: ['market_position', { map: 'operators', region: a || 'Gulf (GCC)', limit: 6 }],
+    vend: ['market_position', { map: 'competitors', limit: 6 }], deals: ['capital_deals', a ? { investor_type: a, limit: 5 } : { limit: 5 }],
+    val: ['valuation_pulse', { metric: a || 'mcap', limit: 6 }], cp: ['contact_plan', { goal: a || 'retention', limit: 5 }], size: ['size_market', {}],
+    co: ['company_lookup', a === 'pe' || a === 'state' ? { involvement: a, limit: 5 } : { segment: a || 'Operator', limit: 5 }]
+  })[k] || null;
+};
+// [id, name, role, default task, calls, sources, actions, gets better with (optional)]
+const AG_SPEC = [
+  { k: 'mi', n: 'Market Intelligence', lead: 'an', svc: ['analyst', 'audio_brief', 'feed'], res: ['ws:ws_signals', 'ws:ws_foresight', 'r:Signal brief', 'r:Competitor battlecard'], learn: 'Licensed news feed|Exchange filings in real time', a: [
+    ['scout', 'Signal Scout', 'Finds the competitor moves that need action today', 'What changed in the market today, and what needs action first?', 'sig|kb:price cut launch', 'web social app reg media', 'Route each critical signal to its lead department with an act-by time|Open the evidence chain before responding|Put the top signal on the workspace', 'Licensed news feed|Store staff reports'],
+    ['profiler', 'Rival Profiler', 'Keeps a live profile of {rivals} and Gulf peers', 'Profile {rivals}: position, strengths and what they will do next.', 'pos|kb:rival profile launch', 'web fin media stats', 'Refresh the battlecard for {rival}|Brief marketing and sales on what changed|Set alert rules for the next likely move', 'Exchange filings in real time|App-intelligence feed'],
+    ['capital', 'Capital Watcher', 'Tracks deals, valuations and investor moves across telecom', 'Which deals and valuation moves matter for {op} this quarter?', 'deals|val:mcap', 'fin media research', 'Flag deals that change a rival’s capacity to invest|Update the peer valuation pack|Review tower and fibre carve-out options', 'Licensed deals database|Investor-call transcripts'],
+    ['news', 'News Desk Agent', 'Reads business media for telecom news that matters', 'What telecom news from the last week should leadership know?', 'kb:news launch deal|sig', 'media research', 'Send a three-line brief to leadership|Tag each story with the owning department'],
+    ['launch', 'Launch Detector', 'Detects new plans, brands and products the day they appear', 'Did any rival launch a new plan, brand or product this week?', 'sig|kb:launch new plan brand', 'web app social', 'Compare each launch with our closest plan|Decide respond, watch or ignore within 24 hours'],
+    ['promo', 'Promotion Tracker', 'Tracks every rival promotion, its depth and its end date', 'Which rival promotions are live, and when do they end?', 'kb:promotion discount offer|plan:nim-u', 'web social app', 'Plan counter-offers for promotions that hit core segments|Time win-back offers to promotion end dates'],
+    ['hiring', 'Hiring Signal Agent', 'Reads rival job posts for hints of new launches', 'What do rival job posts say about their next move?', 'kb:job posts hiring installer|pred:fwa', 'web media', 'Flag hiring clusters in new areas|Feed each pattern into the move predictor'],
+    ['filings', 'Filings Reader', 'Reads results and exchange filings for strategy shifts', 'What did rival results and filings reveal this quarter?', 'kb:results filing revenue|val:revenue', 'fin media', 'Update battlecards with the new numbers|Brief strategy on guidance changes'],
+    ['sentiment', 'Market Sentiment Gauge', 'Measures how customers feel about each operator, week by week', 'How has sentiment toward {op} and {rivals} moved this month?', 'kb:sentiment reviews complaints|sig', 'social ios gplay', 'Act on the biggest negative driver first|Share the trend with marketing'],
+    ['peer', 'Gulf Peer Benchmarker', 'Benchmarks Gulf operators on scale, growth and innovation', 'How does {op} compare with Gulf peers on growth and innovation?', 'pos|val:revenue', 'fin stats research', 'Pick one peer practice to adopt this year|Track the gap every quarter'],
+    ['alert', 'Alert Designer', 'Turns recurring signals into alert rules for each team', 'Which alert rules would have caught last month’s rival moves earliest?', 'sig|kb:alert rule early warning', 'int web', 'Create alert rules for the top three move types|Review false alarms monthly'],
+    ['brief', 'Weekly Brief Writer', 'Writes the weekly market brief for executives', 'Write this week’s market brief for the leadership team.', 'sig|pos|kb:weekly brief', 'media fin web', 'Send the brief every Monday at 08:00|Keep it to one page with sources']] },
+  { k: 'mk', n: 'Marketing & Brand', lead: 'pm', svc: ['launch', 'wargame', 'audio_brief'], res: ['ws:ws_rte', 'pb:2', 'r:Customer contact policy'], learn: 'Campaign results|Tokenized segment data', a: [
+    ['segment', 'Segment Strategist', 'Finds the segments and offers with the most upside', 'Which customer segments should {op} target next, and with what offer?', 'kb:youth eSIM app|cp:upsell', 'social ios gplay stats', 'Test the youth app plan against a control group|Time offers with the right-time engine|Measure gross adds by segment weekly'],
+    ['timer', 'Campaign Timer', 'Times every offer for the moment each customer is most likely to respond', 'Who should we contact in the next four hours, and through which channel?', 'cp:upsell', 'int app', 'Send the contact queue to the CRM|Keep caps, consent and quiet hours on|Compare engagement with the fixed schedule', 'Campaign response history|Consent records'],
+    ['listener', 'Brand Listener', 'Reads social posts and app reviews in Arabic, English and other languages', 'What are customers saying about {op} and its rivals this week?', 'kb:complaints reviews outage|sig', 'social ios gplay media', 'Answer the top complaint theme publicly and factually|Send product issues to the owning team|Track sentiment after each fix', 'Social listening feed|App-review feed'],
+    ['creative', 'Creative Tester', 'Tests messages and creatives against control groups', 'Which campaign message should we scale this month?', 'kb:campaign creative message|cp:upsell', 'int social', 'Run an A/B test before every major launch|Scale only messages with a clear uplift'],
+    ['sov', 'Share-of-Voice Agent', 'Measures share of voice across media and social', 'What is our share of voice against {rivals} this month?', 'kb:share of voice media social', 'social media', 'Shift spend to channels where our voice is falling|Report monthly to the marketing lead'],
+    ['youth', 'Youth Brand Agent', 'Builds offers and content for young, app-first customers', 'What should our youth proposition offer next quarter?', 'kb:youth eSIM gaming social|size', 'social ios gplay', 'Test a youth plan inside the app|Work with creators under clear disclosure rules'],
+    ['expat', 'Expatriate Segment Agent', 'Designs offers for expatriate and migrant workers', 'How do we win more expatriate customers in the {mkt}?', 'kb:expatriate international calls transfers|cp:upsell', 'stats social int', 'Bundle international minutes with home-country transfers|Advertise in community languages'],
+    ['tourist', 'Visitor Offer Agent', 'Creates eSIM and roaming offers for tourists and visitors', 'What visitor offer would win tourists on arrival?', 'kb:tourist eSIM visitor airport', 'stats web', 'Offer a QR-code eSIM at arrival points|Track visitor sign-ups by nationality'],
+    ['seasonal', 'Seasonal Campaign Planner', 'Plans campaigns around Ramadan, Eid, back-to-school and national days', 'Plan the next seasonal campaign calendar.', 'kb:Ramadan Eid seasonal campaign|cp:upsell', 'int social', 'Lock the calendar eight weeks ahead|Respect rest days and quiet hours'],
+    ['partner', 'Partnership Marketer', 'Finds co-marketing partners in retail, travel and entertainment', 'Which partnerships would bring new customers fastest?', 'kb:partnership retail entertainment', 'media research', 'Shortlist three partners with shared customers|Agree measurable goals before launch'],
+    ['crm', 'CRM Journey Designer', 'Designs lifecycle journeys from welcome to renewal', 'Which lifecycle journey needs fixing first?', 'cp:service|kb:onboarding welcome renewal', 'int app', 'Rebuild the welcome journey for the first 90 days|Measure early churn by journey'],
+    ['budget', 'Marketing Mix Optimizer', 'Moves budget to the channels with the best return', 'Where should next quarter’s marketing budget go?', 'kb:marketing spend channel return|size', 'int research', 'Move 10% of budget from the weakest channel|Re-measure every quarter']] },
+  { k: 'sl', n: 'Sales & Channels', lead: 'pm', svc: ['store_bot', 'launch', 'decision_room'], res: ['r:Competitor battlecard', 'ws:wargame'], learn: 'CRM pipeline|Store footfall', a: [
+    ['pipeline', 'Pipeline Coach', 'Ranks enterprise and SME opportunities by chance and value', 'Which opportunities should sales chase this month?', 'kb:tender enterprise private 5G', 'reg media int', 'Assign an owner to every open tender|Prepare a reference case for each bid|Review win and loss after each award', 'CRM pipeline|Tender portals'],
+    ['store', 'Store Intel Agent', 'Watches rival retail moves near our stores', 'Where is rival retail pressure rising near our stores?', 'geo:retail', 'web social int', 'Staff the stores under pressure at peak hours|Give store teams the talk track for the rival offer|Log rival offers through the Voice-of-Store bot', 'Store footfall|Staff reports'],
+    ['upsell', 'Upsell Planner', 'Finds customers ready for fibre, {wallet} or roaming passes', 'Which customers are most likely to upgrade this week?', 'cp:upsell', 'int app', 'Offer the upgrade at the predicted moment|Track take-up against a control group|Stop if opt-outs rise', 'Product holdings|Upgrade history'],
+    ['telesales', 'Telesales Coach', 'Ranks call lists and scripts for outbound sales', 'Who should telesales call today, and what should they say?', 'cp:upsell|kb:telesales script', 'int', 'Call within the predicted best hour|Keep scripts short and factual'],
+    ['online', 'Online Sales Optimizer', 'Improves conversion on the website and app shop', 'Where do online buyers drop off before checkout?', 'kb:online checkout conversion app', 'app ios gplay', 'Remove one step from checkout|Test instant eSIM delivery in the message'],
+    ['dealer', 'Dealer Network Manager', 'Tracks dealers, kiosks and partner shops', 'Which dealers and kiosks should we grow or fix?', 'geo:retail|kb:dealer kiosk partner', 'int web', 'Support top dealers with stock and training|Review weak dealers monthly'],
+    ['quota', 'Quota Planner', 'Sets fair targets by channel and region', 'Are this quarter’s sales targets realistic for each channel?', 'kb:sales target channel|size', 'int', 'Move targets toward growing channels|Review weekly with channel heads'],
+    ['objection', 'Objection Handler', 'Prepares answers to the objections customers raise most', 'Which objections do customers raise about our offers versus {rival}?', 'kb:objection price rival switch|plan:nim-u', 'int social', 'Train staff on the top five answers|Update the answers after each rival offer'],
+    ['bundle', 'Bundle Seller', 'Finds households ready for mobile and home bundles', 'Which households should get a bundle offer this week?', 'cp:upsell|geo:churn', 'int', 'Offer bundles where switching risk is highest|Track bundle take-up weekly'],
+    ['storex', 'Store Experience Agent', 'Improves store visits, waiting times and conversion', 'Which stores lose the most visitors without a sale?', 'geo:retail|kb:store waiting time', 'int', 'Add staff at peak hours in weak stores|Test appointment booking'],
+    ['winback', 'Win-Back Agent', 'Wins back customers who left in the last 90 days', 'Which former customers are most likely to come back?', 'cp:retention|kb:win back port in', 'int', 'Make one fair offer at 30 and at 90 days|Stop after two contacts'],
+    ['salesfc', 'Sales Forecaster', 'Forecasts gross adds by channel for the next 13 weeks', 'What will gross adds look like next quarter?', 'sig|size', 'int stats', 'Share the forecast with finance weekly|Flag a 10% miss early']] },
+  { k: 'cx', n: 'Customer Experience & Care', lead: 'cx', svc: ['store_bot', 'analyst'], res: ['ws:ws_churn', 'r:Shift handover note'], learn: 'Contact-centre transcripts (tokenized)|Survey results', a: [
+    ['voc', 'Voice-of-Customer Agent', 'Turns complaints and reviews into fix-it lists', 'What are the top three things customers want fixed?', 'kb:complaints slow outage', 'ios gplay social int', 'Assign each issue to an owner with a date|Tell customers when it is fixed|Watch the review score after each fix'],
+    ['nps', 'NPS Analyst', 'Tracks NPS and what drives it', 'What is driving NPS up or down this month?', 'kb:NPS satisfaction survey|sig', 'int social', 'Fix the biggest detractor driver|Close the loop with each detractor'],
+    ['contact', 'Contact Centre Optimizer', 'Cuts waiting times and repeat calls', 'Why do customers call twice about the same issue?', 'kb:repeat calls contact centre|cp:service', 'int', 'Fix the top repeat-call reason|Give agents the right answer the first time'],
+    ['outage', 'Outage Communicator', 'Tells affected customers about outages fast and clearly', 'Which customers were hit by the latest outage, and what should we tell them?', 'sig:crit|geo:coverage', 'net int social', 'Message affected customers within 30 minutes|Pause marketing to them for seven days'],
+    ['bill', 'Bill Shock Preventer', 'Warns customers before an unexpected bill', 'Who is about to get an unexpectedly high bill?', 'cp:service|kb:bill shock roaming charges', 'int', 'Send a usage alert before the cap|Offer a fitting add-on'],
+    ['complaint', 'Complaint Resolver', 'Routes complaints and tracks them to closure', 'Which open complaints could escalate to the regulator?', 'kb:complaint escalation regulator|sig', 'int reg', 'Resolve the oldest complaints first|Report regulator-bound cases daily'],
+    ['digicare', 'Digital Care Agent', 'Moves simple requests to the app and chat', 'Which requests could customers handle themselves in the app?', 'kb:self service app chat|cp:service', 'app ios gplay', 'Add the top three requests to the app|Measure how many calls the app avoids'],
+    ['access', 'Accessibility Agent', 'Makes services easy for elderly and disabled customers', 'Where do elderly or disabled customers struggle with our services?', 'kb:accessibility elderly', 'int social', 'Offer an assisted-service line|Test the app with screen readers'],
+    ['mapper', 'CX Journey Mapper', 'Maps end-to-end journeys and their pain points', 'Map the move-home journey and its pain points.', 'kb:journey move home installation', 'int app', 'Fix the slowest step first|Set a target time for the journey'],
+    ['install', 'Installation Tracker', 'Tracks home installation appointments', 'Which installation appointments are at risk of being missed?', 'kb:installation appointment fibre|geo:coverage', 'int net', 'Confirm appointments the day before|Compensate missed slots automatically'],
+    ['language', 'Multilingual Care Agent', 'Plans care in Arabic, English, Hindi, Urdu and more', 'Which languages do customers need most in care?', 'kb:Arabic Hindi Urdu language', 'int social', 'Staff care for the top five languages|Translate the key help pages'],
+    ['cxcard', 'CX Scorecard Agent', 'Builds the weekly customer-experience scorecard', 'Build this week’s customer-experience scorecard.', 'sig|kb:CX scorecard', 'int', 'Review the scorecard every Monday|Give every red metric an owner']] },
+  { k: 'rl', n: 'Retention & Loyalty', lead: 'cx', svc: ['analyst', 'launch'], res: ['ws:ws_rte', 'ws:ws_churn', 'pb:1', 'pb:2', 'r:Customer contact policy', 'go:#challenge'], learn: 'Port-out records|Save-desk outcomes', a: [
+    ['churn', 'Churn Sentinel', 'Spots where churn is spreading, district by district', 'Where is churn spreading, and why?', 'geo:churn|sig', 'int social', 'Target save offers to the top two districts|Brief the save desk on the rival offer behind it|Re-measure port-outs after seven days', 'Port-out records|Complaint logs'],
+    ['save', 'Save-Desk Agent', 'Builds today’s retention queue inside the contact guardrails', 'Who should the save desk call first today?', 'cp:retention', 'int', 'Call the top of the queue at the predicted time|Use a tenure reward rather than a blanket discount|Log the outcome for the model', 'Save-desk outcomes|Tenure data'],
+    ['risk', 'Churn Risk Scorer', 'Scores every customer’s risk of leaving', 'Which customer groups are most at risk this month?', 'cp:retention|geo:churn', 'int', 'Act on the highest-risk group first|Re-score every week'],
+    ['contract', 'Contract End Agent', 'Acts before contracts and device plans end', 'Whose contract or device plan ends in the next 60 days?', 'cp:retention|kb:contract end renewal', 'int', 'Offer renewal 45 days before the end|Reward loyalty instead of blanket discounts'],
+    ['loyalty', 'Loyalty Programme Manager', 'Designs rewards that make customers stay', 'Which rewards keep customers longest for the least cost?', 'kb:loyalty rewards points|cp:retention', 'int', 'Show tenure rewards on every bill|Measure churn by reward tier'],
+    ['family', 'Family Plan Agent', 'Grows multi-line family plans', 'Which households are ready for a family plan?', 'cp:upsell|kb:family plan lines', 'int', 'Offer a family plan to multi-line households|Make adding a line one tap'],
+    ['portout', 'Port-Out Analyst', 'Explains where port-outs go and why', 'Where did last week’s port-outs go, and why?', 'geo:churn|sig', 'int reg', 'Answer the main reason with a targeted offer|Track the port-in and port-out balance'],
+    ['saveoffer', 'Retention Offer Designer', 'Designs save offers that cost less than losing the customer', 'Design a save offer for customers tempted by {rival}.', 'sim:arc:15|cp:retention', 'int web', 'Cap offers at the customer’s expected value|Test against a control group'],
+    ['moment', 'Right-Moment Agent', 'Picks the moment and channel for every retention contact', 'When and how should we contact this week’s at-risk customers?', 'cp:retention', 'int app', 'Contact only inside consent and quiet hours|Keep to two contacts a week'],
+    ['ltv', 'Lifetime Value Agent', 'Values each customer over their lifetime', 'Which customers are worth the most to keep?', 'cp:retention|size', 'int', 'Spend the retention budget by lifetime value|Review the model every quarter'],
+    ['prepaid', 'Prepaid Retention Agent', 'Keeps prepaid customers topping up', 'Which prepaid customers have stopped topping up?', 'cp:retention|kb:prepaid top up', 'int', 'Send a small top-up bonus at the right moment|Win back inactive SIMs within 30 days'],
+    ['retcard', 'Retention Scorecard Agent', 'Reports churn, saves and cost per save', 'Build this month’s retention scorecard.', 'geo:churn|cp:retention', 'int', 'Report churn by segment monthly|Retire offers that stop working']] },
+  { k: 'pr', n: 'Pricing & Offers', lead: 'pm', svc: ['wargame', 'launch', 'analyst'], res: ['ws:ws_tariff', 'ws:wargame', 'pb:0', 'tab:tab-dna', 'tab:tab-war'], learn: 'Live tariff crawl|Elasticity from past campaigns', a: [
+    ['tariff', 'Tariff Analyst', 'Compares our plans with rival plans gene by gene', 'How do our main plans compare with the closest rival plans?', 'plan:nim-u', 'web app', 'Fix any gene where a rival clearly wins|Show the total monthly price, fees included|Re-check after each rival change', 'Live tariff crawl|Plan take-up data'],
+    ['pricesim', 'Price-Move Simulator', 'Simulates a rival price cut and ranks the responses', 'A rival cuts 15% for eight weeks: what should we do?', 'sim:arc:15', 'web int', 'Choose the response with the best net impact|Respond in week 0, not week 3|Avoid blanket price cuts', 'Elasticity from past campaigns|Port-out data'],
+    ['fee', 'Fee Watch', 'Catches hidden price changes in fees and allowances', 'Has any rival raised prices through fees or smaller allowances?', 'kb:fee stealth pricing', 'web', 'Use the change in factual comparisons|Offer switchers a clear total-price promise|Alert pricing on every new fee', 'Terms-and-conditions archive'],
+    ['elastic', 'Elasticity Modeller', 'Estimates how demand reacts to price', 'How sensitive are our main segments to a price change?', 'sim:vtx:10|kb:price elasticity', 'int', 'Price by segment, not one price for all|Re-estimate after each change'],
+    ['ladder', 'Plan Ladder Designer', 'Designs a plan line-up with clear steps up', 'Is our plan line-up clear, with sensible steps between plans?', 'plan:nim-e|plan:nim-u', 'web int', 'Remove plans nobody buys|Keep clear price steps between plans'],
+    ['addons', 'Add-On Pricer', 'Prices data packs, roaming passes and add-ons', 'Which add-ons are priced too high or too low?', 'kb:add-on data pack roaming pass|plan:nim-u', 'web int', 'Re-price the three weakest add-ons|Bundle add-ons customers buy together'],
+    ['prepaidp', 'Prepaid Pricing Agent', 'Prices prepaid bundles against rival prepaid offers', 'How do our prepaid bundles compare with {rival}’s?', 'plan:kte-e|kb:prepaid bundle', 'web', 'Match value, not price, in the top bundles|Watch prepaid churn after each change'],
+    ['b2bprice', 'Business Pricing Agent', 'Prices SME and enterprise plans and discounts', 'Are our business discounts consistent and profitable?', 'kb:business discount enterprise price', 'int', 'Set discount bands by deal size|Approve exceptions centrally'],
+    ['promoroi', 'Promotion ROI Agent', 'Measures the return of each promotion', 'Which promotions paid back last quarter?', 'kb:promotion return uplift|cp:upsell', 'int', 'Stop promotions that do not pay back|Repeat the best two'],
+    ['pricewar', 'Price-War Early Warning', 'Spots the signs of a price war early', 'Are there signs of a price war starting?', 'sig:crit|pred:cut', 'web social', 'Prepare targeted responses in advance|Avoid broad cuts that start a spiral'],
+    ['bundlep', 'Bundle Price Architect', 'Prices mobile, home and TV bundles', 'What bundle price would grow households without losing margin?', 'plan:pls-u|size', 'web int', 'Give each bundle a clear saving|Track margin per household'],
+    ['total', 'Total-Price Checker', 'Compares the full monthly price, fees included', 'What does each main plan really cost per month, fees included?', 'plan:nim-u|kb:fee stealth pricing', 'web', 'Advertise the total monthly price|Remove confusing fees']] },
+  { k: 'en', n: 'Enterprise & Government', lead: 'b2b', svc: ['decision_room', 'analyst', 'diligence'], res: ['r:Competitor battlecard', 'ws:ws_exec'], learn: 'CRM account data|Government tender portals', a: [
+    ['tender', 'Tender Hunter', 'Finds public and private tenders early', 'Which tenders open in the next 90 days?', 'kb:tender private 5G port', 'reg gov media', 'Qualify each tender within 48 hours|Line up partners for gaps|Track rival bids', 'Government tender portals|Partner pipeline'],
+    ['architect', 'Solution Architect', 'Designs 5G, cloud and AI offers for each industry', 'Which industry solution should we lead with next quarter?', 'kb:cloud AI enterprise 5G', 'research media', 'Run a paid pilot with clear KPIs|Publish the result as a reference|Package it for similar clients', 'Pilot results|Licensed research'],
+    ['account', 'Account Planner', 'Builds account plans for the largest clients', 'Build an account plan for our largest enterprise client group.', 'co:Operator|kb:government enterprise contract', 'fin media int', 'Map decision-makers and needs|Plan three offers for the next 12 months|Review quarterly with the client', 'CRM account data'],
+    ['private5g', 'Private 5G Agent', 'Finds sites for private 5G networks', 'Which industries need private 5G most in the {mkt}?', 'kb:private 5G port industry|size', 'research media', 'Pitch ports, airports and factories first|Offer a paid pilot'],
+    ['iot', 'IoT Solutions Agent', 'Builds IoT offers for fleets, utilities and cities', 'Which IoT offers should we push this year?', 'kb:IoT fleet utilities smart city|size', 'research media', 'Package three IoT offers by industry|Partner for devices'],
+    ['cloud', 'Cloud & AI Seller', 'Sells cloud, sovereign AI and data-centre services', 'Which clients are ready for sovereign cloud and AI?', 'kb:sovereign cloud AI data centre', 'media research', 'Target regulated industries first|Show data-residency guarantees'],
+    ['gov', 'Government Programs Agent', 'Follows government digital programs and budgets', 'Which government programs need telecom partners?', 'kb:government digital program|kb:tender', 'gov reg', 'Map each program to an offer|Build relationships early'],
+    ['secsell', 'Managed Security Seller', 'Sells managed security to businesses', 'Which clients need managed security services?', 'kb:cybersecurity managed security', 'research media', 'Bundle security with connectivity|Publish incident response times'],
+    ['renewal', 'Contract Renewal Agent', 'Protects large contracts before they renew', 'Which large contracts renew in the next six months?', 'kb:contract renewal enterprise', 'int', 'Start renewals six months early|Bring a better offer before rivals do'],
+    ['ecosys', 'Partner Ecosystem Agent', 'Manages integrators, cloud and device partners', 'Which partners bring us the most business?', 'co:Operator|kb:partner integrator', 'media int', 'Reward partners who bring deals|Drop inactive partners'],
+    ['rivalb2b', 'Rival B2B Watcher', 'Tracks rival enterprise wins and offers', 'Which enterprise deals did {rivals} win recently?', 'kb:enterprise contract win|sig', 'media reg', 'Learn from each lost deal|Prepare counters for the next bids'],
+    ['b2bcard', 'B2B Scorecard Agent', 'Reports pipeline, wins and margins', 'Build this month’s enterprise scorecard.', 'kb:pipeline win rate', 'int', 'Review the pipeline weekly|Focus on deals that can close this quarter']] },
+  { k: 'sm', n: 'SME & Small Business', lead: 'b2b', svc: ['launch', 'analyst'], res: ['r:Competitor battlecard'], learn: 'Business licence data|SME CRM records', a: [
+    ['smeseg', 'SME Segment Agent', 'Finds the small-business segments with the most demand', 'Which small-business segments should we target first?', 'size|kb:SME small business', 'stats research', 'Pick two segments to lead with|Build one offer for each'],
+    ['smeoffer', 'SME Offer Builder', 'Builds simple bundles for small businesses', 'What bundle would win small shops and offices?', 'kb:SME bundle internet mobile|plan:nim-e', 'web int', 'Combine mobile, fibre and a payments app|Keep pricing simple'],
+    ['smesale', 'SME Sales Agent', 'Ranks SME leads for the sales team', 'Which SME leads should sales call this week?', 'cp:upsell|kb:SME leads', 'int', 'Call the warmest leads first|Track conversion by lead source'],
+    ['startup', 'Startup Program Agent', 'Runs offers for startups and free zones', 'How do we win startups in the free zones?', 'kb:startup free zone', 'gov media', 'Offer startup credits|Partner with incubators'],
+    ['smedigi', 'Digital Tools Agent', 'Sells websites, cloud apps and payments to SMEs', 'Which digital tools do small businesses ask for most?', 'kb:SME digital tools payments', 'research', 'Bundle the top two tools|Train sales on short demos'],
+    ['smecare', 'SME Care Agent', 'Gives small businesses fast support', 'Where do small businesses wait too long for help?', 'kb:SME support', 'int', 'Offer a priority line|Set a four-hour fix target'],
+    ['smechurn', 'SME Churn Agent', 'Spots small businesses about to leave', 'Which SME accounts are at risk of leaving?', 'cp:retention|kb:SME churn', 'int', 'Call at-risk accounts this week|Fix service issues first'],
+    ['smepay', 'Merchant Payments Agent', 'Grows payments and {wallet} use among merchants', 'How do we grow merchant payments?', 'kb:merchant payments wallet', 'fin int', 'Offer low fees in the first year|Bundle point-of-sale with connectivity'],
+    ['smerival', 'SME Rival Watcher', 'Tracks rival small-business offers', 'What SME offers do {rivals} run now?', 'kb:SME offer rival|plan:vtx-p', 'web', 'Match value where we lose deals|Highlight service quality'],
+    ['smemap', 'Local Business Mapper', 'Maps where new businesses open', 'Where are new businesses opening fastest?', 'geo:retail|kb:new business licences', 'gov stats', 'Send field sales to growth areas|Time offers with licence renewals'],
+    ['smecredit', 'SME Credit Agent', 'Checks credit risk for device and service plans', 'Which small businesses qualify for device financing?', 'kb:credit risk SME', 'fin int', 'Approve low-risk accounts fast|Ask for deposits where needed'],
+    ['smecard', 'SME Scorecard Agent', 'Reports SME growth and churn', 'Build this month’s SME scorecard.', 'kb:SME scorecard', 'int', 'Review every month|Set targets by segment']] },
+  { k: 'nw', n: 'Network & Technology', lead: 'nw', svc: ['geo_audit', 'analyst'], res: ['ws:ws_network', 'r:Speedtest Global Index', 'r:3GPP', 'tab:tab-geo'], learn: 'Licensed speed-test feed|Own network counters', a: [
+    ['coverage', 'Coverage Truth Agent', 'Checks advertised coverage against measured speeds', 'Where does a rival’s coverage claim not match measured speeds?', 'geo:coverage', 'net web', 'Fix our own gaps first|Use rival gaps in factual campaigns|Prioritize capex in contested cells', 'Licensed speed-test feed|Own network counters'],
+    ['build', 'Rival Build Watcher', 'Predicts rival network and fixed-wireless launches', 'How likely is a rival fixed-wireless launch, and when?', 'pred:fwa', 'web reg media', 'Pre-empt with household bundles in target districts|Watch installer hiring weekly|Prepare a response plan now', 'Site permits|Job postings'],
+    ['capacity', 'Capacity Planner', 'Links rival network moves to our capex priorities', 'Where should network capex go first, given rival moves?', 'kb:network 5G speed carriers|sig', 'net reg', 'Rank contested cells for the next capex cycle|Coordinate launch timing with marketing|Track speed after upgrades', 'Traffic forecasts|Capex plans'],
+    ['fivegsa', '5G Standalone Planner', 'Plans 5G standalone and network slicing', 'Where should 5G standalone and slicing launch first?', 'kb:5G standalone slicing|pred:fwa', 'net research', 'Launch slicing for business clients first|Measure latency gains'],
+    ['outagep', 'Outage Predictor', 'Predicts outages from alarms and weather', 'Which sites are most likely to fail this week?', 'sig:crit|geo:coverage', 'net int', 'Fix high-risk sites first|Pre-position spare parts'],
+    ['speed', 'Speed Benchmarker', 'Compares measured speeds with rivals by area', 'Where are rivals faster than us?', 'geo:coverage|kb:speed test', 'net', 'Prioritize upgrades where rivals lead|Advertise only where we lead, factually'],
+    ['spectrum', 'Spectrum Use Agent', 'Checks how well each band is used', 'Are we using our spectrum efficiently?', 'kb:spectrum band carriers', 'net reg', 'Refarm under-used bands|Plan for the next auction'],
+    ['energy', 'Network Energy Agent', 'Cuts network power use and cost', 'Where can we save network energy without hurting service?', 'kb:energy power sites', 'net int', 'Switch off spare capacity at night where safe|Track savings monthly'],
+    ['sat', 'Satellite & Direct-to-Device Agent', 'Tracks satellite and direct-to-device services', 'What does satellite direct-to-device mean for us?', 'pred:sat|kb:satellite direct to device', 'media research', 'Decide whether to partner or wait|Test coverage for remote areas'],
+    ['vendor', 'Network Vendor Agent', 'Tracks equipment vendors, prices and roadmaps', 'Which vendor roadmap fits our next network cycle?', 'kb:vendor equipment Ericsson Nokia Huawei', 'research media', 'Compare total cost over five years|Keep two vendors where possible'],
+    ['sites', 'Site Acquisition Agent', 'Finds and secures new sites and towers', 'Where do we need new sites, and who owns them?', 'geo:coverage|deals:infrastructure', 'gov net', 'Share towers where possible|Start permits early'],
+    ['nwcard', 'Network Scorecard Agent', 'Reports speed, availability and dropped calls', 'Build this week’s network scorecard.', 'geo:coverage|sig', 'net', 'Review every week|Give every red area an owner']] },
+  { k: 'fh', n: 'Fibre & Home', lead: 'nw', svc: ['geo_audit', 'launch'], res: ['ws:ws_network', 'tab:tab-geo'], learn: 'Address-level demand data|Installer schedules', a: [
+    ['fibreplan', 'Fibre Rollout Planner', 'Ranks areas for new fibre', 'Which areas should get fibre next?', 'geo:churn|size', 'stats net', 'Build where demand and rival pressure are high|Pre-sell before building'],
+    ['fwa', 'Fixed-Wireless Strategist', 'Plans fixed wireless where fibre is slow to build', 'Where does fixed wireless make sense for us?', 'pred:fwa|geo:coverage', 'net web', 'Offer fixed wireless where fibre is far away|Protect households from rival fixed wireless'],
+    ['homebundle', 'Home Bundle Agent', 'Grows mobile and home bundles', 'Which mobile customers should get a home offer?', 'cp:upsell|plan:pls-u', 'int', 'Offer home internet to multi-line households|Show the bundle saving clearly'],
+    ['movehome', 'Move-Home Agent', 'Keeps customers when they move house', 'How many customers move home each month, and how many do we lose?', 'kb:move home relocation|cp:retention', 'int', 'Move the service for free|Contact customers at lease renewal'],
+    ['tv', 'TV & Content Agent', 'Builds TV, streaming and gaming bundles', 'Which content partners would make our home offer stronger?', 'kb:TV streaming content gaming', 'media research', 'Bundle the top streaming service|Test a gaming pack'],
+    ['wifi', 'Home Wi-Fi Agent', 'Fixes poor in-home Wi-Fi', 'Which customers have poor in-home Wi-Fi?', 'kb:wifi router mesh|cp:service', 'int net', 'Offer mesh Wi-Fi upgrades|Send a technician only when needed'],
+    ['smarthome', 'Smart Home Agent', 'Sells smart-home and security devices', 'Is there demand for smart-home bundles?', 'kb:smart home security cameras|size', 'research', 'Pilot a smart-home bundle|Partner with device makers'],
+    ['newbuild', 'New Development Agent', 'Wins new buildings and communities before they open', 'Which new communities open in the next 12 months?', 'kb:new community building developer', 'gov media', 'Sign developers early|Pre-install fibre'],
+    ['homechurn', 'Home Churn Agent', 'Stops home broadband customers leaving', 'Why do home customers leave, and to whom?', 'geo:churn|cp:retention', 'int', 'Fix speed issues first|Offer bundle loyalty rewards'],
+    ['homeprice', 'Home Price Agent', 'Compares home internet plans with rivals', 'How do our home plans compare with rival plans?', 'plan:pls-u|kb:home internet price', 'web', 'Keep a clear entry plan|Show speed for the price'],
+    ['installcap', 'Install Capacity Agent', 'Matches installer capacity to demand', 'Do we have enough installers for next month’s orders?', 'kb:installer capacity orders', 'int', 'Add partner installers at peaks|Cut waiting time to under three days'],
+    ['homecard', 'Home Scorecard Agent', 'Reports home growth, speed and churn', 'Build this month’s home scorecard.', 'geo:coverage|kb:home broadband', 'int net', 'Review every month|Set targets per area']] },
+  { k: 'dg', n: 'Digital, App & Fintech', lead: 'da', svc: ['feed', 'launch'], res: ['r:AI assistant', 'r:Right-time engagement studio'], learn: 'App analytics|Wallet transaction data (tokenized)', a: [
+    ['appwatch', 'App Store Watcher', 'Tracks ratings, reviews and releases of every telecom app', 'How do the telecom apps in the {mkt} compare this week?', 'kb:app rating reviews sign-up', 'ios gplay app', 'Fix the top-rated complaint in the next release|Learn from what customers praise in rival apps|Watch rank after each release', 'App-intelligence feed|Own app analytics'],
+    ['wallet', 'Wallet Growth Agent', 'Finds who is ready to use {wallet} and why', 'How do we grow active {wallet} users this quarter?', 'cp:upsell|kb:wallet fintech payments', 'int fin', 'Launch bill cashback paid in {wallet}|Bundle home-country transfers for expatriates|Time wallet offers per customer', 'Wallet transaction data (tokenized)'],
+    ['journey', 'Digital Journey Agent', 'Finds where online sign-up and support journeys lose customers', 'Where do customers drop out of the digital sign-up journey?', 'kb:eSIM sign-up in-app', 'app ios gplay', 'Cut sign-up to under five minutes|Add instant eSIM everywhere|Measure completion weekly', 'Journey analytics'],
+    ['appfeat', 'App Feature Planner', 'Decides which app features to build next', 'Which app features would cut calls and grow sales most?', 'kb:app feature request|cp:service', 'ios gplay app', 'Build the two most requested features|Measure use after release'],
+    ['esim', 'eSIM Growth Agent', 'Grows instant eSIM sign-ups', 'How do we make eSIM sign-up instant for everyone?', 'kb:eSIM sign-up instant', 'app web', 'Allow full eSIM sign-up in the app|Track the time to activate'],
+    ['remit', 'Remittance Agent', 'Grows international money transfers through {wallet}', 'Which corridors should {wallet} price better for transfers?', 'kb:remittance transfer corridor|size', 'fin stats', 'Cut fees on the top three corridors|Bundle transfers with calls home'],
+    ['finance', 'Device Financing Agent', 'Offers device instalments and buy-now-pay-later', 'Which customers should get device instalment offers?', 'cp:upsell|kb:instalments financing', 'int fin', 'Offer instalments at contract end|Check affordability first'],
+    ['chatbot', 'Chatbot Trainer', 'Improves the care chatbot with real questions', 'Which questions does the chatbot fail to answer?', 'kb:chatbot questions', 'int app', 'Add answers for the ten most common failures|Hand over to a person quickly'],
+    ['personal', 'Personalization Agent', 'Personalizes app offers for each customer', 'What should each customer see when they open the app?', 'cp:upsell', 'int app', 'Show one relevant offer, not ten|Respect consent'],
+    ['merchant', 'Merchant Network Agent', 'Grows where {wallet} is accepted', 'Where should {wallet} be accepted next?', 'kb:merchant acceptance payments|geo:retail', 'fin int', 'Sign the most-visited merchants|Offer launch cashback'],
+    ['digrival', 'Digital Rival Watcher', 'Tracks rival apps, wallets and digital brands', 'What did rival apps and wallets launch this month?', 'kb:rival app wallet launch|sig', 'ios gplay app', 'Adopt proven ideas within the law|Promote our strengths'],
+    ['digcard', 'Digital Scorecard Agent', 'Reports app users, ratings and digital sales', 'Build this month’s digital scorecard.', 'kb:app users rating digital sales', 'app int', 'Review every month|Set a target for the digital share of sales']] },
+  { k: 'dv', n: 'Devices & Retail', lead: 'pm', svc: ['store_bot', 'launch'], res: ['r:Competitor battlecard'], learn: 'Point-of-sale data|Stock levels', a: [
+    ['range', 'Device Range Planner', 'Plans which phones and devices to stock', 'Which devices should we stock next quarter?', 'kb:smartphone launch device|plan:arc-p', 'web media', 'Stock the top sellers early|Drop slow-moving devices'],
+    ['tradein', 'Trade-In Agent', 'Runs device trade-in offers', 'How does our trade-in offer compare with rivals?', 'kb:trade-in offer|plan:arc-p', 'web', 'Match trade-in values on flagship phones|Recycle old devices responsibly'],
+    ['launchday', 'Device Launch Agent', 'Prepares for new phone launches', 'Are we ready for the next flagship phone launch?', 'kb:iPhone Galaxy launch pre-order', 'web media', 'Open pre-orders early|Pair a plan with each launch'],
+    ['stock', 'Stock Balancer', 'Moves stock between stores to meet demand', 'Which stores will run out of popular devices?', 'geo:retail|kb:stock inventory', 'int', 'Rebalance stock weekly|Alert stores before they run out'],
+    ['accessories', 'Accessories Agent', 'Grows accessory sales', 'Which accessories sell best with each device?', 'kb:accessories cases chargers', 'int', 'Offer accessories at checkout|Train staff to suggest them'],
+    ['protect', 'Device Protection Agent', 'Sells device protection plans', 'Who should be offered device protection?', 'cp:upsell|kb:device insurance', 'int', 'Offer protection with flagship sales|Make claims simple'],
+    ['refurb', 'Refurbished Devices Agent', 'Builds a certified refurbished-phone range', 'Is there demand for certified refurbished phones?', 'kb:refurbished phones|size', 'research', 'Pilot a refurbished range|Give a clear warranty'],
+    ['storeplan', 'Store Network Planner', 'Decides where to open, move or close stores', 'Where should we open or close stores?', 'geo:retail|size', 'stats int', 'Open where rival pressure and footfall are high|Close stores that lose money'],
+    ['popup', 'Pop-Up Store Agent', 'Plans kiosks and pop-ups at malls and events', 'Where should we run pop-up stores next month?', 'geo:retail|kb:pop-up kiosk events', 'int social', 'Go where rivals open kiosks|Measure sales per day'],
+    ['devrival', 'Rival Device Offers Agent', 'Tracks rival device deals and financing', 'What device deals are {rivals} running?', 'plan:vtx-p|kb:device deal financing', 'web', 'Counter on flagship phones only|Highlight network value'],
+    ['bizdev', 'Business Devices Agent', 'Supplies devices to business customers', 'Which business clients need a device refresh?', 'kb:business devices refresh', 'int', 'Offer devices as a service|Bundle device management tools'],
+    ['retcard2', 'Retail Scorecard Agent', 'Reports store sales, footfall and conversion', 'Build this week’s retail scorecard.', 'geo:retail|kb:store sales footfall', 'int', 'Review every week|Coach the weakest stores']] },
+  { k: 'ro', n: 'Roaming, Wholesale & Partners', lead: 'b2b', svc: ['feed', 'analyst'], res: ['r:GSMA Intelligence', 'r:ITU ICT statistics'], learn: 'Roaming traffic records|Partner agreements', a: [
+    ['roampass', 'Roaming Pass Agent', 'Prices roaming passes by destination', 'Are our roaming passes priced right for the top destinations?', 'kb:roaming pass destination price', 'web stats', 'Re-price passes for the top ten destinations|Suggest a pass before customers travel'],
+    ['inbound', 'Inbound Roaming Agent', 'Wins visitors who roam on our network', 'Which visitor nationalities roam on our network most?', 'kb:inbound roaming visitors|size', 'stats int', 'Improve deals with the top partner operators|Offer visitor SIMs'],
+    ['wholesale', 'Wholesale Deals Agent', 'Sells capacity to MVNOs and other carriers', 'Which wholesale deals should we pursue?', 'kb:wholesale MVNO capacity|co:Operator', 'media int', 'Price wholesale by volume|Protect retail margins'],
+    ['mvno', 'MVNO Watcher', 'Tracks MVNOs and digital brands in the market', 'Which MVNOs and digital brands are growing fastest?', 'kb:MVNO digital brand|pos', 'web media', 'Decide whether to host or compete|Watch their pricing'],
+    ['carrier', 'Carrier Partner Agent', 'Manages partnerships with operators abroad', 'Which partner operators should we work more closely with?', 'pos:Middle East|co:Operator', 'fin media', 'Renew key partner deals early|Share roaming data securely'],
+    ['cables', 'Subsea & Transit Agent', 'Tracks subsea cables, transit and data-centre links', 'Which new cables or routes matter for us?', 'kb:subsea cable transit data centre', 'media research', 'Secure capacity on new routes|Sell transit to neighbouring markets'],
+    ['roamfraud', 'Roaming Fraud Agent', 'Detects roaming and interconnect fraud', 'Is there unusual roaming or interconnect traffic?', 'sig:crit|kb:fraud interconnect', 'int', 'Block suspicious routes fast|Report to partners'],
+    ['travel', 'Travel Partner Agent', 'Partners with airlines, hotels and travel apps', 'Which travel partners would sell our roaming and eSIM?', 'kb:airline hotel travel partner', 'media', 'Sign two travel partners|Offer eSIM at booking'],
+    ['events', 'Events & Seasons Agent', 'Plans capacity and offers for major events and peak seasons', 'Which events need extra capacity and special offers?', 'kb:event capacity season|geo:coverage', 'stats net', 'Add temporary capacity|Offer event passes'],
+    ['interconnect', 'Interconnect Rates Agent', 'Checks interconnect and termination rates', 'Are our interconnect rates competitive and compliant?', 'kb:interconnect termination rates regulator', 'reg fin', 'Renegotiate high-cost routes|Track regulator decisions'],
+    ['iotroam', 'IoT Roaming Agent', 'Manages roaming for connected devices', 'How do we support IoT devices that roam permanently?', 'kb:IoT roaming permanent', 'research reg', 'Offer an IoT roaming plan|Check the rules in each country'],
+    ['rocard', 'Roaming Scorecard Agent', 'Reports roaming revenue, visitors and margins', 'Build this month’s roaming and wholesale scorecard.', 'kb:roaming revenue', 'int fin', 'Review every month|Act on falling routes']] },
+  { k: 'st', n: 'Strategy & Investment', lead: 'st', svc: ['strategy_sprint', 'board_brief', 'diligence'], res: ['ws:ws_foresight', 'ws:ws_exec', 'go:#operators'], learn: 'Outcome history for back-testing|Licensed deals database', a: [
+    ['forecast', 'Move Forecaster', 'Forecasts rival moves 30 to 90 days ahead', 'Which rival moves are most likely next quarter?', 'pred:fwa|pred:cut', 'web reg fin media', 'Plan a response for each likely move now|Set early-warning alert rules|Review the forecast monthly', 'Outcome history for back-testing'],
+    ['mna', 'M&A Scout', 'Screens deals, carve-outs and partners', 'Which deals or carve-outs should strategy look at?', 'deals:infrastructure', 'fin media research', 'Screen each option against the capital plan|Model value with finance|Brief the board', 'Licensed deals database'],
+    ['sizer', 'Market Sizer', 'Sizes markets and new business lines', 'How big is the opportunity for our next business line?', 'size', 'stats research', 'Validate the size with a pilot|Set a three-year target|Decide whether to build, partner or buy', 'National statistics|Licensed research'],
+    ['scenario', 'Scenario Planner', 'Builds best, base and worst cases', 'What are our three scenarios for the next two years?', 'pred:cut|pred:fwa|size', 'research stats', 'Set triggers for each scenario|Review every quarter'],
+    ['portfolio', 'Portfolio Reviewer', 'Reviews each business line for growth and return', 'Which business lines should we grow, fix or exit?', 'val:revenue|co:Operator', 'fin', 'Rank lines by return on capital|Decide once a year'],
+    ['aistrat', 'AI Strategy Agent', 'Finds where AI creates the most value', 'Where should we use AI first to save cost or grow revenue?', 'kb:AI use case value|kb:sovereign AI', 'research media', 'Pick three AI uses with clear value|Measure each within 90 days'],
+    ['newbiz', 'New Business Scout', 'Finds adjacent businesses to enter', 'Which new business lines fit us best?', 'size|kb:new business adjacent', 'research stats', 'Test the best two with small pilots|Decide whether to build, partner or buy'],
+    ['intl', 'International Expansion Agent', 'Screens markets to enter or exit', 'Which markets should we enter or exit?', 'pos:Middle East|pos:Africa', 'fin stats', 'Score markets on growth and risk|Prefer partnerships first'],
+    ['esg', 'ESG & Sustainability Agent', 'Tracks emissions, energy and ESG ratings', 'Where do we stand on ESG, and what should improve?', 'kb:ESG emissions energy', 'research fin', 'Set a yearly energy target|Publish progress'],
+    ['board', 'Board Brief Agent', 'Prepares the strategy pack for the board', 'Prepare the next board strategy brief.', 'sig|pos|val:mcap', 'fin media', 'Send the brief a week ahead|Keep it to five pages'],
+    ['okr', 'Goals Tracker', 'Tracks strategic goals and key results', 'Are we on track with this year’s strategic goals?', 'kb:goals targets progress', 'int', 'Flag goals behind plan|Name an owner for each recovery'],
+    ['rivalstrat', 'Rival Strategy Agent', 'Reads rival strategy from results, hiring and launches', 'What is {rival}’s strategy for the next year?', 'pos|kb:strategy results', 'fin media web', 'Prepare a response plan|Update it every year']] },
+  { k: 'fn', n: 'Finance & Investor Relations', lead: 'fi', svc: ['capital', 'diligence', 'board_brief'], res: ['ws:ws_capital', 'tab:tab-cap'], learn: 'Management accounts|Investor-call transcripts', a: [
+    ['peerval', 'Peer Valuation Agent', 'Compares our valuation with peers', 'How is the market valuing us against peers?', 'val:mcap|val:mcap_to_revenue', 'fin', 'Explain the gap to investors|Update every month'],
+    ['results', 'Results Analyst', 'Reads peer quarterly results the day they publish', 'What did peers report this quarter?', 'kb:quarterly results revenue profit|val:revenue', 'fin media', 'Brief leadership within a day|Update the peer table'],
+    ['capex', 'Capex Allocator', 'Ranks investments by return', 'Which projects should get capex next year?', 'size|geo:coverage', 'int fin', 'Fund the highest returns first|Review spending every quarter'],
+    ['cost', 'Cost Optimizer', 'Finds savings without hurting customers', 'Where can we cut cost by 5% without hurting service?', 'kb:cost savings opex', 'int', 'Cut duplicate spend first|Track savings monthly'],
+    ['revassure', 'Revenue Assurance Agent', 'Finds revenue leaks in billing and usage', 'Where is revenue leaking?', 'kb:revenue leakage billing|sig', 'int', 'Fix the largest leak first|Reconcile every month'],
+    ['treasury', 'Treasury Agent', 'Watches cash, debt and currency risk', 'How exposed are we to currency and interest-rate changes?', 'kb:currency interest rates debt', 'fin cb', 'Hedge large exposures|Review every month'],
+    ['ir', 'Investor Questions Agent', 'Prepares answers to investor questions', 'What will investors ask about next quarter?', 'val:mcap|kb:investor questions guidance', 'fin media', 'Prepare clear answers with numbers|Keep messages consistent'],
+    ['dividend', 'Capital Return Agent', 'Compares dividends and buybacks with peers', 'How do our dividends compare with peers?', 'kb:dividend buyback', 'fin', 'Keep the policy clear|Explain changes early'],
+    ['dealval', 'Deal Valuation Agent', 'Values acquisitions, stakes and carve-outs', 'What would a tower or fibre carve-out be worth?', 'deals:infrastructure|val:mcap_to_revenue', 'fin research', 'Compare with recent deals|Model three prices'],
+    ['tax', 'Royalty & Tax Agent', 'Tracks telecom royalty and tax rules', 'How will royalty and tax changes affect profit?', 'kb:royalty tax regime', 'reg fin', 'Model each change|Plan ahead with the regulator'],
+    ['budgetfc', 'Budget Forecaster', 'Forecasts revenue and profit for the year', 'Will we meet this year’s budget?', 'size|sig', 'int fin', 'Flag gaps early|Plan recovery actions'],
+    ['fincard', 'Finance Scorecard Agent', 'Reports revenue, margin, cash and returns', 'Build this month’s finance scorecard.', 'val:revenue|kb:margin cash', 'fin int', 'Review every month|Give every miss an owner']] },
+  { k: 'rg', n: 'Regulatory, Legal & Spectrum', lead: 'rg', svc: ['regulator', 'analyst'], res: ['ws:ws_spectrum', 'pb:3', 'r:TDRA (UAE)', 'r:UAE personal data protection law', 'r:EU GDPR (official text)'], learn: 'Regulator notice feeds|Legal guidance library', a: [
+    ['consult', 'Consultation Tracker', 'Tracks consultations, decisions and deadlines', 'Which consultations need a response, and by when?', 'kb:consultation spectrum regulator', 'reg gov', 'Assign an owner to each consultation|Draft the response two weeks early|Brief strategy on the impact', 'Regulator notice feeds'],
+    ['compliance', 'Contact Compliance Agent', 'Checks every campaign against consent, quiet hours and caps', 'Are our contact plans within consent, quiet-hour and frequency rules?', 'cp:retention', 'int', 'Block any slot that breaks a rule|Report opt-outs and complaints weekly|Review the policy every quarter', 'Consent records|Complaint logs'],
+    ['guard', 'Competition-Law Guard', 'Reviews recommendations for competition-law risk', 'Do our planned responses stay within competition law?', 'sig', 'reg', 'Keep every response unilateral|Never share or use rivals’ confidential plans|Escalate doubtful cases to legal', 'Legal guidance library'],
+    ['auction', 'Spectrum Auction Agent', 'Prepares for spectrum auctions', 'Which spectrum should we bid for, and what is it worth?', 'kb:spectrum auction band|val:mcap', 'reg fin', 'Set a bidding envelope with finance|Model each rival’s needs'],
+    ['licence', 'Licence Tracker', 'Tracks licence terms, renewals and obligations', 'Which licence obligations are due this year?', 'kb:licence renewal obligations', 'reg', 'Keep an obligations calendar|Report status every quarter'],
+    ['privacy', 'Privacy Agent', 'Checks data use against privacy law', 'Does our data use meet privacy law?', 'kb:privacy personal data law|cp:service', 'reg int', 'Run a privacy check before each new use|Keep consent records complete'],
+    ['consumer', 'Consumer Protection Agent', 'Checks offers and ads against consumer rules', 'Do our ads and offers meet consumer rules?', 'kb:consumer protection advertising', 'reg', 'Review ads before launch|Fix unclear terms'],
+    ['porting', 'Numbering & Porting Agent', 'Tracks number porting rules and performance', 'Are number ports handled on time?', 'kb:number porting rules|geo:churn', 'reg int', 'Meet porting deadlines|Report to the regulator'],
+    ['airules', 'AI Rules Agent', 'Tracks AI rules and responsible-AI duties', 'Which AI rules apply to our models?', 'kb:AI regulation responsible AI', 'reg gov', 'Keep model cards up to date|Review high-risk uses'],
+    ['disputes', 'Disputes Agent', 'Tracks disputes and legal cases', 'Which disputes could affect us this year?', 'kb:dispute court case', 'media reg', 'Escalate high-risk cases|Settle small ones early'],
+    ['regcal', 'Regulatory Calendar Agent', 'Keeps every deadline in one calendar', 'Which regulatory deadlines come up in the next 90 days?', 'kb:deadline consultation decision', 'reg gov', 'Give each deadline an owner|Send reminders two weeks ahead'],
+    ['regcard', 'Compliance Scorecard Agent', 'Reports compliance status and risks', 'Build this quarter’s compliance scorecard.', 'kb:compliance status', 'reg int', 'Review every quarter|Fix red items first']] },
+  { k: 'da', n: 'Data, AI & Analytics', lead: 'da', svc: ['feed', 'market_feed', 'analyst'], res: ['ws:ws_copilot', 'ws:ws_cert', 'r:Model card', 'go:#challenge2'], learn: 'Data lineage records|Model monitoring logs', a: [
+    ['quality', 'Data Quality Agent', 'Checks data freshness and accuracy', 'Which data sources are stale or wrong?', 'kb:data quality freshness|sig', 'int', 'Fix the most-used sources first|Show freshness on every chart'],
+    ['catalog', 'Data Catalog Agent', 'Keeps a catalog of every data source and owner', 'Which data do we have, and who owns it?', 'kb:data source owner', 'int', 'Name an owner for each source|Remove unused data'],
+    ['model', 'Model Monitor', 'Watches models for drift and bias', 'Are our models still accurate and fair?', 'cp:retention|kb:model drift bias', 'int', 'Retrain drifting models|Check fairness every month'],
+    ['experiment', 'Experiment Designer', 'Designs A/B tests with the right sample sizes', 'Design an A/B test for the next retention offer.', 'cp:retention|kb:A/B test sample size', 'int', 'Pre-register each test|Stop tests only at the planned size'],
+    ['genai', 'GenAI Builder', 'Builds AI assistants for staff', 'Which staff tasks should get an AI assistant first?', 'kb:AI assistant staff productivity', 'research int', 'Start with care and sales|Measure the time saved'],
+    ['demand', 'Demand Forecaster', 'Forecasts traffic, sales and churn', 'What will demand look like next quarter?', 'size|geo:churn', 'int stats', 'Share forecasts with network and sales|Track forecast accuracy'],
+    ['dashboards', 'Dashboard Builder', 'Builds dashboards teams actually use', 'Which dashboards are unused, and what is missing?', 'kb:dashboard usage', 'int', 'Retire unused dashboards|Build one per team'],
+    ['tokenize', 'Privacy-Safe Data Agent', 'Tokenizes and protects customer data', 'Is customer data tokenized everywhere it should be?', 'kb:tokenized customer data privacy', 'int reg', 'Tokenize before any analysis|Limit access by role'],
+    ['kbcurator', 'Knowledge Base Curator', 'Keeps the intelligence hub clean and searchable', 'Which knowledge-base items are duplicated or out of date?', 'kb:knowledge base|sig', 'int media', 'Merge duplicates|Archive outdated items'],
+    ['srcplan', 'Source Planner', 'Plans which sources to add and how often to refresh them', 'Which new data sources would improve our intelligence most?', 'kb:source registry refresh', 'int research', 'Add the two highest-value sources|Set refresh schedules'],
+    ['nlp', 'Multilingual Language Agent', 'Improves analysis of Arabic and other languages', 'How well do we understand Arabic posts and reviews?', 'kb:Arabic sentiment language', 'social int', 'Add Arabic dialect examples|Check accuracy every month'],
+    ['dacard', 'Data Scorecard Agent', 'Reports data quality, model accuracy and use', 'Build this month’s data and AI scorecard.', 'kb:data AI scorecard', 'int', 'Review every month|Fund the most-used data products']] },
+  { k: 'sc', n: 'Security, Fraud & Trust', lead: 'rg', svc: ['analyst'], res: ['r:UAE personal data protection law', 'r:UK ICO: direct marketing guidance'], learn: 'Fraud case records|Security event logs', a: [
+    ['fraud', 'Fraud Detector', 'Detects SIM-swap, subscription and payment fraud', 'Which fraud patterns are rising this week?', 'sig:crit|kb:fraud SIM swap', 'int', 'Block high-risk transactions fast|Warn affected customers'],
+    ['simswap', 'SIM-Swap Guard', 'Protects customers from SIM-swap attacks', 'Are SIM-swap attempts rising?', 'kb:SIM swap attack', 'int', 'Add extra checks for swaps|Alert banks to suspicious swaps'],
+    ['scam', 'Scam Call & Message Agent', 'Blocks spam and scam calls and messages', 'Which scam campaigns are targeting our customers?', 'kb:scam spam calls messages|sig', 'int social', 'Block scam numbers fast|Warn customers in the app'],
+    ['cyber', 'Cyber Threat Agent', 'Tracks cyber threats to the network', 'Which threats are targeting telecom networks now?', 'kb:cyber threat telecom attack', 'media research', 'Patch critical systems first|Run incident drills'],
+    ['ddos', 'DDoS Shield Agent', 'Spots and stops DDoS attacks', 'Are DDoS attacks hitting us or our clients?', 'sig:crit|kb:DDoS attack', 'net int', 'Filter attack traffic|Offer DDoS protection to clients'],
+    ['identity', 'Identity Check Agent', 'Checks customer identity at sign-up', 'Where do fake identities get through at sign-up?', 'kb:identity verification sign-up', 'int reg', 'Add digital ID checks|Review failed checks'],
+    ['insider', 'Insider Risk Agent', 'Watches for misuse of customer data by staff', 'Is any staff access to customer data unusual?', 'kb:insider access audit', 'int', 'Limit access by role|Review access logs weekly'],
+    ['breach', 'Breach Response Agent', 'Plans the response to data breaches', 'Are we ready to respond to a data breach?', 'kb:data breach response plan', 'reg int', 'Run a breach drill|Prepare customer and regulator messages'],
+    ['supplier', 'Supplier Security Agent', 'Checks suppliers’ security', 'Which suppliers are a security risk?', 'kb:supplier security risk', 'int research', 'Audit high-risk suppliers|Add security terms to contracts'],
+    ['iotsec', 'IoT Security Agent', 'Secures connected devices on the network', 'Which IoT devices are a security risk?', 'kb:IoT device security', 'net research', 'Isolate risky devices|Require secure defaults'],
+    ['safety', 'Trust & Safety Agent', 'Protects children and vulnerable customers online', 'Are our parental controls and safety tools good enough?', 'kb:parental controls child safety', 'social reg', 'Make controls easy to find|Report safety statistics'],
+    ['seccard', 'Security Scorecard Agent', 'Reports incidents, fraud losses and fix times', 'Build this month’s security scorecard.', 'sig:crit|kb:security incidents', 'int', 'Review every month|Fix repeat incidents']] }
 ];
-const AG = { dept: 'mi', agent: 'scout', busy: false };
+const AG_DEPTS = AG_SPEC.map(D => ({
+  k: D.k, n: D.n, lead: D.lead, svc: D.svc, res: D.res,
+  agents: D.a.map(([id, n, role, q, calls, src, acts, learn]) => ({
+    id, n, role: agT(role), q: agT(q), calls: calls.split('|').map(AG_CALL).filter(Boolean), src: src.split(' '),
+    acts: acts.split('|').map(agT), learn: (learn || D.learn).split('|')
+  }))
+}));
+const AG = { dept: 'mi', agent: 'scout', busy: false, q: '' };
+const AG_LAST = new WeakMap();
 const agFind = () => { const D = AG_DEPTS.find(d => d.k === AG.dept); return { D, A: D.agents.find(a => a.id === AG.agent) || D.agents[0] }; };
+const agByKey = key => { const [dk, id] = String(key || '').split(':'); const D = AG_DEPTS.find(d => d.k === dk); const A = D && D.agents.find(a => a.id === id); return A ? { D, A } : null; };
+const agAll = () => AG_DEPTS.flatMap(D => D.agents.map(A => ({ D, A })));
+const agInit = A => esc(A.n.split(' ').map(w => w[0]).join('').slice(0, 2));
+const agTools = A => [...new Set(A.calls.map(c => c[0]).concat('intel_search'))];
 function agFmt(name, r) {
   try {
     if (name === 'list_signals') return r.slice(0, 4).map(x => `[${x.id}] ${x.text} (${x.operator}, ${SEVL[x.severity] || x.severity}, ${x.freshness_pct}% fresh)`);
@@ -1837,67 +2061,112 @@ function agFmt(name, r) {
   return [];
 }
 const agSrcNames = A => A.src.map(k => (MI_SRC.find(s => s.k === k) || { n: k }).n);
+// a resource token: ws:<workshop> pb:<playbook index> r:<resource name> tab:<console tab> go:#<section>
+function agResLabel(tok) {
+  const [t, ...rest] = tok.split(':'), v = rest.join(':');
+  if (t === 'ws') { const w = WORKSHOPS.find(x => x.k === v); return w && $('#wsGrid') ? 'Workshop: ' + w.name : null; }
+  if (t === 'pb') return PLAYBOOKS[+v] && $('#resGrid') ? 'Playbook: ' + PLAYBOOKS[+v][0] : null;
+  if (t === 'r') return RESOURCES.some(r => r[1] === v) && $('#resGrid') ? v : null;
+  if (t === 'tab') { const b = document.getElementById(v); return b ? 'Console: ' + txtOf(b) : null; }
+  if (t === 'go') { const s = $(v); return s && $('h2', s) ? txtOf($('h2', s)) : null; }
+  return null;
+}
+function agOpenRes(tok) {
+  const [t, ...rest] = tok.split(':'), v = rest.join(':');
+  const openRes = (sel, name) => { resCat = 'All'; resQ = ''; const q = $('#resQ'); if (q) q.value = ''; renderResources(); const el = findCard(sel, name); const box = el && (el.closest('details') || el.closest('article')); if (box && box.tagName === 'DETAILS') box.open = true; findGo(box || $('#resources'), box); };
+  if (t === 'ws') { acadAud = 'all'; renderAcademy(); findGo(document.getElementById(wsAnchor(v)), true); }
+  else if (t === 'pb') openRes('#resGrid summary b', PLAYBOOKS[+v][0]);
+  else if (t === 'r') openRes('#resGrid h4', v);
+  else if (t === 'tab') { selectTab(v); findGo($('#app')); }
+  else if (t === 'go') findGo($(v));
+}
+function agInfoHtml(D, A) {
+  const res = D.res.map(t => [t, agResLabel(t)]).filter(x => x[1]);
+  const svc = D.svc.map(k => SERVICES.find(s => s.k === k)).filter(Boolean);
+  return `<div><span class="label">Searches these sources</span><div class="chips">${agSrcNames(A).map(n => `<span class="chip">${esc(n)}</span>`).join('')}</div></div>
+    <div><span class="label">Runs these tools</span><div class="chips">${agTools(A).map(t => `<span class="chip hl mono">${esc(t)}</span>`).join('')}</div></div>
+    <div><span class="label">Can book these services</span><div class="chips">${svc.map(s => `<button type="button" class="chip" data-agsvc="${esc(s.k)}" title="${esc(s.desc)}">${esc(s.name)} ↗</button>`).join('')}</div></div>
+    <div><span class="label">Works with these resources</span><div class="chips">${res.map(([t, l]) => `<button type="button" class="chip" data-agres="${esc(t)}">${esc(l)}</button>`).join('') || '<span class="tiny muted">None on this page</span>'}</div></div>
+    <div><span class="label">Gets better with</span><div class="chips">${A.learn.map(n => `<span class="chip">${esc(n)}</span>`).join('')}</div></div>`;
+}
 function agRenderList() {
   const el = $('#agDepts'); if (!el) return;
-  el.innerHTML = AG_DEPTS.map(d => `<button type="button" data-agd="${d.k}" aria-pressed="${d.k === AG.dept}"><b>${esc(d.n)}</b><span>${d.agents.length} agents</span></button>`).join('');
-  const { D, A } = agFind();
-  $('#agAgents').innerHTML = D.agents.map(a => `<button type="button" class="ag-card" data-aga="${a.id}" aria-pressed="${a.id === A.id}"><span class="ag-av" aria-hidden="true">${esc(a.n.split(' ').map(w => w[0]).join('').slice(0, 2))}</span><span class="ag-meta"><b>${esc(a.n)}</b><span>${esc(a.role)}</span></span></button>`).join('');
+  el.innerHTML = AG_DEPTS.map(d => `<button type="button" data-agd="${d.k}" aria-pressed="${!AG.q && d.k === AG.dept}"><b>${esc(d.n)}</b><span>${d.agents.length} agents</span></button>`).join('');
+  const { D, A } = agFind(), q = AG.q.toLowerCase();
+  const list = q ? agAll().filter(({ D, A }) => (A.n + ' ' + A.role + ' ' + D.n).toLowerCase().includes(q)).slice(0, 36) : D.agents.map(a => ({ D, A: a }));
+  $('#agAgents').innerHTML = list.map(x => `<button type="button" class="ag-card" data-aga="${x.D.k}:${x.A.id}" aria-pressed="${x.D.k === D.k && x.A.id === A.id}"><span class="ag-av" aria-hidden="true">${agInit(x.A)}</span><span class="ag-meta"><b>${esc(x.A.n)}</b><span>${q ? esc(x.D.n) + ' · ' : ''}${esc(x.A.role)}</span></span></button>`).join('') || '<p class="small muted">No agent matches. Try another word.</p>';
   $('#agTask').value = A.q;
-  $('#agInfo').innerHTML = `<div><span class="label">Searches these sources</span><div class="chips">${agSrcNames(A).map(n => `<span class="chip">${esc(n)}</span>`).join('')}</div></div>
-    <div><span class="label">Uses these tools</span><div class="chips">${[...new Set(A.calls.map(c => c[0]).concat('intel_search'))].map(t => `<span class="chip hl mono">${esc(t)}</span>`).join('')}</div></div>
-    <div><span class="label">Gets better with</span><div class="chips">${A.learn.map(n => `<span class="chip">${esc(n)}</span>`).join('')}</div></div>`;
+  $('#agSel').textContent = `${A.n} · ${D.n}`;
+  $('#agInfo').innerHTML = agInfoHtml(D, A);
+}
+async function agLocal(A, task, trace, body) {
+  const lines = [];
+  for (const [name, args] of A.calls) { try { const r = await TOOLS[name](args); trace(name, args, true); lines.push(...agFmt(name, r)); } catch (e) { trace(name, args, false); } }
+  const R = miSearch(task, 'all'); trace('intel_search', { query: task.slice(0, 40) }, true);
+  R.res.slice(0, 3).forEach(r => lines.push(`${r.d.type}: ${r.d.title}`));
+  body.innerHTML = `<div class="ag-sec"><span class="label">Findings</span><ul class="cxl">${[...new Set(lines)].slice(0, 8).map(l => `<li>${esc(l)}</li>`).join('') || '<li>No new findings in the connected sources.</li>'}</ul></div>
+    <div class="ag-sec"><span class="label">Recommended actions</span><ol class="cxl">${A.acts.map(a => `<li>${esc(a)}</li>`).join('')}</ol></div>
+    <div class="ag-sec"><span class="label">Searched</span><p class="small muted">${esc(agSrcNames(A).join(' · '))} · ${R.total || 0} knowledge-base matches for the task</p></div>
+    <p class="tiny muted">Built-in agent run. In the Claude viewer the agent reasons over the same tools and writes its own brief.</p>`;
+  return A.acts;
+}
+// run one agent on a task and write its brief into box (the agents chapter, a terminal panel or the command line)
+async function agExec(D, A, task, box) {
+  box.innerHTML = `<div class="ag-head"><span class="ag-av" aria-hidden="true">${agInit(A)}</span><div><b>${esc(A.n)}</b><span class="tiny muted">${esc(D.n)} · working on: ${esc(task)}</span></div></div><div class="trace"></div><div class="ag-body"><p class="small muted">Searching sources and running tools…</p></div>`;
+  const tr = $('.trace', box), body = $('.ag-body', box);
+  const trace = (name, args, ok) => { const c = document.createElement('span'); c.className = 'tchip' + (ok ? ' done' : ' err'); c.textContent = name + '(' + Object.entries(args || {}).map(([k, v]) => k + '=' + String(v).slice(0, 24)).join(', ') + ')'; tr.appendChild(c); };
+  let acts = A.acts;
+  try {
+    if (sample && toolsMax) {
+      const tools = TOOLDEFS.filter(d => agTools(A).includes(d.name)).slice(0, toolsMax).map(d => Object.assign({}, d, { execute: async input => { try { const r = await TOOLS[d.name](input || {}); trace(d.name, input, true); return r; } catch (e) { trace(d.name, input, false); throw e; } } }));
+      const prompt = `${RULES}\n\nYou are "${A.n}", an AI agent in ${agT('{opU}')}'s ${D.n} department. Your job: ${A.role}. You search these sources: ${agSrcNames(A).join(', ')}. Console data is simulated for fictional operators; positioning, landscape and capital data are researched. Use your tools, then reply in Markdown with exactly these headings: **Findings** (3-5 bullets citing what you found), **What it means for ${agT('{opU}')}** (2 bullets), **Recommended actions** (3 numbered, each with an owner), **Watch next** (1-2 bullets). Never suggest coordinating with competitors.\n\nTask: ${task}`;
+      const { text } = await sample([{ role: 'user', content: prompt }], { tools, modelTier: 'quick', onText: ({ text }) => { body.innerHTML = mdLite(text); } });
+      body.innerHTML = mdLite(text);
+      const got = (text.match(/^\s*\d+\.\s+(.+)$/gm) || []).map(x => x.replace(/^\s*\d+\.\s+/, '').replace(/\*\*/g, '')).slice(0, 5);
+      if (got.length) acts = got;
+    } else acts = await agLocal(A, task, trace, body);
+  } catch (err) {
+    if (err && err.code === 'cancelled') { body.innerHTML = '<p class="small">Stopped.</p>'; return null; }
+    acts = await agLocal(A, task, trace, body);
+    body.insertAdjacentHTML('afterbegin', `<p class="tiny muted">${esc(aiFail(err))}; the built-in agent ran instead.</p>`);
+  }
+  body.insertAdjacentHTML('beforeend', `<div class="row-btns"><button type="button" class="btn sm" data-agtask>Add actions to the workspace</button></div>`);
+  const res = { D, A, acts };
+  AG_LAST.set(box, res);
+  return res;
 }
 async function agRun() {
   if (AG.busy) return;
-  const { D, A } = agFind(), task = $('#agTask').value.trim() || A.q, out = $('#agOut'), btn = $('#agRun');
+  const { D, A } = agFind(), task = $('#agTask').value.trim() || A.q, btn = $('#agRun');
   AG.busy = true; btn.disabled = true;
-  out.innerHTML = `<div class="ag-head"><span class="ag-av" aria-hidden="true">${esc(A.n.split(' ').map(w => w[0]).join('').slice(0, 2))}</span><div><b>${esc(A.n)}</b><span class="tiny muted">${esc(D.n)} · working on: ${esc(task)}</span></div></div><div class="trace" id="agTrace"></div><div id="agBody"><p class="small muted">Searching sources and running tools…</p></div>`;
-  const trace = (name, args, ok) => { const c = document.createElement('span'); c.className = 'tchip' + (ok ? ' done' : ' err'); c.textContent = name + '(' + Object.entries(args || {}).map(([k, v]) => k + '=' + String(v).slice(0, 24)).join(', ') + ')'; $('#agTrace').appendChild(c); };
-  const names = [...new Set(A.calls.map(c => c[0]).concat('intel_search'))];
-  try {
-    if (sample && toolsMax) {
-      const tools = TOOLDEFS.filter(d => names.includes(d.name)).slice(0, toolsMax).map(d => Object.assign({}, d, { execute: async input => { try { const r = await TOOLS[d.name](input || {}); trace(d.name, input, true); return r; } catch (e) { trace(d.name, input, false); throw e; } } }));
-      const prompt = `${RULES}\n\nYou are "${A.n}", an AI agent in e& UAE's ${D.n} department. Your job: ${A.role}. You search these sources: ${agSrcNames(A).join(', ')}. Console data is simulated for fictional operators; positioning, landscape and capital data are researched. Use your tools, then reply in Markdown with exactly these headings: **Findings** (3-5 bullets citing what you found), **What it means for e& UAE** (2 bullets), **Recommended actions** (3 numbered, each with an owner), **Watch next** (1-2 bullets). Never suggest coordinating with competitors.\n\nTask: ${task}`;
-      const { text } = await sample([{ role: 'user', content: prompt }], { tools, modelTier: 'quick', onText: ({ text }) => { $('#agBody').innerHTML = mdLite(text); } });
-      $('#agBody').innerHTML = mdLite(text) + `<div class="row-btns" style="margin-top:10px"><button type="button" class="btn sm" data-agtask>Add actions to the workspace</button></div>`;
-      AG.last = { A, acts: (text.match(/^\s*\d+\.\s+(.+)$/gm) || []).map(x => x.replace(/^\s*\d+\.\s+/, '').replace(/\*\*/g, '')).slice(0, 5) };
-    } else await agLocal(A, task, trace);
-  } catch (err) {
-    if (err && err.code === 'cancelled') $('#agBody').innerHTML = '<p class="small">Stopped.</p>';
-    else { await agLocal(A, task, trace); $('#agBody').insertAdjacentHTML('afterbegin', `<p class="tiny muted">${esc(aiFail(err))}; the built-in agent ran instead.</p>`); }
-  } finally { AG.busy = false; btn.disabled = false; }
+  try { await agExec(D, A, task, $('#agOut')); } finally { AG.busy = false; btn.disabled = false; }
 }
-async function agLocal(A, task, trace) {
-  {
-      const lines = [];
-      for (const [name, args] of A.calls) { try { const r = await TOOLS[name](args); trace(name, args, true); lines.push(...agFmt(name, r)); } catch (e) { trace(name, args, false); } }
-      const R = miSearch(task, 'all'); trace('intel_search', { query: task.slice(0, 40) }, true);
-      R.res.slice(0, 3).forEach(r => lines.push(`${r.d.type}: ${r.d.title}`));
-      $('#agBody').innerHTML = `<div class="ag-sec"><span class="label">Findings</span><ul class="cxl">${[...new Set(lines)].slice(0, 8).map(l => `<li>${esc(l)}</li>`).join('') || '<li>No new findings in the connected sources.</li>'}</ul></div>
-        <div class="ag-sec"><span class="label">Recommended actions</span><ol class="cxl">${A.acts.map(a => `<li>${esc(a)}</li>`).join('')}</ol></div>
-        <div class="ag-sec"><span class="label">Searched</span><p class="small muted">${esc(agSrcNames(A).join(' · '))} · ${R.total || 0} knowledge-base matches for the task</p></div>
-        <p class="tiny muted">Built-in agent run. In the Claude viewer the agent reasons over the same tools and writes its own brief.</p>
-        <div class="row-btns"><button type="button" class="btn sm" data-agtask>Add actions to the workspace</button></div>`;
-      AG.last = { A, acts: A.acts };
-  }
-}
+// buttons inside any agent brief or info panel, wherever it is on the page
+document.addEventListener('click', async e => {
+  const t = e.target.closest('[data-agtask]');
+  if (t) { const box = t.closest('.ag-run'); const r = box && AG_LAST.get(box); if (!r) return; t.disabled = true; for (const x of r.acts.slice(0, 3)) await addTask({ title: `${r.A.n}: ${x}`, kind: 'manual', dept: r.D.lead, prio: 'normal' }); return; }
+  const s = e.target.closest('[data-agsvc]');
+  if (s) { const host = s.closest('[data-agkey]'); const hit = host ? agByKey(host.dataset.agkey) : agFind(); if (!hit) return; s.disabled = true; try { const q = await createRequest({ service: s.dataset.agsvc, details: `${hit.A.n} (${hit.D.n}) asked for this service`, urgency: 'standard', via: 'agents' }); toast(`Requested: ${q.service}${q.saved ? '' : ' (this visit only)'}`); } catch (err) { toast(err.message); } finally { s.disabled = false; } return; }
+  const r = e.target.closest('[data-agres]'); if (r) agOpenRes(r.dataset.agres);
+});
 function initAgents() {
   if (!$('#agApp')) return;
-  $('#agApp').addEventListener('click', async e => {
-    const d = e.target.closest('[data-agd]'); if (d) { AG.dept = d.dataset.agd; AG.agent = AG_DEPTS.find(x => x.k === AG.dept).agents[0].id; agRenderList(); $('#agOut').innerHTML = '<p class="small muted">Pick an agent and run it.</p>'; return; }
-    const a = e.target.closest('[data-aga]'); if (a) { AG.agent = a.dataset.aga; agRenderList(); return; }
-    const t = e.target.closest('[data-agtask]'); if (t && AG.last) { t.disabled = true; const { D } = agFind(); for (const x of AG.last.acts.slice(0, 3)) await addTask({ title: `${AG.last.A.n}: ${x}`, kind: 'manual', dept: { mi: 'st', mk: 'pm', sl: 'pm', cx: 'cx', pr: 'pm', en: 'b2b', nw: 'nw', dg: 'da', st: 'st', rg: 'rg' }[D.k] || 'st', prio: 'normal' }); }
+  $('#agApp').addEventListener('click', e => {
+    const d = e.target.closest('[data-agd]'); if (d) { AG.q = ''; $('#agFind').value = ''; AG.dept = d.dataset.agd; AG.agent = AG_DEPTS.find(x => x.k === AG.dept).agents[0].id; agRenderList(); $('#agOut').innerHTML = '<p class="small muted">Pick an agent and run it.</p>'; return; }
+    const a = e.target.closest('[data-aga]'); if (a) { const [dk, id] = a.dataset.aga.split(':'); AG.dept = dk; AG.agent = id; agRenderList(); }
   });
+  let st; $('#agFind').addEventListener('input', e => { clearTimeout(st); st = setTimeout(() => { AG.q = e.target.value.trim(); agRenderList(); }, 120); });
   $('#agRun').onclick = agRun;
-  $('#agCount').textContent = AG_DEPTS.reduce((n, d) => n + d.agents.length, 0);
+  $('#agCount').textContent = agAll().length;
+  $('#agDeptN').textContent = AG_DEPTS.length;
   agRenderList();
 }
 
-/* ---------- e& INNOVATION LAB: 500+ tools and services ---------- */
+/* ---------- etisalat INNOVATION LAB: 500+ tools and services ---------- */
 const EL_PAT = {
   agent: ['AI agent', 'Designed', a => `${a} agent`, a => `An AI agent that watches ${a} across sources and alerts the owner when something changes.`],
-  monitor: ['Tool', 'Designed', a => `${a} monitor`, a => `Tracks ${a} for e& and every rival, daily, with change alerts and evidence.`],
-  bench: ['Dashboard', 'Designed', a => `${a} benchmark`, a => `Benchmarks ${a} for e&, du, Virgin Mobile UAE and Gulf peers on one screen.`],
+  monitor: ['Tool', 'Designed', a => `${a} monitor`, a => `Tracks ${a} for etisalat and every rival, daily, with change alerts and evidence.`],
+  bench: ['Dashboard', 'Designed', a => `${a} benchmark`, a => `Benchmarks ${a} for etisalat, du, Virgin Mobile UAE and Gulf peers on one screen.`],
   forecast: ['Model', 'Designed', a => `${a} forecast`, a => `Predicts ${a} 30–90 days ahead from leading signals, with a confidence range.`],
   sim: ['Tool', 'Designed', a => `${a} simulator`, a => `Simulates how a change in ${a} would play out in a digital twin, before anything goes live.`],
   opt: ['Model', 'Designed', a => `${a} optimizer`, a => `Recommends the best move on ${a} for each segment, inside pricing and contact guardrails.`],
@@ -1918,8 +2187,8 @@ const EL_DOM = [
   ['nw', 'Network & coverage', ['Coverage claim', 'Network speed', 'Site build activity'], [['Coverage truth layer', 'Dashboard', 'Live', 'Advertised versus measured coverage per hex cell.', 'tab-geo']]],
   ['fb', 'Fibre & home', ['Fibre demand', 'Fixed wireless competition', 'Household bundle'], [['Household hub concept', 'Playbook', 'Prototype', 'One family account for mobile, fibre, entertainment and wallet.', '#operators']]],
   ['dg', 'Digital & app', ['App store rating', 'Digital sign-up journey', 'App feature release'], [['App Store Watcher agent', 'AI agent', 'Live', 'Tracks ratings, reviews and releases of every telecom app.', '#agents']]],
-  ['fm', 'e& money & fintech', ['Wallet adoption', 'Remittance corridor', 'Merchant acceptance'], [['Wallet Growth agent', 'AI agent', 'Live', 'Finds who is ready to use e& money and why.', '#agents']]],
-  ['dv', 'Devices & retail', ['Device trade-in offer', 'Device stock', 'Accessory attach rate'], [['Store Intel agent', 'AI agent', 'Live', 'Watches rival retail moves near e& stores.', '#agents']]],
+  ['fm', 'etisalat money & fintech', ['Wallet adoption', 'Remittance corridor', 'Merchant acceptance'], [['Wallet Growth agent', 'AI agent', 'Live', 'Finds who is ready to use etisalat money and why.', '#agents']]],
+  ['dv', 'Devices & retail', ['Device trade-in offer', 'Device stock', 'Accessory attach rate'], [['Store Intel agent', 'AI agent', 'Live', 'Watches rival retail moves near etisalat stores.', '#agents']]],
   ['rm', 'Roaming & visitors', ['Visitor connectivity', 'Roaming usage', 'Tourist eSIM demand'], [['Tourist eSIM at arrival', 'Playbook', 'Prototype', 'QR sign-up at the airport with a ready wallet.', '#operators']]],
   ['sg', 'Strategy & M&A', ['Deal flow', 'Peer valuation', 'Portfolio performance'], [['Capital radar', 'Dashboard', 'Live', 'Valuations and state, PE and hedge-fund moves.', 'tab-cap'], ['Analyst workbench', 'Tool', 'Live', 'Benchmark of 108 real operators with CSV export.', 'tab-wb'], ['Positioning quadrants', 'Dashboard', 'Live', 'Where every operator sits and what to improve.', '#positioning']]],
   ['fi', 'Finance & investor relations', ['Revenue at risk', 'Investor sentiment', 'Cost efficiency'], [['Value calculator', 'Tool', 'Live', 'AED value of retention, upgrades and analyst time.', '#value']]],
@@ -1938,7 +2207,7 @@ function elBuild() {
     core.forEach(([n, type, status, d, tgt]) => items.push({ k, dn, n, type, status, d, tgt }));
     assets.forEach(a => Object.values(EL_PAT).forEach(([type, status, nf, df]) => items.push({ k, dn, n: nf(a), type, status, d: df(/^[A-Z]{2}/.test(a) ? a : a[0].toLowerCase() + a.slice(1)), tgt: null })));
   });
-  // Cellvoyant’s own innovation catalogue, mapped to the closest e& area
+  // Cellvoyant’s own innovation catalogue, mapped to the closest etisalat area
   const map = { 'AI engines': 'ai', 'Data & tools': 'mi', 'Delivery': 'sl', 'Services': 'pp', 'Trust & guardrails': 'sc' };
   LAB.forEach(([cat, , n, d]) => { const k = map[cat] || 'mi'; const dn = EL_DOM.find(x => x[0] === k)[1]; if (!items.some(x => x.n === n)) items.push({ k, dn, n, type: cat === 'Services' ? 'Service' : cat === 'AI engines' ? 'Model' : 'Tool', status: isLive(n) ? 'Live' : cat === 'Services' ? 'Service' : 'Designed', d, tgt: null, core: true }); });
   return (EL_ITEMS = items);
@@ -1968,7 +2237,7 @@ function initElab() {
   root.addEventListener('click', async e => {
     const g = e.target.closest('[data-go]'); if (g) { goTool(g.dataset.go); return; }
     const r = e.target.closest('[data-elreq]'); if (!r) return; r.disabled = true;
-    try { const q = await createRequest({ service: 'lab_item', details: `e& UAE: ${r.dataset.elreq}`, urgency: 'standard', via: 'innovation lab' }); toast(`Requested ${q.label}${q.saved ? '' : ' (this visit only)'}`); r.textContent = 'Requested'; }
+    try { const q = await createRequest({ service: 'lab_item', details: `etisalat UAE: ${r.dataset.elreq}`, urgency: 'standard', via: 'innovation lab' }); toast(`Requested ${q.label}${q.saved ? '' : ' (this visit only)'}`); r.textContent = 'Requested'; }
     catch (err) { toast(err.message); r.disabled = false; }
   });
   elRender();
@@ -3101,11 +3370,11 @@ const LAB = [
   ['AI engines', 'new', 'Multilingual Intelligence Desk', 'Detects Arabic, English, Chinese and other scripts, scores sentiment, summarizes long reports and links companies to the knowledge base; Claude adds translation and abstractive summaries.', 'Arabic and Chinese content left unread'],
   ['AI engines', 'new', 'Semantic Intelligence Search', 'One search across signals, operators, companies, deals, sources and documents, with terms in different languages mapped to shared concepts, plus emerging-signal detection and linked stories.', 'Historical intelligence nobody can find again'],
   ['Trust & guardrails', 'new', 'Business-Unit Access Control', 'Role and business-unit rules for public, licensed, internal and customer data; search results filtered by access level; licensed credentials kept in a server-side vault.', 'Confidential and licensed data shared too widely'],
-  ['Delivery', 'new', 'Operator Desk (e& UAE edition)', 'A department for operators: segment marketing plans, a sales playbook, strategy horizons and rival-response playbooks for any of 108 operators, with a deeper, sourced edition for e& UAE.', 'Strategy decks that are out of date before they are presented'],
+  ['Delivery', 'new', 'Operator Desk (etisalat UAE edition)', 'A department for operators: segment marketing plans, a sales playbook, strategy horizons and rival-response playbooks for any of 108 operators, with a deeper, sourced edition for etisalat UAE.', 'Strategy decks that are out of date before they are presented'],
   ['AI engines', 'new', 'Problem-Solving Studio', 'Breaks a big, complex problem into root causes, levers, options, a recommendation, a 90-day plan, KPIs and risks; Claude solves custom problems.', 'Complex problems debated for months without a plan'],
   ['AI engines', 'new', 'Idea Lab', 'Innovative marketing, sales and product ideas on an impact-versus-effort map, with an idea starter and Claude-generated ideas, each one ready to become a task.', 'Good ideas lost in meetings']
 ];
-const LIVE = new Set(['Operator Desk (e& UAE edition)', 'Problem-Solving Studio', 'Idea Lab', 'Source Registry & Refresh Planner', 'Multilingual Intelligence Desk', 'Semantic Intelligence Search', 'Business-Unit Access Control', 'Right-Time Engagement Engine', 'Operator Workspace', 'Resources & Templates Library', 'Department Lens & Signal Routing', 'Analyst Workbench', 'Move Predictor', 'Tariff DNA Sequencer', 'Market Digital Twin (War Room)', 'Insight Half-Life Router', 'Churn Contagion Radar', 'Coverage Truth Engine', 'Activist & Capital Radar', 'Alert Rules & Watchlists', 'One-click Brief Export', 'Cellvoyant AI Assistant']);
+const LIVE = new Set(['Operator Desk (etisalat UAE edition)', 'Problem-Solving Studio', 'Idea Lab', 'Source Registry & Refresh Planner', 'Multilingual Intelligence Desk', 'Semantic Intelligence Search', 'Business-Unit Access Control', 'Right-Time Engagement Engine', 'Operator Workspace', 'Resources & Templates Library', 'Department Lens & Signal Routing', 'Analyst Workbench', 'Move Predictor', 'Tariff DNA Sequencer', 'Market Digital Twin (War Room)', 'Insight Half-Life Router', 'Churn Contagion Radar', 'Coverage Truth Engine', 'Activist & Capital Radar', 'Alert Rules & Watchlists', 'One-click Brief Export', 'Cellvoyant AI Assistant']);
 let labCat = 'All';
 const LIVE_EL = { 'Right-Time Engagement Engine': 'rtApp', 'Source Registry & Refresh Planner': 'miApp', 'Multilingual Intelligence Desk': 'miApp', 'Semantic Intelligence Search': 'miApp', 'Business-Unit Access Control': 'miApp' };
 const isLive = n => LIVE.has(n) && (!LIVE_EL[n] || !!document.getElementById(LIVE_EL[n]));
@@ -3550,6 +3819,226 @@ function initNav() {
   map.forEach((a, id) => { const s = document.getElementById(id); if (s) io.observe(s); });
 }
 
+/* ---------- TERMINALS: several workstations side by side, ready-made or built for one purpose ---------- */
+const TM_KEY = 'cv.terminals.v1';
+const TM_PANELS = {
+  kpi: ['Market pulse', 'Signals, coverage, tasks and data freshness at a glance'],
+  signals: ['Signal feed', 'Top competitor signals, ranked by urgency'],
+  movers: ['Market-value movers', 'Biggest risers and fallers since the last check'],
+  mcap: ['Largest companies', 'Telecom, tower and intelligence companies by market value'],
+  gulf: ['Gulf operators', 'Revenue, growth and market value of Gulf operators'],
+  deals: ['Capital deals', 'Private-equity, infrastructure, hedge-fund and sovereign deals'],
+  predict: ['Move predictor', 'Probability and timing of the next rival moves'],
+  tariff: ['Tariff compare', 'A plan against the closest rival plans'],
+  war: ['War room', 'Simulate a rival price cut and see the best response'],
+  geo: ['Geo radar', 'Churn, coverage and retail hotspots by district'],
+  agent: ['Agent console', 'Run any AI agent on any task'],
+  roster: ['Department agents', 'Every agent in one department, one click to run'],
+  tasks: ['Workspace tasks', 'Open tasks from the team workspace'],
+  intel: ['Intelligence feed', 'Latest matching items from the knowledge base'],
+  sources: ['Source registry', 'Where the intelligence comes from'],
+  lab: ['Innovation lab', 'Tools and services by status'],
+  facts: ['Key facts', 'Sourced headline facts from this page'],
+  notes: ['Notes', 'Your notes for this terminal, kept in this browser']
+};
+const TM_PRESETS = [
+  { id: 'exec', n: 'Executive', p: 'What leadership needs at 8 a.m.: signals, market moves, forecasts and tasks', panels: [['kpi'], ['signals'], ['movers'], ['predict'], ['agent', 'st:board'], ['tasks']] },
+  { id: 'market', n: 'Market & competitors', p: 'Every rival move and position in one view', panels: [['signals'], ['gulf'], ['predict'], ['geo', 'retail'], ['agent', 'mi:profiler'], ['intel']] },
+  { id: 'pricing', n: 'Pricing', p: 'Compare plans and test responses before you move', panels: [['tariff'], ['war'], ['signals', 'crit'], ['agent', 'pr:tariff'], ['roster', 'pr']] },
+  { id: 'capital', n: 'Capital markets', p: 'Valuations, movers and deals across telecom', panels: [['mcap'], ['movers'], ['deals'], ['gulf'], ['agent', 'fn:peerval']] },
+  { id: 'network', n: 'Network', p: 'Coverage truth, rival builds and capex priorities', panels: [['geo', 'coverage'], ['predict'], ['signals'], ['agent', 'nw:coverage'], ['roster', 'nw']] },
+  { id: 'customer', n: 'Customers & retention', p: 'Where churn spreads and who to save today', panels: [['geo', 'churn'], ['war'], ['agent', 'rl:churn'], ['roster', 'rl'], ['tasks']] },
+  { id: 'enterprise', n: 'Enterprise & SME', p: 'Tenders, accounts and business offers', panels: [['agent', 'en:tender'], ['roster', 'en'], ['roster', 'sm'], ['intel'], ['deals']] },
+  { id: 'regulatory', n: 'Regulatory & risk', p: 'Consultations, compliance, security and fraud', panels: [['agent', 'rg:consult'], ['roster', 'rg'], ['roster', 'sc'], ['signals'], ['sources']] },
+  { id: 'agents', n: 'Agent operations', p: 'Run and supervise the AI agents', panels: [['agent', 'mi:scout'], ['agent', 'mk:segment'], ['roster', 'mi'], ['tasks']] },
+  { id: 'digital', n: 'Digital & fintech', p: 'Apps, eSIM, the wallet and digital rivals', panels: [['agent', 'dg:wallet'], ['roster', 'dg'], ['intel', 'app wallet eSIM'], ['notes']] },
+  { id: 'innovation', n: 'Innovation', p: 'The lab, new ideas and data', panels: [['lab'], ['agent', 'da:genai'], ['intel'], ['notes']] }
+];
+if (EDITION === 'eand') TM_PRESETS.unshift({ id: 'uae', n: 'etisalat UAE', p: 'The UAE market, du and Virgin Mobile UAE at a glance', panels: [['facts'], ['gulf'], ['signals'], ['agent', 'mi:profiler'], ['roster', 'mk']] });
+const TM = { custom: [], open: [], active: null, notes: {}, log: {}, hist: [], hi: -1, edit: null, draft: null };
+const tmAll = () => TM_PRESETS.concat(TM.custom);
+const tmGet = id => tmAll().find(t => t.id === id);
+function tmSave() { try { localStorage.setItem(TM_KEY, JSON.stringify({ custom: TM.custom, open: TM.open, active: TM.active, notes: TM.notes })); } catch (e) { /* storage blocked: this visit only */ } }
+function tmLoad() {
+  try { const s = JSON.parse(localStorage.getItem(TM_KEY) || 'null'); if (s) { TM.custom = (s.custom || []).filter(t => t && t.id && Array.isArray(t.panels)); TM.open = s.open || []; TM.active = s.active; TM.notes = s.notes || {}; } } catch (e) { /* first visit or storage blocked */ }
+  TM.open = TM.open.filter(id => tmGet(id));
+  if (!TM.open.length) TM.open = EDITION === 'eand' ? ['uae', 'exec', 'market'] : ['exec', 'market', 'pricing'];
+  if (TM.active !== '__new' && !tmGet(TM.active)) TM.active = TM.open[0];
+}
+const tmPct = v => (v > 0 ? '+' : '') + (v * 100).toFixed(1) + '%';
+const tmRow = (a, b, cls) => `<div class="tm-row"><span>${a}</span><span class="${cls || ''}">${b}</span></div>`;
+const tmMovers = () => (LAND ? LAND.companies : []).filter(c => c.mcap && c.mcap.usd && c.mcap.prev).map(c => ({ c, d: c.mcap.usd / c.mcap.prev - 1 })).sort((a, b) => b.d - a.d);
+const tmAgentOpts = sel => AG_DEPTS.map(D => `<optgroup label="${esc(D.n)}">${D.agents.map(A => `<option value="${D.k}:${A.id}"${sel === D.k + ':' + A.id ? ' selected' : ''}>${esc(A.n)}</option>`).join('')}</optgroup>`).join('');
+function tmPanelHtml(k, arg, tid) {
+  if (k === 'kpi') {
+    const sig = TOOLS.list_signals({ limit: 20 }), fr = sig.length ? Math.round(sig.reduce((a, x) => a + x.freshness_pct, 0) / sig.length) : 0;
+    const tiles = [['Critical signals', sig.filter(x => x.severity === 'crit').length], ['High signals', sig.filter(x => x.severity === 'high').length], ['Average freshness', fr + '%'],
+      ['Open tasks', taskList().filter(t => t.status !== 'done').length], ['Operators tracked', POS ? POS.operators.length : '—'], ['Companies tracked', LAND ? LAND.companies.length : '—'],
+      ['AI agents', agAll().length], ['Market values as of', LAND && LAND.verifiedAt ? String(LAND.verifiedAt).slice(0, 10) : '—']];
+    return `<div class="tm-kpis">${tiles.map(([l, v]) => `<div><b>${esc(String(v))}</b><span>${esc(l)}</span></div>`).join('')}</div>`;
+  }
+  if (k === 'signals') return TOOLS.list_signals({ limit: 8, severity: arg || undefined }).map(x => `<button type="button" class="tm-line" data-tmrun="SIG ${esc(x.id)}"><span class="tm-sev s-${esc(x.severity)}">${esc(SEVL[x.severity] || x.severity)}</span><span>${esc(x.operator)}: ${esc(x.text)}</span><span class="mono muted">${x.freshness_pct}%</span></button>`).join('') || '<p class="small muted">No signals.</p>';
+  if (k === 'movers') { const m = tmMovers(); if (!m.length) return '<p class="small muted">No earlier values to compare yet.</p>'; return '<span class="label">Risers</span>' + m.slice(0, 5).map(x => tmRow(esc(x.c.name), `${fmtMoney(x.c.mcap.usd)} · ${tmPct(x.d)}`, 'tm-up')).join('') + '<span class="label">Fallers</span>' + m.slice(-5).reverse().map(x => tmRow(esc(x.c.name), `${fmtMoney(x.c.mcap.usd)} · ${tmPct(x.d)}`, 'tm-dn')).join(''); }
+  if (k === 'mcap') return (LAND ? LAND.companies : []).filter(c => c.mcap && c.mcap.usd).sort((a, b) => b.mcap.usd - a.mcap.usd).slice(0, +arg || 10).map((c, i) => tmRow(`${i + 1}. ${esc(c.name)}`, fmtMoney(c.mcap.usd))).join('');
+  if (k === 'gulf') return POS ? POS.operators.filter(o => o.region === 'Gulf (GCC)' && revOf(o)).sort((a, b) => revOf(b) - revOf(a)).slice(0, 10).map(o => tmRow(esc(o.short || o.name), `${fmtMoney(revOf(o))} rev${o.growth && o.growth.v != null ? ' · ' + (o.growth.v > 0 ? '+' : '') + o.growth.v + '%' : ''}${o.mcap && o.mcap.usd ? ' · ' + fmtMoney(o.mcap.usd) + ' mcap' : ''}`)).join('') : '<p class="small muted">Positioning data is not loaded.</p>';
+  if (k === 'deals') return TOOLS.capital_deals({ limit: 8 }).map(d => tmRow(esc(`${d.investor} → ${d.target}`), esc(`${d.date}${d.value_usd ? ' · ' + fmtMoney(d.value_usd) : ''}`))).join('');
+  if (k === 'predict') return ['fwa', 'cut', 'sat'].map(m => { const r = TOOLS.predict_move({ move_id: m }); return `<div class="tm-bar"><span>${esc(r.move)}</span><i style="--w:${r.probability_pct}%"></i><b>${r.probability_pct}%</b><span class="tiny muted">${esc(r.window)}</span></div>`; }).join('');
+  if (k === 'tariff') { const id = arg || 'nim-u'; return `<label class="sr" for="tmPlan${tid}">Plan</label><select class="inp" id="tmPlan${tid}" data-tmplan>${PLANS.map(p => `<option value="${p.id}"${p.id === id ? ' selected' : ''}>${esc(OPS[p.op] ? OPS[p.op].short + ' ' + p.name : p.id)}</option>`).join('')}</select>` + agFmt('compare_plans', TOOLS.compare_plans({ plan_id: id })).map(l => `<p class="small">${esc(l)}</p>`).join(''); }
+  if (k === 'war') return `<form class="tm-war" data-tmwar><label class="small">Rival <select class="inp" name="rival">${['arc', 'vtx', 'pls', 'kte'].map(r => `<option value="${r}">${esc(OPS[r].name)}</option>`).join('')}</select></label><label class="small">Price cut <input type="range" name="cut" min="5" max="30" value="15"> <output>15%</output></label><button class="btn sm accent" type="submit">Simulate</button></form><div class="tm-warout small muted">Pick a rival and a cut, then simulate.</div>`;
+  if (k === 'geo') { const L = arg || 'churn', r = TOOLS.geo_hotspots({ layer: L }); return `<div class="seg tm-seg">${['churn', 'coverage', 'retail'].map(x => `<button type="button" data-tmgeo="${x}" aria-pressed="${x === L}">${x[0].toUpperCase() + x.slice(1)}</button>`).join('')}</div>` + r.hotspots.slice(0, 6).map(h => tmRow(esc(h.district), esc(h.port_outs_per_day_per_10k != null ? h.port_outs_per_day_per_10k + ' port-outs/day per 10k · ' + h.level : h.measured_mbps != null ? h.measured_mbps + ' Mbps · ' + h.gap : 'pressure ' + h.rival_retail_pressure))).join(''); }
+  if (k === 'agent') { const hit = agByKey(arg) || agAll()[0]; return `<label class="sr" for="tmAg${tid}">Agent</label><select class="inp" id="tmAg${tid}" data-tmagent>${tmAgentOpts(hit.D.k + ':' + hit.A.id)}</select><label class="sr" for="tmAgQ${tid}">Task</label><textarea class="tm-q" id="tmAgQ${tid}" rows="2">${esc(hit.A.q)}</textarea><button type="button" class="btn sm accent" data-tmagrun>Run agent</button><div class="ag-run tm-agout" aria-live="polite"></div>`; }
+  if (k === 'roster') { const D = AG_DEPTS.find(d => d.k === arg) || AG_DEPTS[0]; return `<p class="tiny muted">${esc(D.n)} · ${D.agents.length} agents</p>` + D.agents.map(A => `<div class="tm-ros"><span><b>${esc(A.n)}</b><span class="tiny muted">${esc(A.role)}</span></span><button type="button" class="btn sm" data-tmros="${D.k}:${A.id}">Run</button></div>`).join('') + '<div class="ag-run tm-agout" aria-live="polite"></div>'; }
+  if (k === 'tasks') { const L = taskList().filter(t => t.status !== 'done').slice(0, 8); return L.map(t => tmRow(esc(t.title), esc((TASK_COLS.find(c => c[0] === t.status) || ['', 'To do'])[1]))).join('') || '<p class="small muted">No open tasks. Agents can add theirs in one click.</p>'; }
+  if (k === 'intel') { const R = miSearch(arg || 'launch price network 5G deal', 'all'); return R.res.slice(0, 7).map(r => tmRow(esc(r.d.title), esc(r.d.type))).join('') || '<p class="small muted">No matches.</p>'; }
+  if (k === 'sources') return MI_SRC.slice(0, 14).map(s => tmRow(esc(s.n), esc(s.acc || s.cat || ''))).join('');
+  if (k === 'lab') { const all = elBuild(), by = s => all.filter(x => x.status === s).length; return `<div class="tm-kpis">${['Live', 'Prototype', 'Service', 'Designed'].map(s => `<div><b>${by(s)}</b><span>${s}</span></div>`).join('')}</div><span class="label">Live now</span>` + all.filter(x => x.status === 'Live').slice(0, 6).map(x => tmRow(esc(x.n), esc(x.dn))).join(''); }
+  if (k === 'facts') return $$('.stats > div').slice(0, 6).map(d => tmRow(`<b>${esc(txtOf($('b', d)))}</b> ${esc(txtOf($('span', d)))}`, esc(txtOf($('cite', d)).replace(' ↗', '')), 'tiny muted')).join('');
+  if (k === 'notes') return `<label class="sr" for="tmNote${tid}">Notes</label><textarea class="tm-q" id="tmNote${tid}" rows="6" data-tmnote placeholder="Notes for this terminal">${esc(TM.notes[TM.active] || '')}</textarea><p class="tiny muted">Saved in this browser only.</p>`;
+  return '';
+}
+function tmFill(el, t) {
+  const [k, arg] = [el.dataset.k, el.dataset.arg];
+  try { $('.tm-pb', el).innerHTML = tmPanelHtml(k, arg, t.id + el.dataset.i); } catch (e) { $('.tm-pb', el).innerHTML = `<p class="small muted">This panel could not load: ${esc(e.message)}</p>`; }
+}
+const tmSub = (k, arg) => k === 'agent' ? (agByKey(arg) || { A: { n: '' } }).A.n : k === 'roster' ? ((AG_DEPTS.find(d => d.k === arg) || {}).n || '') : k === 'geo' ? (arg || 'churn') : k === 'signals' && arg ? (SEVL[arg] || arg) : '';
+function tmTerminalHtml(t) {
+  return `<div class="tm-head"><div><h3>${t.custom ? '★ ' : ''}${esc(t.n)}</h3><p class="small muted">${esc(t.p || '')}</p></div><div class="tm-meta"><span class="pill sim">Signals simulated</span><span class="mono tm-clock" data-tmclock></span>${t.custom ? `<button type="button" class="btn sm" data-tmedit="${esc(t.id)}">Edit</button>` : `<button type="button" class="btn sm" data-tmcopy="${esc(t.id)}">Customize a copy</button>`}</div></div>
+    <form class="tm-cmd" data-tmcmd><label for="tmIn" class="sr">Terminal command</label><span aria-hidden="true">CV&gt;</span><input id="tmIn" autocomplete="off" spellcheck="false" placeholder="Type a command: HELP, OP du, MCAP 10, AGENT churn sentinel"><button class="btn sm" type="submit">Run</button></form>
+    <div class="tm-log" id="tmLog" aria-live="polite">${(TM.log[t.id] || []).join('')}</div>
+    <div class="tm-grid">${t.panels.map(([k, arg], i) => TM_PANELS[k] ? `<article class="tm-p${k === 'agent' || k === 'roster' ? ' tm-wide' : ''}" data-k="${k}" data-arg="${esc(arg || '')}" data-i="${i}"><header><b>${esc(TM_PANELS[k][0])}</b><span>${esc(tmSub(k, arg))}</span></header><div class="tm-pb"></div></article>` : '').join('')}</div>`;
+}
+function tmLauncherHtml() {
+  const d = TM.draft || { n: '', p: '', panels: [] }, has = k => d.panels.find(p => p[0] === k);
+  const argSel = k => k === 'geo' ? `<select class="inp" name="arg-geo">${['churn', 'coverage', 'retail'].map(x => `<option${(has('geo') || [])[1] === x ? ' selected' : ''}>${x}</option>`).join('')}</select>`
+    : k === 'agent' ? `<select class="inp" name="arg-agent">${tmAgentOpts((has('agent') || [])[1] || 'mi:scout')}</select>`
+    : k === 'roster' ? `<select class="inp" name="arg-roster">${AG_DEPTS.map(D => `<option value="${D.k}"${(has('roster') || [])[1] === D.k ? ' selected' : ''}>${esc(D.n)}</option>`).join('')}</select>`
+    : k === 'signals' ? `<select class="inp" name="arg-signals"><option value="">All severities</option><option value="crit"${(has('signals') || [])[1] === 'crit' ? ' selected' : ''}>Critical only</option><option value="high"${(has('signals') || [])[1] === 'high' ? ' selected' : ''}>High only</option></select>` : '';
+  return `<div class="tm-launch">
+    <div><h3>Open a terminal</h3><p class="small muted">Ready-made terminals for each job. Open as many as you like; each opens in its own tab.</p></div>
+    <div class="tm-cards">${TM_PRESETS.map(t => `<button type="button" class="tm-card" data-tmopen="${t.id}"><b>${esc(t.n)}</b><span class="small">${esc(t.p)}</span><span class="tiny muted">${t.panels.map(p => TM_PANELS[p[0]][0]).join(' · ')}</span></button>`).join('')}</div>
+    ${TM.custom.length ? `<div><h3>Your terminals</h3><div class="tm-cards">${TM.custom.map(t => `<div class="tm-card tm-mine"><b>★ ${esc(t.n)}</b><span class="small">${esc(t.p || '')}</span><span class="row-btns"><button type="button" class="btn sm accent" data-tmopen="${esc(t.id)}">Open</button><button type="button" class="btn sm" data-tmedit="${esc(t.id)}">Edit</button><button type="button" class="btn sm" data-tmdel="${esc(t.id)}">Delete</button></span></div>`).join('')}</div></div>` : ''}
+    <form class="tm-build panel" data-tmbuild id="tmBuild">
+      <h3>${TM.edit ? 'Edit your terminal' : 'Build a custom terminal'}</h3>
+      <p class="small muted">Name it, say what it is for and pick its panels. It is saved in this browser, and you can open several at once.</p>
+      <div class="tm-brow"><label class="small">Name<input class="inp-search" name="n" maxlength="40" required value="${esc(d.n)}" placeholder="e.g. Ramadan campaign room"></label><label class="small">Purpose<input class="inp-search" name="p" maxlength="120" value="${esc(d.p)}" placeholder="What this terminal is for"></label></div>
+      <fieldset class="tm-pick"><legend class="label">Panels</legend>${Object.entries(TM_PANELS).map(([k, [n, desc]]) => `<label class="tm-opt"><input type="checkbox" name="pk" value="${k}"${has(k) ? ' checked' : ''}><span><b>${esc(n)}</b><span class="tiny muted">${esc(desc)}</span></span>${argSel(k)}</label>`).join('')}</fieldset>
+      <div class="row-btns"><button class="btn accent" type="submit">${TM.edit ? 'Save changes' : 'Create terminal'}</button>${TM.edit ? '<button class="btn" type="button" data-tmcancel>Cancel</button>' : ''}<span class="small" id="tmMsg" aria-live="polite"></span></div>
+    </form></div>`;
+}
+function tmRender() {
+  const tabs = $('#tmTabs'), body = $('#tmBody'); if (!tabs) return;
+  tabs.innerHTML = TM.open.map(id => { const t = tmGet(id); return t ? `<span class="tm-tab"><button type="button" role="tab" aria-selected="${id === TM.active}" data-tmopen="${esc(id)}">${t.custom ? '★ ' : ''}${esc(t.n)}</button><button type="button" class="tm-x" data-tmclose="${esc(id)}" aria-label="Close the ${esc(t.n)} terminal">×</button></span>` : ''; }).join('') +
+    `<button type="button" class="tm-new" role="tab" aria-selected="${TM.active === '__new'}" data-tmopen="__new">+ New terminal</button>`;
+  const t = tmGet(TM.active);
+  if (!t) { body.innerHTML = tmLauncherHtml(); return; }
+  body.innerHTML = tmTerminalHtml(t);
+  $$('.tm-p', body).forEach(el => tmFill(el, t));
+  tmClock();
+}
+function tmOpen(id) { if (id !== '__new' && !tmGet(id)) return false; if (id !== '__new' && !TM.open.includes(id)) TM.open.push(id); TM.active = id; if (id !== '__new') { TM.edit = null; TM.draft = null; } tmSave(); tmRender(); return true; }
+function tmClock() { const c = $('[data-tmclock]'); if (c) c.textContent = new Date().toLocaleString('en-GB', { weekday: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
+function tmOut(html) {
+  const id = TM.active, L = TM.log[id] = (TM.log[id] || []); L.push(`<div class="tm-l">${html}</div>`); if (L.length > 120) L.splice(0, L.length - 120);
+  const box = $('#tmLog'); if (box) { box.insertAdjacentHTML('beforeend', `<div class="tm-l">${html}</div>`); box.scrollTop = box.scrollHeight; }
+}
+const TM_HELP = [['HELP', 'this list'], ['OPEN name', 'open a terminal, e.g. OPEN pricing'], ['NEW', 'build a custom terminal'], ['SIG [crit|high|S-1234]', 'signals, or one signal in detail'],
+  ['OP name', 'an operator profile, e.g. OP stc'], ['CO name', 'a company or investor, e.g. CO KKR'], ['MCAP [n]', 'largest companies by market value'], ['MOVERS', 'market-value risers and fallers'],
+  ['DEALS [n]', 'latest capital deals'], ['PRED [fwa|cut|sat]', 'move predictions'], ['SIM rival cut%', 'war-room simulation, e.g. SIM arcline 15'], ['PLAN id', 'compare a plan, e.g. PLAN nim-u'],
+  ['GEO churn|coverage|retail', 'district hotspots'], ['AGENTS [department]', 'list departments or agents'], ['AGENT name [: task]', 'run an agent, e.g. AGENT fee watch: any new fees?'],
+  ['ASK question', 'ask the AI assistant'], ['FIND text', 'search the whole platform'], ['TASK title', 'add a workspace task'], ['CLEAR', 'clear this log']];
+const tmFindAgent = q => { const s = q.toLowerCase().trim(); return agByKey(s) || agAll().find(x => x.A.n.toLowerCase() === s) || agAll().find(x => x.A.n.toLowerCase().includes(s) || x.A.id === s); };
+async function tmCmd(raw) {
+  const line = String(raw || '').trim(); if (!line) return;
+  TM.hist.unshift(line); TM.hist.length = Math.min(TM.hist.length, 40); TM.hi = -1;
+  const sp = line.indexOf(' '), C = (sp < 0 ? line : line.slice(0, sp)).toUpperCase(), arg = sp < 0 ? '' : line.slice(sp + 1).trim();
+  tmOut(`<span class="tm-in">CV&gt; ${esc(line)}</span>`);
+  const rows = (a) => a.length ? tmOut(a.map(esc).join('<br>')) : tmOut('<span class="muted">Nothing found.</span>');
+  try {
+    if (C === 'HELP') tmOut(TM_HELP.map(([c, d]) => `<b>${esc(c)}</b>  ${esc(d)}`).join('<br>'));
+    else if (C === 'CLEAR') { TM.log[TM.active] = []; $('#tmLog').innerHTML = ''; }
+    else if (C === 'OPEN') { const s = arg.toLowerCase(), t = tmAll().find(x => x.id === s || x.n.toLowerCase() === s) || tmAll().find(x => x.n.toLowerCase().includes(s)); if (!t || !s) tmOut('Terminals: ' + esc(tmAll().map(x => x.n).join(', '))); else tmOpen(t.id); }
+    else if (C === 'NEW') tmOpen('__new');
+    else if (C === 'SIG') {
+      if (/^s-\d+/i.test(arg)) { const r = TOOLS.get_signal({ id: arg }); rows([`${r.id} · ${SEVL[r.severity] || r.severity} · ${r.operator} · ${r.class}`, r.text, `Source: ${r.source} · detected ${r.detected}`, `Likely next move: ${r.predicted_next_move || '—'}`]); }
+      else rows(TOOLS.list_signals({ limit: /^\d+$/.test(arg) ? +arg : 8, severity: ['crit', 'high', 'watch'].includes(arg.toLowerCase()) ? arg.toLowerCase() : undefined }).map(x => `[${x.id}] ${SEVL[x.severity]} · ${x.operator}: ${x.text} (${x.freshness_pct}% fresh)`));
+    }
+    else if (C === 'OP') {
+      const s = arg.toLowerCase(); const o = POS && s && (POS.operators.find(x => (x.short || '').toLowerCase() === s) || POS.operators.find(x => x.name.toLowerCase().includes(s) || (x.short || '').toLowerCase().includes(s)));
+      if (!o) tmOut('No operator matches. Try OP stc, OP du or OP vodafone.');
+      else rows([o.name, `${o.country || ''} · ${o.region || ''} · ${POSM.ops.quad(o.x, o.y)}`, `Revenue ${revOf(o) ? fmtMoney(revOf(o)) : '—'}${o.growth && o.growth.v != null ? ' · growth ' + o.growth.v + '%' : ''} · market value ${o.mcap && o.mcap.usd ? fmtMoney(o.mcap.usd) + ' (' + (o.mcap.asOf || '') + ')' : '—'}`, `Competes with: ${(o.rivals || []).slice(0, 5).join(', ') || '—'}`].concat((o.moves || []).slice(0, 2).map(m => `Recent: ${m[0]} ${m[1]}`)));
+    }
+    else if (C === 'CO') rows(TOOLS.company_lookup({ name: arg, limit: 4 }).map(c => `${c.name} · ${c.segment} · ${c.hq || ''}${c.market_cap_usd ? ' · ' + fmtMoney(c.market_cap_usd) : ''}${c.investors && c.investors.length ? ' · investors: ' + c.investors.slice(0, 3).join(', ') : ''}`));
+    else if (C === 'MCAP') rows((LAND ? LAND.companies : []).filter(c => c.mcap && c.mcap.usd).sort((a, b) => b.mcap.usd - a.mcap.usd).slice(0, clamp(+arg || 10, 1, 40)).map((c, i) => `${i + 1}. ${c.name}  ${fmtMoney(c.mcap.usd)}  (${c.mcap.asOf || ''})`));
+    else if (C === 'MOVERS') { const m = tmMovers(); rows(m.slice(0, 5).map(x => `▲ ${x.c.name} ${tmPct(x.d)} → ${fmtMoney(x.c.mcap.usd)}`).concat(m.slice(-5).reverse().map(x => `▼ ${x.c.name} ${tmPct(x.d)} → ${fmtMoney(x.c.mcap.usd)}`))); }
+    else if (C === 'DEALS') rows(TOOLS.capital_deals({ limit: clamp(+arg || 6, 1, 25) }).map(d => `${d.date}: ${d.investor} → ${d.target}${d.value_usd ? ' (' + fmtMoney(d.value_usd) + ')' : ''}`));
+    else if (C === 'PRED') rows((['fwa', 'cut', 'sat'].includes(arg.toLowerCase()) ? [arg.toLowerCase()] : ['fwa', 'cut', 'sat']).flatMap(m => agFmt('predict_move', TOOLS.predict_move({ move_id: m }))));
+    else if (C === 'SIM') { const [r, c] = arg.split(/\s+/); const key = ['arc', 'vtx', 'pls', 'kte'].includes((r || '').toLowerCase()) ? r.toLowerCase() : opByName(r); if (!['arc', 'vtx', 'pls', 'kte'].includes(key)) tmOut('Rivals: ' + ['arc', 'vtx', 'pls', 'kte'].map(k => OPS[k].name).join(', ') + '. Example: SIM arcline 15'); else rows(agFmt('simulate_response', TOOLS.simulate_response({ rival: key, cut_pct: clamp(+String(c || '15').replace('%', '') || 15, 1, 60), weeks: 8 }))); }
+    else if (C === 'PLAN') rows(agFmt('compare_plans', TOOLS.compare_plans({ plan_id: PLANS.some(p => p.id === arg) ? arg : 'nim-u' })));
+    else if (C === 'GEO') rows(agFmt('geo_hotspots', TOOLS.geo_hotspots({ layer: ['churn', 'coverage', 'retail'].includes(arg.toLowerCase()) ? arg.toLowerCase() : 'churn' })));
+    else if (C === 'AGENTS') { const s = arg.toLowerCase(), D = s && AG_DEPTS.find(d => d.k === s || d.n.toLowerCase().includes(s)); if (D) rows(D.agents.map(A => `${A.n}: ${A.role}`)); else rows(AG_DEPTS.map(d => `${d.k}  ${d.n} (${d.agents.length} agents)`)); }
+    else if (C === 'AGENT') {
+      const [who, ...task] = arg.split(':'), hit = tmFindAgent(who || '');
+      if (!hit) { tmOut('No agent matches. Try AGENTS to list them, or AGENT churn sentinel.'); return; }
+      const box = document.createElement('div'); box.className = 'ag-run tm-agout';
+      $('#tmLog').appendChild(box); await agExec(hit.D, hit.A, task.join(':').trim() || hit.A.q, box); $('#tmLog').scrollTop = $('#tmLog').scrollHeight;
+      TM.log[TM.active].push(`<div class="tm-l tiny muted">Ran ${esc(hit.A.n)} (open the terminal again to rerun).</div>`);
+    }
+    else if (C === 'ASK') { selectTab('tab-ask'); const a = $('#askInput'); if (a) a.value = arg; findGo($('#app')); setTimeout(() => a && a.focus(), 300); tmOut('Opened the AI assistant with your question.'); }
+    else if (C === 'FIND') { findOpen(); const q = $('#findQ'); q.value = arg; findRender(); }
+    else if (C === 'TASK') { if (!arg) tmOut('Example: TASK Call back the top three at-risk accounts'); else await addTask({ title: arg, kind: 'manual', dept: 'st', prio: 'normal' }); }
+    else tmOut(`Unknown command ${esc(C)}. Type HELP.`);
+  } catch (e) { tmOut(`<span class="tm-err">${esc(e.message || String(e))}</span>`); }
+}
+function tmBuildSave(f) {
+  const n = f.n.value.trim(), p = f.p.value.trim(), ks = $$('input[name=pk]:checked', f).map(x => x.value);
+  if (!n) { $('#tmMsg').textContent = 'Give the terminal a name.'; return; }
+  if (!ks.length) { $('#tmMsg').textContent = 'Pick at least one panel.'; return; }
+  const panels = ks.map(k => { const a = f.elements['arg-' + k]; return a ? [k, a.value] : [k]; });
+  if (TM.edit) { const t = TM.custom.find(x => x.id === TM.edit); if (t) Object.assign(t, { n, p, panels }); tmOpen(TM.edit); }
+  else { const t = { id: 'c' + Date.now().toString(36), n, p, panels, custom: true }; TM.custom.push(t); tmOpen(t.id); }
+  FIND.items = null; toast('Terminal saved in this browser');
+}
+function initTerminals() {
+  const app = $('#tmApp'); if (!app) return;
+  tmLoad(); tmRender();
+  app.addEventListener('click', async e => {
+    const o = e.target.closest('[data-tmopen]'); if (o) { tmOpen(o.dataset.tmopen); return; }
+    const x = e.target.closest('[data-tmclose]'); if (x) { const id = x.dataset.tmclose, i = TM.open.indexOf(id); TM.open.splice(i, 1); if (TM.active === id) TM.active = TM.open[Math.max(0, i - 1)] || '__new'; tmSave(); tmRender(); return; }
+    const ed = e.target.closest('[data-tmedit]'); if (ed) { const t = tmGet(ed.dataset.tmedit); TM.edit = t.id; TM.draft = { n: t.n, p: t.p, panels: t.panels }; TM.active = '__new'; tmRender(); $('#tmBuild').scrollIntoView({ block: 'start', behavior: RM.matches ? 'auto' : 'smooth' }); return; }
+    const cp = e.target.closest('[data-tmcopy]'); if (cp) { const t = tmGet(cp.dataset.tmcopy); TM.edit = null; TM.draft = { n: 'My ' + t.n.toLowerCase() + ' terminal', p: t.p, panels: t.panels }; TM.active = '__new'; tmRender(); $('#tmBuild').scrollIntoView({ block: 'start', behavior: RM.matches ? 'auto' : 'smooth' }); return; }
+    if (e.target.closest('[data-tmcancel]')) { TM.edit = null; TM.draft = null; tmRender(); return; }
+    const del = e.target.closest('[data-tmdel]'); if (del) { const id = del.dataset.tmdel; TM.custom = TM.custom.filter(t => t.id !== id); TM.open = TM.open.filter(t => t !== id); delete TM.notes[id]; tmSave(); tmRender(); FIND.items = null; toast('Terminal deleted'); return; }
+    const run = e.target.closest('[data-tmrun]'); if (run) { tmCmd(run.dataset.tmrun); return; }
+    const g = e.target.closest('[data-tmgeo]'); if (g) { const p = g.closest('.tm-p'); p.dataset.arg = g.dataset.tmgeo; $('header span', p).textContent = g.dataset.tmgeo; tmFill(p, tmGet(TM.active)); return; }
+    const ar = e.target.closest('[data-tmagrun]'); if (ar) { const p = ar.closest('.tm-p'), hit = agByKey($('[data-tmagent]', p).value); if (!hit) return; ar.disabled = true; try { await agExec(hit.D, hit.A, $('textarea', p).value.trim() || hit.A.q, $('.tm-agout', p)); } finally { ar.disabled = false; } return; }
+    const ro = e.target.closest('[data-tmros]'); if (ro) { const p = ro.closest('.tm-p'), hit = agByKey(ro.dataset.tmros); ro.disabled = true; try { await agExec(hit.D, hit.A, hit.A.q, $('.tm-agout', p)); } finally { ro.disabled = false; } }
+  });
+  app.addEventListener('change', e => {
+    const ag = e.target.closest('[data-tmagent]'); if (ag) { const hit = agByKey(ag.value), p = ag.closest('.tm-p'); $('textarea', p).value = hit.A.q; $('header span', p).textContent = hit.A.n; return; }
+    const pl = e.target.closest('[data-tmplan]'); if (pl) { const p = pl.closest('.tm-p'); p.dataset.arg = pl.value; tmFill(p, tmGet(TM.active)); }
+  });
+  app.addEventListener('input', e => {
+    const n = e.target.closest('[data-tmnote]'); if (n) { TM.notes[TM.active] = n.value.slice(0, 4000); tmSave(); return; }
+    if (e.target.name === 'cut') e.target.nextElementSibling.textContent = e.target.value + '%';
+  });
+  app.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (e.target.matches('[data-tmcmd]')) { const i = $('#tmIn'), v = i.value; i.value = ''; await tmCmd(v); i.focus(); }
+    else if (e.target.matches('[data-tmbuild]')) tmBuildSave(e.target);
+    else if (e.target.matches('[data-tmwar]')) { const f = e.target, r = TOOLS.simulate_response({ rival: f.rival.value, cut_pct: +f.cut.value, weeks: 8 }); f.nextElementSibling.innerHTML = agFmt('simulate_response', r).map(l => `<p>${esc(l)}</p>`).join(''); }
+  });
+  app.addEventListener('keydown', e => {
+    if (e.target.id !== 'tmIn' || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
+    e.preventDefault(); TM.hi = clamp(TM.hi + (e.key === 'ArrowUp' ? 1 : -1), -1, TM.hist.length - 1); e.target.value = TM.hi < 0 ? '' : TM.hist[TM.hi];
+  });
+  // keep the live panels current while the terminal is on screen
+  setInterval(() => {
+    if (document.hidden) return; tmClock();
+    const r = app.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+    const t = tmGet(TM.active); if (t) $$('.tm-p[data-k="kpi"], .tm-p[data-k="signals"], .tm-p[data-k="tasks"]', app).forEach(el => tmFill(el, t));
+  }, 15000);
+}
+
 /* ---------- FIND ANYTHING: one search over chapters, tools, agents, companies, operators and sources ---------- */
 const FIND = { items: null, list: [], sel: 0 };
 const txtOf = el => (el ? el.textContent : '').replace(/\s+/g, ' ').trim();
@@ -3561,6 +4050,7 @@ function findIndex() {
   const it = [], add = (kind, t, d, go, extra) => { if (typeof t !== 'string' || !t) return; it.push({ kind, t, d: d || '', go, s: `${t} ${d || ''} ${extra || ''}`.toLowerCase() }); };
   $$('main section[id]').forEach(s => { const h = $('h2', s); if (h) add('Chapter', txtOf(h), txtOf($('.eyebrow', s)).replace(/^\d+/, ''), () => findGo(s)); });
   $$('main h3[id], main h4[id]').forEach(h => add('Section', txtOf(h), txtOf(h.closest('section') && $('h2', h.closest('section'))), () => findGo(h, true)));
+  if ($('#tmApp')) tmAll().forEach(t => add('Terminal', t.n + ' terminal', t.p, () => { tmOpen(t.id); findGo($('#terminals')); }, t.panels.map(p => (TM_PANELS[p[0]] || [''])[0]).join(' ')));
   $$('#app .tab').forEach(t => add('Console view', txtOf(t), 'Live operations console', () => { selectTab(t.id); findGo($('#app')); }));
   if ($('#operators')) {
     $$('#odTabs [data-t]').forEach(b => add('Operator desk', txtOf(b), 'Operator desk tab', () => { b.click(); findGo($('#operators')); }));
@@ -3582,8 +4072,8 @@ function findIndex() {
     GLOSSARY.forEach(g => add('Glossary', g[0], g[1], () => open('#resGrid dt', g[0])));
   }
   if ($('#agApp')) AG_DEPTS.forEach(D => {
-    add('Agent department', D.n, D.agents.map(a => a.n).join(', '), () => { AG.dept = D.k; AG.agent = D.agents[0].id; agRenderList(); findGo($('#agents')); });
-    D.agents.forEach(A => add('AI agent', A.n, `${D.n} · ${A.role}`, () => { AG.dept = D.k; AG.agent = A.id; agRenderList(); findGo($('#agents')); }));
+    add('Agent department', D.n, D.agents.map(a => a.n).join(', '), () => { AG.q = ''; $('#agFind').value = ''; AG.dept = D.k; AG.agent = D.agents[0].id; agRenderList(); findGo($('#agents')); });
+    D.agents.forEach(A => add('AI agent', A.n, `${D.n} · ${A.role}`, () => { AG.q = ''; $('#agFind').value = ''; AG.dept = D.k; AG.agent = A.id; agRenderList(); findGo($('#agents')); }));
   });
   const coreLab = new Set($('#labGrid') ? LAB.map(x => x[2]) : []);
   if ($('#elGrid')) elBuild().forEach(x => { if (!coreLab.has(x.n)) add('Innovation lab', x.n, `${x.dn} · ${x.type} · ${x.status}`, () => {
@@ -3599,14 +4089,14 @@ function findIndex() {
       posS.map = k; if (k === 'ops') posS.region = c.region || 'All regions'; posS.seg = 'all'; posS.cls = 'all'; posS.sel[k] = c.id; posRender(); findGo($('#positioning'));
     }, [c.short, c.group, c.ticker].filter(Boolean).join(' '));
   }));
-  if (POS && $('#odOp')) odOps().forEach(c => add('Operator desk', `${c.id === 'e-emirates-telecom' ? 'e& UAE' : c.name} desk`, 'Marketing plan, sales playbook, strategy, problem studio and ideas', () => { const s = $('#odOp'); s.value = c.id; s.dispatchEvent(new Event('change')); findGo($('#operators')); }, c.short));
+  if (POS && $('#odOp')) odOps().forEach(c => add('Operator desk', `${c.id === 'e-emirates-telecom' ? 'etisalat UAE' : c.name} desk`, 'Marketing plan, sales playbook, strategy, problem studio and ideas', () => { const s = $('#odOp'); s.value = c.id; s.dispatchEvent(new Event('change')); findGo($('#operators')); }, c.short));
   if (LAND && $('#landQ')) LAND.companies.forEach(c => add('Company', c.name, [c.seg, c.hq].filter(Boolean).join(' · '), () => { const q = $('#landQ'); q.value = c.name; q.dispatchEvent(new Event('input', { bubbles: true })); findGo($('#landscape')); }, (c.investors || []).map(i => i.n).join(' ')));
   $$('#sources tr[id^="src-"]').forEach(r => { const a = $('a', r); add('Source', txtOf(a) || txtOf(r).slice(0, 80), `${txtOf($('.muted', r))} · source ${r.id.slice(4)}`, () => findGo(r, true), txtOf(r)); });
   $$('main details > summary').forEach(sm => { const d = sm.parentElement; if (d.closest('#resGrid')) return; add(d.closest('.faq') ? 'Question' : 'Detail', txtOf(sm), txtOf(d.closest('section') && $('h2', d.closest('section'))), () => { d.open = true; findGo(d, true); }); });
   TOOLDEFS.forEach(d => add('Assistant tool', d.name.replace(/_/g, ' '), d.description, () => { selectTab('tab-ask'); findGo($('#app')); }));
   return (FIND.items = it);
 }
-const FIND_ORDER = ['Chapter', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
+const FIND_ORDER = ['Chapter', 'Terminal', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
 function findSearch(raw) {
   const q = raw.trim().toLowerCase(), items = findIndex();
   if (!q) return items.filter(x => x.kind === 'Chapter').map(x => ({ x, sc: 1 }));
@@ -3698,7 +4188,7 @@ function initFind() {
 $('#simClock').textContent = fmtClock();
 setLive(live);
 renderFeed(); kpis(); renderDetail();
-[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initFind]
+[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initTerminals, initFind]
   .forEach(f => { try { f(); } catch (err) { console.warn('Cellvoyant: ' + f.name + ' skipped', err); } });
 const radar = initRadar();
 renderServices(); renderReqs();

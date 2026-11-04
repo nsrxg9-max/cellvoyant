@@ -776,7 +776,7 @@ table.land .co span{display:block;font-size:12px;color:var(--muted)}
 .pos-link b{font-family:var(--f-display);font-size:22px;font-weight:800}
 .pos-link:hover{box-shadow:var(--shadow)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-/* ===== v0.6 · operations-center console (always dark), departments, workbench, academy, sponsors ===== */
+/* ===== v0.6 · operations-center console (always dark), departments, workbench, academy ===== */
 .console{
   --bg:#0A1118; --band:#0E161E; --surface:#0F1922; --surface-2:#15222D;
   --ink:#E6EEF4; --ink-2:#B9C7D3; --muted:#8597A8; --line:#1F2E3C; --line-strong:#2D4254;
@@ -949,15 +949,6 @@ button.chip:hover{border-color:var(--accent)}
 .ws-form textarea{border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font:14px/1.4 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical;width:100%}
 .ws-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 
-/* sponsors */
-.sponsor-strip{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;padding:18px 0 2px}
-.sponsor-strip ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 28px;align-items:center}
-.wm{font-family:var(--f-display);font-weight:800;font-stretch:115%;font-variation-settings:"wdth" 115;letter-spacing:.08em;font-size:15px;color:var(--ink-2);line-height:1.2}
-.sponsor-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-@media (max-width:760px){.sponsor-grid{grid-template-columns:1fr 1fr}}
-@media (max-width:420px){.sponsor-grid{grid-template-columns:1fr}}
-.sponsor-grid li{display:grid;place-items:center;align-content:center;gap:8px;min-height:132px;padding:20px;background:var(--surface);text-align:center}
-.sponsor-grid .wm{font-size:clamp(17px,2vw,22px);color:var(--ink);overflow-wrap:anywhere}
 /* ===== v0.6 · teams, operator workspace, right-time studio, challenge, resources ===== */
 .teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:8px;margin-top:8px}
 .teams div{display:grid;gap:2px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2)}
@@ -1295,6 +1286,118 @@ table.t.claims-t{min-width:540px;font-size:14px}
 .claims-t ol li{padding-left:12px;border-left:2px solid var(--line)}
 .claim-t tr.ind-row td{background:color-mix(in srgb,var(--accent-soft) 55%,var(--surface))}
 
+/* AI agent departments */
+.ag-wrap{display:grid;grid-template-columns:minmax(220px,260px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.ag-wrap{grid-template-columns:minmax(0,1fr)}}
+.ag-depts{display:grid;gap:6px}
+@media (max-width:900px){.ag-depts{grid-template-columns:repeat(auto-fill,minmax(min(180px,100%),1fr))}}
+.ag-depts button{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;display:grid;gap:1px}
+.ag-depts button b{font-size:14px}
+.ag-depts button span{font-size:12px;color:var(--muted)}
+.ag-depts button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.ag-main{display:grid;gap:14px;min-width:0}
+.ag-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.ag-cards{grid-template-columns:minmax(0,1fr)}}
+.ag-card{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.ag-card[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.ag-av{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font:700 13px var(--f-mono)}
+.ag-meta{display:grid;gap:2px}
+.ag-meta b{font-size:14px}
+.ag-meta span{font-size:12.5px;color:var(--ink-2);line-height:1.35}
+.ag-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:14px}
+.ag-info .chips{margin-top:6px}
+.ag-task{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.ag-task textarea{flex:1 1 300px;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;font:14px/1.45 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical;min-height:52px}
+.ag-out{border:1px solid var(--line-strong);border-radius:14px;background:var(--surface);padding:16px;display:grid;gap:10px;min-height:120px}
+.ag-head{display:flex;gap:10px;align-items:center}
+.ag-head div{display:grid}
+.ag-sec{display:grid;gap:4px}
+.ag-sec .cxl{margin-top:2px}
+.ag-side{display:grid;gap:8px;align-content:start;min-width:0}
+.ag-depts{max-height:min(760px,80vh);overflow:auto;padding-right:2px}
+@media (max-width:900px){.ag-depts{max-height:none}}
+.ag-task{display:grid;gap:6px}
+.ag-task-row{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.ag-task-row textarea{flex:1 1 300px;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;font:14px/1.45 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical;min-height:52px}
+button.chip{font:inherit;font-size:12.5px;cursor:pointer;text-align:left}
+button.chip:hover{border-color:var(--accent);color:var(--ink)}
+/* terminals */
+.tm{background:var(--surface);color:var(--ink);border:1px solid var(--line-strong);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.tm-tabs{display:flex;align-items:flex-end;gap:2px;overflow-x:auto;scrollbar-width:thin;background:var(--surface-2);border-bottom:1px solid var(--line);padding:8px 8px 0}
+.tm-tab{display:flex;align-items:center;flex:none;border:1px solid transparent;border-bottom:0;border-radius:9px 9px 0 0}
+.tm-tab:has([aria-selected="true"]){background:var(--surface);border-color:var(--line)}
+.tm-tab button,.tm-new{appearance:none;border:0;background:transparent;color:var(--ink-2);font:500 13px var(--f-body);padding:9px 6px 10px 12px;cursor:pointer;white-space:nowrap}
+.tm-tab [aria-selected="true"]{color:var(--ink);font-weight:600}
+.tm-tab .tm-x{padding:9px 10px 10px 4px;color:var(--muted);font-size:15px;line-height:1}
+.tm-tab .tm-x:hover{color:var(--crit)}
+.tm-new{flex:none;color:var(--accent);font-weight:600;padding:9px 12px 10px}
+.tm-new[aria-selected="true"]{background:var(--surface);border-radius:9px 9px 0 0}
+.tm-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.tm-head h3{font-family:var(--f-display);font-size:19px;margin:0}
+.tm-head p{margin:2px 0 0}
+.tm-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.tm-clock{font-size:12px;color:var(--muted)}
+.tm-cmd{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--line);font:600 13px var(--f-mono);color:var(--accent)}
+.tm-cmd input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font:14px var(--f-mono)}
+.tm-cmd:focus-within{box-shadow:inset 0 0 0 2px var(--accent)}
+.tm-log{max-height:260px;overflow:auto;padding:0 16px;background:var(--bg);font:12.5px/1.6 var(--f-mono);color:var(--ink-2);overflow-wrap:anywhere}
+.tm-log:not(:empty){padding:10px 16px;border-bottom:1px solid var(--line)}
+.tm-l{padding:2px 0}
+.tm-l b{color:var(--ink)}
+.tm-in{color:var(--accent)}
+.tm-err{color:var(--crit)}
+.tm-log .ag-run{font-family:var(--f-body);margin:8px 0}
+.tm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(330px,100%),1fr));gap:12px;padding:14px;align-items:start}
+.tm-p{min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--surface);display:flex;flex-direction:column}
+.tm-wide{grid-column:span 2}
+@media (max-width:760px){.tm-wide{grid-column:auto}}
+.tm-p>header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);font:600 11.5px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tm-p>header b{color:var(--ink)}
+.tm-p>header span{text-transform:none;letter-spacing:0;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tm-pb{padding:10px 12px;display:grid;gap:6px;font-size:13.5px;min-width:0}
+.tm-pb .label{margin-top:4px}
+.tm-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:3px 0;border-bottom:1px dashed var(--line)}
+.tm-row>span:first-child{min-width:0;overflow-wrap:anywhere}
+.tm-row>span:last-child{flex:none;font-family:var(--f-mono);font-size:12.5px;text-align:right}
+.tm-up{color:var(--good)}
+.tm-dn{color:var(--crit)}
+.tm-line{appearance:none;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:baseline;text-align:left;border:0;border-bottom:1px dashed var(--line);background:transparent;color:var(--ink);font:13px/1.4 var(--f-body);padding:5px 0;cursor:pointer}
+.tm-line:hover{color:var(--accent)}
+.tm-sev{font:600 10.5px var(--f-mono);text-transform:uppercase;padding:2px 6px;border-radius:5px;background:var(--surface-2);color:var(--ink-2)}
+.tm-sev.s-crit{background:var(--crit-soft,#3D1815);color:var(--crit)}
+.tm-sev.s-high{background:var(--signal-soft);color:var(--signal)}
+.tm-kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.tm-kpis div{display:grid;gap:2px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2)}
+.tm-kpis b{font:700 20px var(--f-display)}
+.tm-kpis span{font-size:11.5px;color:var(--muted)}
+.tm-bar{display:grid;grid-template-columns:minmax(0,1fr) 90px auto;gap:4px 10px;align-items:center}
+.tm-bar>span:first-child{grid-column:1/-1;font-size:13px}
+.tm-bar i{display:block;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--accent) var(--w),var(--line) var(--w))}
+.tm-bar b{font:600 13px var(--f-mono)}
+.tm-bar .tiny{grid-column:1/-1}
+.tm-seg{display:flex;flex-wrap:wrap;gap:4px}
+.tm-war{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.tm-war label{display:grid;gap:4px}
+.tm-war output{font-family:var(--f-mono)}
+.tm-q{width:100%;border:1px solid var(--line-strong);border-radius:9px;padding:8px 10px;font:13.5px/1.45 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical}
+.tm-pb .inp{font-size:13px}
+.tm-ros{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.tm-ros>span{display:grid;min-width:0}
+.tm-agout:not(:empty){border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:8px;background:var(--surface-2)}
+.tm-launch{display:grid;gap:18px;padding:16px}
+.tm-launch h3{font-family:var(--f-display);font-size:19px;margin:0 0 4px}
+.tm-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:10px}
+.tm-card{appearance:none;display:grid;gap:4px;align-content:start;text-align:left;font:inherit;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer}
+button.tm-card:hover{border-color:var(--accent)}
+.tm-mine{cursor:default}
+.tm-build{display:grid;gap:12px}
+.tm-brow{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:10px}
+.tm-brow label{display:grid;gap:4px}
+.tm-pick{border:0;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:8px}
+.tm-opt{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:start;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.tm-opt>span{display:grid}
+.tm-opt select{grid-column:2}
+
 /* find anything (search dialog) */
 .find-btn{flex:none;display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 10px 0 12px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);color:var(--ink-2);font:500 13.5px/1 var(--f-body,inherit);cursor:pointer}
 .find-btn:hover{border-color:var(--accent);color:var(--ink)}
@@ -1422,33 +1525,6 @@ table.t.claims-t{min-width:540px;font-size:14px}
 @media (max-width:760px){.val-out{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
 .val-out b{font-size:22px}
 .st-svc{background:color-mix(in srgb,var(--cx-1) 16%,var(--surface));color:var(--cx-1)}
-.ag-wrap{display:grid;grid-template-columns:minmax(220px,260px) minmax(0,1fr);gap:16px;align-items:start}
-@media (max-width:900px){.ag-wrap{grid-template-columns:minmax(0,1fr)}}
-.ag-depts{display:grid;gap:6px}
-@media (max-width:900px){.ag-depts{grid-template-columns:repeat(auto-fill,minmax(min(180px,100%),1fr))}}
-.ag-depts button{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;display:grid;gap:1px}
-.ag-depts button b{font-size:14px}
-.ag-depts button span{font-size:12px;color:var(--muted)}
-.ag-depts button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
-.ag-main{display:grid;gap:14px;min-width:0}
-.ag-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-@media (max-width:760px){.ag-cards{grid-template-columns:minmax(0,1fr)}}
-.ag-card{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
-.ag-card[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.ag-av{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font:700 13px var(--f-mono)}
-.ag-meta{display:grid;gap:2px}
-.ag-meta b{font-size:14px}
-.ag-meta span{font-size:12.5px;color:var(--ink-2);line-height:1.35}
-.ag-info{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-@media (max-width:760px){.ag-info{grid-template-columns:minmax(0,1fr)}}
-.ag-info .chips{margin-top:6px}
-.ag-task{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
-.ag-task textarea{flex:1 1 300px;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;font:14px/1.45 var(--f-body);background:var(--surface);color:var(--ink);resize:vertical;min-height:52px}
-.ag-out{border:1px solid var(--line-strong);border-radius:14px;background:var(--surface);padding:16px;display:grid;gap:10px;min-height:120px}
-.ag-head{display:flex;gap:10px;align-items:center}
-.ag-head div{display:grid}
-.ag-sec{display:grid;gap:4px}
-.ag-sec .cxl{margin-top:2px}
 .el-sum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:16px}
 @media (max-width:820px){.el-sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .el-sum div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:2px}
@@ -1479,6 +1555,7 @@ table.t.claims-t{min-width:540px;font-size:14px}
       <a href="#edition">Overview</a>
       <a href="#glance">Market</a>
       <a href="#operators">Customers</a>
+      <a href="#terminals">Terminals</a>
       <a href="#battle">Competition</a>
       <a href="#agents">AI agents</a>
       <a href="#elab">Innovation lab</a>
@@ -1499,9 +1576,9 @@ table.t.claims-t{min-width:540px;font-size:14px}
       <div>
         <div class="eyebrow">Prepared for etisalat (e&amp;) UAE · November 2026</div>
         <h1>Grow and keep customers in the UAE, <em>ahead</em> of every rival move</h1>
-        <p class="lede">One place for e&amp; UAE’s marketing, sales, strategy and analyst teams: plans by customer segment, battlecards, a 12-month growth plan, two working solutions and a live operations console that predicts rival moves and tests responses.</p>
+        <p class="lede">One place for etisalat UAE’s marketing, sales, strategy and analyst teams: plans by customer segment, battlecards, a 12-month growth plan, two working solutions and a live operations console that predicts rival moves and tests responses.</p>
         <div class="cta-row">
-          <a class="btn primary" href="#operators">Explore the e&amp; UAE desk</a>
+          <a class="btn primary" href="#operators">Explore the etisalat UAE desk</a>
           <a class="btn" href="#launch">See the pilot plan</a>
         </div>
         <div class="meta-row">
@@ -1512,7 +1589,7 @@ table.t.claims-t{min-width:540px;font-size:14px}
       <aside class="exec" aria-label="Executive summary">
         <div class="exec-h"><span class="label">Executive summary</span><span class="tiny muted">Cellvoyant assessment</span></div>
         <div class="exec-row"><b>Where etisalat stands</b><p>About 61% of UAE mobile lines and 16.5m UAE subscribers (Sep 2026), with a UAE licence renewed to 2046. du is growing faster in fixed wireless, fibre and digital services.</p></div>
-        <div class="exec-row"><b>What we recommend</b><ul><li>Converged household and youth offers to defend and grow share</li><li>Right-time retention and upsell, inside strict contact rules</li><li>One market intelligence hub and 30 AI agents for every team</li><li>An innovation lab of 600+ tools to scope, pilot and scale</li></ul></div>
+        <div class="exec-row"><b>What we recommend</b><ul><li>Converged household and youth offers to defend and grow share</li><li>Right-time retention and upsell, inside strict contact rules</li><li>216 AI agents in 18 departments, and terminals for every team</li><li>An innovation lab of 600+ tools to scope, pilot and scale</li></ul></div>
         <div class="exec-row"><b>How we prove it</b><p>A 30-day pilot with an A/B test: target +15% engagement vs control, earlier warning on rival moves and 40% fewer analyst hours spent collecting data.</p></div>
         <a class="btn sm accent" href="#launch">See the pilot plan →</a>
       </aside>
@@ -1526,10 +1603,10 @@ table.t.claims-t{min-width:540px;font-size:14px}
     <div class="sec-head">
       <div class="eyebrow"><span class="no">01</span>Overview</div>
       <h2>Attract customers and clients, sell more, keep them longer</h2>
-      <p class="lede">Twenty things e&amp; UAE teams can do here, each one live on this page. Plans and ideas are Cellvoyant’s recommendations built on public data; customer data in the solutions is synthetic and tokenized until a pilot connects e&amp; UAE’s own systems.</p>
+      <p class="lede">Twenty-one things etisalat UAE teams can do here, each one live on this page. Plans and ideas are Cellvoyant’s recommendations built on public data; customer data in the solutions is synthetic and tokenized until a pilot connects etisalat UAE’s own systems.</p>
     </div>
-    <div class="ed-grid"><a class="ed-card" data-odtab="marketing" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 001 1h3l6 4V6L7 10H4a1 1 0 00-1 1zM17 8a5 5 0 010 8"/></svg><span class="ed-t">Attract customers</span><span class="small">Six segment plans, from young digital-first users to expatriates and tourists.</span><span class="ed-go">Marketing plan →</span></a><a class="ed-card" data-odtab="sales" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg><span class="ed-t">Sell more</span><span class="small">A five-stage funnel, channel plan and sales rhythm, with right-moment upsell.</span><span class="ed-go">Sales playbook →</span></a><a class="ed-card" href="#challenge"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.6-7 10-7 10z"/></svg><span class="ed-t">Keep customers</span><span class="small">The best moment and channel for each customer, inside consent and anti-spam rules.</span><span class="ed-go">Solution 1 →</span></a><a class="ed-card" href="#clients"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></svg><span class="ed-t">Win business clients</span><span class="small">Six client groups with offers, sales motions and KPIs, plus enterprise problem plans.</span><span class="ed-go">Clients →</span></a><a class="ed-card" href="#battle"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg><span class="ed-t">Beat each rival</span><span class="small">Battlecards against du and Virgin Mobile UAE, with signals to watch and responses.</span><span class="ed-go">Battlecards →</span></a><a class="ed-card" href="#growth"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="ed-t">Plan the year</span><span class="small">A four-quarter growth plan with owners and KPIs, and a clear plan line-up.</span><span class="ed-go">Growth plan →</span></a><a class="ed-card" href="#console"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/></svg><span class="ed-t">See rivals early</span><span class="small">Ranked signals, move predictions and war-room simulations, updated every second.</span><span class="ed-go">Live console →</span></a><a class="ed-card" href="#challenge2"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span class="ed-t">One source of truth</span><span class="small">14 source types, Arabic, English and Chinese analysis, search and role-based access.</span><span class="ed-go">Solution 2 →</span></a><a class="ed-card" data-odtab="solve" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">New ideas, big problems</span><span class="small">An idea lab and a problem studio that turns big problems into a 90-day plan.</span><span class="ed-go">Problem studio →</span></a><a class="ed-card" href="#positioning"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/></svg><span class="ed-t">Benchmark the Gulf</span><span class="small">Real, sourced data on 108 operators, with quadrants and what to improve.</span><span class="ed-go">Positioning →</span></a><a class="ed-card" href="#value"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7M9 15v3c0 1.7 2.7 3 6 3s6-1.3 6-3v-5c0-1.6-2.4-2.9-5.5-3"/></svg><span class="ed-t">Size the prize</span><span class="small">An AED value calculator for retention, upgrades and analyst time.</span><span class="ed-go">Value calculator →</span></a><a class="ed-card" href="#academy"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5-10-5zM6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><span class="ed-t">Train every team</span><span class="small">12 workshops, templates, playbooks and a glossary.</span><span class="ed-go">Academy →</span></a><a class="ed-card" href="#agents"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/></svg><span class="ed-t">AI agents at work</span><span class="small">30 agents in 10 departments search sources, run tools and brief each team.</span><span class="ed-go">AI agents →</span></a><a class="ed-card" href="#elab"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">Innovation lab</span><span class="small">600+ tools and services for 20 areas of e&amp; UAE, beyond market intelligence.</span><span class="ed-go">Innovation lab →</span></a><a class="ed-card" href="#landscape"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/></svg><span class="ed-t">Know the field</span><span class="small">140 companies with owners, valuations and private-equity and hedge-fund stakes.</span><span class="ed-go">Landscape →</span></a><a class="ed-card" href="#platform"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span class="ed-t">How it works</span><span class="small">From signal to decision in six steps, with grounded AI and guardrails.</span><span class="ed-go">Platform →</span></a><a class="ed-card" href="#cellvoyant"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h2c1.5 0 1.5-6 3-6s1.5 12 3 12 1.5-9 3-9 1.5 5 3 5h4"/></svg><span class="ed-t">Market spectrum</span><span class="small">A live waterfall of rival signals by class, with sourced global telecom facts.</span><span class="ed-go">About Cellvoyant →</span></a><a class="ed-card" href="#lab"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">Core lab</span><span class="small">The 44 core Cellvoyant tools, engines, services and guardrails, live ones marked.</span><span class="ed-go">Core lab →</span></a><a class="ed-card" href="#patent"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg><span class="ed-t">Patent draft</span><span class="small">A provisional patent draft with 20 claims in tables, a claim map and a filing path.</span><span class="ed-go">Patent →</span></a><a class="ed-card" href="#business"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7M9 15v3c0 1.7 2.7 3 6 3s6-1.3 6-3v-5c0-1.6-2.4-2.9-5.5-3"/></svg><span class="ed-t">Business model</span><span class="small">Pricing, go-to-market, roadmap, success targets and how risks are handled.</span><span class="ed-go">Business →</span></a></div>
-    <p class="tiny muted ed-note">Facts about e&amp; and du come from their published results and link to the source. This edition uses no e&amp; internal data.</p>
+    <div class="ed-grid"><a class="ed-card" data-odtab="marketing" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 001 1h3l6 4V6L7 10H4a1 1 0 00-1 1zM17 8a5 5 0 010 8"/></svg><span class="ed-t">Attract customers</span><span class="small">Six segment plans, from young digital-first users to expatriates and tourists.</span><span class="ed-go">Marketing plan →</span></a><a class="ed-card" data-odtab="sales" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg><span class="ed-t">Sell more</span><span class="small">A five-stage funnel, channel plan and sales rhythm, with right-moment upsell.</span><span class="ed-go">Sales playbook →</span></a><a class="ed-card" href="#challenge"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.6-7 10-7 10z"/></svg><span class="ed-t">Keep customers</span><span class="small">The best moment and channel for each customer, inside consent and anti-spam rules.</span><span class="ed-go">Solution 1 →</span></a><a class="ed-card" href="#clients"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></svg><span class="ed-t">Win business clients</span><span class="small">Six client groups with offers, sales motions and KPIs, plus enterprise problem plans.</span><span class="ed-go">Clients →</span></a><a class="ed-card" href="#battle"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg><span class="ed-t">Beat each rival</span><span class="small">Battlecards against du and Virgin Mobile UAE, with signals to watch and responses.</span><span class="ed-go">Battlecards →</span></a><a class="ed-card" href="#growth"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="ed-t">Plan the year</span><span class="small">A four-quarter growth plan with owners and KPIs, and a clear plan line-up.</span><span class="ed-go">Growth plan →</span></a><a class="ed-card" href="#console"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/></svg><span class="ed-t">See rivals early</span><span class="small">Ranked signals, move predictions and war-room simulations, updated every second.</span><span class="ed-go">Live console →</span></a><a class="ed-card" href="#challenge2"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span class="ed-t">One source of truth</span><span class="small">14 source types, Arabic, English and Chinese analysis, search and role-based access.</span><span class="ed-go">Solution 2 →</span></a><a class="ed-card" data-odtab="solve" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">New ideas, big problems</span><span class="small">An idea lab and a problem studio that turns big problems into a 90-day plan.</span><span class="ed-go">Problem studio →</span></a><a class="ed-card" href="#positioning"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/></svg><span class="ed-t">Benchmark the Gulf</span><span class="small">Real, sourced data on 108 operators, with quadrants and what to improve.</span><span class="ed-go">Positioning →</span></a><a class="ed-card" href="#value"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7M9 15v3c0 1.7 2.7 3 6 3s6-1.3 6-3v-5c0-1.6-2.4-2.9-5.5-3"/></svg><span class="ed-t">Size the prize</span><span class="small">An AED value calculator for retention, upgrades and analyst time.</span><span class="ed-go">Value calculator →</span></a><a class="ed-card" href="#academy"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5-10-5zM6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><span class="ed-t">Train every team</span><span class="small">12 workshops, templates, playbooks and a glossary.</span><span class="ed-go">Academy →</span></a><a class="ed-card" href="#terminals"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M12 15h5"/></svg><span class="ed-t">Terminals</span><span class="small">Several terminals side by side, ready-made or built for one purpose, with a command line.</span><span class="ed-go">Terminals →</span></a><a class="ed-card" href="#agents"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/></svg><span class="ed-t">AI agents at work</span><span class="small">216 agents in 18 departments search sources, run tools, book services and brief each team.</span><span class="ed-go">AI agents →</span></a><a class="ed-card" href="#elab"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">Innovation lab</span><span class="small">600+ tools and services for 20 areas of etisalat UAE, beyond market intelligence.</span><span class="ed-go">Innovation lab →</span></a><a class="ed-card" href="#landscape"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/></svg><span class="ed-t">Know the field</span><span class="small">140 companies with owners, valuations and private-equity and hedge-fund stakes.</span><span class="ed-go">Landscape →</span></a><a class="ed-card" href="#platform"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span class="ed-t">How it works</span><span class="small">From signal to decision in six steps, with grounded AI and guardrails.</span><span class="ed-go">Platform →</span></a><a class="ed-card" href="#cellvoyant"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h2c1.5 0 1.5-6 3-6s1.5 12 3 12 1.5-9 3-9 1.5 5 3 5h4"/></svg><span class="ed-t">Market spectrum</span><span class="small">A live waterfall of rival signals by class, with sourced global telecom facts.</span><span class="ed-go">About Cellvoyant →</span></a><a class="ed-card" href="#lab"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">Core lab</span><span class="small">The 44 core Cellvoyant tools, engines, services and guardrails, live ones marked.</span><span class="ed-go">Core lab →</span></a><a class="ed-card" href="#patent"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg><span class="ed-t">Patent draft</span><span class="small">A provisional patent draft with 20 claims in tables, a claim map and a filing path.</span><span class="ed-go">Patent →</span></a><a class="ed-card" href="#business"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7M9 15v3c0 1.7 2.7 3 6 3s6-1.3 6-3v-5c0-1.6-2.4-2.9-5.5-3"/></svg><span class="ed-t">Business model</span><span class="small">Pricing, go-to-market, roadmap, success targets and how risks are handled.</span><span class="ed-go">Business →</span></a></div>
+    <p class="tiny muted ed-note">Facts about etisalat and du come from their published results and link to the source. This edition uses no etisalat internal data.</p>
   </div>
 </section>
 
@@ -1563,7 +1640,7 @@ table.t.claims-t{min-width:540px;font-size:14px}
           <tr><td>Market value, retrieved 4 Nov 2026</td><td><a href="https://companiesmarketcap.com/emirates-telecom-etisalat-group/marketcap/" target="_blank" rel="noopener noreferrer">USD 49.25bn ↗</a></td><td><a href="https://companiesmarketcap.com/emirates-integrated-telecommunications/marketcap/" target="_blank" rel="noopener noreferrer">USD 15.15bn ↗</a></td></tr>
           <tr><td>Licence and royalty</td><td>Renewed for 20 years to 2046; royalty regime extended for 2027–2029</td><td>Renewed for 20 years; royalty regime extended for three years</td></tr>
           <tr><td>Largest shareholder</td><td>Emirates Investment Authority (about 60%, not re-verified)</td><td>Emirates Investment Authority (50.12%)</td></tr>
-          <tr><td>Growth engines named in results</td><td>Sovereign AI Compute with Core42; agentic AI in business connectivity plans; e&amp; money</td><td>Home Wireless, fibre, du Pay, cloud, AI and data centres</td></tr>
+          <tr><td>Growth engines named in results</td><td>Sovereign AI Compute with Core42; agentic AI in business connectivity plans; etisalat money</td><td>Home Wireless, fibre, du Pay, cloud, AI and data centres</td></tr>
           <tr><td>Digital brands</td><td>—</td><td>Virgin Mobile UAE (digital-only, on du’s network)</td></tr>
         </tbody>
       </table>
@@ -1612,11 +1689,6 @@ table.t.claims-t{min-width:540px;font-size:14px}
       <div><b>68%</b><span>of operators turned data growth into ARPU growth, although 93% saw usage rise</span><cite><a href="#src-5">Tefficient, 1H 2025</a></cite></div>
       <div><b>−2%</b><span>Forecast global telecom capex for 2026, so every investment has to count</span><cite><a href="#src-7">Dell'Oro, Apr 2026</a></cite></div>
       <div><b>2×</b><span>CI teams that share insights weekly are twice as likely to see revenue impact (79% vs 41%)</span><cite><a href="#src-24">Crayon, 2026</a></cite></div>
-    </div>
-    <div class="sponsor-strip">
-      <span class="label">Sponsored by</span>
-      <ul aria-label="Sponsors"><li class="wm">PAINITE</li><li class="wm">M.A.I.I</li><li class="wm">SPACE42</li><li class="wm">G42 AI</li><li class="wm">BLOOMBERG</li><li class="wm">MC INTERNATIONAL INVESTMENTS</li></ul>
-      <a class="small" href="#sponsors">Our sponsors →</a>
     </div>
   </div>
 </section>
@@ -1752,12 +1824,12 @@ table.t.claims-t{min-width:540px;font-size:14px}
 <section class="sec" id="operators">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">06</span>Operator desk · e&amp; UAE edition</div>
-      <h2>Attract, sell and win: the e&amp; UAE desk</h2>
-      <p class="lede">Marketing plans by customer segment, a sales playbook, strategy horizons and rival-response playbooks, a studio that turns big problems into a 90-day plan, and an idea lab for new ways to attract customers. Built for e&amp; UAE from public sources and Cellvoyant’s assessment. Pick any of 108 operators to compare their desk.</p>
-      <p class="tiny muted">Independent analysis from public sources plus Cellvoyant’s own assessment. Not affiliated with or endorsed by e&amp; or any operator named here.</p>
+      <div class="eyebrow"><span class="no">06</span>Operator desk · etisalat UAE edition</div>
+      <h2>Attract, sell and win: the etisalat UAE desk</h2>
+      <p class="lede">Marketing plans by customer segment, a sales playbook, strategy horizons and rival-response playbooks, a studio that turns big problems into a 90-day plan, and an idea lab for new ways to attract customers. Built for etisalat UAE from public sources and Cellvoyant’s assessment. Pick any of 108 operators to compare their desk.</p>
+      <p class="tiny muted">Independent analysis from public sources plus Cellvoyant’s own assessment. Not affiliated with or endorsed by etisalat or any operator named here.</p>
     </div>
-    <div class="od-bar"><label class="lens"><span class="label">Desk for</span><select id="odOp" class="mini" aria-label="Operator"></select></label><span class="pill sim" id="odBadge">Special edition · e&amp; UAE</span></div>
+    <div class="od-bar"><label class="lens"><span class="label">Desk for</span><select id="odOp" class="mini" aria-label="Operator"></select></label><span class="pill sim" id="odBadge">Special edition · etisalat UAE</span></div>
     <div class="tabs od-tabs" id="odTabs" role="tablist" aria-label="Operator desk views"><button class="tab" role="tab" id="odt-overview" data-t="overview" aria-controls="odBody" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</button><button class="tab" role="tab" id="odt-marketing" data-t="marketing" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 001 1h3l6 4V6L7 10H4a1 1 0 00-1 1zM17 8a5 5 0 010 8"/></svg>Marketing plan</button><button class="tab" role="tab" id="odt-sales" data-t="sales" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>Sales playbook</button><button class="tab" role="tab" id="odt-strategy" data-t="strategy" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l5-7 4 4 7-11M15 6h5v5"/></svg>Strategy</button><button class="tab" role="tab" id="odt-solve" data-t="solve" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0012 3z"/></svg>Problem studio</button><button class="tab" role="tab" id="odt-ideas" data-t="ideas" aria-controls="odBody" aria-selected="false" tabindex="-1"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>Idea lab</button></div>
     <div class="od-body" id="odBody" role="tabpanel" aria-labelledby="odt-overview"></div>
   </div>
@@ -1768,19 +1840,19 @@ table.t.claims-t{min-width:540px;font-size:14px}
     <div class="sec-head">
       <div class="eyebrow"><span class="no">07</span>Battlecards · Cellvoyant assessment</div>
       <h2>How to win against each UAE rival</h2>
-      <p class="lede">Where e&amp; leads, where each rival is pushing, what to watch for and how to respond. Facts come from the scorecard above; the rest is Cellvoyant’s recommendation. Responses are always unilateral and factual: no coordination, no disparagement.</p>
+      <p class="lede">Where etisalat leads, where each rival is pushing, what to watch for and how to respond. Facts come from the scorecard above; the rest is Cellvoyant’s recommendation. Responses are always unilateral and factual: no coordination, no disparagement.</p>
     </div>
     <div class="bc-grid">
-      <article class="bc"><div class="bc-h"><h3>e&amp; vs du</h3><span class="stc st-proto">Main rival</span></div><div class="bc-b">
-        <div><span class="label">Where e&amp; leads</span><ul class="cxl"><li>About 61% of UAE mobile lines (Sep 2026)</li><li>Group scale and international reach</li><li>e&amp; money and AI partnerships</li><li>Strong margins to fund offers</li></ul></div>
+      <article class="bc"><div class="bc-h"><h3>etisalat vs du</h3><span class="stc st-proto">Main rival</span></div><div class="bc-b">
+        <div><span class="label">Where etisalat leads</span><ul class="cxl"><li>About 61% of UAE mobile lines (Sep 2026)</li><li>Group scale and international reach</li><li>etisalat money and AI partnerships</li><li>Strong margins to fund offers</li></ul></div>
         <div><span class="label">Where du is pushing</span><ul class="cxl"><li>Home Wireless and fibre as growth engines</li><li>du Pay, cloud, AI and data centres</li><li>Faster revenue growth than its guidance</li><li>A second, digital-only brand for youth</li></ul></div>
         <div><span class="label">Signals Cellvoyant watches</span><ul class="cxl"><li>Installer and field hiring</li><li>Plan-page and fee changes</li><li>Enterprise tender awards</li><li>App releases adding payments</li></ul></div>
-        <div><span class="label">Responses</span><ul class="cxl"><li>Household bundles in districts where installs rise</li><li>Right-moment fibre upgrades, not blanket cuts</li><li>e&amp; money rewards visible on every bill</li><li>Paid enterprise pilots with clear KPIs</li></ul></div>
+        <div><span class="label">Responses</span><ul class="cxl"><li>Household bundles in districts where installs rise</li><li>Right-moment fibre upgrades, not blanket cuts</li><li>etisalat money rewards visible on every bill</li><li>Paid enterprise pilots with clear KPIs</li></ul></div>
         <div class="full"><span class="label">Talk track</span><p class="small" style="margin-top:6px">Compare the total monthly value, fees included: one account for mobile, home and wallet, the largest customer base in the UAE, and offers that reward staying. Never criticize the rival; let the comparison speak.</p></div>
       </div></article>
-      <article class="bc"><div class="bc-h"><h3>e&amp; vs Virgin Mobile UAE</h3><span class="stc st-prod">Digital flanker</span></div><div class="bc-b">
+      <article class="bc"><div class="bc-h"><h3>etisalat vs Virgin Mobile UAE</h3><span class="stc st-prod">Digital flanker</span></div><div class="bc-b">
         <div><span class="label">Rival position</span><ul class="cxl"><li>Digital-only brand on du’s network</li><li>App-first sign-up</li><li>Aimed at youth and price-conscious users</li></ul></div>
-        <div><span class="label">Where e&amp; can win</span><ul class="cxl"><li>A youth plan inside the e&amp; app</li><li>Instant eSIM in under five minutes</li><li>Gaming and creator data passes</li><li>Cashback in e&amp; money</li></ul></div>
+        <div><span class="label">Where etisalat can win</span><ul class="cxl"><li>A youth plan inside the etisalat app</li><li>Instant eSIM in under five minutes</li><li>Gaming and creator data passes</li><li>Cashback in etisalat money</li></ul></div>
         <div><span class="label">Signals Cellvoyant watches</span><ul class="cxl"><li>App-store rank jumps</li><li>Social buzz and creator campaigns</li><li>Promotion pages and price changes</li></ul></div>
         <div><span class="label">Responses</span><ul class="cxl"><li>App-only counter-offer within 48 hours</li><li>Creator campaign with gaming partners</li><li>Measure under-30 gross adds weekly</li></ul></div>
         <div class="full"><span class="label">Talk track</span><p class="small" style="margin-top:6px">Everything the app-first brands offer, plus the UAE’s largest network operator behind it, a wallet that pays you back and stores where you can get help in person.</p></div>
@@ -1808,7 +1880,7 @@ table.t.claims-t{min-width:540px;font-size:14px}
         <div class="it"><b>Household bundle pilot</b><span class="small">Three districts where rival installs rise</span><div class="chips"><span class="chip">Marketing</span><span class="chip">Network</span></div></div>
         <p class="tiny muted">KPI: gross adds under 30; visitor activations; converged households</p></div>
       <div class="q"><span class="label">Quarter 3</span><h3>Grow</h3>
-        <div class="it"><b>Right-moment upsell</b><span class="small">Fibre, e&amp; money and roaming passes</span><div class="chips"><span class="chip">Marketing</span><span class="chip">Analytics</span></div></div>
+        <div class="it"><b>Right-moment upsell</b><span class="small">Fibre, etisalat money and roaming passes</span><div class="chips"><span class="chip">Marketing</span><span class="chip">Analytics</span></div></div>
         <div class="it"><b>SME growth pack</b><span class="small">Lines, fibre, cloud, AI assistant, payments</span><div class="chips"><span class="chip">Enterprise</span></div></div>
         <div class="it"><b>Home-country bundles</b><span class="small">Calling, data and lower transfer fees</span><div class="chips"><span class="chip">Marketing</span><span class="chip">Finance</span></div></div>
         <p class="tiny muted">KPI: products per customer; ARPU; wallet active users</p></div>
@@ -1844,10 +1916,10 @@ table.t.claims-t{min-width:540px;font-size:14px}
     <div class="sec-head">
       <div class="eyebrow"><span class="no">10</span>Plan line-up &amp; KPI tree · Cellvoyant recommendation</div>
       <h2>A clear line-up, and the numbers that show it works</h2>
-      <p class="lede">Six plan families from entry to household and business, with no prices: those come from e&amp; UAE’s own pricing work, tested with Tariff DNA against rival plans.</p>
+      <p class="lede">Six plan families from entry to household and business, with no prices: those come from etisalat UAE’s own pricing work, tested with Tariff DNA against rival plans.</p>
     </div>
     <div class="ladder-x">
-      <div class="lx"><span class="label">1 · Entry prepaid</span><b>Data-first, top up in the app</b><span>Cashback in e&amp; money on top-ups</span></div>
+      <div class="lx"><span class="label">1 · Entry prepaid</span><b>Data-first, top up in the app</b><span>Cashback in etisalat money on top-ups</span></div>
       <div class="lx"><span class="label">2 · Digital prepaid</span><b>App-only, instant eSIM</b><span>Youth, gaming and creator passes</span></div>
       <div class="lx"><span class="label">3 · Core postpaid</span><b>Clear data tiers</b><span>Add-ons offered at the right moment</span></div>
       <div class="lx"><span class="label">4 · Premium postpaid</span><b>Travel and priority</b><span>Roaming passes, priority support, perks</span></div>
@@ -1862,7 +1934,7 @@ table.t.claims-t{min-width:540px;font-size:14px}
           <tr><td><b>Engagement rate</b></td><td>Contacts that customers answer</td><td>Right-time engine</td><td>+15% vs control (about 4,200 customers per group)</td></tr>
           <tr><td><b>Churn</b></td><td>Every saved line keeps its revenue</td><td>Save desk by district, right-time retention</td><td>Lower than control over 90 days</td></tr>
           <tr><td><b>Products per customer</b></td><td>Converged customers stay longer</td><td>Household bundles, right-moment upsell</td><td>Higher than control</td></tr>
-          <tr><td><b>Wallet active users</b></td><td>e&amp; money becomes a reason to stay</td><td>Bill cashback, home-country bundles</td><td>Higher than control</td></tr>
+          <tr><td><b>Wallet active users</b></td><td>etisalat money becomes a reason to stay</td><td>Bill cashback, home-country bundles</td><td>Higher than control</td></tr>
           <tr><td><b>Opt-outs and complaints</b></td><td>Trust is the guardrail</td><td>Caps, quiet hours, cooling-off</td><td>No increase vs control (stop rule)</td></tr>
           <tr><td><b>Analyst hours collecting data</b></td><td>Time moves to deciding</td><td>Source registry, automated briefs</td><td>−40% (business-plan target)</td></tr>
         </tbody>
@@ -1871,32 +1943,50 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec band" id="agents">
+<section class="sec band" id="terminals">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">11</span>AI agent departments</div>
-      <h2><span id="agCount">30</span> AI agents in 10 departments, working for e&amp; UAE</h2>
-      <p class="lede">Each agent has a job, a set of sources it searches and tools it can run. Give it a task: it searches the knowledge base, runs its tools and writes a brief with findings and recommended actions. In the Claude viewer the agent reasons with Claude; elsewhere a built-in agent runs the same tools.</p>
+      <div class="eyebrow"><span class="no">11</span>Terminals</div>
+      <h2>A terminal for every job, and ones you build yourself</h2>
+      <p class="lede">Everything on the platform in one place. Open several terminals side by side as tabs: each puts live panels, the AI agents and a command line on one screen. Start from a ready-made terminal or build a custom one for a specific purpose; yours are saved in this browser. Type <b>HELP</b> in the command line to see what it can do.</p>
+    </div>
+    <div class="console tm" id="tmApp">
+      <div class="tm-tabs" id="tmTabs" role="tablist" aria-label="Open terminals"></div>
+      <div id="tmBody"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="agents">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span class="no">12</span>AI agent departments</div>
+      <h2><span id="agCount">216</span> AI agents in <span id="agDeptN">18</span> departments, working for etisalat UAE</h2>
+      <p class="lede">Every department has at least twelve agents. Each agent has a job, the sources it searches, the tools it runs, the services it can book and the resources it works with. Give it a task: it searches the knowledge base, runs its tools and writes a brief with findings and recommended actions, which go to the workspace in one click. In the Claude viewer agents reason with Claude; elsewhere a built-in agent runs the same tools. Every agent also runs from the terminals.</p>
     </div>
     <div class="ag-wrap" id="agApp">
-      <div class="ag-depts" id="agDepts" role="group" aria-label="Agent departments"></div>
+      <div class="ag-side">
+        <label class="sr" for="agFind">Find an agent</label>
+        <input class="inp-search" id="agFind" type="search" autocomplete="off" placeholder="Find an agent or a skill…">
+        <div class="ag-depts" id="agDepts" role="group" aria-label="Agent departments"></div>
+      </div>
       <div class="ag-main">
         <div class="ag-cards" id="agAgents" role="group" aria-label="Agents"></div>
         <div class="panel ag-info" id="agInfo"></div>
-        <div class="ag-task"><label class="sr" for="agTask">Task for the agent</label><textarea id="agTask" rows="2"></textarea><button class="btn accent" id="agRun" type="button">Run agent</button></div>
-        <div class="ag-out" id="agOut" aria-live="polite"><p class="small muted">Pick an agent and run it.</p></div>
+        <div class="ag-task"><label class="label" for="agTask" id="agSel">Task</label><div class="ag-task-row"><textarea id="agTask" rows="2"></textarea><button class="btn accent" id="agRun" type="button">Run agent</button></div></div>
+        <div class="ag-out ag-run" id="agOut" aria-live="polite"><p class="small muted">Pick an agent and run it.</p></div>
         <p class="tiny muted">Console signals are simulated; positioning, landscape and capital data are researched. Agents never recommend coordinating with competitors, and every brief shows which tools and sources it used.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="sec" id="elab">
+<section class="sec band" id="elab">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">12</span>Innovation lab for e&amp;</div>
-      <h2><span id="elTotal">600</span> tools and services for every part of e&amp; UAE</h2>
-      <p class="lede">Far beyond market intelligence: agents, models, dashboards, playbooks, services and workshops for 20 areas, from marketing and retention to network, e&amp; money, security and people. Live items open on this page; everything else can be scoped and piloted on request.</p>
+      <div class="eyebrow"><span class="no">13</span>Innovation lab for etisalat</div>
+      <h2><span id="elTotal">600</span> tools and services for every part of etisalat UAE</h2>
+      <p class="lede">Far beyond market intelligence: agents, models, dashboards, playbooks, services and workshops for 20 areas, from marketing and retention to network, etisalat money, security and people. Live items open on this page; everything else can be scoped and piloted on request.</p>
     </div>
     <div class="el-sum" id="elSum"></div>
     <div class="el-bar">
@@ -1910,22 +2000,22 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec band" id="lab">
+<section class="sec" id="lab">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">13</span>Core lab</div>
+      <div class="eyebrow"><span class="no">14</span>Core lab</div>
       <h2>The 44 core Cellvoyant tools, engines, services and guardrails</h2>
-      <p class="lede"><b id="labLiveN">17</b> of them already run on this page (filter by <b>Live now</b>). This is the full set Cellvoyant is designed to grow into, each tied to a specific telecom problem. All 44 are also in the innovation lab above, next to 600+ more for e&amp; UAE. Items marked <span class="badge core">Patent core</span> carry the inventive steps claimed in the draft below.</p>
+      <p class="lede"><b id="labLiveN">17</b> of them already run on this page (filter by <b>Live now</b>). This is the full set Cellvoyant is designed to grow into, each tied to a specific telecom problem. All 44 are also in the innovation lab above, next to 600+ more for etisalat UAE. Items marked <span class="badge core">Patent core</span> carry the inventive steps claimed in the draft below.</p>
     </div>
     <div class="filters" id="labFilters" role="group" aria-label="Filter innovations"></div>
     <div class="lab" id="labGrid"></div>
   </div>
 </section>
 
-<section class="sec" id="challenge">
+<section class="sec band" id="challenge">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">14</span>Solution 1 · right-time engagement</div>
+      <div class="eyebrow"><span class="no">15</span>Solution 1 · right-time engagement</div>
       <h2>Reach every customer at the right moment</h2>
       <p class="lede">Telecom companies often reach customers at the wrong moment and miss chances to keep them, sell them more and make them happier. The challenge: an AI solution that predicts the best time to contact each customer from behavioral, transactional and contextual data, so engagement goes up and churn goes down, without ever becoming intrusive. Students, analysts and operators can all work on it, and the prototype below solves it end to end.</p>
     </div>
@@ -2004,13 +2094,13 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec band" id="challenge2">
+<section class="sec" id="challenge2">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">15</span>Solution 2 · central market intelligence</div>
+      <div class="eyebrow"><span class="no">16</span>Solution 2 · central market intelligence</div>
       <h2>One AI-powered intelligence platform for a whole telecom group</h2>
-      <p class="lede">Large telecom groups such as e&amp; and their peers hold market intelligence in regional databases, vendor subscriptions, spreadsheets and public sources. The challenge: one central AI platform that automates collection, monitors competitors and delivers timely insights and recommended actions to every business unit, securely. This is the problem Cellvoyant was built for. Here is how each requirement is met.</p>
-      <p class="tiny muted">Challenge brief as provided. Cellvoyant is independent and is not affiliated with or endorsed by e&amp; or any operator named on this page.</p>
+      <p class="lede">Large telecom groups such as etisalat and their peers hold market intelligence in regional databases, vendor subscriptions, spreadsheets and public sources. The challenge: one central AI platform that automates collection, monitors competitors and delivers timely insights and recommended actions to every business unit, securely. This is the problem Cellvoyant was built for. Here is how each requirement is met.</p>
+      <p class="tiny muted">Challenge brief as provided. Cellvoyant is independent and is not affiliated with or endorsed by etisalat or any operator named on this page.</p>
     </div>
     <div class="ch-grid">
       <article class="ch-card"><span class="label">01 · Challenge summary</span><h3>No single place for market intelligence</h3><p class="small">Groups lack a centralized, AI-powered platform to automate market data collection, monitor competitor activity and deliver timely insights and recommended actions across business units.</p></article>
@@ -2061,7 +2151,7 @@ table.t.claims-t{min-width:540px;font-size:14px}
         <div class="mi-search">
           <div class="box"><div class="box-h"><span><b>Search the knowledge base</b> · any language</span><span id="miRoleNote"></span></div><div class="wb-body">
             <div class="mi-qrow"><label class="sr" for="miQ">Search</label><input class="inp" id="miQ" type="search" dir="auto" autocomplete="off" placeholder="Search signals, operators, deals, sources, documents…"><label class="sr" for="miType">Result type</label><select id="miType" class="mini"><option value="all">All types</option><option>Signal</option><option>Operator</option><option>Company</option><option>Deal</option><option>Source</option><option>Document</option><option>Resource</option><option>Playbook</option><option>Glossary</option></select></div>
-            <div class="chips" id="miQuick"><button type="button" class="chip hl" data-q="price cut">price cut</button><button type="button" class="chip hl" data-q="e&amp;">e&amp;</button><button type="button" class="chip hl" data-q="أسعار" lang="ar">أسعار</button><button type="button" class="chip hl" data-q="网速" lang="zh">网速</button><button type="button" class="chip hl" data-q="private equity">private equity</button><button type="button" class="chip hl" data-q="spectrum consultation">spectrum consultation</button><button type="button" class="chip hl" data-q="pricing outlook">pricing outlook</button></div>
+            <div class="chips" id="miQuick"><button type="button" class="chip hl" data-q="price cut">price cut</button><button type="button" class="chip hl" data-q="etisalat">etisalat</button><button type="button" class="chip hl" data-q="أسعار" lang="ar">أسعار</button><button type="button" class="chip hl" data-q="网速" lang="zh">网速</button><button type="button" class="chip hl" data-q="private equity">private equity</button><button type="button" class="chip hl" data-q="spectrum consultation">spectrum consultation</button><button type="button" class="chip hl" data-q="pricing outlook">pricing outlook</button></div>
             <div id="miResults" class="mi-results"></div>
           </div></div>
           <div class="side">
@@ -2100,10 +2190,10 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec" id="platform">
+<section class="sec band" id="platform">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">16</span>The solution</div>
+      <div class="eyebrow"><span class="no">17</span>The solution</div>
       <h2>One signal mesh, one telecom knowledge graph, agents that reason about moves</h2>
       <p class="lede">Cellvoyant works like a network operations center for the market. Instead of alarms from base stations, it receives signals from competitors, turns them into verified events, and sends each one to the person who can act before it goes stale.</p>
     </div>
@@ -2157,12 +2247,12 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec band" id="console">
+<section class="sec" id="console">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">17</span>Working prototype</div>
+      <div class="eyebrow"><span class="no">18</span>Working prototype</div>
       <h2>The Cellvoyant console</h2>
-      <p class="lede">Click an alert to see its evidence, sequence a tariff, toggle the weak signals behind a prediction, war-game a price cut, or have the AI assistant run any of it and book a service. The console runs live and updates every second. Its figures are simulated for six fictional operators in one demo market, where you play <b>Nimbus Mobile</b>; in a pilot, the same console runs on e&amp; UAE’s market and data. The Capital radar, the Analyst workbench and the Landscape use real, sourced market data. Pick a department in <b>Lens</b> to re-rank everything for that team.</p>
+      <p class="lede">Click an alert to see its evidence, sequence a tariff, toggle the weak signals behind a prediction, war-game a price cut, or have the AI assistant run any of it and book a service. The console runs live and updates every second. Its figures are simulated for six fictional operators in one demo market, where you play <b>Nimbus Mobile</b>; in a pilot, the same console runs on etisalat UAE’s market and data. The Capital radar, the Analyst workbench and the Landscape use real, sourced market data. Pick a department in <b>Lens</b> to re-rank everything for that team.</p>
     </div>
 
     <div class="console" id="app">
@@ -2448,10 +2538,10 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec" id="landscape">
+<section class="sec band" id="landscape">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">18</span>Competitor &amp; capital landscape · data as of Sep 2026</div>
+      <div class="eyebrow"><span class="no">19</span>Competitor &amp; capital landscape · data as of Sep 2026</div>
       <h2>Who competes, who owns them, and where the capital sits</h2>
       <p class="lede">Every direct competitor and adjacent telecom-intelligence vendor, and the operators that make up the market. For each: ownership, private-equity and hedge-fund involvement, market cap or valuation, revenue and capital raised, each figure with its source and date. Click any row for details.</p>
     </div>
@@ -2500,11 +2590,11 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec band" id="positioning">
+<section class="sec" id="positioning">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">19</span>Positioning · researched Oct 2026</div>
-      <h2>Where e&amp; and its competitors sit</h2>
+      <div class="eyebrow"><span class="no">20</span>Positioning · researched Oct 2026</div>
+      <h2>Where etisalat and its competitors sit</h2>
       <p class="lede">Two maps. The first places telecom operators across the Gulf, the wider Middle East, Asia-Pacific, Europe, Africa and the Americas, starting with the Gulf. The second places Cellvoyant’s own competitors, the intelligence vendors. Click any company to see its quadrant, owners, what to improve, how to succeed and its competitors.</p>
     </div>
     <div class="pos-tabs" id="posTabs" role="group" aria-label="Choose a map">
@@ -2531,15 +2621,15 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec" id="value">
+<section class="sec band" id="value">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">20</span>Value calculator</div>
+      <div class="eyebrow"><span class="no">21</span>Value calculator</div>
       <h2>What the programme could be worth, in AED</h2>
-      <p class="lede">An illustrative calculator. The inputs are examples, not e&amp; UAE figures: replace them with e&amp; UAE’s own numbers to size the opportunity. The pilot measures the real effect.</p>
+      <p class="lede">An illustrative calculator. The inputs are examples, not etisalat UAE figures: replace them with etisalat UAE’s own numbers to size the opportunity. The pilot measures the real effect.</p>
     </div>
     <div class="console rt-app" id="valApp">
-      <div class="c-bar"><div class="c-id"><div><div class="c-title">Value calculator</div><div class="c-sub">Example inputs · replace with e&amp; UAE figures</div></div></div><div class="c-right"><button class="btn sm" id="valReset" type="button">Reset</button></div></div>
+      <div class="c-bar"><div class="c-id"><div><div class="c-title">Value calculator</div><div class="c-sub">Example inputs · replace with etisalat UAE figures</div></div></div><div class="c-right"><button class="btn sm" id="valReset" type="button">Reset</button></div></div>
       <div class="tpanel">
         <div class="ue-sliders val-sl">
           <div class="ue-sl"><label for="vN">Customers in scope</label><output id="o-vN" for="vN"></output><input type="range" id="vN" min="50000" max="5000000" step="50000" value="500000"></div>
@@ -2560,10 +2650,10 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec band" id="departments">
+<section class="sec" id="departments">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">21</span>Departments &amp; sectors</div>
+      <div class="eyebrow"><span class="no">22</span>Departments &amp; sectors</div>
       <h2>Nine departments, 36 teams, six lines of business</h2>
       <p class="lede">Every signal is routed to the teams that can act on it, with a lead owner and an act-by time. Pick a department to see the questions it answers, its tools, the KPIs it watches and its operating rhythm, then open the console with that department’s lens. Or switch to business sectors to see what Cellvoyant watches in each line of business.</p>
     </div>
@@ -2576,11 +2666,11 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec" id="academy">
+<section class="sec band" id="academy">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">22</span>Cellvoyant Academy</div>
-      <h2>Workshops for e&amp; UAE teams</h2>
+      <div class="eyebrow"><span class="no">23</span>Cellvoyant Academy</div>
+      <h2>Workshops for etisalat UAE teams</h2>
       <p class="lede">Hands-on sessions built on the console and the real market data on this page. Each one ends with something your team can use the next day. Seat requests go into the same queue as the console’s services.</p>
     </div>
     <ol class="path" aria-label="Learning path">
@@ -2595,10 +2685,10 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec band" id="resources">
+<section class="sec" id="resources">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">23</span>Resources &amp; tools</div>
+      <div class="eyebrow"><span class="no">24</span>Resources &amp; tools</div>
       <h2>Templates, playbooks, tools and trusted sources</h2>
       <p class="lede">Everything an operator or analyst needs next to the console: download a template, follow a playbook, open a tool, or go straight to the regulator or data source.</p>
     </div>
@@ -2607,25 +2697,25 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec" id="howwework">
+<section class="sec band" id="howwework">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">24</span>How we work together</div>
-      <h2>Governance, data and security for an e&amp; UAE pilot</h2>
-      <p class="lede">A light structure with clear owners, and data that never leaves e&amp; UAE’s control.</p>
+      <div class="eyebrow"><span class="no">25</span>How we work together</div>
+      <h2>Governance, data and security for an etisalat UAE pilot</h2>
+      <p class="lede">A light structure with clear owners, and data that never leaves etisalat UAE’s control.</p>
     </div>
     <div class="how-grid">
       <div class="panel"><span class="label">Governance</span><ul class="cxl"><li><b>Monthly steering:</b> sponsors from marketing, sales, strategy and compliance</li><li><b>Weekly working group:</b> one owner per department lens</li><li><b>Week-8 decision:</b> go or no-go on agreed KPIs</li></ul></div>
-      <div class="panel"><span class="label">Data</span><ul class="cxl"><li>Public and licensed market data from day one</li><li>Customer data only tokenized, only for the A/B test</li><li>Customer data stays in e&amp; UAE’s own environment</li><li>No data shared with other operators, ever</li></ul></div>
+      <div class="panel"><span class="label">Data</span><ul class="cxl"><li>Public and licensed market data from day one</li><li>Customer data only tokenized, only for the A/B test</li><li>Customer data stays in etisalat UAE’s own environment</li><li>No data shared with other operators, ever</li></ul></div>
       <div class="panel"><span class="label">Security &amp; compliance</span><ul class="cxl"><li>Single sign-on and role-based access by division</li><li>UAE hosting and audit logs of every query and export</li><li>Contact policy approved by compliance before any test</li><li>Competition-law review of the design</li></ul></div>
     </div>
   </div>
 </section>
 
-<section class="sec band" id="patent">
+<section class="sec" id="patent">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">25</span>Intellectual property</div>
+      <div class="eyebrow"><span class="no">26</span>Intellectual property</div>
       <h2>Provisional patent application, working draft</h2>
       <p class="lede">A complete first draft in the structure a US provisional application uses: field, background, summary, drawings, detailed description, 20 claims and an abstract. Take it to a registered patent attorney or agent to review and file. This draft is not legal advice.</p>
     </div>
@@ -2842,10 +2932,10 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec" id="business">
+<section class="sec band" id="business">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">26</span>Business model &amp; go-to-market</div>
+      <div class="eyebrow"><span class="no">27</span>Business model &amp; go-to-market</div>
       <h2>How Cellvoyant makes money and wins its first customers</h2>
       <p class="lede">Proposed pricing and targets to validate in customer discovery. They are planning assumptions, not market facts.</p>
     </div>
@@ -2918,11 +3008,11 @@ table.t.claims-t{min-width:540px;font-size:14px}
   </div>
 </section>
 
-<section class="sec band" id="launch">
+<section class="sec" id="launch">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">27</span>Next step</div>
-      <h2>Start with a 30-day pilot at e&amp; UAE</h2>
+      <div class="eyebrow"><span class="no">28</span>Next step</div>
+      <h2>Start with a 30-day pilot at etisalat UAE</h2>
       <p class="lede">Cellvoyant runs next to the current process for 30 days in shadow mode, and the right-time engine is tested against the fixed schedule in a controlled A/B test on tokenized data. Week 8 decides the rollout.</p>
     </div>
     <div class="launch-grid">
@@ -2934,7 +3024,7 @@ table.t.claims-t{min-width:540px;font-size:14px}
       </ol>
       <form class="panel lift pilot-form" id="pilotForm">
         <h3>Join the pilot</h3>
-        <div class="pf-row"><label class="label" for="plOrg">Organization type</label><select id="plOrg"><option>e&amp; UAE · consumer</option><option>e&amp; UAE · enterprise</option><option>Mobile network operator (MNO)</option><option>MVNO or digital brand</option><option>Fiber, cable or ISP</option><option>Tower, satellite or infrastructure</option><option>Analyst or consultancy</option><option>Investor (PE, infrastructure, hedge fund, sovereign)</option><option>Regulator or government</option><option>University or student team</option></select></div>
+        <div class="pf-row"><label class="label" for="plOrg">Organization type</label><select id="plOrg"><option>etisalat UAE · consumer</option><option>etisalat UAE · enterprise</option><option>Mobile network operator (MNO)</option><option>MVNO or digital brand</option><option>Fiber, cable or ISP</option><option>Tower, satellite or infrastructure</option><option>Analyst or consultancy</option><option>Investor (PE, infrastructure, hedge fund, sovereign)</option><option>Regulator or government</option><option>University or student team</option></select></div>
         <div class="pf-row"><label class="label" for="plReg">Region</label><select id="plReg"><option>Gulf (GCC)</option><option>Middle East</option><option>Asia-Pacific</option><option>Europe</option><option>Africa</option><option>Americas</option><option>Global</option></select></div>
         <fieldset class="pf-mods"><legend class="label">Modules</legend>
           <label><input type="checkbox" name="plMod" value="Operations console" checked> Operations console</label>
@@ -2954,20 +3044,22 @@ table.t.claims-t{min-width:540px;font-size:14px}
         <div class="lc ok"><i>✓</i><span>Operations console with 9 views, department lens, workspace and workbench</span></div>
         <div class="lc ok"><i>✓</i><span>Client edition for etisalat (e&amp;) UAE with AI agents, an innovation lab and both solutions</span></div>
         <div class="lc ok"><i>✓</i><span>AI assistant with <b id="lcTools">17</b> tools and a service desk</span></div>
-        <div class="lc ok"><i>✓</i><span>Operator desk with an e&amp; UAE edition, problem studio and idea lab</span></div>
+        <div class="lc ok"><i>✓</i><span>Operator desk with an etisalat UAE edition, problem studio and idea lab</span></div>
         <div class="lc ok"><i>✓</i><span>9 departments, 36 teams, 12 workshops and a resources library</span></div>
+        <div class="lc ok"><i>✓</i><span>Terminals: 11 ready-made, custom ones and a command line</span></div>
+        <div class="lc ok"><i>✓</i><span>216 AI agents in 18 departments, each with tools, services and resources</span></div>
         <div class="lc ok"><i>✓</i><span>Search across the whole platform (Ctrl K or ⌘ K)</span></div>
         <div class="lc ok"><i>✓</i><span>Installable app with offline access and share previews (public site)</span></div></div>
       <div class="lc-col"><span class="label">Data &amp; trust</span>
         <div class="lc ok"><i>✓</i><span>140 companies and 108 operators with sources and check dates</span></div>
         <div class="lc ok"><i>✓</i><span>Competition-law and customer-contact guardrails built in</span></div>
         <div class="lc ok"><i>✓</i><span>UAE operator figures refreshed with Q3 2026 results (4 Nov 2026)</span></div>
-        <div class="lc todo"><i>○</i><span><b>Refresh the global landscape</b> (140 companies, 108 operators; last checked 6 Oct 2026)</span></div>
+        <div class="lc ok"><i>✓</i><span>Market values for 78 listed companies and 73 operators refreshed (4 Nov 2026); Gulf operators updated with Q3 2026 results</span></div>
+        <div class="lc todo"><i>○</i><span><b>Refresh the remaining operator results</b> outside the Gulf (last checked 6 Oct 2026)</span></div>
         <div class="lc todo"><i>○</i><span><b>Legal review</b> of the competition-law and privacy design</span></div></div>
       <div class="lc-col"><span class="label">Business &amp; partners</span>
         <div class="lc ok"><i>✓</i><span>Pricing, go-to-market, roadmap and a pilot offer</span></div>
         <div class="lc todo"><i>○</i><span><b>File the provisional patent</b> before sharing the page widely</span></div>
-        <div class="lc todo"><i>○</i><span><b>Sponsor logos</b> and approval of how sponsor names are shown</span></div>
         <div class="lc todo"><i>○</i><span><b>A private contact channel</b> for pilot leads (e-mail or CRM)</span></div></div>
     </div>
     <h3 class="res-h" id="faq">Questions</h3>
@@ -2982,17 +3074,6 @@ table.t.claims-t{min-width:540px;font-size:14px}
       <details class="panel"><summary>What does it cost?</summary><p class="small">Proposed plans start at $2,500 a month (Scout) and $12,000 a month (Operator Core), with custom group pricing. These are planning assumptions to validate with pilot customers.</p></details>
       <details class="panel"><summary>Can we use our own data?</summary><p class="small">Yes. A pilot can join your port-out and CRM data inside your own environment, and the Insight API pushes signals into your pricing engine, CRM or BI tools.</p></details>
     </div>
-  </div>
-</section>
-
-<section class="sec" id="sponsors">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow"><span class="no">28</span>Sponsors</div>
-      <h2>Supported by our sponsors</h2>
-      <p class="lede">Thank you to the organizations sponsoring Cellvoyant.</p>
-    </div>
-    <ul class="sponsor-grid" aria-label="Sponsors"><li><span class="wm">PAINITE</span><span class="label">Sponsor</span></li><li><span class="wm">M.A.I.I</span><span class="label">Sponsor</span></li><li><span class="wm">SPACE42</span><span class="label">Sponsor</span></li><li><span class="wm">G42 AI</span><span class="label">Sponsor</span></li><li><span class="wm">BLOOMBERG</span><span class="label">Sponsor</span></li><li><span class="wm">MC INTERNATIONAL INVESTMENTS</span><span class="label">Sponsor</span></li></ul>
   </div>
 </section>
 
@@ -3065,10 +3146,10 @@ table.t.claims-t{min-width:540px;font-size:14px}
 <footer class="foot ed-foot">
   <div class="wrap ed-foot-grid">
     <div><a class="brand" href="#top"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M5 17c3 0 3-7 6-7s3 12 6 12 3-9 6-9 3 4 5 4" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Cellvoyant <small>for etisalat (e&amp;)</small></a><p class="small">An edition prepared by Cellvoyant for discussion with etisalat (e&amp;) UAE, built from public sources and simulated or synthetic data.</p></div>
-    <div><span class="label">This edition</span><ul class="small"><li><a href="#edition">Overview</a></li><li><a href="#operators">e&amp; UAE desk</a></li><li><a href="#challenge">Solution 1 · right-time engagement</a></li><li><a href="#challenge2">Solution 2 · market intelligence</a></li><li><a href="#lab">Core lab</a></li><li><a href="#patent">Patent draft</a></li><li><a href="#business">Business model</a></li><li><a href="#launch">Pilot plan</a></li></ul></div>
+    <div><span class="label">This edition</span><ul class="small"><li><a href="#edition">Overview</a></li><li><a href="#operators">etisalat UAE desk</a></li><li><a href="#challenge">Solution 1 · right-time engagement</a></li><li><a href="#challenge2">Solution 2 · market intelligence</a></li><li><a href="#terminals">Terminals</a></li><li><a href="#agents">AI agents</a></li><li><a href="#lab">Core lab</a></li><li><a href="#patent">Patent draft</a></li><li><a href="#business">Business model</a></li><li><a href="#launch">Pilot plan</a></li></ul></div>
     <div><span class="label">Notes</span><p class="small">Not affiliated with or endorsed by etisalat (e&amp;). Facts link to their published sources; plans, battlecards and targets are Cellvoyant recommendations. Console signals are simulated.</p></div>
   </div>
-  <div class="wrap ed-foot-bar"><span>© 2026 Cellvoyant</span><span class="mono">etisalat (e&amp;) UAE edition · v2.0 · 4 Nov 2026</span><a href="./">Main Cellvoyant platform →</a></div>
+  <div class="wrap ed-foot-bar"><span>© 2026 Cellvoyant</span><span class="mono">etisalat (e&amp;) UAE edition · v2.1 · 4 Nov 2026</span><a href="./">Main Cellvoyant platform →</a></div>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>

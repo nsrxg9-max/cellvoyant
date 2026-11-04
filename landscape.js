@@ -171,10 +171,10 @@ window.CV_LANDSCAPE = {
 "rel": "Horizontal digital data that telcos could use for online benchmarking; no telecom-specific offer found.",
 "own": "public",
 "mcap": {
-"usd": 669810000.0,
-"asOf": "2026-09-28",
+"usd": 772180000.0,
+"asOf": "2026-11-03",
 "src": "https://stockanalysis.com/stocks/smwb/market-cap/",
-"prev": 757170000.0
+"prev": 669810000.0
 },
 "rev": {
 "usd": 77200000.0,
@@ -609,10 +609,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 273420000.0,
-"asOf": "2026-09-28",
+"usd": 241590000.0,
+"asOf": "2026-11-03",
 "src": "https://stockanalysis.com/stocks/ttgt/market-cap/",
-"prev": 272690000.0
+"prev": 273420000.0
 },
 "val": {
 "usd": 350000000.0,
@@ -819,10 +819,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 117260000.0,
-"asOf": "2026-09-28",
+"usd": 103760000.0,
+"asOf": "2026-11-04",
 "src": "https://stockanalysis.com/quote/nse/SUBEXLTD/market-cap/",
-"prev": 130000000.0
+"prev": 117260000.0
 },
 "rev": {
 "usd": 31000000.0,
@@ -850,10 +850,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 6000000000.0,
-"asOf": "2026-09-28",
+"usd": 6520000000.0,
+"asOf": "2026-11-03",
 "src": "https://stockanalysis.com/stocks/dox/market-cap/",
-"prev": 6090000000.0
+"prev": 6000000000.0
 },
 "rev": {
 "usd": 4530000000.0,
@@ -908,10 +908,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 178540000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 177690000000.0
+"usd": 163562274816.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 178540000000.0
 },
 "rev": {
 "usd": 88300000000.0,
@@ -943,10 +943,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 193940000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 193280000000.0
+"usd": 187501625344.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 193940000000.0
 },
 "rev": {
 "usd": 138200000000.0,
@@ -977,10 +977,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 170620000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 173360000000.0
+"usd": 144093167616.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 170620000000.0
 },
 "rev": {
 "usd": 125600000000.0,
@@ -1011,10 +1011,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 77320000000.0,
-"asOf": "2026-09-28",
+"usd": 84050000000.0,
+"asOf": "2026-11-03",
 "src": "https://stockanalysis.com/stocks/cmcsa/market-cap/",
-"prev": 80020000000.0
+"prev": 77320000000.0
 },
 "rev": {
 "usd": 123700000000.0,
@@ -1048,8 +1048,8 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 18220000000.0,
-"asOf": "2026-09-28",
+"usd": 18610000000.0,
+"asOf": "2026-11-03",
 "src": "https://stockanalysis.com/stocks/chtr/market-cap/"
 },
 "rev": {
@@ -1081,10 +1081,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 219200000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 218010000000.0
+"usd": 221098925010.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 219200000000.0
 },
 "rev": {
 "usd": 156600000000.0,
@@ -1120,10 +1120,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 144920000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 147620000000.0
+"usd": 138771989328.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 144920000000.0
 },
 "rev": {
 "usd": 135900000000.0,
@@ -1154,10 +1154,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 88240000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 89570000000.0
+"usd": 83803117582.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 88240000000.0
 },
 "rev": {
 "usd": 91200000000.0,
@@ -1187,10 +1187,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 72830000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 74460000000.0
+"usd": 70596910393.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 72830000000.0
 },
 "rev": {
 "usd": 44600000000.0,
@@ -1224,10 +1224,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 68690000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 70800000000.0
+"usd": 65862315204.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 68690000000.0
 },
 "rev": {
 "usd": 38400000000.0,
@@ -1262,10 +1262,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 115820000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 117340000000.0
+"usd": 135401007926.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 115820000000.0
 },
 "rev": {
 "usd": 22000000000.0,
@@ -1368,10 +1368,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 57280000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 57960000000.0
+"usd": 54816904388.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 57280000000.0
 },
 "rev": {
 "usd": 20700000000.0,
@@ -1389,7 +1389,7 @@ window.CV_LANDSCAPE = {
 "region": "Gulf (GCC)"
 },
 {
-"name": "e& (Emirates Telecom)",
+"name": "etisalat (e&, Emirates Telecom)",
 "seg": "Operator",
 "hq": "UAE",
 "ticker": "EAND (ADX)",
@@ -1403,10 +1403,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 52000000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 52140000000.0
+"usd": 49250000000.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/emirates-telecom-etisalat-group/marketcap/",
+"prev": 52000000000.0
 },
 "rev": {
 "usd": 19850000000.0,
@@ -1441,10 +1441,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 38310000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 37780000000.0
+"usd": 36189413376.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 38310000000.0
 },
 "rev": {
 "usd": 46200000000.0,
@@ -1475,10 +1475,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 42090000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 42530000000.0
+"usd": 43888206555.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 42090000000.0
 },
 "rev": {
 "usd": 46100000000.0,
@@ -1522,10 +1522,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 21780000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 21730000000.0
+"usd": 21098048315.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 21780000000.0
 },
 "rev": {
 "usd": 40100000000.0,
@@ -1557,10 +1557,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 64750000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 66030000000.0
+"usd": 73894223872.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 64750000000.0
 },
 "rev": {
 "usd": 54100000000.0,
@@ -1596,10 +1596,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 54550000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 54250000000.0
+"usd": 52873763094.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 54550000000.0
 },
 "rev": {
 "usd": 11200000000.0,
@@ -1630,10 +1630,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 39750000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 41270000000.0
+"usd": 44018173332.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 39750000000.0
 },
 "rev": {
 "usd": 18300000000.0,
@@ -1664,10 +1664,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 78280000000.0,
-"asOf": "2026-09-28",
+"usd": 86860000000.0,
+"asOf": "2026-11-03",
 "src": "https://stockanalysis.com/stocks/amt/market-cap/",
-"prev": 79570000000.0
+"prev": 78280000000.0
 },
 "rev": {
 "usd": 10810000000.0,
@@ -1693,10 +1693,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 28550000000.0,
-"asOf": "2026-09-28",
+"usd": 36880000000.0,
+"asOf": "2026-11-03",
 "src": "https://stockanalysis.com/stocks/cci/market-cap/",
-"prev": 30690000000.0
+"prev": 28550000000.0
 },
 "recent": "Closed the $8.5bn sale of fiber (to Zayo) and small cells (to EQT's Arium) on 2026-05-01; now a pure US tower company.",
 "sources": [
@@ -1736,10 +1736,10 @@ window.CV_LANDSCAPE = {
 }
 ],
 "mcap": {
-"usd": 17530000000.0,
-"asOf": "2026-09-29",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/",
-"prev": 18680000000.0
+"usd": 19282788070.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 17530000000.0
 },
 "rev": {
 "usd": 4560000000.0,
@@ -1787,9 +1787,10 @@ window.CV_LANDSCAPE = {
 "https://www.agbi.com/telecoms/2026/02/du-says-2025-revenue-rises-9-to-beat-guidance/"
 ],
 "mcap": {
-"usd": 14980000000.0,
-"asOf": "retrieved 2026-10-06 (page undated)",
-"src": null
+"usd": 15150000000.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/emirates-integrated-telecommunications/marketcap/",
+"prev": 14980000000.0
 },
 "rev": {
 "usd": 4330000000.0,
@@ -1848,9 +1849,10 @@ window.CV_LANDSCAPE = {
 "https://companiesmarketcap.com/saudi-arabia/largest-companies-in-saudi-arabia-by-market-cap/"
 ],
 "mcap": {
-"usd": 13200000000.0,
-"asOf": "retrieved 2026-10-06",
-"src": null
+"usd": 11652970848.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 13200000000.0
 },
 "rev": {
 "usd": 5240000000.0,
@@ -1883,9 +1885,10 @@ window.CV_LANDSCAPE = {
 "https://www.zain.com/en/press-release/zain-ksa-2026q1"
 ],
 "mcap": {
-"usd": 2370000000.0,
-"asOf": "retrieved 2026-10-06",
-"src": null
+"usd": 2070175184.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2",
+"prev": 2370000000.0
 },
 "rev": {
 "usd": 2930000000.0,
@@ -1978,9 +1981,10 @@ window.CV_LANDSCAPE = {
 "https://companiesmarketcap.com/qatar/largest-companies-in-qatar-by-market-cap/"
 ],
 "mcap": {
-"usd": 10390000000.0,
-"asOf": "retrieved 2026-10-06",
-"src": null
+"usd": 11131999328.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/ooredoo-qatar/marketcap/",
+"prev": 10390000000.0
 },
 "rev": {
 "usd": 6760000000.0,
@@ -2049,9 +2053,10 @@ window.CV_LANDSCAPE = {
 "https://www.qna.org.qa/en/News-Area/News/2018-02/27/qatar-foundation-acquires-vodafone-group-shares-in-vodafone-qatar"
 ],
 "mcap": {
-"usd": 2790000000.0,
-"asOf": "retrieved 2026-10-06",
-"src": null
+"usd": 3054123798.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2",
+"prev": 2790000000.0
 },
 "rev": {
 "usd": 934000000.0,
@@ -2089,9 +2094,10 @@ window.CV_LANDSCAPE = {
 "https://www.agbi.com/telecoms/2026/07/zain-to-invest-1-5bn-in-syria-mobile-network-upgrade/"
 ],
 "mcap": {
-"usd": 8290000000.0,
-"asOf": "retrieved 2026-10-06",
-"src": null
+"usd": 8080736560.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 8290000000.0
 },
 "rev": {
 "usd": 7440000000.0,
@@ -2379,9 +2385,10 @@ window.CV_LANDSCAPE = {
 "https://techafricanews.com/2026/03/20/turkcell-unveils-try-8-8bn-dividend-after-strong-2025-performance/"
 ],
 "mcap": {
-"usd": 4500000000.0,
-"asOf": "2026-10-06",
-"src": null
+"usd": 4065594880.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 4500000000.0
 },
 "rev": {
 "usd": 5620000000.0,
@@ -2420,9 +2427,10 @@ window.CV_LANDSCAPE = {
 "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2"
 ],
 "mcap": {
-"usd": 3810000000.0,
-"asOf": "2026-10-06",
-"src": null
+"usd": 3355202837.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2",
+"prev": 3810000000.0
 },
 "rev": {
 "usd": 5630000000.0,
@@ -2488,9 +2496,10 @@ window.CV_LANDSCAPE = {
 "https://en.wikipedia.org/wiki/Partner_Communications_Company"
 ],
 "mcap": {
-"usd": 2120000000.0,
-"asOf": "2026-10-06",
-"src": null
+"usd": 2062575445.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2",
+"prev": 2120000000.0
 },
 "rev": {
 "usd": 930000000.0,
@@ -2524,9 +2533,10 @@ window.CV_LANDSCAPE = {
 "https://investors.cellcom.co.il/wp-content/uploads/2025/05/Cellcom-Israel-Ltd.-Periodic-Report-for-2024-1.pdf"
 ],
 "mcap": {
-"usd": 1900000000.0,
-"asOf": "2026-10-06",
-"src": null
+"usd": 1677955051.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2",
+"prev": 1900000000.0
 },
 "rev": {
 "usd": 1230000000.0,
@@ -2561,9 +2571,10 @@ window.CV_LANDSCAPE = {
 "https://en.globes.co.il/en/article-searchlight-fuhrer-buy-control-of-bezeq-parent-co-1001290879"
 ],
 "mcap": {
-"usd": 6690000000.0,
-"asOf": "2026-10-06",
-"src": null
+"usd": 6062539670.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 6690000000.0
 },
 "rev": {
 "usd": 2520000000.0,
@@ -2741,9 +2752,10 @@ window.CV_LANDSCAPE = {
 "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
 ],
 "mcap": {
-"usd": 20390000000.0,
-"asOf": "2026-10-06",
-"src": null
+"usd": 23654527000.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 20390000000.0
 },
 "rev": {
 "usd": 6590000000.0,
@@ -2785,9 +2797,10 @@ window.CV_LANDSCAPE = {
 "https://allafrica.com/stories/202609160220.html"
 ],
 "mcap": {
-"usd": 17760000000.0,
-"asOf": "2026-10-06",
-"src": null
+"usd": 19141183100.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 17760000000.0
 },
 "rev": {
 "usd": 9520000000.0,
@@ -2834,9 +2847,10 @@ window.CV_LANDSCAPE = {
 "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
 ],
 "mcap": {
-"usd": 15000000000.0,
-"asOf": "2026-10-06",
-"src": null
+"usd": 12787745732.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 15000000000.0
 },
 "rev": {
 "usd": 6415000000.0,
@@ -3004,9 +3018,10 @@ window.CV_LANDSCAPE = {
 "https://en.wikipedia.org/wiki/Telkom_(South_Africa)"
 ],
 "mcap": {
-"usd": 1490000000.0,
-"asOf": "2026-10-06",
-"src": null
+"usd": 1802871200.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2",
+"prev": 1490000000.0
 },
 "rev": {
 "usd": 634000000.0,
@@ -3124,9 +3139,10 @@ window.CV_LANDSCAPE = {
 "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2"
 ],
 "mcap": {
-"usd": 2850000000.0,
-"asOf": "2026-10-06",
-"src": null
+"usd": 2855595776.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2",
+"prev": 2850000000.0
 },
 "subs": "n/a (towerco) mobile (None)"
 },
@@ -3162,9 +3178,10 @@ window.CV_LANDSCAPE = {
 "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2"
 ],
 "mcap": {
-"usd": 2920000000.0,
-"asOf": "2026-10-06",
-"src": null
+"usd": 2770257560.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2",
+"prev": 2920000000.0
 },
 "rev": {
 "usd": 854100000.0,
@@ -3198,9 +3215,10 @@ window.CV_LANDSCAPE = {
 "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
 ],
 "mcap": {
-"usd": 52360000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 52309523729.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 52360000000.0
 },
 "rev": {
 "usd": 74590000000.0,
@@ -3238,9 +3256,10 @@ window.CV_LANDSCAPE = {
 "https://stockanalysis.com/quote/hkg/0762/"
 ],
 "mcap": {
-"usd": 21250000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 20903603549.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 21250000000.0
 },
 "rev": {
 "usd": 55240000000.0,
@@ -3276,9 +3295,10 @@ window.CV_LANDSCAPE = {
 "https://stockanalysis.com/quote/tyo/4755/"
 ],
 "mcap": {
-"usd": 9110000000.0,
-"asOf": "2026-10-06 (Rakuten Group, JPY1.44trn)",
-"src": "https://stockanalysis.com/quote/tyo/4755/"
+"usd": 8666360000.0,
+"asOf": "2026-11-04",
+"src": "https://stockanalysis.com/quote/tyo/4755/market-cap/",
+"prev": 9110000000.0
 },
 "rev": {
 "usd": 2370000000.0,
@@ -3317,9 +3337,10 @@ window.CV_LANDSCAPE = {
 "https://stockanalysis.com/stocks/skm/"
 ],
 "mcap": {
-"usd": 13980000000.0,
-"asOf": "2026-10-05",
-"src": "https://stockanalysis.com/stocks/skm/"
+"usd": 11770000000.0,
+"asOf": "2026-11-03",
+"src": "https://stockanalysis.com/stocks/skm/market-cap/",
+"prev": 13980000000.0
 },
 "rev": {
 "usd": 11020000000.0,
@@ -3361,9 +3382,10 @@ window.CV_LANDSCAPE = {
 "https://stockanalysis.com/stocks/kt/"
 ],
 "mcap": {
-"usd": 9120000000.0,
-"asOf": "2026-10-05",
-"src": "https://stockanalysis.com/stocks/kt/"
+"usd": 8360000000.0,
+"asOf": "2026-11-03",
+"src": "https://stockanalysis.com/stocks/kt/market-cap/",
+"prev": 9120000000.0
 },
 "rev": {
 "usd": 17710000000.0,
@@ -3395,9 +3417,10 @@ window.CV_LANDSCAPE = {
 "https://stockanalysis.com/quote/krx/032640/"
 ],
 "mcap": {
-"usd": 4600000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 4938706670.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 4600000000.0
 },
 "rev": {
 "usd": 10660000000.0,
@@ -3444,9 +3467,10 @@ window.CV_LANDSCAPE = {
 "https://en.wikipedia.org/wiki/Telecommunications_in_India"
 ],
 "mcap": {
-"usd": 14780000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 14086314540.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 14780000000.0
 },
 "rev": {
 "usd": 4840000000.0,
@@ -3485,9 +3509,10 @@ window.CV_LANDSCAPE = {
 "https://stockanalysis.com/quote/idx/TLKM/"
 ],
 "mcap": {
-"usd": 12700000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 10240655360.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 12700000000.0
 },
 "rev": {
 "usd": 8200000000.0,
@@ -3525,9 +3550,10 @@ window.CV_LANDSCAPE = {
 "https://stockanalysis.com/quote/idx/ISAT/"
 ],
 "mcap": {
-"usd": 3980000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 2435481770.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2",
+"prev": 3980000000.0
 },
 "rev": {
 "usd": 3370000000.0,
@@ -3565,9 +3591,10 @@ window.CV_LANDSCAPE = {
 "https://stockanalysis.com/quote/idx/EXCL/"
 ],
 "mcap": {
-"usd": 2360000000.0,
-"asOf": "2026-10-06 (IDR42.22trn)",
-"src": "https://stockanalysis.com/quote/idx/EXCL/"
+"usd": 1527480000.0,
+"asOf": "2026-11-04",
+"src": "https://stockanalysis.com/quote/idx/EXCL/market-cap/",
+"prev": 2360000000.0
 },
 "rev": {
 "usd": 2500000000.0,
@@ -3605,9 +3632,10 @@ window.CV_LANDSCAPE = {
 "https://stockanalysis.com/quote/klse/AXIATA/"
 ],
 "mcap": {
-"usd": 3710000000.0,
-"asOf": "2026-10-05 (MYR15.07bn)",
-"src": "https://stockanalysis.com/quote/klse/AXIATA/"
+"usd": 3817710000.0,
+"asOf": "2026-11-03",
+"src": "https://stockanalysis.com/quote/klse/AXIATA/market-cap/",
+"prev": 3710000000.0
 },
 "rev": {
 "usd": 2850000000.0,
@@ -3643,9 +3671,10 @@ window.CV_LANDSCAPE = {
 "https://en.wikipedia.org/wiki/List_of_mobile_network_operators_of_the_Asia_Pacific_region"
 ],
 "mcap": {
-"usd": 7290000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 7590535671.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 7290000000.0
 },
 "rev": {
 "usd": 3210000000.0,
@@ -3677,9 +3706,10 @@ window.CV_LANDSCAPE = {
 "https://en.wikipedia.org/wiki/List_of_mobile_network_operators_of_the_Asia_Pacific_region"
 ],
 "mcap": {
-"usd": 6750000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 6957764899.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 6750000000.0
 },
 "rev": {
 "usd": 2670000000.0,
@@ -3715,9 +3745,10 @@ window.CV_LANDSCAPE = {
 "https://en.wikipedia.org/wiki/Advanced_Info_Service"
 ],
 "mcap": {
-"usd": 30240000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 29680079434.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 30240000000.0
 },
 "rev": {
 "usd": 6780000000.0,
@@ -3756,9 +3787,10 @@ window.CV_LANDSCAPE = {
 "https://en.wikipedia.org/wiki/True_Corporation"
 ],
 "mcap": {
-"usd": 13150000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 13174467738.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 13150000000.0
 },
 "rev": {
 "usd": 5550000000.0,
@@ -3801,9 +3833,10 @@ window.CV_LANDSCAPE = {
 "https://en.wikipedia.org/wiki/PLDT"
 ],
 "mcap": {
-"usd": 4240000000.0,
-"asOf": "2026-10-06 (PHP237.66bn)",
-"src": "https://stockanalysis.com/quote/pse/TEL/"
+"usd": 3811070000.0,
+"asOf": "2026-11-03",
+"src": "https://stockanalysis.com/quote/pse/TEL/market-cap/",
+"prev": 4240000000.0
 },
 "rev": {
 "usd": 3940000000.0,
@@ -3842,9 +3875,10 @@ window.CV_LANDSCAPE = {
 "https://en.wikipedia.org/wiki/Globe_Telecom"
 ],
 "mcap": {
-"usd": 4000000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 4003401728.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 4000000000.0
 },
 "rev": {
 "usd": 3280000000.0,
@@ -3902,9 +3936,10 @@ window.CV_LANDSCAPE = {
 "https://stockanalysis.com/stocks/cht/"
 ],
 "mcap": {
-"usd": 35550000000.0,
-"asOf": "2026-10-05",
-"src": "https://stockanalysis.com/stocks/cht/"
+"usd": 37590000000.0,
+"asOf": "2026-11-03",
+"src": "https://stockanalysis.com/stocks/cht/market-cap/",
+"prev": 35550000000.0
 },
 "rev": {
 "usd": 7700000000.0,
@@ -3930,9 +3965,10 @@ window.CV_LANDSCAPE = {
 "https://en.wikipedia.org/wiki/List_of_mobile_network_operators_of_the_Asia_Pacific_region"
 ],
 "mcap": {
-"usd": 37350000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 39312882735.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 37350000000.0
 },
 "rev": {
 "usd": 16060000000.0,
@@ -3964,9 +4000,10 @@ window.CV_LANDSCAPE = {
 "https://en.wikipedia.org/wiki/List_of_mobile_network_operators_of_the_Asia_Pacific_region"
 ],
 "mcap": {
-"usd": 11510000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 11738718412.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 11510000000.0
 },
 "rev": {
 "usd": 4860000000.0,
@@ -4007,9 +4044,10 @@ window.CV_LANDSCAPE = {
 "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
 ],
 "mcap": {
-"usd": 25970000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 29399421587.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 25970000000.0
 },
 "rev": {
 "usd": 26050000000.0,
@@ -4121,9 +4159,10 @@ window.CV_LANDSCAPE = {
 "https://www.swisscom.ch/en/about/news/2026/01/07-vodafone-italia.html"
 ],
 "mcap": {
-"usd": 14900000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 13645002164.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 14900000000.0
 },
 "rev": {
 "usd": 15380000000.0,
@@ -4257,9 +4296,10 @@ window.CV_LANDSCAPE = {
 "https://www.telecomrevieweurope.com/articles/telecom-operators/kpn-and-abp-launch-althio-tower-company/"
 ],
 "mcap": {
-"usd": 16750000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 18309747677.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 16750000000.0
 }
 },
 {
@@ -4289,9 +4329,10 @@ window.CV_LANDSCAPE = {
 "https://www.datacenterdynamics.com/en/news/telia-to-acquire-mvno-telness-in-sweden/"
 ],
 "mcap": {
-"usd": 17270000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 19484242819.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 17270000000.0
 },
 "rev": {
 "usd": 8070000000.0,
@@ -4323,9 +4364,10 @@ window.CV_LANDSCAPE = {
 "https://www.investmentmonitor.ai/news/telenor-to-sell-true-corporation-stake/"
 ],
 "mcap": {
-"usd": 17860000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 19107456342.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 17860000000.0
 },
 "rev": {
 "usd": 7970000000.0,
@@ -4356,9 +4398,10 @@ window.CV_LANDSCAPE = {
 "https://www.telecompaper.com/news/iliad-vehicle-freya-brings-tele2-stake-into-line-with-voting-rights-holding--1561674"
 ],
 "mcap": {
-"usd": 11080000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 11144865262.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 11080000000.0
 },
 "rev": {
 "usd": 2980000000.0,
@@ -4453,9 +4496,10 @@ window.CV_LANDSCAPE = {
 "https://stockanalysis.com/stocks/lbtyk/revenue/"
 ],
 "mcap": {
-"usd": 4400000000.0,
-"asOf": "2026-10-06 (live page, undated)",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 3813358848.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2",
+"prev": 4400000000.0
 },
 "rev": {
 "usd": 4880000000.0,
@@ -4521,9 +4565,10 @@ window.CV_LANDSCAPE = {
 "https://www.investing.com/news/transcripts/earnings-call-transcript-telus-cuts-dividend-and-2026-outlook-in-q2-2026-93CH-4829137"
 ],
 "mcap": {
-"usd": 12410000000.0,
-"asOf": "2026-10-05",
-"src": "https://companiesmarketcap.com/telus/marketcap/"
+"usd": 14017500160.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 12410000000.0
 },
 "rev": {
 "usd": 14530000000.0,
@@ -4561,9 +4606,10 @@ window.CV_LANDSCAPE = {
 "https://playbackonline.ca/2025/07/03/rogers-closes-transaction-for-mlse-majority-stake/"
 ],
 "mcap": {
-"usd": 16410000000.0,
-"asOf": "2026-10-05",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 18027317248.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 16410000000.0
 },
 "rev": {
 "usd": 15540000000.0,
@@ -4598,9 +4644,10 @@ window.CV_LANDSCAPE = {
 "https://ca.finance.yahoo.com/news/bce-stock-up-after-it-sells-minority-stake-in-mlse-to-rogers-for-47b-182330387.html"
 ],
 "mcap": {
-"usd": 18400000000.0,
-"asOf": "2026-10-05",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 19154081792.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 18400000000.0
 },
 "rev": {
 "usd": 17510000000.0,
@@ -4639,9 +4686,10 @@ window.CV_LANDSCAPE = {
 "https://www.marketscreener.com/news/millicom-secures-full-control-of-tigo-colombia-after-epm-exit-ce7e5bdfdc80f127"
 ],
 "mcap": {
-"usd": 15290000000.0,
-"asOf": "2026-10-05",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 12999202816.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 15290000000.0
 },
 "rev": {
 "usd": 5800000000.0,
@@ -4674,9 +4722,10 @@ window.CV_LANDSCAPE = {
 "https://www.gurufocus.com/news/8629579/liberty-latin-america-reports-q4-and-fy-2025-results"
 ],
 "mcap": {
-"usd": 1720000000.0,
-"asOf": "2026-10-05",
-"src": "https://companiesmarketcap.com/liberty-latin-america/marketcap/"
+"usd": 1710206848.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=2",
+"prev": 1720000000.0
 },
 "rev": {
 "usd": 4440000000.0,
@@ -4722,9 +4771,10 @@ window.CV_LANDSCAPE = {
 "https://kyivindependent.com/kyivstar-makes-historic-nasdaq-debut-as-first-ukrainian-listing/"
 ],
 "mcap": {
-"usd": 5290000000.0,
-"asOf": "2026-10-05",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 5378747904.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 5290000000.0
 },
 "rev": {
 "usd": 4400000000.0,
@@ -4758,9 +4808,10 @@ window.CV_LANDSCAPE = {
 "https://olhardigital.com.br/2026/01/20/pro/claro-lidera-crescimento-em-2025-mas-vivo-segue-maior-operadora/"
 ],
 "mcap": {
-"usd": 20160000000.0,
-"asOf": "2026-10-05",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 17559855104.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 20160000000.0
 },
 "rev": {
 "usd": 10660000000.0,
@@ -4799,9 +4850,10 @@ window.CV_LANDSCAPE = {
 "https://tecnoblog.net/noticias/estatal-italiana-assume-o-controle-indireto-da-tim-o-que-muda-no-brasil/"
 ],
 "mcap": {
-"usd": 9160000000.0,
-"asOf": "2026-10-05",
-"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/"
+"usd": 8428045824.0,
+"asOf": "2026-11-04",
+"src": "https://companiesmarketcap.com/telecommunication/largest-telecommunication-companies-by-market-cap/?page=1",
+"prev": 9160000000.0
 },
 "rev": {
 "usd": 4760000000.0,
@@ -5272,5 +5324,5 @@ window.CV_LANDSCAPE = {
 "<b>Activists move operators.</b> About 16 months after Elliott's campaign at Crown Castle, the company agreed to sell its fiber and small-cell businesses. TCI reshaped Cellnex, and Jana and Glendon shaped the fight over Frontier's sale. Stakes and settlements are early signals worth tracking.",
 "<b>Sell proprietary predictions, not summaries.</b> Klue cut 40% of its staff in 2025, blaming AI tools that let companies build this themselves. Rivals now deliver through AI assistants (MCP servers, Glean). Recent exits in this category went to strategic and PE buyers at roughly 1–5× revenue, so plan for that kind of exit, not IPO pricing."
 ],
-"verifiedAt": "2026-09-29T07:20:41Z"
+"verifiedAt": "2026-11-04T06:54:08Z"
 };
