@@ -1398,6 +1398,21 @@ button.tm-card:hover{border-color:var(--accent)}
 .tm-opt>span{display:grid}
 .tm-opt select{grid-column:2}
 
+/* tool library and service catalog panels */
+.tl-bar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,220px);gap:8px}
+@media (max-width:560px){.tl-bar{grid-template-columns:minmax(0,1fr)}}
+.tl-list{max-height:300px;overflow:auto;display:grid;gap:2px;border:1px solid var(--line);border-radius:10px;padding:4px}
+.tl-item{appearance:none;display:grid;gap:1px;text-align:left;border:0;border-radius:8px;background:transparent;color:var(--ink);font:13px/1.35 var(--f-body);padding:7px 9px;cursor:pointer}
+.tl-item:hover,.tl-item:focus-visible{background:var(--accent-soft)}
+.tl-item .tiny{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tl-form{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(min(170px,100%),1fr));align-items:end;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--surface-2)}
+.tl-form>b,.tl-form>.tiny,.tl-form>.tl-out{grid-column:1/-1}
+.tl-form label{display:grid;gap:4px}
+.tl-out:not(:empty){border-top:1px dashed var(--line);padding-top:8px;font:13px/1.55 var(--f-mono);overflow-wrap:anywhere}
+.tl-out p{margin:0}
+.sv-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 9px;border-bottom:1px dashed var(--line)}
+.sv-item>span{display:grid;min-width:0}
+.sv-item .tiny{overflow-wrap:anywhere}
 /* find anything (search dialog) */
 .find-btn{flex:none;display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 10px 0 12px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);color:var(--ink-2);font:500 13.5px/1 var(--f-body,inherit);cursor:pointer}
 .find-btn:hover{border-color:var(--accent);color:var(--ink)}
@@ -2083,7 +2098,7 @@ button.tm-card:hover{border-color:var(--accent)}
     <div class="sec-head">
       <div class="eyebrow">Terminals</div>
       <h2>A terminal for every job, and ones you build yourself</h2>
-      <p class="lede">Everything on the platform in one place. Open several terminals side by side as tabs: each puts live panels, the AI agents and a command line on one screen. Start from a ready-made terminal or build a custom one for a specific purpose; yours are saved in this browser. Type <b>HELP</b> in the command line to see what it can do.</p>
+      <p class="lede">Everything on the platform in one place. Open several terminals side by side as tabs: each puts live panels, the AI agents, a library of more than 400 tools, a catalog of more than 340 services and a command line on one screen. Start from a ready-made terminal or build a custom one for a specific purpose; yours are saved in this browser. Type <b>HELP</b> in the command line to see what it can do.</p>
     </div>
     <div class="console tm" id="tmApp">
       <div class="tm-tabs" id="tmTabs" role="tablist" aria-label="Open terminals"></div>
@@ -2493,7 +2508,7 @@ button.tm-card:hover{border-color:var(--accent)}
         <div class="lc ok"><i>✓</i><span>AI assistant with <b id="lcTools">17</b> tools and a service desk</span></div>
         <div class="lc ok"><i>✓</i><span>Operator desk with an etisalat UAE edition, problem studio and idea lab</span></div>
         <div class="lc ok"><i>✓</i><span>9 departments, 36 teams, 12 workshops and a resources library</span></div>
-        <div class="lc ok"><i>✓</i><span>Terminals: 11 ready-made, custom ones and a command line</span></div>
+        <div class="lc ok"><i>✓</i><span>Terminals: 12 ready-made, custom ones, 400+ tools, 340+ services and a command line</span></div>
         <div class="lc ok"><i>✓</i><span>216 AI agents in 18 departments, each with tools, services and resources</span></div>
         <div class="lc ok"><i>✓</i><span>Search across the whole platform (Ctrl K or ⌘ K)</span></div>
         <div class="lc ok"><i>✓</i><span>Installable app with offline access and share previews (public site)</span></div></div>

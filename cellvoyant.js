@@ -2082,7 +2082,7 @@ function agOpenRes(tok) {
 }
 function agInfoHtml(D, A) {
   const res = D.res.map(t => [t, agResLabel(t)]).filter(x => x[1]);
-  const svc = D.svc.map(k => SERVICES.find(s => s.k === k)).filter(Boolean);
+  const svc = D.svc.map(k => SERVICES.find(s => s.k === k)).filter(Boolean).concat(SVC_CAT.filter(s => s.dept === D.k && s.kind === 'Signature'));
   return `<div><span class="label">Searches these sources</span><div class="chips">${agSrcNames(A).map(n => `<span class="chip">${esc(n)}</span>`).join('')}</div></div>
     <div><span class="label">Runs these tools</span><div class="chips">${agTools(A).map(t => `<span class="chip hl mono">${esc(t)}</span>`).join('')}</div></div>
     <div><span class="label">Can book these services</span><div class="chips">${svc.map(s => `<button type="button" class="chip" data-agsvc="${esc(s.k)}" title="${esc(s.desc)}">${esc(s.name)} ↗</button>`).join('')}</div></div>
@@ -2652,7 +2652,8 @@ const SERVICES = [
   { k: 'lab_item', name: 'Innovation lab: scope or pilot a tool', turn: 'scoped in 1 week', desc: 'Scope, build and pilot any tool, agent or service from the innovation lab.' },
   { k: 'pilot', name: 'Pilot program (30-day shadow mode)', turn: 'kick-off within 2 weeks', desc: 'Run Cellvoyant next to your current process for 30 days and measure how much earlier it catches each competitor move.' }
 ];
-const svcByKey = k => SERVICES.find(s => s.k === k);
+const SVC_EXTRA = []; // the service catalog adds its 340+ services here
+const svcByKey = k => SERVICES.find(s => s.k === k) || SVC_EXTRA.find(s => s.k === k);
 WORKSHOPS.forEach(w => { if (!svcByKey(w.k)) SERVICES.push({ k: w.k, name: 'Academy: ' + w.name, turn: w.dur, desc: w.desc, ws: true }); });
 
 /* request queue: shared db when the viewer provides it, otherwise this visit only */
@@ -3839,7 +3840,9 @@ const TM_PANELS = {
   sources: ['Source registry', 'Where the intelligence comes from'],
   lab: ['Innovation lab', 'Tools and services by status'],
   facts: ['Key facts', 'Sourced headline facts from this page'],
-  notes: ['Notes', 'Your notes for this terminal, kept in this browser']
+  notes: ['Notes', 'Your notes for this terminal, kept in this browser'],
+  toolbox: ['Tool library', '400+ tools: analytics, simulations and calculators'],
+  services: ['Service catalog', '340+ services to request, by department']
 };
 const TM_PRESETS = [
   { id: 'exec', n: 'Executive', p: 'What leadership needs at 8 a.m.: signals, market moves, forecasts and tasks', panels: [['kpi'], ['signals'], ['movers'], ['predict'], ['agent', 'st:board'], ['tasks']] },
@@ -3852,7 +3855,8 @@ const TM_PRESETS = [
   { id: 'regulatory', n: 'Regulatory & risk', p: 'Consultations, compliance, security and fraud', panels: [['agent', 'rg:consult'], ['roster', 'rg'], ['roster', 'sc'], ['signals'], ['sources']] },
   { id: 'agents', n: 'Agent operations', p: 'Run and supervise the AI agents', panels: [['agent', 'mi:scout'], ['agent', 'mk:segment'], ['roster', 'mi'], ['tasks']] },
   { id: 'digital', n: 'Digital & fintech', p: 'Apps, eSIM, the wallet and digital rivals', panels: [['agent', 'dg:wallet'], ['roster', 'dg'], ['intel', 'app wallet eSIM'], ['notes']] },
-  { id: 'innovation', n: 'Innovation', p: 'The lab, new ideas and data', panels: [['lab'], ['agent', 'da:genai'], ['intel'], ['notes']] }
+  { id: 'innovation', n: 'Innovation', p: 'The lab, new ideas and data', panels: [['lab'], ['agent', 'da:genai'], ['intel'], ['notes']] },
+  { id: 'tools', n: 'Tools & services', p: 'Every tool and every service in one terminal', panels: [['toolbox'], ['services'], ['notes']] }
 ];
 if (EDITION === 'eand') TM_PRESETS.unshift({ id: 'uae', n: 'etisalat UAE', p: 'The UAE market, du and Virgin Mobile UAE at a glance', panels: [['facts'], ['gulf'], ['signals'], ['agent', 'mi:profiler'], ['roster', 'mk']] });
 const TM = { custom: [], open: [], active: null, notes: {}, log: {}, hist: [], hi: -1, edit: null, draft: null };
@@ -3893,6 +3897,8 @@ function tmPanelHtml(k, arg, tid) {
   if (k === 'sources') return MI_SRC.slice(0, 14).map(s => tmRow(esc(s.n), esc(s.acc || s.cat || ''))).join('');
   if (k === 'lab') { const all = elBuild(), by = s => all.filter(x => x.status === s).length; return `<div class="tm-kpis">${['Live', 'Prototype', 'Service', 'Designed'].map(s => `<div><b>${by(s)}</b><span>${s}</span></div>`).join('')}</div><span class="label">Live now</span>` + all.filter(x => x.status === 'Live').slice(0, 6).map(x => tmRow(esc(x.n), esc(x.dn))).join(''); }
   if (k === 'facts') return $$('.stats > div').slice(0, 6).map(d => tmRow(`<b>${esc(txtOf($('b', d)))}</b> ${esc(txtOf($('span', d)))}`, esc(txtOf($('cite', d)).replace(' ↗', '')), 'tiny muted')).join('');
+  if (k === 'toolbox') return tlPanelHtml(tid, arg);
+  if (k === 'services') return svPanelHtml(tid, arg);
   if (k === 'notes') return `<label class="sr" for="tmNote${tid}">Notes</label><textarea class="tm-q" id="tmNote${tid}" rows="6" data-tmnote placeholder="Notes for this terminal">${esc(TM.notes[TM.active] || '')}</textarea><p class="tiny muted">Saved in this browser only.</p>`;
   return '';
 }
@@ -3900,12 +3906,12 @@ function tmFill(el, t) {
   const [k, arg] = [el.dataset.k, el.dataset.arg];
   try { $('.tm-pb', el).innerHTML = tmPanelHtml(k, arg, t.id + el.dataset.i); } catch (e) { $('.tm-pb', el).innerHTML = `<p class="small muted">This panel could not load: ${esc(e.message)}</p>`; }
 }
-const tmSub = (k, arg) => k === 'agent' ? (agByKey(arg) || { A: { n: '' } }).A.n : k === 'roster' ? ((AG_DEPTS.find(d => d.k === arg) || {}).n || '') : k === 'geo' ? (arg || 'churn') : k === 'signals' && arg ? (SEVL[arg] || arg) : '';
+const tmSub = (k, arg) => k === 'agent' ? (agByKey(arg) || { A: { n: '' } }).A.n : k === 'roster' ? ((AG_DEPTS.find(d => d.k === arg) || {}).n || '') : k === 'geo' ? (arg || 'churn') : k === 'services' && arg ? ((AG_DEPTS.find(d => d.k === arg) || {}).n || '') : k === 'toolbox' ? tlBuild().length + ' tools' : k === 'signals' && arg ? (SEVL[arg] || arg) : '';
 function tmTerminalHtml(t) {
   return `<div class="tm-head"><div><h3>${t.custom ? '★ ' : ''}${esc(t.n)}</h3><p class="small muted">${esc(t.p || '')}</p></div><div class="tm-meta"><span class="pill sim">Signals simulated</span><span class="mono tm-clock" data-tmclock></span>${t.custom ? `<button type="button" class="btn sm" data-tmedit="${esc(t.id)}">Edit</button>` : `<button type="button" class="btn sm" data-tmcopy="${esc(t.id)}">Customize a copy</button>`}</div></div>
     <form class="tm-cmd" data-tmcmd><label for="tmIn" class="sr">Terminal command</label><span aria-hidden="true">CV&gt;</span><input id="tmIn" autocomplete="off" spellcheck="false" placeholder="Type a command: HELP, OP du, MCAP 10, AGENT churn sentinel"><button class="btn sm" type="submit">Run</button></form>
     <div class="tm-log" id="tmLog" aria-live="polite">${(TM.log[t.id] || []).join('')}</div>
-    <div class="tm-grid">${t.panels.map(([k, arg], i) => TM_PANELS[k] ? `<article class="tm-p${k === 'agent' || k === 'roster' ? ' tm-wide' : ''}" data-k="${k}" data-arg="${esc(arg || '')}" data-i="${i}"><header><b>${esc(TM_PANELS[k][0])}</b><span>${esc(tmSub(k, arg))}</span></header><div class="tm-pb"></div></article>` : '').join('')}</div>`;
+    <div class="tm-grid">${t.panels.map(([k, arg], i) => TM_PANELS[k] ? `<article class="tm-p${['agent', 'roster', 'toolbox', 'services'].includes(k) ? ' tm-wide' : ''}" data-k="${k}" data-arg="${esc(arg || '')}" data-i="${i}"><header><b>${esc(TM_PANELS[k][0])}</b><span>${esc(tmSub(k, arg))}</span></header><div class="tm-pb"></div></article>` : '').join('')}</div>`;
 }
 function tmLauncherHtml() {
   const d = TM.draft || { n: '', p: '', panels: [] }, has = k => d.panels.find(p => p[0] === k);
@@ -3945,6 +3951,7 @@ const TM_HELP = [['HELP', 'this list'], ['OPEN name', 'open a terminal, e.g. OPE
   ['OP name', 'an operator profile, e.g. OP stc'], ['CO name', 'a company or investor, e.g. CO KKR'], ['MCAP [n]', 'largest companies by market value'], ['MOVERS', 'market-value risers and fallers'],
   ['DEALS [n]', 'latest capital deals'], ['PRED [fwa|cut|sat]', 'move predictions'], ['SIM rival cut%', 'war-room simulation, e.g. SIM arcline 15'], ['PLAN id', 'compare a plan, e.g. PLAN nim-u'],
   ['GEO churn|coverage|retail', 'district hotspots'], ['AGENTS [department]', 'list departments or agents'], ['AGENT name [: task]', 'run an agent, e.g. AGENT fee watch: any new fees?'],
+  ['TOOLS [search|family]', 'find tools, e.g. TOOLS gulf'], ['TOOL id [values]', 'run a tool, e.g. TOOL calc-arpu 1200000000 4000000 12'], ['SERVICES [search]', 'find services, e.g. SERVICES churn'], ['BOOK service [: note]', 'request a service, e.g. BOOK churn model build'],
   ['ASK question', 'ask the AI assistant'], ['FIND text', 'search the whole platform'], ['TASK title', 'add a workspace task'], ['CLEAR', 'clear this log']];
 const tmFindAgent = q => { const s = q.toLowerCase().trim(); return agByKey(s) || agAll().find(x => x.A.n.toLowerCase() === s) || agAll().find(x => x.A.n.toLowerCase().includes(s) || x.A.id === s); };
 async function tmCmd(raw) {
@@ -3983,6 +3990,10 @@ async function tmCmd(raw) {
       $('#tmLog').appendChild(box); await agExec(hit.D, hit.A, task.join(':').trim() || hit.A.q, box); $('#tmLog').scrollTop = $('#tmLog').scrollHeight;
       TM.log[TM.active].push(`<div class="tm-l tiny muted">Ran ${esc(hit.A.n)} (open the terminal again to rerun).</div>`);
     }
+    else if (C === 'TOOLS') { const s = arg.toLowerCase(), T = tlBuild(), fam = TL_FAMS().find(f => f.toLowerCase() === s), L = T.filter(t => !s || (fam ? t.fam === fam : (t.n + ' ' + t.d + ' ' + t.fam).toLowerCase().includes(s))); if (!s) tmOut(`${T.length} tools in ${TL_FAMS().length} families: ${esc(TL_FAMS().map(f => f + ' (' + T.filter(t => t.fam === f).length + ')').join(', '))}. Try TOOLS gulf or TOOLS calculators.`); else rows(L.slice(0, 25).map(t => `${t.id}  ${t.n}`).concat(L.length > 25 ? [`…and ${L.length - 25} more`] : [])); }
+    else if (C === 'TOOL') { const parts = arg.split(/\s+/), p0 = (parts[0] || '').toLowerCase(), byId = tlBuild().find(x => x.id === p0 || x.id === 'calc-' + p0), t = byId || tlFind(arg); if (!t || !arg) { tmOut('No tool matches. Try TOOLS to search.'); return; } const rest = byId ? parts.slice(1) : []; const args = {}; rest.forEach((v, i) => { const m = v.match(/^(\w+)=(.*)$/); if (m) args[m[1]] = m[2]; else args[i] = v; }); tmOut(`<b>${esc(t.n)}</b>`); rows(tlRun(t, args)); }
+    else if (C === 'SERVICES') { const s = arg.toLowerCase(), D = s && AG_DEPTS.find(d => d.k === s || d.n.toLowerCase() === s), L = SVC_CAT.filter(x => D ? x.dept === D.k : !s || (x.name + ' ' + x.desc + ' ' + x.dn).toLowerCase().includes(s)); if (!s) tmOut(`${SVC_CAT.length} services, ${SV_TYPES.length + 4} per department. Try SERVICES churn or SERVICES pricing.`); else rows(L.slice(0, 20).map(x => `${x.name} · ${x.turn}`).concat(L.length > 20 ? [`…and ${L.length - 20} more`] : [])); }
+    else if (C === 'BOOK') { const [who, ...note] = arg.split(':'), sv = svFind(who) || svcByKey(who.trim()); if (!sv) tmOut('No service matches. Try SERVICES to search.'); else { const q = await svBook(sv.k, note.join(':').trim()); tmOut(`Requested ${esc(q.service)} · ${esc(q.label || '')}${q.saved ? '' : ' (kept for this visit only)'}`); } }
     else if (C === 'ASK') { selectTab('tab-ask'); const a = $('#askInput'); if (a) a.value = arg; findGo($('#app')); setTimeout(() => a && a.focus(), 300); tmOut('Opened the AI assistant with your question.'); }
     else if (C === 'FIND') { findOpen(); const q = $('#findQ'); q.value = arg; findRender(); }
     else if (C === 'TASK') { if (!arg) tmOut('Example: TASK Call back the top three at-risk accounts'); else await addTask({ title: arg, kind: 'manual', dept: 'st', prio: 'normal' }); }
@@ -4009,22 +4020,29 @@ function initTerminals() {
     if (e.target.closest('[data-tmcancel]')) { TM.edit = null; TM.draft = null; tmRender(); return; }
     const del = e.target.closest('[data-tmdel]'); if (del) { const id = del.dataset.tmdel; TM.custom = TM.custom.filter(t => t.id !== id); TM.open = TM.open.filter(t => t !== id); delete TM.notes[id]; tmSave(); tmRender(); FIND.items = null; toast('Terminal deleted'); return; }
     const run = e.target.closest('[data-tmrun]'); if (run) { tmCmd(run.dataset.tmrun); return; }
+    const tp = e.target.closest('[data-tlpick]'); if (tp) { const t = tlBuild().find(x => x.id === tp.dataset.tlpick), box = $('[data-tlrun]', tp.closest('.tm-p')); box.innerHTML = tlFormHtml(t); if (!t.params.length) $('form', box).requestSubmit(); return; }
+    const sb = e.target.closest('[data-svbook]'); if (sb) { sb.disabled = true; try { await svBook(sb.dataset.svbook); sb.textContent = 'Requested'; } catch (err) { toast(err.message); sb.disabled = false; } return; }
     const g = e.target.closest('[data-tmgeo]'); if (g) { const p = g.closest('.tm-p'); p.dataset.arg = g.dataset.tmgeo; $('header span', p).textContent = g.dataset.tmgeo; tmFill(p, tmGet(TM.active)); return; }
     const ar = e.target.closest('[data-tmagrun]'); if (ar) { const p = ar.closest('.tm-p'), hit = agByKey($('[data-tmagent]', p).value); if (!hit) return; ar.disabled = true; try { await agExec(hit.D, hit.A, $('textarea', p).value.trim() || hit.A.q, $('.tm-agout', p)); } finally { ar.disabled = false; } return; }
     const ro = e.target.closest('[data-tmros]'); if (ro) { const p = ro.closest('.tm-p'), hit = agByKey(ro.dataset.tmros); ro.disabled = true; try { await agExec(hit.D, hit.A, hit.A.q, $('.tm-agout', p)); } finally { ro.disabled = false; } }
   });
   app.addEventListener('change', e => {
     const ag = e.target.closest('[data-tmagent]'); if (ag) { const hit = agByKey(ag.value), p = ag.closest('.tm-p'); $('textarea', p).value = hit.A.q; $('header span', p).textContent = hit.A.n; return; }
-    const pl = e.target.closest('[data-tmplan]'); if (pl) { const p = pl.closest('.tm-p'); p.dataset.arg = pl.value; tmFill(p, tmGet(TM.active)); }
+    const pl = e.target.closest('[data-tmplan]'); if (pl) { const p = pl.closest('.tm-p'); p.dataset.arg = pl.value; tmFill(p, tmGet(TM.active)); return; }
+    const tf = e.target.closest('[data-tlfam]'); if (tf) { const p = tf.closest('.tm-p'); $('[data-tllist]', p).innerHTML = tlListHtml($('[data-tlq]', p).value, tf.value); return; }
+    const sd = e.target.closest('[data-svdept]'); if (sd) { const p = sd.closest('.tm-p'); $('[data-svlist]', p).innerHTML = svListHtml($('[data-svq]', p).value, sd.value); }
   });
   app.addEventListener('input', e => {
     const n = e.target.closest('[data-tmnote]'); if (n) { TM.notes[TM.active] = n.value.slice(0, 4000); tmSave(); return; }
     if (e.target.name === 'cut') e.target.nextElementSibling.textContent = e.target.value + '%';
+    const tq = e.target.closest('[data-tlq]'); if (tq) { const p = tq.closest('.tm-p'); $('[data-tllist]', p).innerHTML = tlListHtml(tq.value, $('[data-tlfam]', p).value); return; }
+    const sq = e.target.closest('[data-svq]'); if (sq) { const p = sq.closest('.tm-p'); $('[data-svlist]', p).innerHTML = svListHtml(sq.value, $('[data-svdept]', p).value); }
   });
   app.addEventListener('submit', async e => {
     e.preventDefault();
     if (e.target.matches('[data-tmcmd]')) { const i = $('#tmIn'), v = i.value; i.value = ''; await tmCmd(v); i.focus(); }
     else if (e.target.matches('[data-tmbuild]')) tmBuildSave(e.target);
+    else if (e.target.matches('[data-tlform]')) { const f = e.target, t = tlBuild().find(x => x.id === f.dataset.tlform), args = {}; (t.params || []).forEach(([k]) => { args[k] = f.elements[k].value; }); let lines; try { lines = tlRun(t, args); } catch (err) { lines = ['Could not run: ' + err.message]; } $('.tl-out', f).innerHTML = lines.map(l => `<p>${esc(l)}</p>`).join(''); }
     else if (e.target.matches('[data-tmwar]')) { const f = e.target, r = TOOLS.simulate_response({ rival: f.rival.value, cut_pct: +f.cut.value, weeks: 8 }); f.nextElementSibling.innerHTML = agFmt('simulate_response', r).map(l => `<p>${esc(l)}</p>`).join(''); }
   });
   app.addEventListener('keydown', e => {
@@ -4037,6 +4055,223 @@ function initTerminals() {
     const r = app.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
     const t = tmGet(TM.active); if (t) $$('.tm-p[data-k="kpi"], .tm-p[data-k="signals"], .tm-p[data-k="tasks"]', app).forEach(el => tmFill(el, t));
   }, 15000);
+}
+
+/* ---------- TOOL LIBRARY: 400+ tools that run on the platform's data, and the 340+ service catalog ---------- */
+const tlSlug = s => String(s).toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const tlM = v => v ? fmtMoney(v) : '—';
+const tlNum = (v, d = 2) => (Math.round(v * 10 ** d) / 10 ** d).toLocaleString('en-US');
+const tlP = v => (Math.round(v * 1000) / 10).toLocaleString('en-US') + '%';
+// calculators: [id, name, description, params [key, label, default], fn(params) -> lines]
+const TL_CALC = [
+  ['arpu', 'ARPU', 'Average revenue per user per month', [['revenue', 'Revenue for the period', 1.2e9], ['subs', 'Average subscribers', 4e6], ['months', 'Months in the period', 12]], p => [`ARPU: ${tlNum(p.revenue / p.subs / p.months)} per month`]],
+  ['churncost', 'Churn cost', 'Revenue lost to churn over the remaining customer lifetime', [['subs', 'Subscribers', 4e6], ['churn', 'Monthly churn %', 1.8], ['arpu', 'ARPU per month', 25], ['months', 'Months of lost revenue', 24]], p => { const lost = p.subs * p.churn / 100; return [`${tlNum(lost, 0)} customers leave each month`, `Revenue lost per monthly cohort: ${tlNum(lost * p.arpu * p.months, 0)}`, `Per year: ${tlNum(lost * 12 * p.arpu * p.months, 0)}`]; }],
+  ['clv', 'Customer lifetime value', 'ARPU × margin ÷ churn', [['arpu', 'ARPU per month', 25], ['margin', 'Margin %', 45], ['churn', 'Monthly churn %', 1.8]], p => [`Expected lifetime: ${tlNum(100 / p.churn, 1)} months`, `Lifetime value: ${tlNum(p.arpu * p.margin / 100 / (p.churn / 100))}`]],
+  ['payback', 'Acquisition payback', 'Months to earn back the cost of winning a customer', [['cac', 'Cost to acquire', 120], ['arpu', 'ARPU per month', 25], ['margin', 'Margin %', 45]], p => [`Payback: ${tlNum(p.cac / (p.arpu * p.margin / 100), 1)} months`]],
+  ['netadds', 'Net adds', 'Gross adds minus disconnections', [['gross', 'Gross adds', 120000], ['churn', 'Disconnections', 95000]], p => [`Net adds: ${tlNum(p.gross - p.churn, 0)}`, `Replacement ratio: ${tlP(p.churn / p.gross)}`]],
+  ['share', 'Market share', 'Your lines as a share of the market', [['own', 'Your lines', 14.8e6], ['total', 'Market lines', 24.3e6]], p => [`Share: ${tlP(p.own / p.total)}`]],
+  ['hhi', 'Market concentration (HHI)', 'Herfindahl-Hirschman index from market shares in %', [['shares', 'Shares, comma-separated', '61,39']], p => { const s = String(p.shares).split(',').map(Number).filter(x => x > 0); const h = s.reduce((a, x) => a + x * x, 0); return [`HHI: ${tlNum(h, 0)} (${h > 2500 ? 'highly concentrated' : h > 1500 ? 'moderately concentrated' : 'unconcentrated'})`]; }],
+  ['ebitdam', 'EBITDA margin', 'EBITDA ÷ revenue', [['ebitda', 'EBITDA', 26.7e9], ['revenue', 'Revenue', 57.6e9]], p => [`EBITDA margin: ${tlP(p.ebitda / p.revenue)}`]],
+  ['capexint', 'Capex intensity', 'Capex ÷ revenue', [['capex', 'Capex', 7.7e9], ['revenue', 'Revenue', 57.6e9]], p => [`Capex intensity: ${tlP(p.capex / p.revenue)}`]],
+  ['ofcf', 'Operating free cash flow', 'EBITDA minus capex', [['ebitda', 'EBITDA', 26.7e9], ['capex', 'Capex', 7.7e9]], p => [`Operating free cash flow: ${tlNum(p.ebitda - p.capex, 0)}`, `Cash conversion: ${tlP((p.ebitda - p.capex) / p.ebitda)}`]],
+  ['leverage', 'Net debt ÷ EBITDA', 'Leverage ratio', [['debt', 'Net debt', 17.7e9], ['ebitda', 'Annual EBITDA', 35.6e9]], p => [`Leverage: ${tlNum(p.debt / p.ebitda)}x`]],
+  ['ev', 'Implied enterprise value', 'EV from an EV/EBITDA multiple', [['ebitda', 'Annual EBITDA', 2e9], ['multiple', 'EV/EBITDA multiple', 7.5]], p => [`Enterprise value: ${tlNum(p.ebitda * p.multiple, 0)}`]],
+  ['elastic', 'Price elasticity response', 'Volume change from a price change', [['elasticity', 'Elasticity', -0.6], ['price', 'Price change %', -10]], p => { const v = p.elasticity * p.price; return [`Volume change: ${tlNum(v, 1)}%`, `Revenue change: ${tlNum(((1 + p.price / 100) * (1 + v / 100) - 1) * 100, 1)}%`]; }],
+  ['breakeven', 'Price-cut break-even', 'New customers needed to offset a price cut', [['base', 'Current customers', 1e6], ['price', 'Price', 65], ['cut', 'Cut %', 10]], p => { const lost = p.base * p.price * p.cut / 100, np = p.price * (1 - p.cut / 100); return [`Monthly revenue given away: ${tlNum(lost, 0)}`, `New customers needed at the new price: ${tlNum(lost / np, 0)} (${tlP(lost / np / p.base)} of the base)`]; }],
+  ['promoroi', 'Promotion ROI', 'Return on a promotion', [['margin', 'Incremental margin', 2.4e6], ['cost', 'Promotion cost', 1.5e6]], p => [`ROI: ${tlP((p.margin - p.cost) / p.cost)}`, p.margin > p.cost ? 'The promotion pays back.' : 'The promotion does not pay back.']],
+  ['samplesize', 'A/B test sample size', 'Customers per group for a two-proportion test (5% significance, 80% power)', [['base', 'Control rate %', 14], ['uplift', 'Uplift to detect, points', 2]], p => { const p1 = p.base / 100, p2 = (p.base + p.uplift) / 100, pb = (p1 + p2) / 2; const n = Math.pow(1.96 * Math.sqrt(2 * pb * (1 - pb)) + 0.8416 * Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2)), 2) / Math.pow(p2 - p1, 2); return [`${tlNum(Math.ceil(n), 0)} customers per group`, `${tlNum(Math.ceil(n) * 2, 0)} in total`]; }],
+  ['significance', 'A/B test significance', 'Two-proportion z-test', [['n1', 'Control size', 4200], ['c1', 'Control conversions', 590], ['n2', 'Test size', 4200], ['c2', 'Test conversions', 680]], p => { const a = p.c1 / p.n1, b = p.c2 / p.n2, pb = (p.c1 + p.c2) / (p.n1 + p.n2), z = (b - a) / Math.sqrt(pb * (1 - pb) * (1 / p.n1 + 1 / p.n2)); return [`Control ${tlP(a)} vs test ${tlP(b)}`, `z = ${tlNum(z)}: ${Math.abs(z) >= 1.96 ? 'significant at 5%' : 'not significant at 5%'}`]; }],
+  ['contactcap', 'Contact-cap check', 'Marketing contacts against a weekly cap', [['contacts', 'Contacts planned this week', 3], ['cap', 'Weekly cap', 2]], p => [p.contacts <= p.cap ? `Within the cap (${p.contacts} of ${p.cap})` : `Over the cap by ${p.contacts - p.cap}: drop the lowest-value contacts`]],
+  ['quiethours', 'Quiet-hours check', 'Calls and SMS only between 08:00 and 21:00', [['hour', 'Planned hour (0–23)', 20]], p => [p.hour >= 8 && p.hour < 21 ? `${p.hour}:00 is allowed` : `${p.hour}:00 is outside quiet hours: move to 08:00–21:00`]],
+  ['savevalue', 'Save-desk value', 'Value of saving customers net of offers', [['saves', 'Customers saved', 1200], ['clv', 'Lifetime value each', 600], ['offer', 'Offer cost each', 40]], p => [`Value kept: ${tlNum(p.saves * p.clv, 0)}`, `Net of offers: ${tlNum(p.saves * (p.clv - p.offer), 0)}`]],
+  ['bundle', 'Bundle saving', 'Saving of a bundle against separate prices', [['separate', 'Separate prices total', 95], ['bundle', 'Bundle price', 79]], p => [`Saving: ${tlNum(p.separate - p.bundle)} (${tlP((p.separate - p.bundle) / p.separate)})`]],
+  ['totalprice', 'Total monthly price', 'Plan price plus monthly fees', [['price', 'Plan price', 65], ['fees', 'Monthly fees', 4]], p => [`Total: ${tlNum(p.price + p.fees)} per month (${tlP(p.fees / p.price)} on top of the headline price)`]],
+  ['pergb', 'Price per GB', 'Price ÷ data allowance', [['price', 'Price', 35], ['gb', 'Data GB', 20]], p => [`${tlNum(p.price / p.gb, 3)} per GB`]],
+  ['permbps', 'Price per Mbps', 'Home internet value', [['price', 'Monthly price', 75], ['mbps', 'Speed Mbps', 500]], p => [`${tlNum(p.price / p.mbps, 3)} per Mbps`]],
+  ['fx', 'Gulf currency converter', 'Converts USD at the official pegs (AED, SAR, QAR, BHD, OMR, JOD)', [['usd', 'USD amount', 1e6]], p => [['AED', 3.6725], ['SAR', 3.75], ['QAR', 3.64], ['BHD', 0.376], ['OMR', 0.3845], ['JOD', 0.709]].map(([c, r]) => `${c} ${tlNum(p.usd * r)}`)],
+  ['cagr', 'Compound annual growth', 'CAGR between two values', [['start', 'Start value', 52.4e9], ['end', 'End value', 57.6e9], ['years', 'Years', 1]], p => [`CAGR: ${tlP(Math.pow(p.end / p.start, 1 / p.years) - 1)}`]],
+  ['forecast', 'Revenue projection', 'Revenue grown at a steady rate', [['revenue', 'Revenue now', 72.9e9], ['growth', 'Growth % a year', 6], ['years', 'Years', 3]], p => Array.from({ length: Math.min(10, p.years) }, (_, i) => `Year ${i + 1}: ${tlNum(p.revenue * Math.pow(1 + p.growth / 100, i + 1), 0)}`)],
+  ['fibre', 'Fibre take-up revenue', 'Homes passed → connected → revenue', [['homes', 'Homes passed', 200000], ['take', 'Take-up %', 35], ['arpu', 'ARPU per month', 75]], p => { const c = p.homes * p.take / 100; return [`${tlNum(c, 0)} connected homes`, `Revenue a year: ${tlNum(c * p.arpu * 12, 0)}`]; }],
+  ['fwacap', 'Fixed-wireless capacity', 'Households a site network can serve', [['sites', 'Sites', 400], ['hh', 'Households per site', 120]], p => [`Capacity: ${tlNum(p.sites * p.hh, 0)} households`]],
+  ['covgap', 'Coverage gap', 'Measured speed against the advertised speed', [['advertised', 'Advertised Mbps', 300], ['measured', 'Measured Mbps', 114]], p => [`Delivers ${tlP(p.measured / p.advertised)} of the claim`, p.measured / p.advertised < 0.5 ? 'Claim not met: fix or stop advertising it' : 'Within a reasonable range']],
+  ['mhzpop', 'Spectrum price per MHz-pop', 'Auction price ÷ (MHz × population)', [['price', 'Price', 3e8], ['mhz', 'MHz', 100], ['pop', 'Population', 10e6]], p => [`${tlNum(p.price / (p.mhz * p.pop), 4)} per MHz-pop`]],
+  ['tenancy', 'Tower tenancy uplift', 'Revenue from adding tenants to towers', [['towers', 'Towers', 4000], ['added', 'Tenants added per tower', 0.3], ['rent', 'Annual rent per tenant', 18000]], p => [`Extra revenue a year: ${tlNum(p.towers * p.added * p.rent, 0)}`]],
+  ['roampass', 'Roaming pass value', 'Price per day of a roaming pass', [['price', 'Pass price', 99], ['days', 'Days', 7]], p => [`${tlNum(p.price / p.days)} per day`]],
+  ['storeconv', 'Store conversion', 'Sales ÷ visitors', [['sales', 'Sales', 420], ['visitors', 'Visitors', 2600]], p => [`Conversion: ${tlP(p.sales / p.visitors)}`]],
+  ['cpa', 'Cost per acquisition', 'Marketing spend ÷ gross adds', [['spend', 'Spend', 2.5e6], ['adds', 'Gross adds', 30000]], p => [`Cost per acquisition: ${tlNum(p.spend / p.adds)}`]],
+  ['nps', 'Net Promoter Score', 'Promoters minus detractors', [['promoters', 'Promoters', 420], ['passives', 'Passives', 300], ['detractors', 'Detractors', 180]], p => { const t = p.promoters + p.passives + p.detractors; return [`NPS: ${tlNum((p.promoters - p.detractors) / t * 100, 0)}`]; }],
+  ['backlog', 'Installation backlog', 'Days to clear open orders', [['orders', 'Open orders', 3600], ['capacity', 'Installs per day', 450]], p => [`${tlNum(p.orders / p.capacity, 1)} days of backlog`]],
+  ['datagrowth', 'Data use projection', 'Monthly GB per user over time', [['gb', 'GB per user now', 18], ['growth', 'Growth % a year', 25], ['years', 'Years', 4]], p => Array.from({ length: Math.min(10, p.years) }, (_, i) => `Year ${i + 1}: ${tlNum(p.gb * Math.pow(1 + p.growth / 100, i + 1), 1)} GB a month`)],
+  ['walletadopt', 'Wallet adoption', 'Active wallet users as a share of subscribers', [['active', 'Active wallet users', 1.2e6], ['subs', 'Subscribers', 16.5e6]], p => [`Adoption: ${tlP(p.active / p.subs)}`]],
+  ['fraudrate', 'Fraud loss rate', 'Fraud losses ÷ revenue', [['loss', 'Fraud losses', 3.5e6], ['revenue', 'Revenue', 2e9]], p => [`Loss rate: ${tlNum(p.loss / p.revenue * 100, 3)}%`]],
+  ['royalty', 'Royalty impact', 'Royalty paid on a revenue or profit base', [['base', 'Base', 1e9], ['rate', 'Rate %', 15]], p => [`Royalty: ${tlNum(p.base * p.rate / 100, 0)}`]],
+  ['yield', 'Dividend yield', 'Dividend per share ÷ share price', [['dps', 'Dividend per share', 1.6], ['price', 'Share price', 30]], p => [`Yield: ${tlP(p.dps / p.price)}`]],
+  ['capexpayback', 'Project payback', 'Years for a project to pay back', [['capex', 'Investment', 5e7], ['cash', 'Cash a year', 1.2e7]], p => [`Payback: ${tlNum(p.capex / p.cash, 1)} years`]],
+  ['npv', 'Net present value', 'NPV of equal annual cash flows', [['capex', 'Investment', 5e7], ['cash', 'Cash a year', 1.2e7], ['years', 'Years', 7], ['rate', 'Discount rate %', 9]], p => { let v = -p.capex; for (let t = 1; t <= p.years; t++) v += p.cash / Math.pow(1 + p.rate / 100, t); return [`NPV: ${tlNum(v, 0)}`, v > 0 ? 'Creates value at this discount rate' : 'Destroys value at this discount rate']; }]
+];
+const TL_TOPICS = ['5G standalone', 'fixed wireless', 'fibre', 'eSIM', 'satellite', 'roaming', 'wallet', 'AI', 'data centre', 'towers', 'spectrum', 'regulator', 'privacy', 'price cut', 'promotion', 'churn', 'enterprise', 'IoT', 'cloud', 'cybersecurity', 'devices', 'retail stores', 'acquisition', 'dividend', 'results', 'ESG', 'energy', 'Ramadan', 'tourists', 'expatriates'];
+let TL = null;
+function tlBuild() {
+  if (TL) return TL;
+  const T = [], add = (fam, n, d, run, params) => T.push({ id: tlSlug(n), n, fam, d, run, params: params || [] });
+  const ops = POS ? POS.operators : [], comps = LAND ? LAND.companies : [];
+  // operator analytics by region
+  [...new Set(ops.map(o => o.region))].forEach(R => {
+    const in_ = () => ops.filter(o => o.region === R);
+    add('Regions', `${R}: revenue ranking`, `Operators in ${R} by revenue`, () => in_().filter(revOf).sort((a, b) => revOf(b) - revOf(a)).map((o, i) => `${i + 1}. ${o.short || o.name}: ${tlM(revOf(o))} (${o.rev.period || ''})`));
+    add('Regions', `${R}: growth leaders`, `Operators in ${R} by revenue growth`, () => in_().filter(o => o.growth && o.growth.v != null).sort((a, b) => b.growth.v - a.growth.v).map((o, i) => `${i + 1}. ${o.short || o.name}: ${o.growth.v > 0 ? '+' : ''}${o.growth.v}% (${o.growth.period || ''})`));
+    add('Regions', `${R}: market values`, `Operators in ${R} by market value`, () => in_().filter(o => o.mcap && o.mcap.usd).sort((a, b) => b.mcap.usd - a.mcap.usd).map((o, i) => `${i + 1}. ${o.short || o.name}: ${tlM(o.mcap.usd)} (${o.mcap.asOf || ''})`));
+    add('Regions', `${R}: quadrant mix`, `How ${R} operators split across the positioning quadrants`, () => { const c = {}; in_().forEach(o => { const q = POSM.ops.quad(o.x, o.y); (c[q] = c[q] || []).push(o.short || o.name); }); return Object.entries(c).map(([q, l]) => `${q} (${l.length}): ${l.join(', ')}`); });
+    add('Regions', `${R}: innovation scorecard`, `Innovation checklist for ${R} operators (5G SA, fixed wireless, fibre, satellite, fintech, AI, cloud)`, () => in_().sort((a, b) => innovCount(b) - innovCount(a)).map(o => `${o.short || o.name}: ${innovCount(o)}/7 ${INNOV.filter(([k]) => o.innov && o.innov[k] && o.innov[k][0] === true).map(x => x[1]).join(', ')}`));
+    add('Regions', `${R}: ownership and state stakes`, `State, sovereign, PE and infrastructure owners in ${R}`, () => in_().map(o => `${o.short || o.name}: ${(o.holders || []).filter(h => !/float/.test(h.t)).map(h => `${h.n} ${h.pct || ''}`).join('; ') || 'widely held'}`));
+    add('Regions', `${R}: recent moves`, `Latest moves by ${R} operators`, () => in_().flatMap(o => (o.moves || []).map(m => [m[0], `${m[0]} · ${o.short || o.name}: ${m[1]}`])).sort((a, b) => String(b[0]).localeCompare(String(a[0]))).slice(0, 12).map(x => x[1]));
+    if (in_().some(o => o.share && o.share.v != null)) add('Regions', `${R}: market shares`, `Home-market shares of ${R} operators, where sourced`, () => in_().filter(o => o.share && o.share.v != null).sort((a, b) => b.share.v - a.share.v).map(o => `${o.short || o.name}: ${o.share.v}% · ${o.share.basis || ''}`));
+  });
+  // country markets
+  [...new Set(ops.map(o => o.country).filter(c => c && !/[/;(]/.test(c)))].sort().forEach(C => add('Countries', `${C}: market overview`, `Operators in ${C}: revenue, growth, share and market value`, () => ops.filter(o => o.country === C).sort((a, b) => revOf(b) - revOf(a)).map(o => `${o.short || o.name}: revenue ${tlM(revOf(o))}${o.growth && o.growth.v != null ? ', growth ' + o.growth.v + '%' : ''}${o.share && o.share.v != null ? ', share ' + o.share.v + '%' : ''}${o.mcap && o.mcap.usd ? ', value ' + tlM(o.mcap.usd) : ''}`)));
+  // landscape segments
+  [...new Set(comps.map(c => c.seg))].forEach(S => {
+    const in_ = () => comps.filter(c => c.seg === S);
+    add('Landscape', `${S}: largest by market value`, `${S} companies by market value`, () => in_().filter(c => c.mcap && c.mcap.usd).sort((a, b) => b.mcap.usd - a.mcap.usd).slice(0, 15).map((c, i) => `${i + 1}. ${c.name}: ${tlM(c.mcap.usd)}`));
+    if (in_().some(c => c.val && c.val.usd)) add('Landscape', `${S}: private valuations`, `Latest private valuations in ${S}`, () => in_().filter(c => c.val && c.val.usd).sort((a, b) => b.val.usd - a.val.usd).slice(0, 15).map(c => `${c.name}: ${tlM(c.val.usd)} (${c.val.asOf || ''})`));
+    add('Landscape', `${S}: PE, hedge-fund and state owners`, `${S} companies with private-equity, hedge-fund, infrastructure or state investors`, () => in_().filter(c => { const f = flagsOf(c); return f.pe || f.hf || f.state || f.infra; }).slice(0, 15).map(c => `${c.name}: ${(c.investors || []).map(i => i.n).slice(0, 3).join(', ')}`));
+    add('Landscape', `${S}: recent moves`, `Recent moves of ${S} companies`, () => in_().filter(c => c.recent).slice(0, 12).map(c => `${c.name}: ${c.recent}`));
+    add('Landscape', `${S}: market-value movers`, `${S} companies whose market value moved most since the last check`, () => in_().filter(c => c.mcap && c.mcap.usd && c.mcap.prev).map(c => [c, c.mcap.usd / c.mcap.prev - 1]).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1])).slice(0, 12).map(([c, d]) => `${c.name}: ${tlPct(d)} → ${tlM(c.mcap.usd)}`));
+  });
+  // capital: investors and deal types
+  (LAND && LAND.investors || []).forEach(I => {
+    add('Capital', `${I.name}: telecom portfolio`, `${I.name} (${I.type}) telecom holdings`, () => [`${I.type}${I.aum ? ' · ' + I.aum : ''}`, `Focus: ${I.focus || '—'}`].concat((I.holdings || []).map(h => typeof h === 'string' ? h : `${h.n || h.name || ''} ${h.pct || ''} ${h.note || ''}`.trim())));
+    add('Capital', `${I.name}: deals`, `Telecom deals involving ${I.name}`, () => { const k = I.name.split(/[ /(]/)[0].toLowerCase(); return (LAND.deals || []).filter(d => d.investor.toLowerCase().includes(k)).map(d => `${d.date}: ${d.investor} → ${d.target} (${d.status || ''})`); });
+  });
+  [...new Set((LAND && LAND.deals || []).map(d => d.type))].forEach(Ty => {
+    add('Capital', `${Ty} deals`, `Telecom deals by ${Ty} investors`, () => LAND.deals.filter(d => d.type === Ty).map(d => `${d.date}: ${d.investor} → ${d.target}`));
+    add('Capital', `${Ty} targets`, `What ${Ty} investors bought and why`, () => LAND.deals.filter(d => d.type === Ty).map(d => `${d.target}: ${d.what || ''}`));
+  });
+  // signals and the war room
+  Object.keys(OPS).filter(k => k !== 'all' && k !== 'nim').forEach(k => {
+    const nm = OPS[k].name;
+    add('Signals', `${nm}: signal feed`, `Latest signals about ${nm}`, () => TOOLS.list_signals({ operator: nm, limit: 8 }).map(x => `[${x.id}] ${SEVL[x.severity]}: ${x.text}`));
+    add('Signals', `${nm}: severity mix`, `How serious the signals about ${nm} are`, () => { const L = TOOLS.list_signals({ operator: nm, limit: 20 }); return ['crit', 'high', 'watch'].map(s => `${SEVL[s]}: ${L.filter(x => x.severity === s).length}`); });
+    add('Signals', `${nm}: threat summary`, `Top signal about ${nm}, its evidence and the likely next move`, () => { const top = TOOLS.list_signals({ operator: nm, limit: 1 })[0]; if (!top) return ['No signals.']; const g = TOOLS.get_signal({ id: top.id }); return [`${g.id}: ${g.text}`, `Revenue at risk: ${tlM(g.revenue_at_risk_usd)}`, `Likely next move: ${g.predicted_next_move || '—'}`].concat((g.candidate_plays || []).slice(0, 3).map(p => `Play: ${p.play}`)); });
+  });
+  [...new Set(TPL.map(t => t.cls))].forEach(C => {
+    add('Signals', `${C} signals`, `Signals of the ${C} class across all rivals`, () => [...events].filter(e => e.tpl.cls === C).sort((a, b) => score(b) - score(a)).slice(0, 8).map(e => `[${e.id}] ${OPS[e.tpl.op].short}: ${e.text}`));
+    add('Signals', `${C} response plays`, `Candidate responses to the top ${C} signal`, () => { const e = [...events].filter(x => x.tpl.cls === C).sort((a, b) => score(b) - score(a))[0]; if (!e) return ['No signals of this class right now.']; const g = TOOLS.get_signal({ id: e.id }); return [`${g.id}: ${g.text}`].concat((g.candidate_plays || []).map(p => `${p.play}: ${p.action || ''} ${p.expected ? '(' + p.expected + ')' : ''}`)); });
+  });
+  ['arc', 'vtx', 'pls', 'kte'].forEach(r => [5, 10, 15, 20, 25, 30].forEach(c => add('War room', `${OPS[r].name} cuts ${c}%`, `War-room simulation: ${OPS[r].name} cuts prices ${c}% for 8 weeks`, () => agFmt('simulate_response', TOOLS.simulate_response({ rival: r, cut_pct: c, weeks: 8 })))));
+  // pricing
+  PLANS.forEach(P => {
+    const nm = `${OPS[P.op].short} ${P.name}`;
+    add('Pricing', `${nm}: rival comparison`, `${nm} against the closest rival plans`, () => agFmt('compare_plans', TOOLS.compare_plans({ plan_id: P.id })));
+    add('Pricing', `${nm}: plan genes`, `Every gene of ${nm}`, () => [`Price $${P.price} · data ${P.data >= 999 ? 'unlimited' : P.data + ' GB'} · hotspot ${P.hotspot} GB`, `5G SA ${P.sa ? 'yes' : 'no'} · streaming ${P.stream ? '$' + P.stream + ' value' : 'none'} · roaming ${P.roam ? '$' + P.roam + ' value' : 'none'}`, `Contract ${P.contract ? P.contract + ' months' : 'none'} · fees $${P.fees} · satellite ${P.sat ? 'yes' : 'no'} · device credit $${P.credit}`]);
+    add('Pricing', `${nm}: total price`, `${nm}: total monthly price and price per GB`, () => [`Total a month: $${P.price + P.fees}`, P.data >= 999 ? 'Unlimited data' : `Price per GB: $${tlNum((P.price + P.fees) / P.data)}`]);
+  });
+  [...new Set(PLANS.map(p => p.op))].forEach(o => add('Pricing', `${OPS[o].name}: plan ladder`, `${OPS[o].name}'s plans from cheapest to dearest`, () => PLANS.filter(p => p.op === o).sort((a, b) => a.price - b.price).map((p, i, a) => `${p.name}: $${p.price}${i ? ' (+' + tlP(p.price / a[i - 1].price - 1) + ')' : ''}`)));
+  // predictions, geo and sizing
+  ['fwa', 'cut', 'sat'].forEach(m => {
+    const P = PRED.find(x => x.id === m); if (!P) return;
+    add('Forecasts', `Forecast: ${P.short || P.title || m}`, 'Probability and window of a rival move', () => agFmt('predict_move', TOOLS.predict_move({ move_id: m })));
+    add('Forecasts', `Sensitivity: ${P.short || P.title || m}`, 'How the forecast changes without its first signal', () => { const a = TOOLS.predict_move({ move_id: m }), b = TOOLS.predict_move({ move_id: m, exclude: [0] }); return [`With all signals: ${a.probability_pct}%`, `Without the first signal: ${b.probability_pct}%`, `Change: ${b.probability_pct - a.probability_pct} points`]; });
+  });
+  ['churn', 'coverage', 'retail'].forEach(L => {
+    add('Geo', `${L[0].toUpperCase() + L.slice(1)} hotspots`, `Districts ranked on the ${L} layer`, () => agFmt('geo_hotspots', TOOLS.geo_hotspots({ layer: L })));
+    add('Geo', `${L[0].toUpperCase() + L.slice(1)} action plan`, `What to do in the top ${L} districts`, () => TOOLS.geo_hotspots({ layer: L }).hotspots.slice(0, 3).map(h => `${h.district}: ${L === 'churn' ? 'targeted save offers and a store visit this week' : L === 'coverage' ? 'fix the gap first, then stop claims the network cannot meet' : 'staff up at peak hours and brief stores on the rival offer'}`));
+  });
+  SEG.forEach(S => add('Sizing', `Market size: ${S.l}`, `TAM, SAM and SOM for ${S.l}`, () => agFmt('size_market', TOOLS.size_market({ segments: [S.k] }))));
+  add('Sizing', 'Market size: all segments', 'TAM, SAM and SOM across every segment', () => agFmt('size_market', TOOLS.size_market({})));
+  // innovation lab
+  EL_DOM.forEach(([k, dn]) => {
+    add('Innovation', `${dn}: lab status`, `Tools and services for ${dn} by status`, () => { const L = elBuild().filter(x => x.k === k); return ['Live', 'Prototype', 'Service', 'Designed'].map(s => `${s}: ${L.filter(x => x.status === s).length}`); });
+    add('Innovation', `${dn}: ready now`, `Live and prototype items for ${dn}`, () => elBuild().filter(x => x.k === k && (x.status === 'Live' || x.status === 'Prototype')).map(x => `${x.status}: ${x.n}`).concat(elBuild().filter(x => x.k === k && x.status === 'Service').slice(0, 4).map(x => `Service: ${x.n}`)));
+  });
+  // sources
+  MI_SRC.forEach(S => {
+    add('Sources', `${S.n}: profile`, `What ${S.n} covers and how it is collected`, () => [`Category: ${S.cat}`, `Examples: ${S.ex}`, `Collection: ${S.conn}`, `Format: ${S.fmt} · access: ${S.acc}`, `Rules: ${S.rule}`]);
+    add('Sources', `${S.n}: freshness and trust`, `Half-life and reliability of ${S.n}`, () => [`Half-life: ${S.hl} hours`, `Reliability: ${Math.round(S.rel * 100)}%`, `Refresh at least every ${S.min} hour${S.min === 1 ? '' : 's'}`]);
+  });
+  // intelligence topics
+  TL_TOPICS.forEach(t => add('Intelligence', `Intel: ${t}`, `Knowledge-base items about ${t}`, () => { const R = miSearch(t, 'all'); return R.res.slice(0, 8).map(r => `${r.d.type}: ${r.d.title}`).concat([`${R.total || R.res.length} matches in all`]); }));
+  // department kits
+  AG_DEPTS.forEach(D => add('Departments', `${D.n}: department kit`, `Agents, services and resources for ${D.n}`, () => [`Agents: ${D.agents.map(a => a.n).join(', ')}`, `Core services: ${D.svc.map(k => (svcByKey(k) || { name: k }).name).join(', ')}`, `Catalog services: ${SVC_CAT.filter(s => s.dept === D.k).length}`, `Resources: ${D.res.map(agResLabel).filter(Boolean).join(', ') || '—'}`]));
+  // calculators
+  TL_CALC.forEach(([id, n, d, params, fn]) => T.push({ id: 'calc-' + id, n: 'Calculator: ' + n, fam: 'Calculators', d, params, run: p => fn(p) }));
+  const seen = new Set(); T.forEach(t => { let id = t.id, i = 2; while (seen.has(id)) id = t.id + '-' + i++; t.id = id; seen.add(id); });
+  return (TL = T);
+}
+const tlPct = v => (v > 0 ? '+' : '') + (v * 100).toFixed(1) + '%';
+const TL_FAMS = () => [...new Set(tlBuild().map(t => t.fam))];
+function tlRun(t, args) {
+  const p = {}; (t.params || []).forEach(([k, , def], i) => { const v = args && (args[k] ?? args[i]); p[k] = typeof def === 'number' ? (v === undefined || v === '' || isNaN(+v) ? def : +v) : (v === undefined || v === '' ? def : String(v)); });
+  const out = t.run(p); return Array.isArray(out) && out.length ? out : ['No results in the current data.'];
+}
+const tlFind = q => { const s = tlSlug(q); if (!s) return null; const T = tlBuild(); return T.find(t => t.id === s || t.id === 'calc-' + s) || T.find(t => tlSlug(t.n).includes(s)) || T.find(t => s.split('-').every(w => tlSlug(t.n + ' ' + t.fam).includes(w))); };
+function tlPanelHtml(tid, sel) {
+  const T = tlBuild(), t = sel && T.find(x => x.id === sel);
+  return `<div class="tl-bar"><label class="sr" for="tlQ${tid}">Find a tool</label><input class="inp-search" id="tlQ${tid}" data-tlq type="search" placeholder="Search ${T.length} tools…" autocomplete="off"><label class="sr" for="tlF${tid}">Family</label><select class="inp" id="tlF${tid}" data-tlfam><option value="">All families</option>${TL_FAMS().map(f => `<option>${esc(f)}</option>`).join('')}</select></div>
+    <div class="tl-list" data-tllist>${tlListHtml('', '')}</div>
+    <div class="tl-run" data-tlrun>${t ? tlFormHtml(t) : '<p class="tiny muted">Pick a tool to run it.</p>'}</div>`;
+}
+function tlListHtml(q, fam) {
+  const s = q.toLowerCase(), L = tlBuild().filter(t => (!fam || t.fam === fam) && (!s || (t.n + ' ' + t.d + ' ' + t.fam).toLowerCase().includes(s)));
+  return L.slice(0, 60).map(t => `<button type="button" class="tl-item" data-tlpick="${esc(t.id)}"><b>${esc(t.n)}</b><span class="tiny muted">${esc(t.fam)} · ${esc(t.d)}</span></button>`).join('') + (L.length > 60 ? `<p class="tiny muted">${L.length - 60} more: narrow the search.</p>` : L.length ? '' : '<p class="small muted">No tool matches.</p>');
+}
+function tlFormHtml(t) {
+  return `<form class="tl-form" data-tlform="${esc(t.id)}"><b>${esc(t.n)}</b><span class="tiny muted">${esc(t.d)}</span>${(t.params || []).map(([k, l, d]) => `<label class="small">${esc(l)}<input class="inp-search" name="${esc(k)}" value="${esc(String(d))}"></label>`).join('')}<button class="btn sm accent" type="submit">Run tool</button><div class="tl-out" aria-live="polite"></div></form>`;
+}
+// service catalog: 4 signature services and 15 standard services for every department
+const SV_FOCUS = { mi: 'competitor moves and market signals', mk: 'campaigns, segments and the brand', sl: 'channels, stores and the sales pipeline', cx: 'care, complaints and customer journeys', rl: 'churn, saves and loyalty', pr: 'plans, prices and promotions', en: 'enterprise and government accounts', sm: 'small-business offers and sales', nw: 'coverage, capacity and network investment', fh: 'fibre, fixed wireless and home services', dg: 'the app, eSIM and the wallet', dv: 'devices, stores and retail operations', ro: 'roaming, wholesale and partner deals', st: 'strategy, scenarios and investments', fn: 'valuation, capex and investor relations', rg: 'consultations, licences and compliance', da: 'data quality, models and analytics', sc: 'fraud, scams and security' };
+const SV_SIG = {
+  mi: [['Competitor deep-dive dossier', 'A full dossier on one rival: plans, network, finances, leadership and likely next moves.', '10 business days'], ['Launch watch', 'Daily alerts on every rival plan, brand and product launch, with a same-day brief.', 'Ongoing, daily'], ['Results-day pack', 'Rival quarterly results summarized for leadership within hours of publication.', 'Same day'], ['Market map refresh', 'Positioning, shares and ownership re-checked for every operator in the market.', '2 weeks']],
+  mk: [['Campaign timing audit', 'Checks when and how campaigns reach customers, against consent and quiet hours.', '2 weeks'], ['Brand health tracker', 'Monthly brand, sentiment and share-of-voice tracking against rivals.', 'Monthly'], ['Segment discovery study', 'Finds under-served customer segments and sizes each one.', '4 weeks'], ['Creative testing program', 'A/B tests messages and creatives with clean control groups.', '6 weeks']],
+  sl: [['Channel performance review', 'Compares stores, dealers, online and telesales on cost and conversion.', '3 weeks'], ['Mystery shopping', 'Visits our and rival stores to compare offers, service and talk tracks.', '2 weeks'], ['Sales script refresh', 'Rewrites scripts and objection answers against current rival offers.', '1 week'], ['Win-back program', 'Designs and runs fair win-back offers for recent leavers.', '6 weeks']],
+  cx: [['Journey mapping', 'Maps an end-to-end journey and ranks its pain points.', '3 weeks'], ['Complaint root-cause study', 'Finds why the top complaints happen and who should fix them.', '3 weeks'], ['Chatbot tuning', 'Retrains the care chatbot on the questions it fails.', '2 weeks'], ['NPS program setup', 'Sets up NPS surveys, closed-loop follow-up and reporting.', '4 weeks']],
+  rl: [['Churn model build', 'Builds and validates a churn-risk model on tokenized data.', '6 weeks'], ['Save-desk optimization', 'Improves save-desk scripts, offers and routing.', '4 weeks'], ['Loyalty program design', 'Designs rewards that keep customers longest for the least cost.', '6 weeks'], ['Contract-end renewal program', 'Contacts customers before contracts end with the right offer.', '4 weeks']],
+  pr: [['Tariff DNA review', 'Compares every plan gene by gene with rival plans.', '2 weeks'], ['Price-response war room', 'Simulates rival price moves and pre-builds responses.', '2-day workshop'], ['Promotion effectiveness audit', 'Measures which promotions paid back.', '3 weeks'], ['Plan line-up redesign', 'Simplifies the plan ladder with clear steps up.', '4 weeks']],
+  en: [['Tender response desk', 'Finds, qualifies and helps write responses to tenders.', 'Ongoing'], ['Industry solution design', 'Designs a 5G, cloud and AI offer for one industry.', '4 weeks'], ['Key account plans', 'Builds 12-month plans for the largest accounts.', '3 weeks'], ['Private 5G pilot design', 'Designs a paid private-5G pilot with clear KPIs.', '4 weeks']],
+  sm: [['SME offer design', 'Builds simple bundles for small businesses.', '3 weeks'], ['SME lead scoring', 'Ranks small-business leads for the sales team.', '3 weeks'], ['Merchant payments program', 'Grows wallet and point-of-sale use among merchants.', '6 weeks'], ['SME churn rescue', 'Finds and saves small-business accounts at risk.', '4 weeks']],
+  nw: [['Rival build tracker', 'Tracks rival site permits, hiring and network launches.', 'Ongoing'], ['Capex prioritization study', 'Ranks network investments by contested demand and return.', '4 weeks'], ['5G standalone readiness review', 'Checks readiness for 5G standalone and slicing.', '3 weeks'], ['Network energy savings study', 'Finds safe ways to cut network power use.', '4 weeks']],
+  fh: [['Fibre rollout prioritization', 'Ranks areas for new fibre by demand and rival pressure.', '4 weeks'], ['Fixed-wireless launch plan', 'Plans where and how to launch fixed wireless.', '4 weeks'], ['Installer capacity review', 'Matches installer capacity to order demand.', '2 weeks'], ['Home bundle design', 'Designs mobile and home bundles with clear savings.', '3 weeks']],
+  dg: [['App store optimization', 'Improves ratings, reviews and visibility in app stores.', '4 weeks'], ['eSIM journey redesign', 'Makes eSIM sign-up instant inside the app.', '4 weeks'], ['Wallet growth program', 'Grows active wallet users with timed offers.', '8 weeks'], ['Remittance corridor pricing study', 'Prices the top transfer corridors against rivals.', '3 weeks']],
+  dv: [['Device range review', 'Decides which devices to stock, drop and promote.', '2 weeks'], ['Trade-in program design', 'Designs trade-in values and logistics.', '3 weeks'], ['Store network plan', 'Decides where to open, move or close stores.', '4 weeks'], ['Device launch readiness', 'Prepares stock, pre-orders and plans for a flagship launch.', '2 weeks']],
+  ro: [['Roaming pass pricing review', 'Re-prices passes for the top destinations.', '2 weeks'], ['Inbound roaming deals review', 'Improves deals with the top partner operators.', '4 weeks'], ['Wholesale and MVNO strategy', 'Decides whether and how to host MVNOs.', '4 weeks'], ['Interconnect rate review', 'Checks interconnect and termination rates.', '3 weeks']],
+  st: [['Scenario planning study', 'Builds best, base and worst cases with triggers.', '4 weeks'], ['M&A screening', 'Screens acquisitions, stakes and carve-outs.', '4 weeks'], ['New business case', 'Builds the case for one new business line.', '4 weeks'], ['Board strategy pack', 'Prepares the strategy pack for the board.', '2 weeks']],
+  fn: [['Peer valuation pack', 'Compares valuation with peers and explains the gap.', '2 weeks'], ['Capex return review', 'Checks the return on recent and planned capex.', '4 weeks'], ['Revenue assurance sweep', 'Finds revenue leaks in billing and usage.', '4 weeks'], ['Investor Q&A preparation', 'Prepares answers to likely investor questions.', '1 week']],
+  rg: [['Consultation response drafting', 'Drafts responses to regulator consultations.', '2 weeks'], ['Spectrum auction preparation', 'Values spectrum and sets a bidding envelope.', '6 weeks'], ['Licence obligations tracker', 'Tracks every licence obligation and deadline.', 'Ongoing'], ['Competition-law review', 'Reviews planned responses for competition-law risk.', '1 week']],
+  da: [['Data quality audit', 'Checks freshness and accuracy of the main data sources.', '3 weeks'], ['Model risk review', 'Checks models for drift, bias and documentation.', '3 weeks'], ['Knowledge base clean-up', 'Merges duplicates and archives outdated items.', '2 weeks'], ['A/B testing program setup', 'Sets up pre-registered tests with the right sample sizes.', '4 weeks']],
+  sc: [['Fraud pattern review', 'Finds rising fraud patterns and blocks them.', '3 weeks'], ['SIM-swap protection program', 'Adds checks that stop SIM-swap attacks.', '4 weeks'], ['Scam call blocking setup', 'Blocks scam calls and messages and warns customers.', '4 weeks'], ['Breach response drill', 'Runs a data-breach drill with legal and communications.', '1 week']]
+};
+const SV_TYPES = [
+  ['diagnostic', 'diagnostic', 'A focused review of {f}: findings, quick wins and a 90-day plan.', '10 business days'],
+  ['sprint', '90-day improvement sprint', 'A cross-functional sprint that moves one KPI in {f}, with weekly reviews.', '90 days'],
+  ['workshop', 'hands-on workshop', 'A one-day workshop for the team on {f}, using live platform data.', '1 day'],
+  ['analyst', 'analyst on demand', 'A specialist analyst answers questions about {f}.', '4-hour response'],
+  ['benchmark', 'Gulf peer benchmark', 'Benchmarks {f} against Gulf peers with sourced data.', '15 business days'],
+  ['feed', 'data feed setup', 'Connects the sources the team needs for {f} into the platform.', '2–4 weeks'],
+  ['dashboard', 'dashboard build', 'Builds a dashboard the team uses every week for {f}.', '3 weeks'],
+  ['agents', 'agent setup and tuning', 'Configures the department’s 12 AI agents on the team’s own data.', '2 weeks'],
+  ['playbook', 'playbook build', 'Writes step-by-step playbooks for the most common situations in {f}.', '2 weeks'],
+  ['wargame', 'war game', 'A war game on {f} against AI-simulated rivals.', '2-day workshop'],
+  ['pilot', '30-day pilot', 'A 30-day shadow-mode pilot on {f} with a clear go/no-go.', '30 days'],
+  ['managed', 'managed service', 'Cellvoyant runs the monitoring and reporting for {f} every month.', 'Monthly'],
+  ['brief', 'weekly brief', 'A one-page weekly brief on {f}, with sources.', 'Weekly'],
+  ['training', 'training and certification', 'Trains and certifies analysts on {f}.', '4 weeks'],
+  ['exec', 'executive briefing', 'A one-hour briefing for leadership on {f}.', '1 hour']
+];
+const SVC_CAT = AG_DEPTS.flatMap(D => (SV_SIG[D.k] || []).map(([n, d, turn]) => ({ k: `${D.k}-${tlSlug(n)}`, name: n, desc: d, turn, dept: D.k, dn: D.n, kind: 'Signature' }))
+  .concat(SV_TYPES.map(([k, n, d, turn]) => ({ k: `${D.k}-${k}`, name: `${D.n} ${n}`, desc: d.replace('{f}', SV_FOCUS[D.k]), turn, dept: D.k, dn: D.n, kind: 'Standard' }))));
+SVC_EXTRA.push(...SVC_CAT);
+const svFind = q => { const s = String(q || '').toLowerCase().trim(); return SVC_CAT.find(x => x.k === s) || SVC_CAT.find(x => x.name.toLowerCase() === s) || SVC_CAT.find(x => x.name.toLowerCase().includes(s)); };
+function svListHtml(q, dept) {
+  const s = q.toLowerCase(), L = SVC_CAT.filter(x => (!dept || x.dept === dept) && (!s || (x.name + ' ' + x.desc + ' ' + x.dn).toLowerCase().includes(s)));
+  return L.slice(0, 40).map(x => `<div class="sv-item"><span><b>${esc(x.name)}</b><span class="tiny muted">${esc(x.kind)} · ${esc(x.turn)} · ${esc(x.desc)}</span></span><button type="button" class="btn sm" data-svbook="${esc(x.k)}">Request</button></div>`).join('') + (L.length > 40 ? `<p class="tiny muted">${L.length - 40} more: narrow the search.</p>` : L.length ? '' : '<p class="small muted">No service matches.</p>');
+}
+function svPanelHtml(tid, dept) {
+  return `<div class="tl-bar"><label class="sr" for="svQ${tid}">Find a service</label><input class="inp-search" id="svQ${tid}" data-svq type="search" placeholder="Search ${SVC_CAT.length} services…" autocomplete="off"><label class="sr" for="svD${tid}">Department</label><select class="inp" id="svD${tid}" data-svdept><option value="">All departments</option>${AG_DEPTS.map(D => `<option value="${D.k}"${D.k === dept ? ' selected' : ''}>${esc(D.n)}</option>`).join('')}</select></div><div class="tl-list" data-svlist>${svListHtml('', dept || '')}</div>`;
+}
+async function svBook(key, note) {
+  const s = svcByKey(key); if (!s) throw new Error('No such service: ' + key);
+  const q = await createRequest({ service: s.k, details: note || `${s.name}${s.dn ? ' (' + s.dn + ')' : ''} requested from a terminal`, urgency: 'standard', via: 'terminal' });
+  toast(`Requested: ${q.service}${q.saved ? '' : ' (this visit only)'}`); return q;
 }
 
 /* ---------- FIND ANYTHING: one search over chapters, tools, agents, companies, operators and sources ---------- */
@@ -4093,10 +4328,11 @@ function findIndex() {
   if (LAND && $('#landQ')) LAND.companies.forEach(c => add('Company', c.name, [c.seg, c.hq].filter(Boolean).join(' · '), () => { const q = $('#landQ'); q.value = c.name; q.dispatchEvent(new Event('input', { bubbles: true })); findGo($('#landscape')); }, (c.investors || []).map(i => i.n).join(' ')));
   $$('#sources tr[id^="src-"]').forEach(r => { const a = $('a', r); add('Source', txtOf(a) || txtOf(r).slice(0, 80), `${txtOf($('.muted', r))} · source ${r.id.slice(4)}`, () => findGo(r, true), txtOf(r)); });
   $$('main details > summary').forEach(sm => { const d = sm.parentElement; if (d.closest('#resGrid')) return; add(d.closest('.faq') ? 'Question' : 'Detail', txtOf(sm), txtOf(d.closest('section') && $('h2', d.closest('section'))), () => { d.open = true; findGo(d, true); }); });
+  if ($('#tmApp')) { tlBuild().forEach(t => add('Tool', t.n, `${t.fam} · ${t.d}`, () => { tmOpen('tools'); tmCmd('TOOL ' + t.id); findGo($('#terminals')); })); SVC_CAT.forEach(x => add('Service', x.name, `${x.dn} · ${x.turn} · ${x.desc}`, () => { tmOpen('tools'); tmCmd('SERVICES ' + x.name); findGo($('#terminals')); })); }
   TOOLDEFS.forEach(d => add('Assistant tool', d.name.replace(/_/g, ' '), d.description, () => { selectTab('tab-ask'); findGo($('#app')); }));
   return (FIND.items = it);
 }
-const FIND_ORDER = ['Chapter', 'Terminal', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
+const FIND_ORDER = ['Chapter', 'Terminal', 'Tool', 'Service', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
 function findSearch(raw) {
   const q = raw.trim().toLowerCase(), items = findIndex();
   if (!q) return items.filter(x => x.kind === 'Chapter').map(x => ({ x, sc: 1 }));
