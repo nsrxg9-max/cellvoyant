@@ -3820,6 +3820,100 @@ function initNav() {
   map.forEach((a, id) => { const s = document.getElementById(id); if (s) io.observe(s); });
 }
 
+/* ---------- LIVE DATA: public sources read straight from the browser (news, exchange rates, World Bank, Wikipedia, app stores) ---------- */
+const LV = { cache: new Map(), gdeltAt: 0, blocked: false };
+const LIVE_PUBLIC = 'https://nsrxg9-max.github.io/cellvoyant/' + (EDITION === 'eand' ? 'eand.html' : '');
+class LiveError extends Error {}
+const IN_CLAUDE = !!(window.claude && typeof window.claude.use === 'function');
+async function liveGet(url, ttl = 10 * 60e3) {
+  const hit = LV.cache.get(url); if (hit && Date.now() - hit.t < ttl) return hit.j;
+  let r;
+  try { r = await fetch(url, { referrerPolicy: 'no-referrer', credentials: 'omit' }); }
+  catch (e) { if (IN_CLAUDE) { LV.blocked = true; throw new LiveError('Live sources can’t be reached from this view. They work on the public site: ' + LIVE_PUBLIC); } throw new LiveError('The source didn’t respond. It may be busy; try again in a minute.'); }
+  if (r.status === 429) throw new LiveError('The source is busy (rate limit). Try again in a few seconds.');
+  if (!r.ok) throw new LiveError('The source answered with an error (' + r.status + ').');
+  const j = await r.json(); LV.cache.set(url, { t: Date.now(), j }); return j;
+}
+const lvTake = (L, n) => Object.assign(L.slice(0, n), { source: L.source });
+const liveDate = s => { const m = String(s || '').match(/^(\d{4})(\d{2})(\d{2})T?(\d{2})?(\d{2})?/); return m ? `${m[1]}-${m[2]}-${m[3]}${m[4] ? ' ' + m[4] + ':' + m[5] : ''}` : String(s || ''); };
+// GDELT news: worldwide online news in 100+ languages, the last 7 days by default; one request every 5 seconds
+async function liveNews(query, { days = 7, max = 12, lang = '' } = {}) {
+  const q = String(query || '').trim(); if (!q) throw new LiveError('Say what to search the news for.');
+  const wait = 5200 - (Date.now() - LV.gdeltAt); if (wait > 0) await new Promise(r => setTimeout(r, wait));
+  LV.gdeltAt = Date.now();
+  const term = /[()"]|\bOR\b|\bAND\b/.test(q) ? q : q.split(/\s+/).length > 1 ? `"${q}"` : q;
+  const url = `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(term + (lang ? ' sourcelang:' + lang : ''))}&mode=artlist&maxrecords=${clamp(+max || 12, 1, 50)}&format=json&sort=datedesc&timespan=${clamp(+days || 7, 1, 90)}d`;
+  try {
+    const j = await liveGet(url, 5 * 60e3);
+    return Object.assign((j.articles || []).map(a => ({ title: a.title, url: a.url, domain: a.domain, date: liveDate(a.seendate), language: a.language, country: a.sourcecountry })), { source: 'GDELT' });
+  } catch (e) {
+    if (LV.blocked) throw e;
+    // GDELT limits each address to one request every few seconds; fall back to Hacker News search so news still works
+    const since = Math.floor(Date.now() / 1000) - 30 * 86400, hq = q.replace(/["()]/g, ' ').replace(/\bOR\b/g, ' ').trim();
+    const h = await liveGet(`https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(hq)}&tags=story&restrictSearchableAttributes=title&numericFilters=created_at_i>${since}&hitsPerPage=${clamp(+max || 12, 1, 30)}`, 5 * 60e3);
+    return Object.assign((h.hits || []).filter(x => x.title).map(x => { let d = ''; try { d = new URL(x.url).hostname.replace(/^www\./, ''); } catch (er) { d = 'news.ycombinator.com'; } return { title: x.title, url: x.url || `https://news.ycombinator.com/item?id=${x.objectID}`, domain: d, date: String(x.created_at || '').slice(0, 16).replace('T', ' '), language: 'English' }; }), { source: 'Hacker News (GDELT is busy, last 30 days)' });
+  }
+}
+// exchange rates (daily, open.er-api.com; attribution required)
+async function liveFx(base = 'USD') {
+  const j = await liveGet(`https://open.er-api.com/v6/latest/${encodeURIComponent(base)}`, 60 * 60e3);
+  if (j.result !== 'success') throw new LiveError('Exchange rates are unavailable right now.');
+  return { base: j.base_code, updated: j.time_last_update_utc, rates: j.rates };
+}
+const WB_IND = { mobile: ['IT.CEL.SETS.P2', 'Mobile subscriptions per 100 people'], internet: ['IT.NET.USER.ZS', 'Internet users, % of population'], broadband: ['IT.NET.BBND.P2', 'Fixed broadband subscriptions per 100 people'], population: ['SP.POP.TOTL', 'Population'], gdp: ['NY.GDP.PCAP.CD', 'GDP per person, current US$'] };
+const WB_GROUPS = { gulf: 'ARE;SAU;QAT;KWT;BHR;OMN', mena: 'ARE;SAU;QAT;KWT;BHR;OMN;EGY;JOR;IRQ;MAR;TUR', world: 'WLD' };
+async function liveWorldBank(ind = 'mobile', countries = 'gulf') {
+  const I = WB_IND[ind] || WB_IND.mobile, cc = WB_GROUPS[countries] || String(countries || '').toUpperCase().replace(/[^A-Z;]/g, '') || WB_GROUPS.gulf;
+  const j = await liveGet(`https://api.worldbank.org/v2/country/${cc}/indicator/${I[0]}?format=json&mrnev=1&per_page=100`, 24 * 3600e3);
+  const rows = (Array.isArray(j) && j[1]) || [];
+  return { indicator: I[1], rows: rows.filter(r => r.value != null).map(r => ({ country: r.country.value, year: r.date, value: r.value })).sort((a, b) => b.value - a.value) };
+}
+async function liveWiki(query, lang = 'en') {
+  const q = String(query || '').trim(); if (!q) throw new LiveError('Say what to look up.');
+  const L = /^(ar|fr|hi|ur|zh)$/.test(lang) ? lang : 'en';
+  const s = await liveGet(`https://${L}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(q)}&srlimit=3&format=json&origin=*`, 24 * 3600e3);
+  for (const hit of (s.query && s.query.search) || []) {
+    const p = await liveGet(`https://${L}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(hit.title.replace(/ /g, '_'))}`, 24 * 3600e3);
+    if (p.type === 'disambiguation') continue;
+    return { title: p.title, extract: p.extract, url: p.content_urls && p.content_urls.desktop && p.content_urls.desktop.page, lang: L };
+  }
+  return L !== 'en' ? liveWiki(q, 'en') : null;
+}
+async function liveApps(term, country = 'ae') {
+  const j = await liveGet(`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&country=${encodeURIComponent(country)}&entity=software&limit=10`, 6 * 3600e3);
+  return (j.results || []).map(a => ({ name: a.trackName, seller: a.sellerName, rating: a.averageUserRating, ratings: a.userRatingCount, version: a.version, updated: String(a.currentVersionReleaseDate || '').slice(0, 10), url: a.trackViewUrl }));
+}
+// plain-text lines for tools, terminals and the assistant
+const LIVE_FX_SHOW = ['AED', 'SAR', 'QAR', 'KWD', 'BHD', 'OMR', 'EGP', 'JOD', 'PKR', 'INR', 'EUR', 'GBP', 'CNY', 'TRY'];
+const liveLines = {
+  news: L => L.length ? [`Source: ${L.source || 'GDELT'}`].concat(L.map(a => `${a.date} · ${a.domain}${a.language && a.language !== 'English' ? ' (' + a.language + ')' : ''}: ${a.title}`)) : ['No news found for that search in the period.'],
+  fx: f => [`1 ${f.base} in other currencies, updated ${f.updated}`].concat(LIVE_FX_SHOW.filter(c => f.rates[c]).map(c => `${c} ${tlNum(f.rates[c], 4)}`)).concat(['Rates by Exchange Rate API (open.er-api.com)']),
+  wb: w => [w.indicator + ' (World Bank, latest year)'].concat(w.rows.map(r => `${r.country}: ${r.value >= 1e5 ? tlNum(r.value, 0) : tlNum(r.value, 1)} (${r.year})`)),
+  wiki: p => p ? [p.title, p.extract, p.url ? 'Source: ' + p.url : ''] : ['Nothing found on Wikipedia.'],
+  apps: L => L.length ? L.map(a => `${a.name} (${a.seller}): ${a.rating ? tlNum(a.rating, 1) + '★ from ' + tlNum(a.ratings, 0) + ' ratings' : 'no rating yet'} · v${a.version} · updated ${a.updated}`) : ['No apps found.']
+};
+// HTML for terminal panels and the assistant, with links back to every source
+const liveHtml = {
+  news: L => !L.length ? `<p class="small muted">No news found for that search${L.source && L.source !== 'GDELT' ? '. The main news service (GDELT) is busy and the backup source has nothing recent on it; try again in a minute.' : ' in the period.'}</p>` : `<p class="tiny muted">Source: ${esc(L.source || 'GDELT')}</p>` + L.map(a => `<a class="lv-item" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer"><b>${esc(a.title)}</b><span class="tiny muted">${esc(a.date)} · ${esc(a.domain)}${a.language && a.language !== 'English' ? ' · ' + esc(a.language) : ''}</span></a>`).join(''),
+  fx: f => `<p class="tiny muted">1 ${esc(f.base)} · updated ${esc(f.updated)}</p>` + LIVE_FX_SHOW.filter(c => f.rates[c]).map(c => tmRow(c, tlNum(f.rates[c], 4))).join('') + '<p class="tiny"><a href="https://www.exchangerate-api.com" target="_blank" rel="noopener noreferrer">Rates by Exchange Rate API</a></p>',
+  wb: w => `<p class="tiny muted">${esc(w.indicator)} · World Bank, latest year</p>` + w.rows.map(r => tmRow(esc(r.country), `${r.value >= 1e5 ? tlNum(r.value, 0) : tlNum(r.value, 1)} (${esc(r.year)})`)).join(''),
+  wiki: p => p ? `<p><b>${esc(p.title)}</b></p><p class="small">${esc(p.extract)}</p>${p.url ? `<p class="tiny"><a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">Wikipedia ↗</a></p>` : ''}` : '<p class="small muted">Nothing found on Wikipedia.</p>',
+  apps: L => L.length ? L.map(a => `<a class="lv-item" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer"><b>${esc(a.name)}</b><span class="tiny muted">${a.rating ? tlNum(a.rating, 1) + '★ · ' + tlNum(a.ratings, 0) + ' ratings' : 'no rating yet'} · ${esc(a.seller)} · v${esc(a.version)} · ${esc(a.updated)}</span></a>`).join('') : '<p class="small muted">No apps found.</p>'
+};
+const LIVE_OPS = EDITION === 'eand' ? ['etisalat', 'du telecom', 'Virgin Mobile UAE', 'stc', 'Mobily', 'Zain', 'Ooredoo', 'Omantel', 'Batelco', 'Vodafone Qatar'] : ['telecom operator', 'stc', 'Zain', 'Ooredoo', 'Vodafone', 'Deutsche Telekom', 'Orange', 'Verizon', 'T-Mobile', 'Airtel'];
+const LIVE_TOPICS = ['5G', 'fibre broadband', 'eSIM', 'satellite direct to device', 'spectrum auction', 'telecom regulator', 'data centre', 'mobile wallet', 'roaming', 'tower deal'];
+const LIVE_APPS = [['etisalat', 'ae'], ['du', 'ae'], ['Virgin Mobile UAE', 'ae'], ['stc', 'sa'], ['Mobily', 'sa'], ['Zain', 'kw'], ['Ooredoo', 'qa'], ['Batelco', 'bh']];
+const LIVE_WIKI = ['etisalat', 'du (company)', 'Saudi Telecom Company', 'Mobily', 'Zain Group', 'Ooredoo', 'Omantel', 'Batelco', 'Telecommunications and Digital Government Regulatory Authority', 'Communications, Space and Technology Commission'];
+function liveTools(add) {
+  LIVE_OPS.forEach(o => add('Live data', `Live news: ${o}`, `Latest news about ${o} from worldwide online media (GDELT, last 7 days)`, async () => liveLines.news(await liveNews(o))));
+  LIVE_TOPICS.forEach(t => add('Live data', `Live news: ${t}`, `Latest news about ${t} (GDELT, last 7 days)`, async () => liveLines.news(await liveNews(t + ' telecom'))));
+  add('Live data', 'Live exchange rates', 'Today’s rates for Gulf, regional and major currencies against the US dollar', async () => liveLines.fx(await liveFx('USD')));
+  add('Live data', 'Live exchange rates against the dirham', 'Today’s rates against the UAE dirham', async () => liveLines.fx(await liveFx('AED')));
+  Object.entries(WB_IND).forEach(([k, [, label]]) => { add('Live data', `World Bank: ${label} in the Gulf`, `${label}, latest year, for the six Gulf states`, async () => liveLines.wb(await liveWorldBank(k, 'gulf'))); add('Live data', `World Bank: ${label} in the Middle East`, `${label}, latest year, for the Gulf and neighbouring markets`, async () => liveLines.wb(await liveWorldBank(k, 'mena'))); });
+  LIVE_APPS.forEach(([t, c]) => add('Live data', `App ratings: ${t} (${c.toUpperCase()} store)`, `Live App Store ratings for ${t} apps in the ${c.toUpperCase()} store`, async () => liveLines.apps(await liveApps(t, c))));
+  LIVE_WIKI.forEach(w => add('Live data', `Wikipedia: ${w}`, `Wikipedia summary of ${w}`, async () => liveLines.wiki(await liveWiki(w))));
+}
+
 /* ---------- TERMINALS: several workstations side by side, ready-made or built for one purpose ---------- */
 const TM_KEY = 'cv.terminals.v1';
 const TM_PANELS = {
@@ -3841,7 +3935,11 @@ const TM_PANELS = {
   lab: ['Innovation lab', 'Tools and services by status'],
   facts: ['Key facts', 'Sourced headline facts from this page'],
   notes: ['Notes', 'Your notes for this terminal, kept in this browser'],
-  toolbox: ['Tool library', '400+ tools: analytics, simulations and calculators'],
+  toolbox: ['Tool library', '450+ tools: live data, analytics, simulations and calculators'],
+  news: ['Live news', 'Worldwide online news in 100+ languages, last 7 days (GDELT)'],
+  fx: ['Live exchange rates', 'Today’s rates for Gulf, regional and major currencies'],
+  wb: ['World Bank indicators', 'Mobile, internet and broadband use by country, latest year'],
+  apps: ['App Store ratings', 'Live ratings of operator apps'],
   services: ['Service catalog', '340+ services to request, by department']
 };
 const TM_PRESETS = [
@@ -3856,6 +3954,7 @@ const TM_PRESETS = [
   { id: 'agents', n: 'Agent operations', p: 'Run and supervise the AI agents', panels: [['agent', 'mi:scout'], ['agent', 'mk:segment'], ['roster', 'mi'], ['tasks']] },
   { id: 'digital', n: 'Digital & fintech', p: 'Apps, eSIM, the wallet and digital rivals', panels: [['agent', 'dg:wallet'], ['roster', 'dg'], ['intel', 'app wallet eSIM'], ['notes']] },
   { id: 'innovation', n: 'Innovation', p: 'The lab, new ideas and data', panels: [['lab'], ['agent', 'da:genai'], ['intel'], ['notes']] },
+  { id: 'live', n: 'Live intelligence', p: 'Real news, exchange rates, country data and app ratings, live from public sources', panels: [['news', LIVE_OPS[0]], ['fx'], ['wb', 'mobile'], ['apps', LIVE_APPS[0][0]], ['news', LIVE_TOPICS[0] + ' telecom']] },
   { id: 'tools', n: 'Tools & services', p: 'Every tool and every service in one terminal', panels: [['toolbox'], ['services'], ['notes']] }
 ];
 if (EDITION === 'eand') TM_PRESETS.unshift({ id: 'uae', n: 'etisalat UAE', p: 'The UAE market, du and Virgin Mobile UAE at a glance', panels: [['facts'], ['gulf'], ['signals'], ['agent', 'mi:profiler'], ['roster', 'mk']] });
@@ -3902,11 +4001,23 @@ function tmPanelHtml(k, arg, tid) {
   if (k === 'notes') return `<label class="sr" for="tmNote${tid}">Notes</label><textarea class="tm-q" id="tmNote${tid}" rows="6" data-tmnote placeholder="Notes for this terminal">${esc(TM.notes[TM.active] || '')}</textarea><p class="tiny muted">Saved in this browser only.</p>`;
   return '';
 }
+const TM_LIVE = {
+  news: { head: a => `<form class="lv-q" data-lvq><label class="sr" for="lvq${a.length}">News search</label><input class="inp-search" id="lvq${a.length}" name="q" value="${esc(a || LIVE_OPS[0])}"><button class="btn sm" type="submit">Search</button></form>`, load: async a => liveHtml.news(lvTake(await liveNews(a || LIVE_OPS[0]), 10)) },
+  fx: { head: () => '', load: async () => liveHtml.fx(await liveFx('USD')) },
+  wb: { head: a => `<div class="seg tm-seg">${Object.keys(WB_IND).map(k => `<button type="button" data-wbind="${k}" aria-pressed="${k === (a || 'mobile')}">${k[0].toUpperCase() + k.slice(1)}</button>`).join('')}</div>`, load: async a => liveHtml.wb(await liveWorldBank(a || 'mobile', 'gulf')) },
+  apps: { head: a => `<div class="seg tm-seg">${LIVE_APPS.map(([t, c]) => `<button type="button" data-appq="${esc(t)}|${c}" aria-pressed="${t === (a || LIVE_APPS[0][0]).split('|')[0]}">${esc(t)}</button>`).join('')}</div>`, load: async a => { const [t, c] = (a || LIVE_APPS[0].join('|')).split('|'); return liveHtml.apps(await liveApps(t, c || (LIVE_APPS.find(x => x[0] === t) || [, 'ae'])[1])); } }
+};
 function tmFill(el, t) {
   const [k, arg] = [el.dataset.k, el.dataset.arg];
+  if (TM_LIVE[k]) {
+    const pb = $('.tm-pb', el), L = TM_LIVE[k], ticket = (el._lv = (el._lv || 0) + 1);
+    pb.innerHTML = L.head(arg || '') + '<div class="lv-body"><p class="small muted">Loading live data…</p></div>';
+    L.load(arg || '').then(h => { if (el._lv === ticket) $('.lv-body', pb).innerHTML = h; }).catch(e => { if (el._lv === ticket) $('.lv-body', pb).innerHTML = `<p class="small muted">${esc(e.message || 'Live data unavailable.')}</p>${LV.blocked ? `<p class="small"><a href="${esc(LIVE_PUBLIC)}" target="_blank" rel="noopener">Open the public site ↗</a></p>` : ''}`; });
+    return;
+  }
   try { $('.tm-pb', el).innerHTML = tmPanelHtml(k, arg, t.id + el.dataset.i); } catch (e) { $('.tm-pb', el).innerHTML = `<p class="small muted">This panel could not load: ${esc(e.message)}</p>`; }
 }
-const tmSub = (k, arg) => k === 'agent' ? (agByKey(arg) || { A: { n: '' } }).A.n : k === 'roster' ? ((AG_DEPTS.find(d => d.k === arg) || {}).n || '') : k === 'geo' ? (arg || 'churn') : k === 'services' && arg ? ((AG_DEPTS.find(d => d.k === arg) || {}).n || '') : k === 'toolbox' ? tlBuild().length + ' tools' : k === 'signals' && arg ? (SEVL[arg] || arg) : '';
+const tmSub = (k, arg) => k === 'agent' ? (agByKey(arg) || { A: { n: '' } }).A.n : k === 'roster' ? ((AG_DEPTS.find(d => d.k === arg) || {}).n || '') : k === 'news' ? (arg || LIVE_OPS[0]) : k === 'apps' ? (arg || LIVE_APPS[0][0]).split('|')[0] : k === 'wb' ? (WB_IND[arg || 'mobile'] || [, ''])[1] : k === 'geo' ? (arg || 'churn') : k === 'services' && arg ? ((AG_DEPTS.find(d => d.k === arg) || {}).n || '') : k === 'toolbox' ? tlBuild().length + ' tools' : k === 'signals' && arg ? (SEVL[arg] || arg) : '';
 function tmTerminalHtml(t) {
   return `<div class="tm-head"><div><h3>${t.custom ? '★ ' : ''}${esc(t.n)}</h3><p class="small muted">${esc(t.p || '')}</p></div><div class="tm-meta"><span class="pill sim">Signals simulated</span><span class="mono tm-clock" data-tmclock></span>${t.custom ? `<button type="button" class="btn sm" data-tmedit="${esc(t.id)}">Edit</button>` : `<button type="button" class="btn sm" data-tmcopy="${esc(t.id)}">Customize a copy</button>`}</div></div>
     <form class="tm-cmd" data-tmcmd><label for="tmIn" class="sr">Terminal command</label><span aria-hidden="true">CV&gt;</span><input id="tmIn" autocomplete="off" spellcheck="false" placeholder="Type a command: HELP, OP du, MCAP 10, AGENT churn sentinel"><button class="btn sm" type="submit">Run</button></form>
@@ -3952,6 +4063,7 @@ const TM_HELP = [['HELP', 'this list'], ['OPEN name', 'open a terminal, e.g. OPE
   ['DEALS [n]', 'latest capital deals'], ['PRED [fwa|cut|sat]', 'move predictions'], ['SIM rival cut%', 'war-room simulation, e.g. SIM arcline 15'], ['PLAN id', 'compare a plan, e.g. PLAN nim-u'],
   ['GEO churn|coverage|retail', 'district hotspots'], ['AGENTS [department]', 'list departments or agents'], ['AGENT name [: task]', 'run an agent, e.g. AGENT fee watch: any new fees?'],
   ['TOOLS [search|family]', 'find tools, e.g. TOOLS gulf'], ['TOOL id [values]', 'run a tool, e.g. TOOL calc-arpu 1200000000 4000000 12'], ['SERVICES [search]', 'find services, e.g. SERVICES churn'], ['BOOK service [: note]', 'request a service, e.g. BOOK churn model build'],
+  ['NEWS query', 'live news, e.g. NEWS etisalat'], ['FX [base]', 'live exchange rates, e.g. FX AED'], ['WB mobile|internet|broadband|population|gdp [gulf|mena|world]', 'World Bank indicators'], ['WIKI query', 'Wikipedia summary'], ['APPS term [country]', 'App Store ratings, e.g. APPS du ae'],
   ['ASK question', 'ask the AI assistant'], ['FIND text', 'search the whole platform'], ['TASK title', 'add a workspace task'], ['CLEAR', 'clear this log']];
 const tmFindAgent = q => { const s = q.toLowerCase().trim(); return agByKey(s) || agAll().find(x => x.A.n.toLowerCase() === s) || agAll().find(x => x.A.n.toLowerCase().includes(s) || x.A.id === s); };
 async function tmCmd(raw) {
@@ -3991,9 +4103,14 @@ async function tmCmd(raw) {
       TM.log[TM.active].push(`<div class="tm-l tiny muted">Ran ${esc(hit.A.n)} (open the terminal again to rerun).</div>`);
     }
     else if (C === 'TOOLS') { const s = arg.toLowerCase(), T = tlBuild(), fam = TL_FAMS().find(f => f.toLowerCase() === s), L = T.filter(t => !s || (fam ? t.fam === fam : (t.n + ' ' + t.d + ' ' + t.fam).toLowerCase().includes(s))); if (!s) tmOut(`${T.length} tools in ${TL_FAMS().length} families: ${esc(TL_FAMS().map(f => f + ' (' + T.filter(t => t.fam === f).length + ')').join(', '))}. Try TOOLS gulf or TOOLS calculators.`); else rows(L.slice(0, 25).map(t => `${t.id}  ${t.n}`).concat(L.length > 25 ? [`…and ${L.length - 25} more`] : [])); }
-    else if (C === 'TOOL') { const parts = arg.split(/\s+/), p0 = (parts[0] || '').toLowerCase(), byId = tlBuild().find(x => x.id === p0 || x.id === 'calc-' + p0), t = byId || tlFind(arg); if (!t || !arg) { tmOut('No tool matches. Try TOOLS to search.'); return; } const rest = byId ? parts.slice(1) : []; const args = {}; rest.forEach((v, i) => { const m = v.match(/^(\w+)=(.*)$/); if (m) args[m[1]] = m[2]; else args[i] = v; }); tmOut(`<b>${esc(t.n)}</b>`); rows(tlRun(t, args)); }
+    else if (C === 'TOOL') { const parts = arg.split(/\s+/), p0 = (parts[0] || '').toLowerCase(), byId = tlBuild().find(x => x.id === p0 || x.id === 'calc-' + p0), t = byId || tlFind(arg); if (!t || !arg) { tmOut('No tool matches. Try TOOLS to search.'); return; } const rest = byId ? parts.slice(1) : []; const args = {}; rest.forEach((v, i) => { const m = v.match(/^(\w+)=(.*)$/); if (m) args[m[1]] = m[2]; else args[i] = v; }); tmOut(`<b>${esc(t.n)}</b>`); rows(await tlRun(t, args)); }
     else if (C === 'SERVICES') { const s = arg.toLowerCase(), D = s && AG_DEPTS.find(d => d.k === s || d.n.toLowerCase() === s), L = SVC_CAT.filter(x => D ? x.dept === D.k : !s || (x.name + ' ' + x.desc + ' ' + x.dn).toLowerCase().includes(s)); if (!s) tmOut(`${SVC_CAT.length} services, ${SV_TYPES.length + 4} per department. Try SERVICES churn or SERVICES pricing.`); else rows(L.slice(0, 20).map(x => `${x.name} · ${x.turn}`).concat(L.length > 20 ? [`…and ${L.length - 20} more`] : [])); }
     else if (C === 'BOOK') { const [who, ...note] = arg.split(':'), sv = svFind(who) || svcByKey(who.trim()); if (!sv) tmOut('No service matches. Try SERVICES to search.'); else { const q = await svBook(sv.k, note.join(':').trim()); tmOut(`Requested ${esc(q.service)} · ${esc(q.label || '')}${q.saved ? '' : ' (kept for this visit only)'}`); } }
+    else if (C === 'NEWS') { tmOut('<span class="muted">Searching live news…</span>'); rows(liveLines.news(lvTake(await liveNews(arg || LIVE_OPS[0]), 10))); }
+    else if (C === 'FX') rows(liveLines.fx(await liveFx((arg || 'USD').toUpperCase())));
+    else if (C === 'WB') { const [i, g] = arg.toLowerCase().split(/\s+/); rows(liveLines.wb(await liveWorldBank(WB_IND[i] ? i : 'mobile', g || 'gulf'))); }
+    else if (C === 'WIKI') rows(liveLines.wiki(await liveWiki(arg || LIVE_WIKI[0], LANG.cur)).filter(Boolean));
+    else if (C === 'APPS') { const m = arg.match(/^(.*?)\s+([a-z]{2})$/i); rows(liveLines.apps(await liveApps(m ? m[1] : arg || 'etisalat', m ? m[2].toLowerCase() : 'ae'))); }
     else if (C === 'ASK') { selectTab('tab-ask'); const a = $('#askInput'); if (a) a.value = arg; findGo($('#app')); setTimeout(() => a && a.focus(), 300); tmOut('Opened the AI assistant with your question.'); }
     else if (C === 'FIND') { findOpen(); const q = $('#findQ'); q.value = arg; findRender(); }
     else if (C === 'TASK') { if (!arg) tmOut('Example: TASK Call back the top three at-risk accounts'); else await addTask({ title: arg, kind: 'manual', dept: 'st', prio: 'normal' }); }
@@ -4022,6 +4139,8 @@ function initTerminals() {
     const run = e.target.closest('[data-tmrun]'); if (run) { tmCmd(run.dataset.tmrun); return; }
     const tp = e.target.closest('[data-tlpick]'); if (tp) { const t = tlBuild().find(x => x.id === tp.dataset.tlpick), box = $('[data-tlrun]', tp.closest('.tm-p')); box.innerHTML = tlFormHtml(t); if (!t.params.length) $('form', box).requestSubmit(); return; }
     const sb = e.target.closest('[data-svbook]'); if (sb) { sb.disabled = true; try { await svBook(sb.dataset.svbook); sb.textContent = 'Requested'; } catch (err) { toast(err.message); sb.disabled = false; } return; }
+    const wb = e.target.closest('[data-wbind]'); if (wb) { const p = wb.closest('.tm-p'); p.dataset.arg = wb.dataset.wbind; $('header span', p).textContent = WB_IND[wb.dataset.wbind][1]; tmFill(p, tmGet(TM.active)); return; }
+    const ap = e.target.closest('[data-appq]'); if (ap) { const p = ap.closest('.tm-p'); p.dataset.arg = ap.dataset.appq; $('header span', p).textContent = ap.dataset.appq.split('|')[0]; tmFill(p, tmGet(TM.active)); return; }
     const g = e.target.closest('[data-tmgeo]'); if (g) { const p = g.closest('.tm-p'); p.dataset.arg = g.dataset.tmgeo; $('header span', p).textContent = g.dataset.tmgeo; tmFill(p, tmGet(TM.active)); return; }
     const ar = e.target.closest('[data-tmagrun]'); if (ar) { const p = ar.closest('.tm-p'), hit = agByKey($('[data-tmagent]', p).value); if (!hit) return; ar.disabled = true; try { await agExec(hit.D, hit.A, $('textarea', p).value.trim() || hit.A.q, $('.tm-agout', p)); } finally { ar.disabled = false; } return; }
     const ro = e.target.closest('[data-tmros]'); if (ro) { const p = ro.closest('.tm-p'), hit = agByKey(ro.dataset.tmros); ro.disabled = true; try { await agExec(hit.D, hit.A, hit.A.q, $('.tm-agout', p)); } finally { ro.disabled = false; } }
@@ -4042,7 +4161,8 @@ function initTerminals() {
     e.preventDefault();
     if (e.target.matches('[data-tmcmd]')) { const i = $('#tmIn'), v = i.value; i.value = ''; await tmCmd(v); i.focus(); }
     else if (e.target.matches('[data-tmbuild]')) tmBuildSave(e.target);
-    else if (e.target.matches('[data-tlform]')) { const f = e.target, t = tlBuild().find(x => x.id === f.dataset.tlform), args = {}; (t.params || []).forEach(([k]) => { args[k] = f.elements[k].value; }); let lines; try { lines = tlRun(t, args); } catch (err) { lines = ['Could not run: ' + err.message]; } $('.tl-out', f).innerHTML = lines.map(l => `<p>${esc(l)}</p>`).join(''); }
+    else if (e.target.matches('[data-lvq]')) { const p = e.target.closest('.tm-p'), q = e.target.q.value.trim(); if (!q) return; p.dataset.arg = q; $('header span', p).textContent = q; tmFill(p, tmGet(TM.active)); }
+    else if (e.target.matches('[data-tlform]')) { const f = e.target, t = tlBuild().find(x => x.id === f.dataset.tlform), args = {}; (t.params || []).forEach(([k]) => { args[k] = f.elements[k].value; }); $('.tl-out', f).innerHTML = '<p class="muted">Running…</p>'; let lines; try { lines = await tlRun(t, args); } catch (err) { lines = [err.message || 'Could not run.']; } $('.tl-out', f).innerHTML = lines.map(l => `<p>${esc(l)}</p>`).join(''); }
     else if (e.target.matches('[data-tmwar]')) { const f = e.target, r = TOOLS.simulate_response({ rival: f.rival.value, cut_pct: +f.cut.value, weeks: 8 }); f.nextElementSibling.innerHTML = agFmt('simulate_response', r).map(l => `<p>${esc(l)}</p>`).join(''); }
   });
   app.addEventListener('keydown', e => {
@@ -4193,6 +4313,7 @@ function tlBuild() {
   TL_TOPICS.forEach(t => add('Intelligence', `Intel: ${t}`, `Knowledge-base items about ${t}`, () => { const R = miSearch(t, 'all'); return R.res.slice(0, 8).map(r => `${r.d.type}: ${r.d.title}`).concat([`${R.total || R.res.length} matches in all`]); }));
   // department kits
   AG_DEPTS.forEach(D => add('Departments', `${D.n}: department kit`, `Agents, services and resources for ${D.n}`, () => [`Agents: ${D.agents.map(a => a.n).join(', ')}`, `Core services: ${D.svc.map(k => (svcByKey(k) || { name: k }).name).join(', ')}`, `Catalog services: ${SVC_CAT.filter(s => s.dept === D.k).length}`, `Resources: ${D.res.map(agResLabel).filter(Boolean).join(', ') || '—'}`]));
+  liveTools(add);
   // calculators
   TL_CALC.forEach(([id, n, d, params, fn]) => T.push({ id: 'calc-' + id, n: 'Calculator: ' + n, fam: 'Calculators', d, params, run: p => fn(p) }));
   const seen = new Set(); T.forEach(t => { let id = t.id, i = 2; while (seen.has(id)) id = t.id + '-' + i++; t.id = id; seen.add(id); });
@@ -4200,9 +4321,9 @@ function tlBuild() {
 }
 const tlPct = v => (v > 0 ? '+' : '') + (v * 100).toFixed(1) + '%';
 const TL_FAMS = () => [...new Set(tlBuild().map(t => t.fam))];
-function tlRun(t, args) {
+async function tlRun(t, args) {
   const p = {}; (t.params || []).forEach(([k, , def], i) => { const v = args && (args[k] ?? args[i]); p[k] = typeof def === 'number' ? (v === undefined || v === '' || isNaN(+v) ? def : +v) : (v === undefined || v === '' ? def : String(v)); });
-  const out = t.run(p); return Array.isArray(out) && out.length ? out : ['No results in the current data.'];
+  const out = await t.run(p); return Array.isArray(out) && out.length ? out.filter(l => l !== '') : ['No results in the current data.'];
 }
 const tlFind = q => { const s = tlSlug(q); if (!s) return null; const T = tlBuild(); return T.find(t => t.id === s || t.id === 'calc-' + s) || T.find(t => tlSlug(t.n).includes(s)) || T.find(t => s.split('-').every(w => tlSlug(t.n + ' ' + t.fam).includes(w))); };
 function tlPanelHtml(tid, sel) {
@@ -4420,11 +4541,295 @@ function initFind() {
   });
 }
 
+/* ---------- LANGUAGES: the interface in six languages, right-to-left for Arabic and Urdu, and full-page translation when the browser or Claude can do it ---------- */
+const LANGS = [['en', 'English', 'EN', 'en-US'], ['ar', 'العربية', 'AR', 'ar-AE'], ['fr', 'Français', 'FR', 'fr-FR'], ['hi', 'हिन्दी', 'HI', 'hi-IN'], ['ur', 'اردو', 'UR', 'ur-PK'], ['zh', '中文', 'ZH', 'zh-CN']];
+const LANG_NAME = { en: 'English', ar: 'Arabic', fr: 'French', hi: 'Hindi', ur: 'Urdu', zh: 'Simplified Chinese' };
+const RTL = new Set(['ar', 'ur']);
+// interface strings; keys are the English text as it appears on the page
+const I18N_KEYS = ['Problem', 'Market', 'Platform', 'Operator desk', 'Live console', 'Terminals', 'AI agents', 'Academy', 'Innovation', 'Patent', 'Business', 'Join the pilot', 'Overview', 'Customers', 'Competition', 'Innovation lab', 'Solutions', 'Value', 'Request a pilot', 'Search',
+  'Search chapters, tools, agents, companies, operators, sources…', 'Ask Cellvoyant', 'Type or speak a question…', 'Send', 'Listening…', 'Speak answers', 'Stop', 'HELLO', '+ New terminal', 'Run', 'Run agent', 'Run tool', 'Request', 'Open a terminal', 'Language',
+  'Translating the page…', 'Page translated on this device', 'IFACE_ONLY', 'Show original', 'VOICE_NA', 'MIC_BLOCKED', 'Find an agent or a skill…', 'Clear', 'Thinking…', 'Translated by Claude'];
+const I18N_ROWS = {
+  ar: ['المشكلة', 'السوق', 'المنصة', 'مكتب المشغّل', 'وحدة التحكم المباشرة', 'المحطات الطرفية', 'وكلاء الذكاء الاصطناعي', 'الأكاديمية', 'الابتكار', 'براءة الاختراع', 'نموذج العمل', 'انضم إلى التجربة', 'نظرة عامة', 'العملاء', 'المنافسة', 'مختبر الابتكار', 'الحلول', 'القيمة', 'اطلب تجربة', 'بحث',
+    'ابحث في الفصول والأدوات والوكلاء والشركات والمشغّلين والمصادر…', 'اسأل Cellvoyant', 'اكتب سؤالك أو تحدّث…', 'إرسال', 'أستمع…', 'قراءة الإجابات بصوت', 'إيقاف', 'مرحبًا! اسألني عن السوق، أو اطلب مني فتح أي قسم أو أداة.', '+ محطة جديدة', 'تشغيل', 'تشغيل الوكيل', 'تشغيل الأداة', 'اطلب', 'افتح محطة', 'اللغة',
+    'جارٍ ترجمة الصفحة…', 'تمت ترجمة الصفحة على هذا الجهاز', 'تمت ترجمة الواجهة. تحتاج ترجمة الصفحة كاملة إلى مترجم Chrome المدمج أو نسخة Claude.', 'عرض الأصل', 'الإدخال الصوتي غير متاح في هذا المتصفح.', 'لا يمكن الوصول إلى الميكروفون هنا.', 'ابحث عن وكيل أو مهارة…', 'مسح', 'جارٍ التفكير…', 'ترجمة Claude'],
+  fr: ['Problème', 'Marché', 'Plateforme', 'Bureau opérateur', 'Console en direct', 'Terminaux', 'Agents IA', 'Académie', 'Innovation', 'Brevet', 'Modèle économique', 'Rejoindre le pilote', 'Vue d’ensemble', 'Clients', 'Concurrence', 'Laboratoire d’innovation', 'Solutions', 'Valeur', 'Demander un pilote', 'Rechercher',
+    'Rechercher chapitres, outils, agents, entreprises, opérateurs, sources…', 'Demander à Cellvoyant', 'Écrivez ou dites votre question…', 'Envoyer', 'J’écoute…', 'Lire les réponses à voix haute', 'Arrêter', 'Bonjour ! Posez-moi une question sur le marché, ou demandez-moi d’ouvrir une section ou un outil.', '+ Nouveau terminal', 'Lancer', 'Lancer l’agent', 'Lancer l’outil', 'Demander', 'Ouvrir un terminal', 'Langue',
+    'Traduction de la page…', 'Page traduite sur cet appareil', 'Interface traduite. La traduction complète de la page nécessite le traducteur intégré de Chrome ou la version Claude.', 'Afficher l’original', 'La saisie vocale n’est pas disponible dans ce navigateur.', 'Le micro n’est pas accessible ici.', 'Trouver un agent ou une compétence…', 'Effacer', 'Réflexion…', 'Traduit par Claude'],
+  hi: ['समस्या', 'बाज़ार', 'प्लेटफ़ॉर्म', 'ऑपरेटर डेस्क', 'लाइव कंसोल', 'टर्मिनल', 'एआई एजेंट', 'अकादमी', 'नवाचार', 'पेटेंट', 'व्यवसाय मॉडल', 'पायलट में शामिल हों', 'अवलोकन', 'ग्राहक', 'प्रतिस्पर्धा', 'नवाचार प्रयोगशाला', 'समाधान', 'मूल्य', 'पायलट का अनुरोध करें', 'खोजें',
+    'अध्याय, टूल, एजेंट, कंपनियाँ, ऑपरेटर और स्रोत खोजें…', 'Cellvoyant से पूछें', 'प्रश्न लिखें या बोलें…', 'भेजें', 'सुन रहा हूँ…', 'उत्तर बोलकर सुनाएँ', 'रोकें', 'नमस्ते! बाज़ार के बारे में कुछ भी पूछें, या कोई अनुभाग या टूल खोलने को कहें।', '+ नया टर्मिनल', 'चलाएँ', 'एजेंट चलाएँ', 'टूल चलाएँ', 'अनुरोध करें', 'टर्मिनल खोलें', 'भाषा',
+    'पेज का अनुवाद हो रहा है…', 'पेज का अनुवाद इसी डिवाइस पर हुआ', 'इंटरफ़ेस का अनुवाद हो गया। पूरे पेज के अनुवाद के लिए Chrome का अंतर्निहित अनुवादक या Claude संस्करण चाहिए।', 'मूल दिखाएँ', 'इस ब्राउज़र में आवाज़ से इनपुट उपलब्ध नहीं है।', 'यहाँ माइक्रोफ़ोन उपलब्ध नहीं है।', 'एजेंट या कौशल खोजें…', 'साफ़ करें', 'सोच रहा हूँ…', 'Claude द्वारा अनुवादित'],
+  ur: ['مسئلہ', 'مارکیٹ', 'پلیٹ فارم', 'آپریٹر ڈیسک', 'لائیو کنسول', 'ٹرمینلز', 'اے آئی ایجنٹس', 'اکیڈمی', 'جدت', 'پیٹنٹ', 'کاروباری ماڈل', 'پائلٹ میں شامل ہوں', 'جائزہ', 'صارفین', 'مسابقت', 'جدت کی لیب', 'حل', 'قدر', 'پائلٹ کی درخواست کریں', 'تلاش',
+    'ابواب، ٹولز، ایجنٹس، کمپنیاں، آپریٹرز اور ذرائع تلاش کریں…', 'Cellvoyant سے پوچھیں', 'سوال لکھیں یا بولیں…', 'بھیجیں', 'سن رہا ہوں…', 'جوابات بول کر سنائیں', 'روکیں', 'السلام علیکم! مارکیٹ کے بارے میں کچھ بھی پوچھیں، یا کوئی حصہ یا ٹول کھولنے کو کہیں۔', '+ نیا ٹرمینل', 'چلائیں', 'ایجنٹ چلائیں', 'ٹول چلائیں', 'درخواست کریں', 'ٹرمینل کھولیں', 'زبان',
+    'صفحے کا ترجمہ ہو رہا ہے…', 'صفحے کا ترجمہ اسی ڈیوائس پر ہوا', 'انٹرفیس کا ترجمہ ہو گیا۔ پورے صفحے کے ترجمے کے لیے Chrome کا بلٹ اِن مترجم یا Claude ورژن درکار ہے۔', 'اصل دکھائیں', 'اس براؤزر میں آواز سے ان پٹ دستیاب نہیں۔', 'یہاں مائیکروفون دستیاب نہیں۔', 'ایجنٹ یا مہارت تلاش کریں…', 'صاف کریں', 'سوچ رہا ہوں…', 'Claude کا ترجمہ'],
+  zh: ['问题', '市场', '平台', '运营商工作台', '实时控制台', '终端', 'AI 智能体', '学院', '创新', '专利', '商业模式', '加入试点', '概览', '客户', '竞争', '创新实验室', '解决方案', '价值', '申请试点', '搜索',
+    '搜索章节、工具、智能体、公司、运营商、来源…', '询问 Cellvoyant', '输入或说出你的问题…', '发送', '正在聆听…', '朗读回答', '停止', '你好！可以问我任何关于市场的问题，或让我打开某个章节或工具。', '+ 新建终端', '运行', '运行智能体', '运行工具', '申请', '打开终端', '语言',
+    '正在翻译页面…', '已在本设备上翻译页面', '界面已翻译。整页翻译需要 Chrome 内置翻译器或 Claude 版本。', '显示原文', '此浏览器不支持语音输入。', '此处无法使用麦克风。', '查找智能体或技能…', '清除', '正在思考…', 'Claude 翻译']
+};
+const I18N_EN = { HELLO: 'Hello! Ask me anything about the market, or tell me what to open.', IFACE_ONLY: 'Interface translated. Full-page translation needs Chrome’s built-in translator or the Claude version.', VOICE_NA: 'Voice input isn’t available in this browser.', MIC_BLOCKED: 'The microphone can’t be used here.' };
+const I18N = Object.fromEntries(Object.entries(I18N_ROWS).map(([l, row]) => [l, Object.fromEntries(I18N_KEYS.map((k, i) => [k, row[i]]))]));
+const LANG = { cur: 'en', pageMode: null, orig: new WeakMap(), cache: {}, translator: null, io: null, mo: null, busy: 0 };
+const tr = k => (LANG.cur !== 'en' && I18N[LANG.cur] && I18N[LANG.cur][k]) || I18N_EN[k] || k;
+const langMeta = l => LANGS.find(x => x[0] === l) || LANGS[0];
+// interface strings: any button, link or label whose whole text is a known key
+function i18nChrome() {
+  const D = I18N[LANG.cur];
+  $$('.nav a, .nav-cta, .ed-cta, .find-btn span, .tm-new, button, a.btn, label.small, .cv-chat [data-i18n]').forEach(el => {
+    if (el.children.length && !el.matches('.find-btn span')) return;
+    const en = el.dataset.i18nEn || el.textContent.trim();
+    if (!(en in (I18N.ar))) return;
+    el.dataset.i18nEn = en; el.textContent = LANG.cur === 'en' ? en : (D && D[en]) || en;
+  });
+  $$('input[placeholder], textarea[placeholder]').forEach(el => { const en = el.dataset.i18nPh || el.placeholder; if (!(en in I18N.ar)) return; el.dataset.i18nPh = en; el.placeholder = LANG.cur === 'en' ? en : (D && D[en]) || en; });
+}
+// full-page translation: the browser's on-device translator first, then Claude, section by section as they come into view
+const I18N_SKIP = 'script,style,code,pre,textarea,input,select,option,svg,.mono,.tm-log,.tm-cmd,[data-notranslate],.cv-msgs';
+function i18nNodes(root) {
+  const out = [], w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.nodeValue.trim().length > 1 && /\p{L}/u.test(n.nodeValue) && !(n.parentElement && n.parentElement.closest(I18N_SKIP))) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+  while (w.nextNode()) out.push(w.currentNode); return out;
+}
+async function i18nTranslateMany(strings) {
+  const L = LANG.cur, C = LANG.cache[L] = LANG.cache[L] || new Map(), todo = [...new Set(strings)].filter(s => !C.has(s));
+  if (LANG.pageMode === 'device' && LANG.translator) { for (const s of todo) { try { C.set(s, await LANG.translator.translate(s)); } catch (e) { C.set(s, s); } if (LANG.cur !== L) return; } }
+  else if (LANG.pageMode === 'claude' && sample) {
+    for (let i = 0; i < todo.length; i += 60) {
+      const chunk = todo.slice(i, i + 60);
+      try {
+        const res = await sample.json(`Translate each string in this JSON array from English into ${LANG_NAME[L]} for a telecom market-intelligence product. Keep company names, product names, numbers, currencies, percentages and codes unchanged. Return only a JSON array of the same length and order.\n${JSON.stringify(chunk)}`, { modelTier: 'quick' });
+        chunk.forEach((s, j) => C.set(s, Array.isArray(res) && typeof res[j] === 'string' ? res[j] : s));
+      } catch (e) { chunk.forEach(s => C.set(s, s)); if (e && (e.code === 'rate_limited' || e.code === 'not_granted')) { LANG.pageMode = null; toast(tr('IFACE_ONLY')); return; } }
+      if (LANG.cur !== L) return;
+    }
+  }
+  return C;
+}
+async function i18nSection(sec) {
+  if (!LANG.pageMode || LANG.cur === 'en' || sec.dataset.i18nDone === LANG.cur) return;
+  sec.dataset.i18nDone = LANG.cur; LANG.busy++;
+  try {
+    const nodes = i18nNodes(sec), C = await i18nTranslateMany(nodes.map(n => (LANG.orig.get(n) || n.nodeValue).trim()));
+    if (!C || LANG.cur === 'en') return;
+    nodes.forEach(n => { const en = LANG.orig.get(n) || n.nodeValue; if (!LANG.orig.has(n)) LANG.orig.set(n, en); const t = C.get(en.trim()); if (t) n.nodeValue = en.replace(en.trim(), t); });
+  } finally { LANG.busy--; }
+}
+function i18nRestore() {
+  $$('main section, header.top, footer').forEach(sec => { delete sec.dataset.i18nDone; i18nNodes(sec).forEach(n => { const en = LANG.orig.get(n); if (en != null) n.nodeValue = en; }); });
+}
+function i18nFonts(l) {
+  const fam = { ar: 'Noto+Sans+Arabic', ur: 'Noto+Sans+Arabic', hi: 'Noto+Sans+Devanagari' }[l];
+  if (!fam || document.getElementById('cvFont-' + fam)) return;
+  const k = document.createElement('link'); k.id = 'cvFont-' + fam; k.rel = 'stylesheet'; k.href = `https://fonts.googleapis.com/css2?family=${fam}:wght@400;600;700&display=swap`; document.head.appendChild(k);
+}
+async function setLang(l, fromUser) {
+  if (!LANGS.some(x => x[0] === l)) return;
+  const prev = LANG.cur; LANG.cur = l;
+  try { localStorage.setItem('cv.lang', l); } catch (e) { /* storage blocked */ }
+  document.documentElement.lang = l; document.documentElement.dir = RTL.has(l) ? 'rtl' : 'ltr'; i18nFonts(l);
+  const b = $('#cvLangBtn'); if (b) { b.querySelector('b').textContent = langMeta(l)[2]; b.setAttribute('aria-label', `${tr('Language')}: ${langMeta(l)[1]}`); }
+  if (prev !== 'en' && prev !== l) i18nRestore();
+  i18nChrome(); cvChatLang();
+  if (l === 'en') { i18nRestore(); LANG.pageMode = null; return; }
+  LANG.pageMode = null; LANG.translator = null;
+  // the on-device translator (Chrome 138+) translates privately; it may need to download a language pack, which needs a click
+  if ('Translator' in self) {
+    const limit = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(new Error('timeout')), ms))]);
+    try {
+      const av = await limit(Translator.availability({ sourceLanguage: 'en', targetLanguage: l }), 4000);
+      if (av === 'available' || (av && av !== 'unavailable' && fromUser)) {
+        toast(av === 'available' ? tr('Translating the page…') : `Downloading the ${langMeta(l)[1]} language pack for on-device translation…`);
+        LANG.translator = await limit(Translator.create({ sourceLanguage: 'en', targetLanguage: l }), av === 'available' ? 10000 : 180000); LANG.pageMode = 'device';
+      }
+    } catch (e) { LANG.translator = null; }
+  }
+  if (!LANG.pageMode && sample) LANG.pageMode = 'claude';
+  if (!LANG.pageMode) { if (fromUser) toast(tr('IFACE_ONLY')); return; }
+  if (LANG.cur !== l) return;
+  $$('header.top, footer').forEach(i18nSection);
+  if (!LANG.io) LANG.io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) i18nSection(e.target); }), { rootMargin: '400px 0px' });
+  $$('main section').forEach(s => { LANG.io.unobserve(s); LANG.io.observe(s); });
+  if (LANG.pageMode === 'device') toast(tr('Page translated on this device'));
+}
+function initLang() {
+  const bar = $('header.top .wrap'); if (!bar || $('#cvLangBtn')) return;
+  const wrap = document.createElement('div'); wrap.className = 'cv-lang';
+  wrap.innerHTML = `<button type="button" id="cvLangBtn" class="find-btn" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><b>EN</b></button>
+    <div class="cv-lang-menu" id="cvLangMenu" role="menu" hidden>${LANGS.map(([k, n]) => `<button type="button" role="menuitemradio" data-lang="${k}" lang="${k}" dir="${RTL.has(k) ? 'rtl' : 'ltr'}">${n}</button>`).join('')}</div>`;
+  bar.insertBefore(wrap, $('.find-btn', bar) || $('.nav-cta, .ed-cta', bar) || null);
+  const btn = $('#cvLangBtn'), menu = $('#cvLangMenu');
+  const close = () => { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
+  btn.addEventListener('click', () => { menu.hidden = !menu.hidden; btn.setAttribute('aria-expanded', String(!menu.hidden)); $$('[data-lang]', menu).forEach(b => b.setAttribute('aria-checked', String(b.dataset.lang === LANG.cur))); if (!menu.hidden) ($('[aria-checked="true"]', menu) || $('button', menu)).focus(); });
+  menu.addEventListener('click', e => { const b = e.target.closest('[data-lang]'); if (!b) return; close(); setLang(b.dataset.lang, true); });
+  menu.addEventListener('keydown', e => { const items = $$('button', menu), i = items.indexOf(document.activeElement); if (e.key === 'Escape') { close(); btn.focus(); } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); items[(i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length].focus(); } });
+  document.addEventListener('click', e => { if (!wrap.contains(e.target)) close(); });
+  // re-apply interface strings when parts of the page re-render; translate new text when the device translator is on
+  let t; LANG.mo = new MutationObserver(() => { if (LANG.cur === 'en') return; clearTimeout(t); t = setTimeout(() => { i18nChrome(); if (LANG.pageMode === 'device') $$('main section').forEach(s => { if (s.dataset.i18nDone) { delete s.dataset.i18nDone; const r = s.getBoundingClientRect(); if (r.bottom > -400 && r.top < innerHeight + 400) i18nSection(s); } }); }, 250); });
+  LANG.mo.observe(document.body, { childList: true, subtree: true });
+  let saved = 'en'; try { saved = localStorage.getItem('cv.lang') || 'en'; } catch (e) { /* storage blocked */ }
+  if (saved !== 'en') setLang(saved, false);
+}
+
+/* ---------- ASK CELLVOYANT: an assistant on every page that you can type or talk to, and that can answer aloud ---------- */
+const CV = { turns: [], busy: false, ctl: null, speak: false, rec: null, listening: false, acts: [] };
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+const cvPlain = html => { const d = document.createElement('div'); d.innerHTML = html; return d.textContent.replace(/\s+/g, ' ').trim(); };
+function cvAdd(role, html) {
+  const box = $('#cvMsgs'), d = document.createElement('div'); d.className = 'cv-m ' + role;
+  if (role === 'u') d.textContent = html; else d.innerHTML = `<div class="trace" hidden></div><div class="body">${html}</div>`;
+  box.appendChild(d); box.scrollTop = box.scrollHeight; return d;
+}
+// answers can carry buttons that run an action
+function cvAct(label, fn) { CV.acts.push(fn); return `<button type="button" class="chip cv-act" data-cvact="${CV.acts.length - 1}">${esc(label)}</button>`; }
+const cvList = (lines, cls) => `<ul class="cxl ${cls || ''}">${lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul>`;
+function cvSay(text) {
+  if (!CV.speak || !('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(String(text).slice(0, 900)), lang = langMeta(LANG.cur)[3];
+  u.lang = lang; const v = speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(LANG.cur)); if (v) u.voice = v;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+}
+// navigation and quick commands, in English or the words the interface uses in the current language
+const CV_SECTIONS = () => $$('main section[id]').map(s => [s.id, txtOf($('h2', s)), txtOf($('.eyebrow', s)).replace(/^\d+/, '')]);
+function cvNavigate(q) {
+  const s = q.toLowerCase();
+  const t = tmAll().find(x => s.includes(x.n.toLowerCase()) || s.includes(x.id)); if (t && /terminal|open|show|launch|افتح|ouvrir|खोल|کھول|打开/.test(s)) { tmOpen(t.id); findGo($('#terminals')); return `Opened the ${t.n} terminal.`; }
+  const lang = LANGS.find(([k, n]) => s.includes(n.toLowerCase()) || (k !== 'en' && new RegExp('\\b' + LANG_NAME[k].toLowerCase().split(' ').pop() + '\\b').test(s)) || (k === 'en' && /\benglish\b/.test(s)));
+  if (lang && /language|switch|speak|translate|in |لغة|langue|भाषा|زبان|语言/.test(s)) { setLang(lang[0], true); return `Switched the language to ${lang[1]}.`; }
+  if (/\b(open|show|go to|take me to|scroll to)\b|افتح|اعرض|ouvre|खोलो|دکھائیں|打开/.test(s)) {
+    const words = s.replace(/\b(open|show|go to|take me to|scroll to|the|please|section|chapter|page)\b/g, ' ').trim();
+    const hit = CV_SECTIONS().find(([, h, e]) => words && ((h && h.toLowerCase().includes(words)) || (e && e.toLowerCase().includes(words)))) || CV_SECTIONS().find(([id]) => words.includes(id));
+    if (hit) { findGo(document.getElementById(hit[0])); return `Opened “${hit[1] || hit[2]}”.`; }
+  }
+  return null;
+}
+// the built-in agent: understands common requests and answers from live sources and the platform's tools
+async function cvLocal(q) {
+  const s = q.toLowerCase(), subj = x => q.replace(x, '').replace(/[?.!]/g, '').trim();
+  const nav = cvNavigate(q); if (nav) return esc(nav);
+  if (/^(hi|hello|hey|help|what can you do|مرحبا|bonjour|नमस्ते|سلام|你好)/i.test(s)) return `<p>${esc(tr('HELLO'))}</p>${cvList(['Live news: “news about stc this week”', 'Exchange rates: “dirham exchange rates”', 'Country data: “mobile subscriptions in the Gulf”', 'App ratings: “app ratings for du”', 'Tools: “calculate ARPU 1.2 billion 4 million 12”', 'Agents: “run churn sentinel”', 'Navigation: “open the pricing terminal”, “switch to Arabic”'])}`;
+  if (/\bnews|headline|latest on|what'?s happening|أخبار|actualit|समाचार|خبریں|新闻/.test(s)) {
+    const term = subj(/(show me |the |latest |live |)(news|headlines?)( about| on| for)?|what'?s happening (with|at)?|this week|today/gi) || LIVE_OPS[0];
+    const L = await liveNews(term); return `<p><b>News about ${esc(term)}</b> · ${esc(L.source === 'GDELT' ? 'GDELT, last 7 days' : L.source || '')}</p>${liveHtml.news(lvTake(L, 8))}`;
+  }
+  if (/exchange|currency|\bfx\b|dirham|riyal|dinar|rupee|euro|سعر الصرف|devise|मुद्रा|کرنسی|汇率/.test(s)) { const f = await liveFx(/dirham|aed|درهم/.test(s) ? 'AED' : /riyal|sar|ريال/.test(s) ? 'SAR' : 'USD'); return `<p><b>Live exchange rates</b></p>${liveHtml.fx(f)}`; }
+  const ind = /mobile sub|subscriptions|cellular/.test(s) ? 'mobile' : /internet users|internet use|online/.test(s) ? 'internet' : /broadband/.test(s) ? 'broadband' : /population/.test(s) ? 'population' : /gdp|income/.test(s) ? 'gdp' : null;
+  if (ind) { const w = await liveWorldBank(ind, /middle east|mena|region/.test(s) ? 'mena' : /world|global/.test(s) ? 'world' : 'gulf'); return `<p><b>${esc(w.indicator)}</b></p>${liveHtml.wb(w)}`; }
+  if (/rating|app store|reviews of|app for|تقييم|avis|रेटिंग|ریٹنگ|评分/.test(s)) { const term = subj(/(show me |the |live )?(app )?(store )?(ratings?|reviews)( for| of)?|apps?/gi) || 'etisalat'; const cc = /saudi|ksa/.test(s) ? 'sa' : /qatar/.test(s) ? 'qa' : /kuwait/.test(s) ? 'kw' : /bahrain/.test(s) ? 'bh' : /oman/.test(s) ? 'om' : 'ae'; return `<p><b>App Store ratings: ${esc(term)}</b> (${cc.toUpperCase()} store)</p>${liveHtml.apps(await liveApps(term, cc))}`; }
+  const ag = /\b(run|ask|start)\b.*\bagent\b|\bagent\b/.test(s) && tmFindAgent(subj(/\b(run|ask|start|the|agent)\b/gi));
+  if (/\b(run|ask|start)\b/.test(s) && (ag || tmFindAgent(subj(/\b(run|ask|start|the)\b/gi)))) { const hit = ag || tmFindAgent(subj(/\b(run|ask|start|the)\b/gi)); const box = document.createElement('div'); box.className = 'ag-run tm-agout'; setTimeout(() => agExec(hit.D, hit.A, hit.A.q, box), 0); return { node: box, text: `Running ${hit.A.n}.` }; }
+  const t = tlFind(q) || (/calculat|compute|work out/.test(s) && tlFind(subj(/calculate|compute|work out|the|my/gi).split(/\s+\d/)[0]));
+  if (t && (t.fam === 'Calculators' || /tool|calculat|ranking|overview|forecast|ratings|scorecard|ladder|simulat/.test(s) || tlSlug(q).includes(t.id))) {
+    const nums = (q.match(/-?\d[\d,]*(\.\d+)?\s*(billion|bn|million|m|k|thousand)?/gi) || []).map(x => { const n = parseFloat(x.replace(/,/g, '')); return /billion|bn/i.test(x) ? n * 1e9 : /million|\bm\b/i.test(x) ? n * 1e6 : /k|thousand/i.test(x) ? n * 1e3 : n; });
+    const lines = await tlRun(t, Object.assign({}, nums)); return `<p><b>${esc(t.n)}</b></p>${cvList(lines)}`;
+  }
+  const o = POS && POS.operators.find(x => new RegExp('\\b' + (x.short || '').toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(s) && (x.short || '').length > 1);
+  if (/who is|what is|tell me about|profile|wikipedia|من هو|ما هي|qui est|कौन|کون|是谁|介绍/.test(s) || o) {
+    const name = subj(/who is|what is|tell me about|profile of|profile|wikipedia/gi) || (o && o.name);
+    const parts = []; if (o) parts.push(`<p><b>${esc(o.name)}</b>: ${esc([o.country, o.region, POSM.ops.quad(o.x, o.y)].filter(Boolean).join(' · '))}. Revenue ${tlM(revOf(o))}${o.mcap && o.mcap.usd ? ', market value ' + tlM(o.mcap.usd) : ''}.</p>`);
+    const full = o && ((o.name.match(/\(([^)]*)\)/) || [])[1] || o.name).replace(/^e&,\s*/, '').replace(/\b(Co|K\.S\.C\.P|P\.J\.S\.C|Q\.P\.S\.C|PJSC)\.?$/i, '').trim();
+    try { parts.push(liveHtml.wiki(await liveWiki(full || name || q, LANG.cur))); } catch (e) { if (!o) throw e; }
+    return parts.join('');
+  }
+  if (/book|request (a |the )?service|order a service/.test(s)) { const sv = svFind(subj(/book|request (a |the )?service|request|order a service|order/gi)); if (sv) return `<p><b>${esc(sv.name)}</b> · ${esc(sv.turn)}</p><p class="small">${esc(sv.desc)}</p>${cvAct('Request this service', async () => { const r = await svBook(sv.k); return `Requested ${r.service} (${r.label}).`; })}`; }
+  // anything else: search the platform and the knowledge base
+  const R = findSearch(q).slice(0, 6), K = miSearch(q, 'all').res.slice(0, 4);
+  if (!R.length && !K.length) return `<p>I didn’t find that on the platform. Try “news about …”, “open …”, “run … agent” or a tool name.</p>`;
+  return `<p>Here’s what I found for “${esc(q)}”:</p><div class="cv-acts">${R.map(r => cvAct(`${r.x.kind}: ${r.x.t}`, () => { r.x.go(); return `Opened ${r.x.t}.`; })).join('')}</div>${K.length ? cvList(K.map(r => `${r.d.type}: ${r.d.title}`)) : ''}`;
+}
+// tools Claude can use in the assistant: live sources first, then the library, agents, navigation and the console's own tools
+const CV_TOOLDEFS = [
+  { name: 'live_news', description: 'Search worldwide online news (GDELT, 100+ languages) from the last N days. Use quotes for exact phrases and OR between alternatives.', inputSchema: { type: 'object', properties: { query: { type: 'string' }, days: { type: 'integer', description: '1-90, default 7' } }, required: ['query'] }, run: async a => { const L = await liveNews(a.query, { days: a.days }); return { source: L.source, articles: L.slice(0, 10) }; } },
+  { name: 'live_exchange_rates', description: 'Today’s exchange rates against a base currency (Gulf, regional and major currencies).', inputSchema: { type: 'object', properties: { base: { type: 'string', description: 'ISO code, default USD' } } }, run: async a => { const f = await liveFx(a.base || 'USD'); return { base: f.base, updated: f.updated, rates: Object.fromEntries(LIVE_FX_SHOW.filter(c => f.rates[c]).map(c => [c, f.rates[c]])) }; } },
+  { name: 'country_indicators', description: 'World Bank telecom and economic indicators, latest year: mobile subscriptions per 100 people, internet users %, fixed broadband per 100, population, GDP per person.', inputSchema: { type: 'object', properties: { indicator: { type: 'string', enum: Object.keys(WB_IND) }, countries: { type: 'string', description: 'gulf, mena, world, or ISO3 codes joined by ;' } }, required: ['indicator'] }, run: a => liveWorldBank(a.indicator, a.countries || 'gulf') },
+  { name: 'wikipedia_lookup', description: 'Wikipedia summary of a company, regulator, person or topic.', inputSchema: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] }, run: a => liveWiki(a.query, LANG.cur) },
+  { name: 'app_store_ratings', description: 'Live Apple App Store ratings for apps matching a term in a country store (ae, sa, qa, kw, bh, om, ...).', inputSchema: { type: 'object', properties: { term: { type: 'string' }, country: { type: 'string' } }, required: ['term'] }, run: async a => (await liveApps(a.term, a.country || 'ae')).slice(0, 6) },
+  { name: 'find_library_tools', description: 'Search the platform’s library of 400+ analysis tools and calculators by keyword.', inputSchema: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] }, run: a => tlBuild().filter(t => (t.n + ' ' + t.d + ' ' + t.fam).toLowerCase().includes(String(a.query).toLowerCase())).slice(0, 12).map(t => ({ id: t.id, name: t.n, family: t.fam, inputs: t.params.map(p => p[0]) })) },
+  { name: 'run_library_tool', description: 'Run a library tool by id (from find_library_tools). Calculators take named inputs.', inputSchema: { type: 'object', properties: { id: { type: 'string' }, inputs: { type: 'object' } }, required: ['id'] }, run: async a => { const t = tlBuild().find(x => x.id === a.id) || tlFind(a.id); if (!t) throw new Error('No tool ' + a.id); return { tool: t.n, result: await tlRun(t, a.inputs || {}) }; } },
+  { name: 'run_agent', description: 'Run one of the 216 department AI agents on a task with the built-in tools; returns its findings and recommended actions.', inputSchema: { type: 'object', properties: { agent: { type: 'string', description: 'agent name, e.g. Churn Sentinel' }, task: { type: 'string' } }, required: ['agent'] }, run: async a => { const hit = tmFindAgent(a.agent); if (!hit) throw new Error('No agent named ' + a.agent); const lines = []; for (const [n, args] of hit.A.calls) { try { lines.push(...agFmt(n, await TOOLS[n](args))); } catch (e) { /* skip */ } } return { agent: hit.A.n, department: hit.D.n, findings: lines.slice(0, 8), actions: hit.A.acts }; } },
+  { name: 'open_view', description: 'Open part of the page for the user: a terminal (e.g. "pricing", "live"), a section id, or a search.', inputSchema: { type: 'object', properties: { target: { type: 'string' } }, required: ['target'] }, run: a => ({ done: cvNavigate('open ' + a.target) || (findOpen(), $('#findQ').value = a.target, findRender(), 'Opened search') }) }
+];
+async function cvClaude(q, bubble) {
+  const body = $('.body', bubble), tracer = $('.trace', bubble);
+  const chip = name => { const c = document.createElement('span'); c.className = 'tchip'; c.textContent = name; tracer.appendChild(c); tracer.hidden = false; return c; };
+  const defs = CV_TOOLDEFS.map(d => ({ name: d.name, description: d.description, inputSchema: d.inputSchema, execute: async input => { const c = chip(d.name); try { const r = await d.run(input || {}); c.classList.add('done'); return r; } catch (e) { c.classList.add('err'); throw e; } } }))
+    .concat(TOOLDEFS.filter(d => d.name !== 'request_service' && d.name !== 'add_workspace_task').map(d => Object.assign({}, d, { execute: input => runTool(d.name, input, bubble) })));
+  const ctl = new AbortController(); CV.ctl = ctl;
+  const sys = `You are "Ask Cellvoyant", a voice-and-chat assistant inside Cellvoyant, an AI market and competitor intelligence platform for telecom operators${EDITION === 'eand' ? ', in an edition prepared for etisalat (e&) UAE' : ''}. You can search live public sources (news, exchange rates, World Bank, Wikipedia, app stores), run the platform's 400+ library tools and 216 department agents, and open parts of the page. The console's signals are simulated for fictional operators; say so when you use them. Positioning, landscape and capital data are researched. Cite the source of live facts (outlet, date, link). Answer in ${LANG_NAME[LANG.cur]}, in short paragraphs and bullets, under 180 words unless asked for more, because answers may be read aloud. Never recommend coordinating prices with competitors.`;
+  const input = [{ role: 'user', content: sys }, ...CV.turns.slice(-8), { role: 'user', content: q }];
+  const opts = { signal: ctl.signal, modelTier: 'quick', onText: ({ text }) => { body.innerHTML = mdLite(text); $('#cvMsgs').scrollTop = 1e9; } };
+  if (toolsMax) opts.tools = defs.slice(0, toolsMax); else opts.cache = false;
+  const { text } = await sample(input, opts);
+  body.innerHTML = mdLite(text); CV.turns.push({ role: 'user', content: q }, { role: 'assistant', content: text });
+  return text;
+}
+async function cvAsk(raw) {
+  const q = String(raw || '').trim(); if (!q || CV.busy) return;
+  cvAdd('u', q); const bubble = cvAdd('a', `<span class="muted">${esc(tr('Thinking…'))}</span>`), body = $('.body', bubble);
+  CV.busy = true; $('#cvStop').hidden = false;
+  try {
+    const nav = cvNavigate(q);
+    if (nav) { body.textContent = nav; cvSay(nav); return; }
+    if (sample) { const t = await cvClaude(q, bubble); cvSay(cvPlain(mdLite(t))); return; }
+    const r = await cvLocal(q);
+    if (r && r.node) { body.innerHTML = `<p>${esc(r.text)}</p>`; body.appendChild(r.node); cvSay(r.text); }
+    else { body.innerHTML = r; cvSay(cvPlain(r).slice(0, 600)); }
+    $('#cvMsgs').scrollTop = 1e9;
+  } catch (e) {
+    if (e && e.code === 'cancelled') body.insertAdjacentHTML('beforeend', '<p class="tiny muted">(stopped)</p>');
+    else if (sample && !(e instanceof LiveError)) { try { const r = await cvLocal(q); body.innerHTML = `<p class="tiny muted">${esc(aiFail(e))}; the built-in assistant answered.</p>` + (r.node ? '' : r); if (r.node) body.appendChild(r.node); } catch (e2) { body.innerHTML = `<p>${esc(e2.message || String(e2))}</p>`; } }
+    else body.innerHTML = `<p>${esc(e.message || String(e))}</p>${LV.blocked ? `<p class="small"><a href="${esc(LIVE_PUBLIC)}" target="_blank" rel="noopener">Open the public site ↗</a></p>` : ''}`;
+  } finally { CV.busy = false; CV.ctl = null; $('#cvStop').hidden = true; }
+}
+function cvChatLang() {
+  const c = $('#cvChat'); if (!c) return;
+  c.setAttribute('dir', RTL.has(LANG.cur) ? 'rtl' : 'ltr'); c.setAttribute('lang', LANG.cur);
+  $('#cvQ').placeholder = tr('Type or speak a question…'); $('#cvT').textContent = tr('Ask Cellvoyant'); $('.cv-fab span').textContent = tr('Ask Cellvoyant');
+  $('#cvSpeak').setAttribute('aria-label', tr('Speak answers')); $('#cvSpeak').title = tr('Speak answers');
+  const hello = $('#cvHello'); if (hello) hello.textContent = tr('HELLO');
+  if (CV.rec) CV.rec.lang = langMeta(LANG.cur)[3];
+}
+function cvMic() {
+  const btn = $('#cvMic');
+  if (!SpeechRec) { toast(tr('VOICE_NA')); return; }
+  if (CV.listening) { CV.rec.stop(); return; }
+  const rec = CV.rec = new SpeechRec(); rec.lang = langMeta(LANG.cur)[3]; rec.interimResults = true; rec.maxAlternatives = 1;
+  let final = '';
+  rec.onstart = () => { CV.listening = true; btn.setAttribute('aria-pressed', 'true'); $('#cvQ').placeholder = tr('Listening…'); };
+  rec.onresult = e => { let txt = ''; for (const r of e.results) { txt += r[0].transcript; if (r.isFinal) final = txt; } $('#cvQ').value = txt; };
+  rec.onerror = e => { toast(/not-allowed|service-not-allowed/.test(e.error) ? tr('MIC_BLOCKED') : e.error === 'no-speech' ? 'No speech heard. Try again.' : 'Voice input stopped: ' + e.error); };
+  rec.onend = () => { CV.listening = false; btn.setAttribute('aria-pressed', 'false'); $('#cvQ').placeholder = tr('Type or speak a question…'); const q = (final || $('#cvQ').value).trim(); if (q) { $('#cvQ').value = ''; cvAsk(q); } };
+  try { rec.start(); } catch (e) { toast(tr('MIC_BLOCKED')); }
+}
+function initChat() {
+  if ($('#cvChat')) return;
+  const fab = document.createElement('button'); fab.type = 'button'; fab.className = 'cv-fab'; fab.setAttribute('aria-controls', 'cvChat'); fab.setAttribute('aria-expanded', 'false');
+  fab.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg><span>Ask Cellvoyant</span>';
+  const box = document.createElement('section'); box.className = 'cv-chat'; box.id = 'cvChat'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-labelledby', 'cvT'); box.hidden = true;
+  box.innerHTML = `<header><div><b id="cvT">Ask Cellvoyant</b><span class="tiny muted" id="cvMode"></span></div><button type="button" class="cv-ic" id="cvSpeak" aria-pressed="false" aria-label="Speak answers" title="Speak answers"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11"/></svg></button><button type="button" class="cv-ic" id="cvClose" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+    <div class="cv-msgs" id="cvMsgs" aria-live="polite"><div class="cv-m a"><div class="body"><p id="cvHello"></p><div class="cv-acts">${['News about etisalat', 'Dirham exchange rates', 'Mobile subscriptions in the Gulf', 'Open the pricing terminal', 'Run churn sentinel', 'Calculate ARPU 1.2 billion 4 million 12'].map(x => `<button type="button" class="chip cv-sugg">${esc(EDITION === 'eand' ? x : x.replace('etisalat', 'stc'))}</button>`).join('')}</div></div></div></div>
+    <form class="cv-in" id="cvForm"><label class="sr" for="cvQ">Your question</label><textarea id="cvQ" rows="1" placeholder="Type or speak a question…"></textarea><button type="button" class="cv-ic" id="cvMic" aria-pressed="false" aria-label="Speak your question" title="Speak your question"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg></button><button type="button" class="btn sm" id="cvStop" hidden>Stop</button><button type="submit" class="btn sm accent">Send</button></form>`;
+  document.body.append(fab, box);
+  const open = v => { box.hidden = !v; fab.setAttribute('aria-expanded', String(v)); fab.hidden = v; if (v) $('#cvQ').focus(); else { if (CV.listening) CV.rec.stop(); fab.focus(); } };
+  fab.addEventListener('click', () => open(true));
+  document.addEventListener('click', e => { if (e.target.closest('[data-cvopen]')) { e.preventDefault(); open(true); } });
+  $('#cvClose').addEventListener('click', () => open(false));
+  box.addEventListener('keydown', e => { if (e.key === 'Escape') open(false); });
+  $('#cvSpeak').addEventListener('click', e => { CV.speak = !CV.speak; e.currentTarget.setAttribute('aria-pressed', String(CV.speak)); if (!CV.speak && 'speechSynthesis' in window) speechSynthesis.cancel(); });
+  $('#cvMic').addEventListener('click', cvMic);
+  $('#cvStop').addEventListener('click', () => { if (CV.ctl) CV.ctl.abort(); if ('speechSynthesis' in window) speechSynthesis.cancel(); });
+  $('#cvForm').addEventListener('submit', e => { e.preventDefault(); const q = $('#cvQ').value; $('#cvQ').value = ''; cvAsk(q); });
+  $('#cvQ').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#cvForm').requestSubmit(); } });
+  box.addEventListener('click', async e => {
+    const sg = e.target.closest('.cv-sugg'); if (sg) { cvAsk(sg.textContent); return; }
+    const a = e.target.closest('[data-cvact]'); if (a) { a.disabled = true; try { const msg = await CV.acts[+a.dataset.cvact](); if (msg) cvAdd('a', `<p>${esc(msg)}</p>`); } catch (err) { toast(err.message); a.disabled = false; } }
+  });
+  aiReady.then(s => { $('#cvMode').textContent = s ? ' · Claude' : ' · built-in'; });
+  cvChatLang();
+}
+
 /* ---------- boot ---------- */
 $('#simClock').textContent = fmtClock();
 setLive(live);
 renderFeed(); kpis(); renderDetail();
-[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initTerminals, initFind]
+[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initTerminals, initFind, initChat, initLang]
   .forEach(f => { try { f(); } catch (err) { console.warn('Cellvoyant: ' + f.name + ' skipped', err); } });
 const radar = initRadar();
 renderServices(); renderReqs();

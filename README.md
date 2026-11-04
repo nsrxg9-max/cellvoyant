@@ -1,6 +1,6 @@
 # Cellvoyant
 
-AI market and competitor intelligence for telecom: terminals with 400+ tools and 340+ services, 216 AI agents in 18 departments, research, a live operations console, departments and teams, a right-time customer engagement model, a market intelligence hub, workshops, resources, competitor & capital landscape, innovation lab and provisional patent draft.
+AI market and competitor intelligence for telecom: an assistant you can talk to in six languages, live public data, terminals with 450+ tools and 340+ services, 216 AI agents in 18 departments, research, a live operations console, departments and teams, a right-time customer engagement model, a market intelligence hub, workshops, resources, competitor & capital landscape, innovation lab and provisional patent draft.
 
 ## Open the live site
 

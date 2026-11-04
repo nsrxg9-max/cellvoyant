@@ -1048,8 +1048,8 @@ button.chip:hover{border-color:var(--accent)}
 .gloss dt{font-weight:700;font-size:14.5px}
 .gloss dd{margin:3px 0 0;font-size:13.5px;color:var(--ink-2)}
 /* ===== v1.0 · fairness, deck, launch, FAQ ===== */
-.skip{position:absolute;left:-9999px;top:8px;z-index:100;background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-weight:600;text-decoration:none}
-.skip:focus{left:16px}
+.skip{position:absolute;inset-inline-start:16px;top:8px;z-index:100;background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-weight:600;text-decoration:none}
+.skip:not(:focus){clip-path:inset(50%);width:1px;height:1px;padding:0;overflow:hidden;white-space:nowrap}
 .rt-verdict{display:grid;gap:2px;padding:10px 12px;border-radius:9px;border:1px solid var(--line)}
 .rt-verdict.good{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 40%,transparent)}
 .rt-verdict.good b{color:var(--good)}
@@ -1413,6 +1413,46 @@ button.tm-card:hover{border-color:var(--accent)}
 .sv-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 9px;border-bottom:1px dashed var(--line)}
 .sv-item>span{display:grid;min-width:0}
 .sv-item .tiny{overflow-wrap:anywhere}
+/* language menu */
+.cv-lang{position:relative;flex:none}
+.cv-lang .find-btn b{font:600 12px var(--f-mono)}
+@media (max-width:720px){.cv-lang .find-btn{width:auto;padding:0 8px;gap:4px}.cv-lang .find-btn b{display:inline}}
+.cv-lang-menu{position:absolute;inset-inline-end:0;top:calc(100% + 6px);z-index:60;min-width:160px;display:grid;padding:6px;border:1px solid var(--line-strong);border-radius:12px;background:var(--surface);box-shadow:var(--shadow)}
+.cv-lang-menu button{appearance:none;border:0;background:transparent;color:var(--ink);font:500 14px var(--f-body);text-align:start;padding:8px 10px;border-radius:8px;cursor:pointer}
+.cv-lang-menu button:hover,.cv-lang-menu button:focus-visible,.cv-lang-menu [aria-checked="true"]{background:var(--accent-soft)}
+html[lang="ar"],html[lang="ur"]{--f-body:"Noto Sans Arabic","IBM Plex Sans",system-ui,sans-serif;--f-display:"Noto Sans Arabic","Archivo",system-ui,sans-serif}
+html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-serif;--f-display:"Noto Sans Devanagari","Archivo",system-ui,sans-serif}
+[dir="rtl"] .tm-log,[dir="rtl"] .tm-cmd,[dir="rtl"] .mono,[dir="rtl"] .tl-out{direction:ltr;text-align:left}
+/* live data lists */
+.lv-item{display:grid;gap:2px;padding:7px 0;border-bottom:1px dashed var(--line);color:var(--ink);text-decoration:none}
+.lv-item:hover b{color:var(--accent)}
+.lv-item b{font-size:13.5px;line-height:1.35;overflow-wrap:anywhere}
+.lv-q{display:flex;gap:6px}
+.lv-q input{flex:1;min-width:0}
+/* Ask Cellvoyant: assistant on every page */
+.cv-fab{position:fixed;inset-inline-end:18px;bottom:18px;z-index:70;display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 18px 0 14px;border:0;border-radius:999px;background:var(--accent);color:var(--accent-ink);font:600 14.5px var(--f-body);box-shadow:0 10px 30px -8px rgba(0,0,0,.45);cursor:pointer}
+.cv-fab svg,.cv-ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:520px){.cv-fab{inset-inline-end:12px;bottom:12px;height:46px;padding:0 14px}.cv-fab span{display:none}}
+.cv-chat{position:fixed;inset-inline-end:18px;bottom:18px;z-index:71;width:min(420px,calc(100vw - 24px));height:min(640px,calc(100dvh - 36px));display:flex;flex-direction:column;border:1px solid var(--line-strong);border-radius:18px;background:var(--surface);color:var(--ink);box-shadow:0 24px 70px -20px rgba(0,0,0,.5);overflow:hidden}
+.cv-chat[hidden]{display:none}
+@media (max-width:520px){.cv-chat{inset:auto 0 0 0;width:100%;height:min(92dvh,100dvh);border-radius:18px 18px 0 0}}
+.cv-chat>header{display:flex;align-items:center;gap:6px;padding:12px 12px 12px 16px;border-bottom:1px solid var(--line)}
+.cv-chat>header>div{flex:1;min-width:0}
+.cv-chat>header b{font-family:var(--f-display);font-size:16px}
+.cv-ic{flex:none;display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--ink-2);cursor:pointer}
+.cv-ic[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+#cvMic[aria-pressed="true"]{background:var(--crit);border-color:var(--crit);color:#fff;animation:cvpulse 1.2s ease-in-out infinite}
+@keyframes cvpulse{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--crit) 30%,transparent)}}
+@media (prefers-reduced-motion:reduce){#cvMic[aria-pressed="true"]{animation:none}}
+.cv-msgs{flex:1;overflow:auto;overscroll-behavior:contain;padding:14px;display:grid;gap:10px;align-content:start}
+.cv-m{max-width:92%;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.cv-m.u{justify-self:end;background:var(--accent-soft);border-radius:14px 14px 4px 14px;padding:9px 12px}
+.cv-m.a{justify-self:start;background:var(--surface-2);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:10px 12px;display:grid;gap:6px}
+.cv-m .body{display:grid;gap:6px}
+.cv-m .body p{margin:0}
+.cv-acts{display:flex;flex-wrap:wrap;gap:6px}
+.cv-in{display:flex;align-items:flex-end;gap:6px;padding:10px;border-top:1px solid var(--line)}
+.cv-in textarea{flex:1;min-width:0;max-height:120px;resize:none;border:1px solid var(--line-strong);border-radius:12px;padding:9px 11px;font:14.5px/1.4 var(--f-body);background:var(--surface);color:var(--ink)}
 /* find anything (search dialog) */
 .find-btn{flex:none;display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 10px 0 12px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);color:var(--ink-2);font:500 13.5px/1 var(--f-body,inherit);cursor:pointer}
 .find-btn:hover{border-color:var(--accent);color:var(--ink)}
@@ -2098,7 +2138,7 @@ button.tm-card:hover{border-color:var(--accent)}
     <div class="sec-head">
       <div class="eyebrow">Terminals</div>
       <h2>A terminal for every job, and ones you build yourself</h2>
-      <p class="lede">Everything on the platform in one place. Open several terminals side by side as tabs: each puts live panels, the AI agents, a library of more than 400 tools, a catalog of more than 340 services and a command line on one screen. Start from a ready-made terminal or build a custom one for a specific purpose; yours are saved in this browser. Type <b>HELP</b> in the command line to see what it can do.</p>
+      <p class="lede">Everything on the platform in one place. Open several terminals side by side as tabs: each puts live panels, the AI agents, a library of more than 450 tools, a catalog of more than 340 services and a command line on one screen. The Live intelligence terminal reads real public sources as you use it: worldwide news (GDELT), World Bank country data, Wikipedia, Apple App Store ratings and daily exchange rates; your search terms are sent to those services. Start from a ready-made terminal or build a custom one for a specific purpose; yours are saved in this browser. Type <b>HELP</b> in the command line to see what it can do.</p>
     </div>
     <div class="console tm" id="tmApp">
       <div class="tm-tabs" id="tmTabs" role="tablist" aria-label="Open terminals"></div>
@@ -2508,7 +2548,10 @@ button.tm-card:hover{border-color:var(--accent)}
         <div class="lc ok"><i>✓</i><span>AI assistant with <b id="lcTools">17</b> tools and a service desk</span></div>
         <div class="lc ok"><i>✓</i><span>Operator desk with an etisalat UAE edition, problem studio and idea lab</span></div>
         <div class="lc ok"><i>✓</i><span>9 departments, 36 teams, 12 workshops and a resources library</span></div>
-        <div class="lc ok"><i>✓</i><span>Terminals: 12 ready-made, custom ones, 400+ tools, 340+ services and a command line</span></div>
+        <div class="lc ok"><i>✓</i><span>Terminals: 13 ready-made, custom ones, 450+ tools, 340+ services and a command line</span></div>
+        <div class="lc ok"><i>✓</i><span>Live data from public sources: news, World Bank, Wikipedia, app ratings and exchange rates</span></div>
+        <div class="lc ok"><i>✓</i><span>Ask Cellvoyant: an assistant on every page you can type or talk to, with spoken answers</span></div>
+        <div class="lc ok"><i>✓</i><span>Six languages: English, Arabic, French, Hindi, Urdu and Chinese, right-to-left where needed</span></div>
         <div class="lc ok"><i>✓</i><span>216 AI agents in 18 departments, each with tools, services and resources</span></div>
         <div class="lc ok"><i>✓</i><span>Search across the whole platform (Ctrl K or ⌘ K)</span></div>
         <div class="lc ok"><i>✓</i><span>Installable app with offline access and share previews (public site)</span></div></div>
@@ -2608,7 +2651,7 @@ button.tm-card:hover{border-color:var(--accent)}
 <footer class="foot">
   <div class="wrap">
     <span>Cellvoyant is a concept by its author. The prototype uses simulated data for fictional operators. Research figures cite their sources below.</span>
-    <span class="mono">v2.1 · 4 Nov 2026</span>
+    <span class="mono">v2.2 · 4 Nov 2026</span>
   </div>
 </footer>
 
