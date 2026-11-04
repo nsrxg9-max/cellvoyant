@@ -1541,14 +1541,14 @@ function initMI() {
 /* ---------- OPERATOR DESK: a department for operators, with an e& UAE edition ---------- */
 const OD = { op: 'e-emirates-telecom', tab: 'overview', prob: 'p1', cat: 'all', gen: [], sel: null };
 const EAND = {
-  facts: [['16.5m', 'UAE subscribers, June 2026', 'e& H1 2026 release', 'https://www.eand.com/en/news/30-07-26-eand-reports-11-6-increase-revenue.html'],
-    ['~63%', 'of UAE mobile lines vs du, Dec 2025 (computed from company figures)', 'e& and du FY2025 releases', 'https://www.du.ae/about/media-centre/newsdetail/du-reports-its-q4-and-2025-results-sustaining-strong-growth'],
-    ['AED 72.9bn', 'group revenue in FY2025, up 23.1%', 'e& FY2025 release', 'https://www.eand.com/en/news/24-feb-26-eand-delivers-record-revenue-and-net-profit-in-FY-2025.html'],
-    ['46.5%', 'group EBITDA margin, H1 2026', 'e& H1 2026 release', 'https://www.eand.com/en/news/30-07-26-eand-reports-11-6-increase-revenue.html'],
-    ['1.76m+', 'e& money cards issued', 'e& FY2025 release', 'https://www.eand.com/en/news/24-feb-26-eand-delivers-record-revenue-and-net-profit-in-FY-2025.html']],
-  rivals: [['du', '9.7m mobile lines (7.7m prepaid, 2.0m postpaid) and 735k fixed; revenue AED 15.9bn, up 8.7% in FY2025; growing in Home Wireless, fibre, du Pay, cloud and AI.'],
+  facts: [['16.5m', 'UAE subscribers, Sep 2026 (14.8m mobile, 1.7m fixed)', 'etisalat Q3 2026 release', 'https://www.eand.com/content/dam/eand/assets/docs/earning-release/2026/earning-releases-q3-2026.pdf'],
+    ['~61%', 'of UAE mobile lines vs du, Sep 2026 (computed from company figures)', 'etisalat and du Q3 2026 releases', 'https://www.dubaiprnetwork.com/business-news/194608-du-reports-resilient-q3-performance-with-nine-month-growth-and-margin-expansion'],
+    ['AED 57.6bn', 'group revenue in 9M 2026, up 10.0%', 'etisalat Q3 2026 release', 'https://www.eand.com/content/dam/eand/assets/docs/earning-release/2026/earning-releases-q3-2026.pdf'],
+    ['46.4%', 'group EBITDA margin, 9M 2026', 'etisalat Q3 2026 release', 'https://www.eand.com/content/dam/eand/assets/docs/earning-release/2026/earning-releases-q3-2026.pdf'],
+    ['2046', 'UAE licence renewed by TDRA for 20 years', 'etisalat Q3 2026 release', 'https://www.eand.com/content/dam/eand/assets/docs/earning-release/2026/earning-releases-q3-2026.pdf']],
+  rivals: [['du', '9.5m mobile lines (7.4m prepaid, 2.0m postpaid) and 756k fixed, Sep 2026; revenue AED 12.3bn in 9M 2026, up 6.2%; growing in Home Wireless, fibre, du Pay, cloud and AI.'],
     ['Virgin Mobile UAE', 'Digital-only brand run by du on its network, aimed at app-first and price-conscious customers.']],
-  swot: { 'Strengths': ['Leading UAE share and high margins', 'Group scale: 251.5m subscribers', 'Cash from the portfolio reset, including the Vodafone stake sale', 'e& money and AI partnerships (AWS, IBM, Microsoft)'],
+  swot: { 'Strengths': ['Leading UAE share and high margins', 'Group scale: 254.8m subscribers', 'AED 21.9bn from the Vodafone stake sale and a UAE licence to 2046', 'Sovereign AI Compute with Core42, e& money and AI partnerships (AWS, IBM, Microsoft)'],
     'Watch-outs': ['du growing in fixed wireless and fibre', 'A digital-only rival brand targets youth and price-conscious users', 'eSIM makes switching a few taps away', 'A complex international portfolio competes for management attention'],
     'Opportunities': ['Converged households: mobile, fibre and e& money in one account', 'Enterprise and SME demand for 5G, cloud and AI', 'Expatriate and visitor segments with specific needs', 'Right-moment, personalized offers instead of mass campaigns'],
     'Threats': ['Price competition in prepaid and youth plans', 'Slower growth in a mature, two-network market', 'Regulatory or pricing changes', 'Customer fatigue from too many messages'] }
@@ -3550,11 +3550,155 @@ function initNav() {
   map.forEach((a, id) => { const s = document.getElementById(id); if (s) io.observe(s); });
 }
 
+/* ---------- FIND ANYTHING: one search over chapters, tools, agents, companies, operators and sources ---------- */
+const FIND = { items: null, list: [], sel: 0 };
+const txtOf = el => (el ? el.textContent : '').replace(/\s+/g, ' ').trim();
+function findFlash(el) { if (!el) return; el.classList.remove('cv-flash'); void el.offsetWidth; el.classList.add('cv-flash'); setTimeout(() => el.classList.remove('cv-flash'), 1900); }
+function findGo(el, flash) { if (!el) return; el.scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: flash ? 'center' : 'start' }); if (flash) findFlash(flash === true ? el : flash); }
+const findCard = (sel, name) => $$(sel).find(e => txtOf(e) === name);
+function findIndex() {
+  if (FIND.items) return FIND.items;
+  const it = [], add = (kind, t, d, go, extra) => { if (typeof t !== 'string' || !t) return; it.push({ kind, t, d: d || '', go, s: `${t} ${d || ''} ${extra || ''}`.toLowerCase() }); };
+  $$('main section[id]').forEach(s => { const h = $('h2', s); if (h) add('Chapter', txtOf(h), txtOf($('.eyebrow', s)).replace(/^\d+/, ''), () => findGo(s)); });
+  $$('main h3[id], main h4[id]').forEach(h => add('Section', txtOf(h), txtOf(h.closest('section') && $('h2', h.closest('section'))), () => findGo(h, true)));
+  $$('#app .tab').forEach(t => add('Console view', txtOf(t), 'Live operations console', () => { selectTab(t.id); findGo($('#app')); }));
+  if ($('#operators')) {
+    $$('#odTabs [data-t]').forEach(b => add('Operator desk', txtOf(b), 'Operator desk tab', () => { b.click(); findGo($('#operators')); }));
+    Object.entries(OD_PROBS).forEach(([k, p]) => add('Big problem', p.t, 'Problem studio: causes, options and a 90-day plan', () => { OD.tab = 'solve'; OD.prob = k; odRender(); findGo($('#operators')); }));
+  }
+  if ($('#deptHub')) {
+    DEPTS.forEach(d => {
+      const go = () => { deptMode = 'dept'; deptSel = d.k; renderDepts(); findGo($('#departments')); };
+      add('Department', d.name, d.mission, go);
+      d.teams.forEach(t => add('Team', t[0], `${d.name} · ${t[1]}`, go));
+    });
+    SECTORS.forEach(x => add('Sector', x.name, 'What to watch: ' + x.watch.join(', '), () => { deptMode = 'sector'; sectorSel = x.k; renderDepts(); findGo($('#departments')); }));
+  }
+  if ($('#wsGrid')) WORKSHOPS.forEach(w => add('Workshop', w.name, `${w.level} · ${w.dur} · ${w.desc}`, () => { acadAud = 'all'; renderAcademy(); findGo(document.getElementById(wsAnchor(w.k)), true); }));
+  if ($('#resGrid')) {
+    const open = (sel, name, cat) => { resCat = 'All'; resQ = ''; const q = $('#resQ'); if (q) q.value = ''; renderResources(); const el = findCard(sel, name); const box = el && (el.closest('details') || el.closest('article') || el.parentElement); if (box && box.tagName === 'DETAILS') box.open = true; findGo(box || $('#resources'), box); };
+    RESOURCES.forEach(r => add('Resource', r[1], `${r[0]} · ${r[2]}`, () => open('#resGrid h4', r[1])));
+    PLAYBOOKS.forEach(p => add('Playbook', p[0], p[1].join(' · '), () => open('#resGrid summary b', p[0])));
+    GLOSSARY.forEach(g => add('Glossary', g[0], g[1], () => open('#resGrid dt', g[0])));
+  }
+  if ($('#agApp')) AG_DEPTS.forEach(D => {
+    add('Agent department', D.n, D.agents.map(a => a.n).join(', '), () => { AG.dept = D.k; AG.agent = D.agents[0].id; agRenderList(); findGo($('#agents')); });
+    D.agents.forEach(A => add('AI agent', A.n, `${D.n} · ${A.role}`, () => { AG.dept = D.k; AG.agent = A.id; agRenderList(); findGo($('#agents')); }));
+  });
+  const coreLab = new Set($('#labGrid') ? LAB.map(x => x[2]) : []);
+  if ($('#elGrid')) elBuild().forEach(x => { if (!coreLab.has(x.n)) add('Innovation lab', x.n, `${x.dn} · ${x.type} · ${x.status}`, () => {
+    Object.assign(EL, { q: x.n, dom: 'all', type: 'all', status: 'all', shown: 36 });
+    $('#elQ').value = x.n; $('#elDom').value = 'all';
+    $$('#elType [data-v], #elStatus [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === 'all')));
+    elRender(); findGo($('#elab')); setTimeout(() => findFlash($('#elGrid > article')), 350);
+  }, x.d); });
+  if ($('#labGrid')) LAB.forEach(([c, , n, d]) => add('Core lab', n, `${c} · ${d}`, () => { labCat = 'All'; renderLab(); const h = findCard('#labGrid h4', n); findGo(h ? h.closest('article') : $('#lab'), h ? h.closest('article') : null); }));
+  if (POS && $('#posChart')) [['ops', POS.operators, 'Operator'], ['vendors', POS.vendors, 'Competitor']].forEach(([k, list, kind]) => list.forEach(c => {
+    if (c.id === 'cellvoyant') return;
+    add(kind, c.name || c.short, k === 'ops' ? [c.country, c.region].filter(Boolean).join(' · ') : c.why || '', () => {
+      posS.map = k; if (k === 'ops') posS.region = c.region || 'All regions'; posS.seg = 'all'; posS.cls = 'all'; posS.sel[k] = c.id; posRender(); findGo($('#positioning'));
+    }, [c.short, c.group, c.ticker].filter(Boolean).join(' '));
+  }));
+  if (POS && $('#odOp')) odOps().forEach(c => add('Operator desk', `${c.id === 'e-emirates-telecom' ? 'e& UAE' : c.name} desk`, 'Marketing plan, sales playbook, strategy, problem studio and ideas', () => { const s = $('#odOp'); s.value = c.id; s.dispatchEvent(new Event('change')); findGo($('#operators')); }, c.short));
+  if (LAND && $('#landQ')) LAND.companies.forEach(c => add('Company', c.name, [c.seg, c.hq].filter(Boolean).join(' · '), () => { const q = $('#landQ'); q.value = c.name; q.dispatchEvent(new Event('input', { bubbles: true })); findGo($('#landscape')); }, (c.investors || []).map(i => i.n).join(' ')));
+  $$('#sources tr[id^="src-"]').forEach(r => { const a = $('a', r); add('Source', txtOf(a) || txtOf(r).slice(0, 80), `${txtOf($('.muted', r))} · source ${r.id.slice(4)}`, () => findGo(r, true), txtOf(r)); });
+  $$('main details > summary').forEach(sm => { const d = sm.parentElement; if (d.closest('#resGrid')) return; add(d.closest('.faq') ? 'Question' : 'Detail', txtOf(sm), txtOf(d.closest('section') && $('h2', d.closest('section'))), () => { d.open = true; findGo(d, true); }); });
+  TOOLDEFS.forEach(d => add('Assistant tool', d.name.replace(/_/g, ' '), d.description, () => { selectTab('tab-ask'); findGo($('#app')); }));
+  return (FIND.items = it);
+}
+const FIND_ORDER = ['Chapter', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
+function findSearch(raw) {
+  const q = raw.trim().toLowerCase(), items = findIndex();
+  if (!q) return items.filter(x => x.kind === 'Chapter').map(x => ({ x, sc: 1 }));
+  const words = q.split(/\s+/), reW = new RegExp('(^|[^a-z0-9])' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const hits = [];
+  for (const x of items) {
+    const t = x.t.toLowerCase();
+    let sc = t === q ? 100 : t.startsWith(q) ? 80 : reW.test(t) ? 62 : t.includes(q) ? 48 : words.every(w => x.s.includes(w)) ? (words.every(w => t.includes(w)) ? 34 : 18) : 0;
+    if (sc) hits.push({ x, sc: sc - FIND_ORDER.indexOf(x.kind) * .3 });
+  }
+  hits.sort((a, b) => b.sc - a.sc);
+  const per = {}, out = [];
+  for (const h of hits) { per[h.x.kind] = (per[h.x.kind] || 0) + 1; if (per[h.x.kind] <= 6) out.push(h); if (out.length >= 48) break; }
+  return out;
+}
+function findMark(s, q) {
+  const i = q ? s.toLowerCase().indexOf(q.toLowerCase()) : -1;
+  return i < 0 ? esc(s) : esc(s.slice(0, i)) + '<mark>' + esc(s.slice(i, i + q.length)) + '</mark>' + esc(s.slice(i + q.length));
+}
+function findRender() {
+  const raw = $('#findQ').value, q = raw.trim(), res = findSearch(raw), list = $('#findList');
+  const acts = [];
+  if (q) {
+    acts.push({ kind: 'Ask', t: `Ask the AI assistant: “${q}”`, d: 'Opens the assistant in the console with your question', go: () => { selectTab('tab-ask'); const a = $('#askInput'); a.value = q; findGo($('#app')); setTimeout(() => a.focus(), 300); } });
+    if ($('#agTask')) acts.push({ kind: 'Ask', t: `Give an AI agent this task: “${q}”`, d: `${AG_DEPTS.find(d => d.k === AG.dept).agents.find(a => a.id === AG.agent).n} is selected; pick another agent if you like`, go: () => { $('#agTask').value = q; findGo($('#agents')); setTimeout(() => $('#agTask').focus(), 300); } });
+    if ($('#miQ')) acts.push({ kind: 'Ask', t: `Search the intelligence hub for “${q}”`, d: 'Ranked results from the market intelligence knowledge base', go: () => { const m = $('#miQ'); m.value = q; m.dispatchEvent(new Event('input', { bubbles: true })); m.form ? m.form.requestSubmit && m.form.requestSubmit() : null; findGo($('#miApp') || $('#challenge2')); } });
+  }
+  FIND.list = [...res.map(r => r.x), ...acts];
+  FIND.sel = Math.min(FIND.sel, Math.max(0, FIND.list.length - 1));
+  let html = '', last = '', i = 0;
+  const head = k => k === 'Ask' ? 'Ask' : k === 'Chapter' && !q ? 'Jump to a chapter' : k;
+  for (const x of FIND.list) {
+    if (x.kind !== last) { html += `<div class="cmdk-g" role="presentation">${esc(head(x.kind))}</div>`; last = x.kind; }
+    html += `<button type="button" class="cmdk-it" role="option" id="find-${i}" data-i="${i}" aria-selected="${i === FIND.sel}"><b>${findMark(x.t, q)}</b>${x.d ? `<span>${esc(x.d.length > 120 ? x.d.slice(0, 118) + '…' : x.d)}</span>` : ''}</button>`;
+    i++;
+  }
+  list.innerHTML = html || '<p class="cmdk-none">Nothing found. Try another word, or ask the assistant.</p>';
+  $('#findQ').setAttribute('aria-activedescendant', FIND.list.length ? 'find-' + FIND.sel : '');
+  $('#findN').textContent = q ? `${res.length}${res.length >= 48 ? '+' : ''} result${res.length === 1 ? '' : 's'}` : `${findIndex().length.toLocaleString()} things to find`;
+}
+function findMove(d) {
+  if (!FIND.list.length) return;
+  FIND.sel = (FIND.sel + d + FIND.list.length) % FIND.list.length;
+  $$('#findList .cmdk-it').forEach(b => b.setAttribute('aria-selected', String(+b.dataset.i === FIND.sel)));
+  const b = $(`#find-${FIND.sel}`); if (b) b.scrollIntoView({ block: 'nearest' });
+  $('#findQ').setAttribute('aria-activedescendant', 'find-' + FIND.sel);
+}
+function findPick(i) {
+  const x = FIND.list[i]; if (!x) return;
+  $('#findDlg').close();
+  setTimeout(() => { try { x.go(); } catch (err) { console.warn('Cellvoyant: find', err); } }, 0);
+}
+function findOpen() {
+  const d = $('#findDlg'); if (d.open) return;
+  FIND.sel = 0; d.showModal(); const q = $('#findQ'); q.select(); findRender();
+}
+function initFind() {
+  const bar = $('header.top .wrap'); if (!bar || $('#findDlg')) return;
+  const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  const btn = document.createElement('button');
+  btn.type = 'button'; btn.className = 'find-btn'; btn.setAttribute('aria-keyshortcuts', mac ? 'Meta+K' : 'Control+K');
+  btn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span>Search</span><kbd>${mac ? '⌘' : 'Ctrl'} K</kbd>`;
+  bar.insertBefore(btn, $('.nav-cta, .ed-cta', bar) || null);
+  const dlg = document.createElement('dialog');
+  dlg.className = 'cmdk'; dlg.id = 'findDlg'; dlg.setAttribute('aria-label', 'Search everything');
+  dlg.innerHTML = `<div class="cmdk-in"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <input id="findQ" type="search" autocomplete="off" spellcheck="false" placeholder="Search chapters, tools, agents, companies, operators, sources…" role="combobox" aria-expanded="true" aria-controls="findList" aria-autocomplete="list" aria-label="Search everything">
+    <button type="button" class="cmdk-x" aria-label="Close search">Esc</button></div>
+    <div class="cmdk-list" id="findList" role="listbox" aria-label="Results"></div>
+    <div class="cmdk-foot"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>Enter</kbd> open</span><span id="findN" aria-live="polite"></span></div>`;
+  document.body.appendChild(dlg);
+  btn.addEventListener('click', findOpen);
+  $('.cmdk-x', dlg).addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', e => { if (e.target === dlg) { dlg.close(); return; } const b = e.target.closest('.cmdk-it'); if (b) findPick(+b.dataset.i); });
+  let t; $('#findQ').addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { FIND.sel = 0; findRender(); $('#findList').scrollTop = 0; }, 60); });
+  $('#findQ').addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); findMove(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); findMove(-1); }
+    else if (e.key === 'Enter') { e.preventDefault(); findPick(FIND.sel); }
+  });
+  document.addEventListener('keydown', e => {
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement && document.activeElement.tagName) || (document.activeElement && document.activeElement.isContentEditable);
+    if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey) && !e.altKey) { e.preventDefault(); dlg.open ? dlg.close() : findOpen(); }
+    else if (e.key === '/' && !typing && !dlg.open && !e.metaKey && !e.ctrlKey) { e.preventDefault(); findOpen(); }
+  });
+}
+
 /* ---------- boot ---------- */
 $('#simClock').textContent = fmtClock();
 setLive(live);
 renderFeed(); kpis(); renderDetail();
-[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum]
+[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initFind]
   .forEach(f => { try { f(); } catch (err) { console.warn('Cellvoyant: ' + f.name + ' skipped', err); } });
 const radar = initRadar();
 renderServices(); renderReqs();

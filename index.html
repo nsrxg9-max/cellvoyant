@@ -5,11 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cellvoyant</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2308131C'/%3E%3Cpath d='M5 17c3 0 3-7 6-7s3 12 6 12 3-9 6-9 3 4 5 4' fill='none' stroke='%233CCFD9' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="canonical" href="https://nsrxg9-max.github.io/cellvoyant/">
 <meta name="theme-color" content="#08131C">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Cellvoyant">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://nsrxg9-max.github.io/cellvoyant/">
 <meta property="og:title" content="Cellvoyant">
 <meta property="og:description" content="Cellvoyant — AI market and competitor intelligence for telecom operators: research, a live operations console, departments and teams, a right-time customer engagement model, workshops, resources and a provisional patent draft.">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://nsrxg9-max.github.io/cellvoyant/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Cellvoyant: market spectrum and headline">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nsrxg9-max.github.io/cellvoyant/assets/og.png">
+<script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 <style>
 :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0}
@@ -1281,6 +1294,34 @@ table.t.claims-t{min-width:540px;font-size:14px}
 .claims-t ol{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:7px}
 .claims-t ol li{padding-left:12px;border-left:2px solid var(--line)}
 .claim-t tr.ind-row td{background:color-mix(in srgb,var(--accent-soft) 55%,var(--surface))}
+
+/* find anything (search dialog) */
+.find-btn{flex:none;display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 10px 0 12px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);color:var(--ink-2);font:500 13.5px/1 var(--f-body,inherit);cursor:pointer}
+.find-btn:hover{border-color:var(--accent);color:var(--ink)}
+.find-btn svg,.cmdk-in svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.find-btn kbd,.cmdk kbd{font:500 11px/1 var(--f-mono);padding:3px 5px;border:1px solid var(--line);border-radius:5px;background:var(--surface-2);color:var(--muted)}
+@media (max-width:720px){.find-btn span,.find-btn kbd{display:none}.find-btn{width:36px;padding:0;justify-content:center}}
+.cmdk{width:min(680px,calc(100vw - 24px));max-height:min(640px,calc(100dvh - 48px));margin:min(10vh,90px) auto auto;padding:0;border:1px solid var(--line-strong);border-radius:16px;background:var(--surface);color:var(--ink);box-shadow:0 24px 70px -20px rgba(0,0,0,.45);overflow:hidden}
+.cmdk[open]{display:flex;flex-direction:column}
+.cmdk::backdrop{background:rgba(6,12,18,.48);backdrop-filter:blur(2px)}
+.cmdk-in{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);color:var(--muted)}
+.cmdk-in input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font-size:16.5px;padding:6px 0}
+.cmdk-in input::-webkit-search-cancel-button{display:none}
+.cmdk-x{flex:none;font:500 11px/1 var(--f-mono);padding:5px 7px;border:1px solid var(--line);border-radius:6px;background:var(--surface-2);color:var(--muted);cursor:pointer}
+.cmdk-list{overflow-y:auto;overscroll-behavior:contain;padding:6px 8px 10px;flex:1}
+.cmdk-g{font:600 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:12px 8px 6px}
+.cmdk-it{display:grid;gap:2px;width:100%;text-align:left;padding:9px 10px;border:0;border-radius:9px;background:transparent;color:var(--ink);cursor:pointer;font:inherit}
+.cmdk-it b{font-size:14.5px;font-weight:600}
+.cmdk-it span{font-size:12.5px;color:var(--muted);line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmdk-it[aria-selected="true"],.cmdk-it:hover{background:var(--accent-soft)}
+.cmdk-it[aria-selected="true"] b{color:var(--accent)}
+.cmdk-it mark{background:transparent;color:inherit;text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:2px;text-underline-offset:3px}
+.cmdk-none{padding:24px 10px;color:var(--muted);font-size:14px}
+.cmdk-foot{display:flex;gap:16px;align-items:center;padding:9px 14px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.cmdk-foot span:last-child{margin-left:auto}
+@media (max-width:520px){.cmdk{margin-top:12px}.cmdk-foot span:not(:last-child){display:none}}
+.cv-flash{animation:cvflash 1.9s ease-out}
+@keyframes cvflash{0%,35%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:0 0 0 3px transparent}}
 </style>
 
 <a class="skip" href="#top">Skip to content</a>
@@ -2310,14 +2351,17 @@ table.t.claims-t{min-width:540px;font-size:14px}
     <div class="lcheck">
       <div class="lc-col"><span class="label">Product</span>
         <div class="lc ok"><i>✓</i><span>Operations console with 9 views, department lens, workspace and workbench</span></div>
-        <div class="lc ok"><i>✓</i><span>Client edition for e&amp; UAE with the right-time engagement and market intelligence solutions</span></div>
+        <div class="lc ok"><i>✓</i><span>Client edition for etisalat (e&amp;) UAE with AI agents, an innovation lab and both solutions</span></div>
         <div class="lc ok"><i>✓</i><span>AI assistant with <b id="lcTools">17</b> tools and a service desk</span></div>
         <div class="lc ok"><i>✓</i><span>Operator desk with an e&amp; UAE edition, problem studio and idea lab</span></div>
-        <div class="lc ok"><i>✓</i><span>9 departments, 36 teams, 12 workshops and a resources library</span></div></div>
+        <div class="lc ok"><i>✓</i><span>9 departments, 36 teams, 12 workshops and a resources library</span></div>
+        <div class="lc ok"><i>✓</i><span>Search across the whole platform (Ctrl K or ⌘ K)</span></div>
+        <div class="lc ok"><i>✓</i><span>Installable app with offline access and share previews (public site)</span></div></div>
       <div class="lc-col"><span class="label">Data &amp; trust</span>
         <div class="lc ok"><i>✓</i><span>140 companies and 108 operators with sources and check dates</span></div>
         <div class="lc ok"><i>✓</i><span>Competition-law and customer-contact guardrails built in</span></div>
-        <div class="lc todo"><i>○</i><span><b>Refresh market data</b> on launch day (last checked 6 Oct 2026)</span></div>
+        <div class="lc ok"><i>✓</i><span>UAE operator figures refreshed with Q3 2026 results (4 Nov 2026)</span></div>
+        <div class="lc todo"><i>○</i><span><b>Refresh the global landscape</b> (140 companies, 108 operators; last checked 6 Oct 2026)</span></div>
         <div class="lc todo"><i>○</i><span><b>Legal review</b> of the competition-law and privacy design</span></div></div>
       <div class="lc-col"><span class="label">Business &amp; partners</span>
         <div class="lc ok"><i>✓</i><span>Pricing, go-to-market, roadmap and a pilot offer</span></div>
@@ -2419,7 +2463,7 @@ table.t.claims-t{min-width:540px;font-size:14px}
 <footer class="foot">
   <div class="wrap">
     <span>Cellvoyant is a concept by its author, sponsored by PAINITE, M.A.I.I, SPACE42, G42 AI, BLOOMBERG and MC INTERNATIONAL INVESTMENTS. The prototype uses simulated data for fictional operators. Research figures cite their sources below.</span>
-    <span class="mono">v1.0 launch candidate · 27 Oct 2026</span>
+    <span class="mono">v2.0 · 4 Nov 2026</span>
   </div>
 </footer>
 
