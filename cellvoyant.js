@@ -2649,6 +2649,7 @@ const SERVICES = [
   { k: 'board_brief', name: 'Weekly board brief', turn: 'weekly', desc: 'An analyst-reviewed brief on rivals, capital moves and recommended responses.' },
   { k: 'op_desk', name: 'Operator desk: full edition for one operator', turn: '3 weeks', desc: 'A segment-by-segment marketing plan, sales playbook, strategy horizons and rival-response playbook for your operator.' },
   { k: 'strategy_sprint', name: 'Strategy sprint for a big problem', turn: '1–2 weeks', desc: 'Analysts and AI work one complex problem into options, a recommendation, a 90-day plan and KPIs with your team.' },
+  { k: 'capability', name: 'Master plan: scope a capability', turn: 'scoped in 2 weeks', desc: 'Scope one or more master-plan capabilities: data needed, integration points, owners, KPIs and a pilot plan.' },
   { k: 'lab_item', name: 'Innovation lab: scope or pilot a tool', turn: 'scoped in 1 week', desc: 'Scope, build and pilot any tool, agent or service from the innovation lab.' },
   { k: 'pilot', name: 'Pilot program (30-day shadow mode)', turn: 'kick-off within 2 weeks', desc: 'Run Cellvoyant next to your current process for 30 days and measure how much earlier it catches each competitor move.' }
 ];
@@ -3997,6 +3998,8 @@ function tmPanelHtml(k, arg, tid) {
   if (k === 'lab') { const all = elBuild(), by = s => all.filter(x => x.status === s).length; return `<div class="tm-kpis">${['Live', 'Prototype', 'Service', 'Designed'].map(s => `<div><b>${by(s)}</b><span>${s}</span></div>`).join('')}</div><span class="label">Live now</span>` + all.filter(x => x.status === 'Live').slice(0, 6).map(x => tmRow(esc(x.n), esc(x.dn))).join(''); }
   if (k === 'facts') return $$('.stats > div').slice(0, 6).map(d => tmRow(`<b>${esc(txtOf($('b', d)))}</b> ${esc(txtOf($('span', d)))}`, esc(txtOf($('cite', d)).replace(' ↗', '')), 'tiny muted')).join('');
   if (k === 'toolbox') return tlPanelHtml(tid, arg);
+  if (k === 'mplan') return mpPanelHtml();
+  if (k === 'decide') return dcPanelHtml();
   if (k === 'services') return svPanelHtml(tid, arg);
   if (k === 'notes') return `<label class="sr" for="tmNote${tid}">Notes</label><textarea class="tm-q" id="tmNote${tid}" rows="6" data-tmnote placeholder="Notes for this terminal">${esc(TM.notes[TM.active] || '')}</textarea><p class="tiny muted">Saved in this browser only.</p>`;
   return '';
@@ -4019,7 +4022,7 @@ function tmFill(el, t) {
 }
 const tmSub = (k, arg) => k === 'agent' ? (agByKey(arg) || { A: { n: '' } }).A.n : k === 'roster' ? ((AG_DEPTS.find(d => d.k === arg) || {}).n || '') : k === 'news' ? (arg || LIVE_OPS[0]) : k === 'apps' ? (arg || LIVE_APPS[0][0]).split('|')[0] : k === 'wb' ? (WB_IND[arg || 'mobile'] || [, ''])[1] : k === 'geo' ? (arg || 'churn') : k === 'services' && arg ? ((AG_DEPTS.find(d => d.k === arg) || {}).n || '') : k === 'toolbox' ? tlBuild().length + ' tools' : k === 'signals' && arg ? (SEVL[arg] || arg) : '';
 function tmTerminalHtml(t) {
-  return `<div class="tm-head"><div><h3>${t.custom ? '★ ' : ''}${esc(t.n)}</h3><p class="small muted">${esc(t.p || '')}</p></div><div class="tm-meta"><span class="pill sim">Signals simulated</span><span class="mono tm-clock" data-tmclock></span>${t.custom ? `<button type="button" class="btn sm" data-tmedit="${esc(t.id)}">Edit</button>` : `<button type="button" class="btn sm" data-tmcopy="${esc(t.id)}">Customize a copy</button>`}</div></div>
+  return `<div class="tm-head"><div><h3>${t.custom ? '★ ' : ''}${esc(t.n)}</h3><p class="small muted">${esc(t.p || '')}</p></div><div class="tm-meta"><span class="pill sim">Signals simulated</span>${t.custom ? '' : `<button type="button" class="btn sm tm-link" data-cvlink="tm-${esc(t.id)}">Copy link</button>`}<span class="mono tm-clock" data-tmclock></span>${t.custom ? `<button type="button" class="btn sm" data-tmedit="${esc(t.id)}">Edit</button>` : `<button type="button" class="btn sm" data-tmcopy="${esc(t.id)}">Customize a copy</button>`}</div></div>
     <form class="tm-cmd" data-tmcmd><label for="tmIn" class="sr">Terminal command</label><span aria-hidden="true">CV&gt;</span><input id="tmIn" autocomplete="off" spellcheck="false" placeholder="Type a command: HELP, OP du, MCAP 10, AGENT churn sentinel"><button class="btn sm" type="submit">Run</button></form>
     <div class="tm-log" id="tmLog" aria-live="polite">${(TM.log[t.id] || []).join('')}</div>
     <div class="tm-grid">${t.panels.map(([k, arg], i) => TM_PANELS[k] ? `<article class="tm-p${['agent', 'roster', 'toolbox', 'services'].includes(k) ? ' tm-wide' : ''}" data-k="${k}" data-arg="${esc(arg || '')}" data-i="${i}"><header><b>${esc(TM_PANELS[k][0])}</b><span>${esc(tmSub(k, arg))}</span></header><div class="tm-pb"></div></article>` : '').join('')}</div>`;
@@ -4114,6 +4117,8 @@ async function tmCmd(raw) {
     else if (C === 'ASK') { selectTab('tab-ask'); const a = $('#askInput'); if (a) a.value = arg; findGo($('#app')); setTimeout(() => a && a.focus(), 300); tmOut('Opened the AI assistant with your question.'); }
     else if (C === 'FIND') { findOpen(); const q = $('#findQ'); q.value = arg; findRender(); }
     else if (C === 'TASK') { if (!arg) tmOut('Example: TASK Call back the top three at-risk accounts'); else await addTask({ title: arg, kind: 'manual', dept: 'st', prio: 'normal' }); }
+    else if (C === 'CAP') rows(mpCmd(arg));
+    else if (C === 'DECIDE') rows(dcCmd(arg));
     else tmOut(`Unknown command ${esc(C)}. Type HELP.`);
   } catch (e) { tmOut(`<span class="tm-err">${esc(e.message || String(e))}</span>`); }
 }
@@ -4450,10 +4455,12 @@ function findIndex() {
   $$('#sources tr[id^="src-"]').forEach(r => { const a = $('a', r); add('Source', txtOf(a) || txtOf(r).slice(0, 80), `${txtOf($('.muted', r))} · source ${r.id.slice(4)}`, () => findGo(r, true), txtOf(r)); });
   $$('main details > summary').forEach(sm => { const d = sm.parentElement; if (d.closest('#resGrid')) return; add(d.closest('.faq') ? 'Question' : 'Detail', txtOf(sm), txtOf(d.closest('section') && $('h2', d.closest('section'))), () => { d.open = true; findGo(d, true); }); });
   if ($('#tmApp')) { tlBuild().forEach(t => add('Tool', t.n, `${t.fam} · ${t.d}`, () => { tmOpen('tools'); tmCmd('TOOL ' + t.id); findGo($('#terminals')); })); SVC_CAT.forEach(x => add('Service', x.name, `${x.dn} · ${x.turn} · ${x.desc}`, () => { tmOpen('tools'); tmCmd('SERVICES ' + x.name); findGo($('#terminals')); })); }
+  if ($('#mpList')) mpBuild().forEach(c => add('Capability', `${c.no}. ${c.n}`, `${c.dom}. ${c.dn} · P${c.p} · ${MP_ROLE[c.role][0]} · ${c.tools}`, () => mpShow(c.no), EDITION === 'eand' ? c.app : ''));
+  if ($('#dcApp')) DC_SCN.forEach(x => add('Decision scenario', dcT(x.t, x), `${x.type} · from detection to a recommendation for review`, () => cvGo('dec:' + x.k)));
   TOOLDEFS.forEach(d => add('Assistant tool', d.name.replace(/_/g, ' '), d.description, () => { selectTab('tab-ask'); findGo($('#app')); }));
   return (FIND.items = it);
 }
-const FIND_ORDER = ['Chapter', 'Terminal', 'Tool', 'Service', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
+const FIND_ORDER = ['Chapter', 'Terminal', 'Capability', 'Decision scenario', 'Tool', 'Service', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
 function findSearch(raw) {
   const q = raw.trim().toLowerCase(), items = findIndex();
   if (!q) return items.filter(x => x.kind === 'Chapter').map(x => ({ x, sc: 1 }));
@@ -4548,23 +4555,23 @@ const RTL = new Set(['ar', 'ur']);
 // interface strings; keys are the English text as it appears on the page
 const I18N_KEYS = ['Problem', 'Market', 'Platform', 'Operator desk', 'Live console', 'Terminals', 'AI agents', 'Academy', 'Innovation', 'Patent', 'Business', 'Join the pilot', 'Overview', 'Customers', 'Competition', 'Innovation lab', 'Solutions', 'Value', 'Request a pilot', 'Search',
   'Search chapters, tools, agents, companies, operators, sources…', 'Ask Cellvoyant', 'Type or speak a question…', 'Send', 'Listening…', 'Speak answers', 'Stop', 'HELLO', '+ New terminal', 'Run', 'Run agent', 'Run tool', 'Request', 'Open a terminal', 'Language',
-  'Translating the page…', 'Page translated on this device', 'IFACE_ONLY', 'Show original', 'VOICE_NA', 'MIC_BLOCKED', 'Find an agent or a skill…', 'Clear', 'Thinking…', 'Translated by Claude'];
+  'Translating the page…', 'Page translated on this device', 'IFACE_ONLY', 'Show original', 'VOICE_NA', 'MIC_BLOCKED', 'Find an agent or a skill…', 'Clear', 'Thinking…', 'Translated by Claude', 'Master plan', 'Decision engine'];
 const I18N_ROWS = {
   ar: ['المشكلة', 'السوق', 'المنصة', 'مكتب المشغّل', 'وحدة التحكم المباشرة', 'المحطات الطرفية', 'وكلاء الذكاء الاصطناعي', 'الأكاديمية', 'الابتكار', 'براءة الاختراع', 'نموذج العمل', 'انضم إلى التجربة', 'نظرة عامة', 'العملاء', 'المنافسة', 'مختبر الابتكار', 'الحلول', 'القيمة', 'اطلب تجربة', 'بحث',
     'ابحث في الفصول والأدوات والوكلاء والشركات والمشغّلين والمصادر…', 'اسأل Cellvoyant', 'اكتب سؤالك أو تحدّث…', 'إرسال', 'أستمع…', 'قراءة الإجابات بصوت', 'إيقاف', 'مرحبًا! اسألني عن السوق، أو اطلب مني فتح أي قسم أو أداة.', '+ محطة جديدة', 'تشغيل', 'تشغيل الوكيل', 'تشغيل الأداة', 'اطلب', 'افتح محطة', 'اللغة',
-    'جارٍ ترجمة الصفحة…', 'تمت ترجمة الصفحة على هذا الجهاز', 'تمت ترجمة الواجهة. تحتاج ترجمة الصفحة كاملة إلى مترجم Chrome المدمج أو نسخة Claude.', 'عرض الأصل', 'الإدخال الصوتي غير متاح في هذا المتصفح.', 'لا يمكن الوصول إلى الميكروفون هنا.', 'ابحث عن وكيل أو مهارة…', 'مسح', 'جارٍ التفكير…', 'ترجمة Claude'],
+    'جارٍ ترجمة الصفحة…', 'تمت ترجمة الصفحة على هذا الجهاز', 'تمت ترجمة الواجهة. تحتاج ترجمة الصفحة كاملة إلى مترجم Chrome المدمج أو نسخة Claude.', 'عرض الأصل', 'الإدخال الصوتي غير متاح في هذا المتصفح.', 'لا يمكن الوصول إلى الميكروفون هنا.', 'ابحث عن وكيل أو مهارة…', 'مسح', 'جارٍ التفكير…', 'ترجمة Claude', 'الخطة الرئيسية', 'محرّك القرار'],
   fr: ['Problème', 'Marché', 'Plateforme', 'Bureau opérateur', 'Console en direct', 'Terminaux', 'Agents IA', 'Académie', 'Innovation', 'Brevet', 'Modèle économique', 'Rejoindre le pilote', 'Vue d’ensemble', 'Clients', 'Concurrence', 'Laboratoire d’innovation', 'Solutions', 'Valeur', 'Demander un pilote', 'Rechercher',
     'Rechercher chapitres, outils, agents, entreprises, opérateurs, sources…', 'Demander à Cellvoyant', 'Écrivez ou dites votre question…', 'Envoyer', 'J’écoute…', 'Lire les réponses à voix haute', 'Arrêter', 'Bonjour ! Posez-moi une question sur le marché, ou demandez-moi d’ouvrir une section ou un outil.', '+ Nouveau terminal', 'Lancer', 'Lancer l’agent', 'Lancer l’outil', 'Demander', 'Ouvrir un terminal', 'Langue',
-    'Traduction de la page…', 'Page traduite sur cet appareil', 'Interface traduite. La traduction complète de la page nécessite le traducteur intégré de Chrome ou la version Claude.', 'Afficher l’original', 'La saisie vocale n’est pas disponible dans ce navigateur.', 'Le micro n’est pas accessible ici.', 'Trouver un agent ou une compétence…', 'Effacer', 'Réflexion…', 'Traduit par Claude'],
+    'Traduction de la page…', 'Page traduite sur cet appareil', 'Interface traduite. La traduction complète de la page nécessite le traducteur intégré de Chrome ou la version Claude.', 'Afficher l’original', 'La saisie vocale n’est pas disponible dans ce navigateur.', 'Le micro n’est pas accessible ici.', 'Trouver un agent ou une compétence…', 'Effacer', 'Réflexion…', 'Traduit par Claude', 'Plan directeur', 'Moteur de décision'],
   hi: ['समस्या', 'बाज़ार', 'प्लेटफ़ॉर्म', 'ऑपरेटर डेस्क', 'लाइव कंसोल', 'टर्मिनल', 'एआई एजेंट', 'अकादमी', 'नवाचार', 'पेटेंट', 'व्यवसाय मॉडल', 'पायलट में शामिल हों', 'अवलोकन', 'ग्राहक', 'प्रतिस्पर्धा', 'नवाचार प्रयोगशाला', 'समाधान', 'मूल्य', 'पायलट का अनुरोध करें', 'खोजें',
     'अध्याय, टूल, एजेंट, कंपनियाँ, ऑपरेटर और स्रोत खोजें…', 'Cellvoyant से पूछें', 'प्रश्न लिखें या बोलें…', 'भेजें', 'सुन रहा हूँ…', 'उत्तर बोलकर सुनाएँ', 'रोकें', 'नमस्ते! बाज़ार के बारे में कुछ भी पूछें, या कोई अनुभाग या टूल खोलने को कहें।', '+ नया टर्मिनल', 'चलाएँ', 'एजेंट चलाएँ', 'टूल चलाएँ', 'अनुरोध करें', 'टर्मिनल खोलें', 'भाषा',
-    'पेज का अनुवाद हो रहा है…', 'पेज का अनुवाद इसी डिवाइस पर हुआ', 'इंटरफ़ेस का अनुवाद हो गया। पूरे पेज के अनुवाद के लिए Chrome का अंतर्निहित अनुवादक या Claude संस्करण चाहिए।', 'मूल दिखाएँ', 'इस ब्राउज़र में आवाज़ से इनपुट उपलब्ध नहीं है।', 'यहाँ माइक्रोफ़ोन उपलब्ध नहीं है।', 'एजेंट या कौशल खोजें…', 'साफ़ करें', 'सोच रहा हूँ…', 'Claude द्वारा अनुवादित'],
+    'पेज का अनुवाद हो रहा है…', 'पेज का अनुवाद इसी डिवाइस पर हुआ', 'इंटरफ़ेस का अनुवाद हो गया। पूरे पेज के अनुवाद के लिए Chrome का अंतर्निहित अनुवादक या Claude संस्करण चाहिए।', 'मूल दिखाएँ', 'इस ब्राउज़र में आवाज़ से इनपुट उपलब्ध नहीं है।', 'यहाँ माइक्रोफ़ोन उपलब्ध नहीं है।', 'एजेंट या कौशल खोजें…', 'साफ़ करें', 'सोच रहा हूँ…', 'Claude द्वारा अनुवादित', 'मास्टर प्लान', 'निर्णय इंजन'],
   ur: ['مسئلہ', 'مارکیٹ', 'پلیٹ فارم', 'آپریٹر ڈیسک', 'لائیو کنسول', 'ٹرمینلز', 'اے آئی ایجنٹس', 'اکیڈمی', 'جدت', 'پیٹنٹ', 'کاروباری ماڈل', 'پائلٹ میں شامل ہوں', 'جائزہ', 'صارفین', 'مسابقت', 'جدت کی لیب', 'حل', 'قدر', 'پائلٹ کی درخواست کریں', 'تلاش',
     'ابواب، ٹولز، ایجنٹس، کمپنیاں، آپریٹرز اور ذرائع تلاش کریں…', 'Cellvoyant سے پوچھیں', 'سوال لکھیں یا بولیں…', 'بھیجیں', 'سن رہا ہوں…', 'جوابات بول کر سنائیں', 'روکیں', 'السلام علیکم! مارکیٹ کے بارے میں کچھ بھی پوچھیں، یا کوئی حصہ یا ٹول کھولنے کو کہیں۔', '+ نیا ٹرمینل', 'چلائیں', 'ایجنٹ چلائیں', 'ٹول چلائیں', 'درخواست کریں', 'ٹرمینل کھولیں', 'زبان',
-    'صفحے کا ترجمہ ہو رہا ہے…', 'صفحے کا ترجمہ اسی ڈیوائس پر ہوا', 'انٹرفیس کا ترجمہ ہو گیا۔ پورے صفحے کے ترجمے کے لیے Chrome کا بلٹ اِن مترجم یا Claude ورژن درکار ہے۔', 'اصل دکھائیں', 'اس براؤزر میں آواز سے ان پٹ دستیاب نہیں۔', 'یہاں مائیکروفون دستیاب نہیں۔', 'ایجنٹ یا مہارت تلاش کریں…', 'صاف کریں', 'سوچ رہا ہوں…', 'Claude کا ترجمہ'],
+    'صفحے کا ترجمہ ہو رہا ہے…', 'صفحے کا ترجمہ اسی ڈیوائس پر ہوا', 'انٹرفیس کا ترجمہ ہو گیا۔ پورے صفحے کے ترجمے کے لیے Chrome کا بلٹ اِن مترجم یا Claude ورژن درکار ہے۔', 'اصل دکھائیں', 'اس براؤزر میں آواز سے ان پٹ دستیاب نہیں۔', 'یہاں مائیکروفون دستیاب نہیں۔', 'ایجنٹ یا مہارت تلاش کریں…', 'صاف کریں', 'سوچ رہا ہوں…', 'Claude کا ترجمہ', 'ماسٹر پلان', 'فیصلہ انجن'],
   zh: ['问题', '市场', '平台', '运营商工作台', '实时控制台', '终端', 'AI 智能体', '学院', '创新', '专利', '商业模式', '加入试点', '概览', '客户', '竞争', '创新实验室', '解决方案', '价值', '申请试点', '搜索',
     '搜索章节、工具、智能体、公司、运营商、来源…', '询问 Cellvoyant', '输入或说出你的问题…', '发送', '正在聆听…', '朗读回答', '停止', '你好！可以问我任何关于市场的问题，或让我打开某个章节或工具。', '+ 新建终端', '运行', '运行智能体', '运行工具', '申请', '打开终端', '语言',
-    '正在翻译页面…', '已在本设备上翻译页面', '界面已翻译。整页翻译需要 Chrome 内置翻译器或 Claude 版本。', '显示原文', '此浏览器不支持语音输入。', '此处无法使用麦克风。', '查找智能体或技能…', '清除', '正在思考…', 'Claude 翻译']
+    '正在翻译页面…', '已在本设备上翻译页面', '界面已翻译。整页翻译需要 Chrome 内置翻译器或 Claude 版本。', '显示原文', '此浏览器不支持语音输入。', '此处无法使用麦克风。', '查找智能体或技能…', '清除', '正在思考…', 'Claude 翻译', '总体规划', '决策引擎']
 };
 const I18N_EN = { HELLO: 'Hello! Ask me anything about the market, or tell me what to open.', IFACE_ONLY: 'Interface translated. Full-page translation needs Chrome’s built-in translator or the Claude version.', VOICE_NA: 'Voice input isn’t available in this browser.', MIC_BLOCKED: 'The microphone can’t be used here.' };
 const I18N = Object.fromEntries(Object.entries(I18N_ROWS).map(([l, row]) => [l, Object.fromEntries(I18N_KEYS.map((k, i) => [k, row[i]]))]));
@@ -4690,7 +4697,7 @@ function cvSay(text) {
 const CV_SECTIONS = () => $$('main section[id]').map(s => [s.id, txtOf($('h2', s)), txtOf($('.eyebrow', s)).replace(/^\d+/, '')]);
 function cvNavigate(q) {
   const s = q.toLowerCase();
-  const t = tmAll().find(x => s.includes(x.n.toLowerCase()) || s.includes(x.id)); if (t && /terminal|open|show|launch|افتح|ouvrir|खोल|کھول|打开/.test(s)) { tmOpen(t.id); findGo($('#terminals')); return `Opened the ${t.n} terminal.`; }
+  const t = !/capabilit|master ?plan|\bp[012]\b/.test(s) && tmAll().find(x => s.includes(x.n.toLowerCase()) || s.includes(x.id)); if (t && /terminal|open|show|launch|افتح|ouvrir|खोल|کھول|打开/.test(s)) { tmOpen(t.id); findGo($('#terminals')); return `Opened the ${t.n} terminal.`; }
   const lang = LANGS.find(([k, n]) => s.includes(n.toLowerCase()) || (k !== 'en' && new RegExp('\\b' + LANG_NAME[k].toLowerCase().split(' ').pop() + '\\b').test(s)) || (k === 'en' && /\benglish\b/.test(s)));
   if (lang && /language|switch|speak|translate|in |لغة|langue|भाषा|زبان|语言/.test(s)) { setLang(lang[0], true); return `Switched the language to ${lang[1]}.`; }
   if (/\b(open|show|go to|take me to|scroll to)\b|افتح|اعرض|ouvre|खोलो|دکھائیں|打开/.test(s)) {
@@ -4704,6 +4711,7 @@ function cvNavigate(q) {
 async function cvLocal(q) {
   const s = q.toLowerCase(), subj = x => q.replace(x, '').replace(/[?.!]/g, '').trim();
   const nav = cvNavigate(q); if (nav) return esc(nav);
+  const mp = mpAnswer(q); if (mp) return mp;
   if (/^(hi|hello|hey|help|what can you do|مرحبا|bonjour|नमस्ते|سلام|你好)/i.test(s)) return `<p>${esc(tr('HELLO'))}</p>${cvList(['Live news: “news about stc this week”', 'Exchange rates: “dirham exchange rates”', 'Country data: “mobile subscriptions in the Gulf”', 'App ratings: “app ratings for du”', 'Tools: “calculate ARPU 1.2 billion 4 million 12”', 'Agents: “run churn sentinel”', 'Navigation: “open the pricing terminal”, “switch to Arabic”'])}`;
   if (/\bnews|headline|latest on|what'?s happening|أخبار|actualit|समाचार|خبریں|新闻/.test(s)) {
     const term = subj(/(show me |the |latest |live |)(news|headlines?)( about| on| for)?|what'?s happening (with|at)?|this week|today/gi) || LIVE_OPS[0];
@@ -4825,14 +4833,587 @@ function initChat() {
   cvChatLang();
 }
 
+/* ---------- MASTER PLAN: 134 tools, services and capabilities ---------- */
+const MP_DOM = [
+  ['A', 'Corporate & Executive Management', 1, 'corp'],
+  ['B', 'Telecom BSS: Customers, Sales & Revenue', 25, 'cust'],
+  ['C', 'Telecom OSS: Infrastructure & Network Operations', 45, 'net'],
+  ['D', 'Telecom Products & Digital Services', 70, 'cust'],
+  ['E', 'Market Intelligence & Competitive Research', 85, 'mkt'],
+  ['F', 'AI Agents, Analytics & Innovation', 97, 'plat'],
+  ['G', 'Enterprise Technology, Security & Governance', 111, 'plat'],
+  ['H', EDITION === 'eand' ? 'Specialized Solutions for the Five e& Pillars' : 'Business-Unit Intelligence Centers', 123, 'mkt'],
+  ['I', 'Productization, Commercialization & Execution', 128, 'mkt']
+];
+// [department / system, tools, services and features, special application for e&, priority 0-2, Cellvoyant's role, where it runs on this page]
+// role: P = Cellvoyant provides it · E = Cellvoyant adds intelligence on top of the existing system · C = stays in the system of record; Cellvoyant connects to it
+// where: #section, tab-… (console view), tm:… (terminal), ag:… (agent department), od:… (operator desk tab), dec (decision engine); "edition|main" when they differ
+const MP_ROWS = [
+  ['Executive Command Center', 'Unified CEO dashboard, business KPIs, alerts, financial and operational summaries', 'Monitor all five e& pillars through one executive interface', 0, 'P', 'tm:exec'],
+  ['Corporate ERP', 'Accounting, HR, procurement, budgets, projects, inventory and assets', 'Integrate financial and operational information across group entities', 0, 'C', ''],
+  ['Corporate Strategy', 'Strategic objectives, OKRs, scorecards, business plans', 'Track progress against e&’s group strategy', 0, 'E', 'ag:st'],
+  ['Group Consolidation', 'Multi-company reporting, intercompany reconciliation, financial consolidation', 'Compare performance across subsidiaries and international operations', 0, 'C', ''],
+  ['Financial Accounting', 'General ledger, accounts payable/receivable, invoicing, expenses', 'Financial controls across corporate business units', 0, 'C', ''],
+  ['Financial Planning & Analysis', 'Revenue forecasting, budgeting, scenario analysis, profitability modeling', 'Model telecom growth, infrastructure costs and business performance', 0, 'E', 'ag:fn'],
+  ['Treasury Management', 'Liquidity, banking, cash forecasts, payments and financing', 'Optimize group liquidity and cross-border financial operations', 1, 'C', 'tm:live'],
+  ['Investment Management', 'Portfolio tracking, valuation, investment performance, due diligence', 'Support e& capital and strategic investment decisions', 1, 'E', 'tab-cap'],
+  ['Procurement Management', 'RFQs, purchase orders, supplier evaluation, procurement automation', 'Manage telecom equipment and enterprise technology purchasing', 0, 'C', ''],
+  ['Contract Management', 'Contract lifecycle, renewals, obligations, electronic signatures', 'Track vendor, customer, technology and interconnection contracts', 0, 'C', ''],
+  ['Human Resources', 'Employee records, recruitment, attendance, leave, payroll, performance', 'Manage workforce processes across group companies', 0, 'C', ''],
+  ['Workforce Intelligence', 'Skills databases, employee analytics, forecasting, organizational planning', 'Identify engineering and AI skills gaps across business units', 1, 'E', ''],
+  ['Learning & Development', 'Training, certifications, technical learning, assessments', 'Develop telecom engineering, cybersecurity, cloud and AI talent', 1, 'E', '#academy'],
+  ['Enterprise Project Management', 'Project portfolios, milestones, budgets, resources, risk logs', 'Monitor infrastructure investments and transformation programs', 0, 'C', ''],
+  ['Corporate Sales Management', 'CRM, sales pipelines, quotations, contracts, account management', 'Support enterprise connectivity, cloud and digital solutions sales', 0, 'E', 'od:sales'],
+  ['Corporate Marketing', 'Campaign planning, segmentation, marketing automation, analytics', 'Coordinate telecom, enterprise and digital product campaigns', 1, 'E', 'od:marketing'],
+  ['Legal Management', 'Legal cases, compliance documents, contracts, litigation records', 'Coordinate legal activities across jurisdictions', 0, 'C', 'ag:rg'],
+  ['Risk Management', 'Enterprise risk register, risk scoring, controls, stress testing', 'Track financial, technology, operational and geopolitical risks', 0, 'E', 'tm:regulatory'],
+  ['Internal Audit', 'Audit planning, evidence management, findings and remediation', 'Support governance across subsidiaries', 0, 'C', ''],
+  ['Asset Management', 'Fixed assets, depreciation, asset lifecycle and maintenance', 'Track towers, data centers, buildings, machinery and IT equipment', 0, 'C', ''],
+  ['Inventory & Warehouse', 'Stock, equipment, spares, barcode/RFID, logistics tracking', 'Manage network hardware and spare-parts supply chains', 0, 'C', ''],
+  ['Corporate Collaboration', 'Team communications, document management, meetings, knowledge base', 'Secure collaboration among authorized e& teams', 0, 'C', 'tab-ws'],
+  ['ESG & Sustainability', 'Carbon accounting, energy metrics, sustainability reporting', 'Track emissions and energy performance across infrastructure', 1, 'E', ''],
+  ['Enterprise Performance Management', 'KPI ownership, department scorecards, benchmarking', 'Compare divisions and international operating companies', 0, 'E', 'tab-wb'],
+  ['Telecom CRM', 'Subscriber records, customer history, support interactions', 'Create a governed customer service view across applicable channels', 0, 'C', ''],
+  ['Subscriber Lifecycle', 'Registration, activation, suspension, renewal, termination', 'Analyze subscriber lifecycle trends and service changes', 0, 'C', ''],
+  ['Billing Management', 'Monthly billing, adjustments, invoices, billing disputes', 'Connect billing performance with financial analytics', 0, 'C', ''],
+  ['Real-Time Charging', 'Usage-based charging for voice, SMS, data and digital services', 'Analyze monetization patterns and charging performance', 0, 'C', ''],
+  ['Prepaid & Postpaid', 'Balances, credit limits, top-ups, renewals, plans', 'Improve product and customer segment analytics', 0, 'C', ''],
+  ['Product Catalog', 'Telecom tariffs, bundles, packages, add-on products', 'Standardize comparable product information across operating companies', 0, 'E', 'tab-dna'],
+  ['Order Management', 'Orders, fulfillment status, service changes, cancellations', 'Monitor order-to-activation performance', 0, 'C', ''],
+  ['SIM & eSIM Management', 'SIM inventory, eSIM profiles, provisioning, replacements', 'Improve activation tracking and digital onboarding', 0, 'C', ''],
+  ['Number Management', 'Number inventory, assignment, portability workflows', 'Monitor numbering resources and portability performance', 0, 'C', ''],
+  ['Digital Customer Portal', 'Self-service, payments, support, plan management', 'Unify customer experience analytics across approved platforms', 1, 'E', 'ag:dg'],
+  ['Customer Experience Management', 'Surveys, NPS, satisfaction scores, journey analytics', 'Connect service quality and customer experience indicators', 0, 'E', 'tm:customer'],
+  ['Customer Churn Management', 'Churn prediction, retention workflows, loyalty analytics', 'Identify high-risk segments and recommend authorized retention actions', 1, 'E', 'ag:rl'],
+  ['Revenue Assurance', 'Billing reconciliation, leakage detection, revenue controls', 'Detect unusual revenue movements and reconciliation exceptions', 0, 'E', ''],
+  ['Telecom Fraud Management', 'Subscription fraud, payment fraud, usage anomalies', 'Detect abnormal patterns across authorized datasets', 0, 'E', 'ag:sc'],
+  ['Payment Management', 'Payment gateways, refunds, reconciliation, collections', 'Consolidate payment performance across applicable products', 0, 'C', ''],
+  ['Customer Support Center', 'Omnichannel support, complaints, chatbots, case management', 'Provide faster case resolution and escalation intelligence', 0, 'E', 'ag:cx'],
+  ['Enterprise CPQ', 'Configure, price and quote enterprise telecom solutions', 'Shorten complex enterprise service sales cycles', 1, 'E', 'tm:enterprise'],
+  ['Partner & Wholesale Billing', 'Wholesale charges, partner contracts, settlements', 'Improve profitability analysis of wholesale relationships', 1, 'C', ''],
+  ['Roaming Management', 'Roaming usage, agreements, wholesale settlements', 'Support international roaming analysis', 1, 'E', 'ag:ro'],
+  ['Usage Mediation', 'Collect, normalize and distribute usage records', 'Ensure approved usage data feeds are accurate and timely', 0, 'C', ''],
+  ['Network Operations Center', 'Centralized network monitoring, alarm dashboards, incident workflows', 'Consolidated network visibility for authorized operating-company teams', 0, 'C', ''],
+  ['Network Monitoring', 'Router, switch, radio, transport and device monitoring', 'Detect abnormal network behavior', 0, 'C', ''],
+  ['Fault Management', 'Alarm correlation, fault prioritization, technical ticketing', 'Reduce troubleshooting and fault-resolution time', 0, 'C', ''],
+  ['Network Performance Management', 'Latency, throughput, utilization, packet loss, availability', 'Compare network performance against targets', 0, 'C', ''],
+  ['Service Assurance', 'End-to-end service health, SLA monitoring, service quality', 'Connect network performance to actual customer experience', 0, 'E', ''],
+  ['Network Inventory', 'Physical and logical network asset records', 'Maintain accurate infrastructure data for planning and analysis', 0, 'C', ''],
+  ['Service Inventory', 'Active services, dependencies, underlying network resources', 'Identify the services affected by network problems', 0, 'C', ''],
+  ['Network Provisioning', 'Service activation, configuration and deactivation', 'Improve service delivery and provisioning analytics', 0, 'C', ''],
+  ['Network Orchestration', 'Multi-domain workflow automation and intent-based orchestration', 'Support e& UAE’s published autonomous network roadmap', 1, 'C', ''],
+  ['Radio Access Network', '4G/5G radio performance, cell configuration, radio capacity', 'Analyze coverage and capacity investments', 0, 'C', 'tm:network'],
+  ['Core Network Management', 'Mobile core functions, session performance, signaling analytics', 'Improve service reliability and core performance visibility', 0, 'C', ''],
+  ['Fiber Network Management', 'Optical inventory, fiber topology, line monitoring', 'Improve fixed broadband reliability and expansion planning', 0, 'C', 'ag:fh'],
+  ['Network GIS', 'Maps of sites, towers, fiber, facilities and coverage', 'Visualize network assets and geographic investment opportunities', 1, 'E', 'tab-geo'],
+  ['Capacity Planning', 'Traffic forecasts, utilization trends, expansion requirements', 'Recommend where network capacity should be expanded', 1, 'E', 'tm:network'],
+  ['Coverage Optimization', 'Coverage modeling, radio planning, performance benchmarking', 'Identify areas requiring optimization or expansion', 1, 'E', 'tab-geo'],
+  ['Outage Management', 'Outage detection, incident coordination, restoration tracking', 'Quantify affected services and restoration priorities', 0, 'C', ''],
+  ['Field Service Management', 'Technician dispatch, work orders, spare parts and inspections', 'Improve repairs, installations and field productivity', 0, 'C', ''],
+  ['Infrastructure Maintenance', 'Preventive maintenance, equipment health, service history', 'Reduce avoidable failures in sites and facilities', 1, 'C', ''],
+  ['Telecom Energy Management', 'Tower energy use, generators, cooling, power optimization', 'Reduce network operating costs and environmental impact', 1, 'E', ''],
+  ['Network Change Management', 'Configuration changes, release approvals, rollback plans', 'Reduce operational risk from network modifications', 0, 'C', ''],
+  ['Network Testing', 'Drive testing, probes, synthetic tests, service validation', 'Verify mobile and fixed service quality', 0, 'C', ''],
+  ['Network Digital Twin', 'Simulated topology, demand, performance and outage scenarios', 'Test proposed changes before implementing them', 2, 'E', ''],
+  ['Predictive Maintenance', 'Equipment failure forecasting, anomaly detection', 'Prioritize maintenance before outages occur', 1, 'E', ''],
+  ['Autonomous Network Control', 'Policy-driven, closed-loop AI recommendations and automation', 'Advance approved use cases toward Level 4 autonomy', 2, 'E', ''],
+  ['Service Impact Analysis', 'Maps incidents to customers, contracts, services and SLAs', 'Prioritize incidents based on business impact', 1, 'E', ''],
+  ['Mobile & 5G Services', 'Voice, data, SMS, mobile plans and 5G services', 'Manage commercial and technical performance of mobile products', 0, 'E', 'tab-dna'],
+  ['Fiber & Fixed Broadband', 'Residential fiber, enterprise internet, fixed access', 'Monitor broadband product growth and performance', 0, 'E', 'ag:fh'],
+  ['Enterprise Connectivity', 'Dedicated connectivity, SD-WAN, private WAN, managed networks', 'Identify enterprise sales and service opportunities', 1, 'E', 'tm:enterprise'],
+  ['Private 5G', 'Enterprise private networks, industrial connectivity', 'Evaluate private-network use cases and demand', 1, 'E', 'ag:en'],
+  ['IoT Connectivity', 'Industrial devices, vehicle connectivity, smart sensors', 'Expand data-driven IoT products and industry solutions', 1, 'E', 'ag:en'],
+  ['Cloud & Data Centers', 'Hosting, cloud services, storage, disaster recovery', 'Support e& enterprise’s digital infrastructure portfolio', 1, 'E', ''],
+  ['Cybersecurity Services', 'Managed security, vulnerability analysis, network protection', 'Identify opportunities for managed security services', 1, 'E', 'ag:sc'],
+  ['Cloud Communications', 'Business voice, SIP, unified communications', 'Improve enterprise communications service offerings', 1, 'E', ''],
+  ['Edge Computing', 'Low-latency processing close to network infrastructure', 'Explore industrial AI and edge applications', 2, 'E', ''],
+  ['Network APIs', 'Approved network identity, connectivity and quality capabilities', 'Evaluate monetization opportunities using standardized APIs', 1, 'E', ''],
+  ['International Connectivity', 'Carrier interconnection, international capacity, roaming', 'Track wholesale and cross-border connectivity opportunities', 1, 'E', 'ag:ro'],
+  ['Satellite & NTN', 'Satellite integration and non-terrestrial connectivity', 'Evaluate remote connectivity and resilience opportunities', 2, 'E', 'tab-pred'],
+  ['Smart City Solutions', 'IoT platforms, smart utilities, connected infrastructure', 'Develop integrated solutions for government and enterprise customers', 1, 'E', 'ag:en'],
+  ['Digital Payments & Fintech', 'Payments, wallets, remittances and financial-product analytics', 'Support e& life’s fintech ecosystem with appropriate controls', 1, 'E', 'tm:digital'],
+  ['Digital Entertainment & Lifestyle', 'Digital subscriptions, content, loyalty and lifestyle applications', 'Identify cross-product engagement and commercial opportunities', 1, 'E', 'ag:dg'],
+  ['Central Market Intelligence Hub', 'Unified industry data, analytics, source tracking and alerts', 'A proposed intelligence layer serving all e& business units', 0, 'P', '#challenge2|tab-cc'],
+  ['Competitor Intelligence', 'Competitor profiles, service launches, partnerships, announcements', 'Track e& competitors across relevant regional markets', 0, 'P', '#battle|tm:market'],
+  ['Competitor Pricing Engine', 'Public tariffs, bundles, promotions, offer comparison', 'Monitor changes in mobile, fiber and enterprise pricing', 0, 'P', 'tm:pricing'],
+  ['Market Research Engine', 'Market sizing, segmentation, growth indicators, market reports', 'Identify telecom and digital-services growth opportunities', 0, 'P', '#market'],
+  ['Telecom Industry Intelligence', 'Operator data, technology adoption, demand and financial trends', 'Compare key markets and industry developments', 0, 'P', '#positioning'],
+  ['Regulatory Intelligence', 'Regulator publications, policy developments, obligations', 'Identify regulatory changes affecting operating companies', 0, 'P', 'tm:regulatory'],
+  ['Technology Intelligence', '5G-Advanced, 6G, Open RAN, IoT, AI, NTN research', 'Detect emerging technologies and strategic implications', 1, 'P', 'tm:innovation'],
+  ['Financial Competitor Intelligence', 'Public financial reports, segment results, investment trends', 'Benchmark publicly reported business performance', 1, 'P', 'tm:capital'],
+  ['Customer Sentiment Intelligence', 'Public feedback, authorized surveys, complaints and sentiment analysis', 'Identify emerging customer expectations and concerns', 1, 'P', 'tm:live'],
+  ['Patent Intelligence', 'Patent search, technical landscape analysis, prior-art tracking', 'Monitor telecom intellectual property and R&D trends', 1, 'P', '#patent'],
+  ['Market Opportunity Detection', 'Detect underserved segments and emerging markets', 'Generate ranked commercial opportunity hypotheses', 1, 'P', 'od:ideas'],
+  ['Strategic Early-Warning System', 'Alerts for market, regulatory, technology and competitor changes', 'Notify relevant teams of potentially material developments', 1, 'P', 'tab-cc'],
+  ['AI Executive Advisor', 'AI-supported strategic summaries, scenario comparisons, recommendations', 'Help executives assess cross-business decisions with traceable evidence', 1, 'P', 'ag:st'],
+  ['AI Market Analyst', 'Automated synthesis of industry research and market indicators', 'Produce sourced market intelligence briefings', 0, 'P', 'ag:mi'],
+  ['AI Competitor Agent', 'Detects and summarizes changes in public competitor information', 'Provide daily or event-triggered competitive insights', 0, 'P', 'ag:mi'],
+  ['AI Financial Agent', 'Financial anomaly detection, forecasts and planning support', 'Identify revenue, cost and cash-flow risks', 1, 'P', 'ag:fn'],
+  ['AI Network Agent', 'Network anomaly detection, root-cause recommendations', 'Support network engineers and operations teams', 1, 'P', 'ag:nw'],
+  ['AI Customer Agent', 'Customer behavior analytics, churn and product recommendations', 'Improve customer experience and retention decisions', 1, 'P', 'ag:rl'],
+  ['AI Cybersecurity Agent', 'Threat triage, suspicious activity detection and investigation assistance', 'Reduce analyst workload under security controls', 1, 'P', 'ag:sc'],
+  ['AI Revenue Agent', 'Revenue leakage analytics and reconciliation anomaly alerts', 'Support billing integrity and revenue assurance', 1, 'P', 'ag:pr'],
+  ['AI Innovation Department', 'Idea generation, evaluation, prototyping, experiment tracking', 'Turn market intelligence into proposed products and services', 1, 'P', '#elab|#lab'],
+  ['AI Solutions Lab', 'Problem definition, alternatives, feasibility and business-case analysis', 'Develop solutions for operational and commercial challenges', 1, 'P', 'od:solve'],
+  ['AI Strategic Simulation', 'Scenario modeling, digital twins, demand and investment analysis', 'Compare strategic alternatives before committing capital', 2, 'P', 'tab-war'],
+  ['AI Agent Orchestrator', 'Coordinates multiple specialized AI agents, tasks, approvals and records', 'Connect market, finance, customer and network intelligence securely', 1, 'P', '#agents'],
+  ['Innovation & Patent Pipeline', 'Prior-art reviews, invention disclosures, R&D tracking, patent workflow', 'Support research commercialization and intellectual property management', 1, 'P', '#patent'],
+  ['Intelligent Decision Engine', 'Evidence scoring, opportunity ranking, risk-adjusted recommendations', 'Prioritize proposed actions with human executive approval', 1, 'P', 'dec'],
+  ['Enterprise Data Platform', 'Data lakehouse, warehouse, governed data products', 'Connect permitted corporate, commercial and network datasets', 0, 'C', ''],
+  ['API & Integration Platform', 'API gateway, integration services, event bus, TM Forum APIs', 'Build on e& UAE’s existing ODA and API architecture', 0, 'C', ''],
+  ['Real-Time Data Processing', 'Kafka-style event streaming, stream processing and alert rules', 'Support low-latency intelligence and operational dashboards', 1, 'E', 'tab-cc'],
+  ['Master Data Management', 'Common entity definitions, data quality, metadata and lineage', 'Improve consistency across business units and markets', 0, 'C', ''],
+  ['Identity & Access Management', 'Single sign-on, MFA, privileged access, role-based permissions', 'Keep corporate and telecom data restricted to authorized users', 0, 'C', ''],
+  ['Cybersecurity Operations', 'SOC, SIEM, vulnerability management, incident response', 'Protect the integrated platform and connected infrastructure', 0, 'C', ''],
+  ['Privacy & Data Governance', 'Classification, lawful processing, consent, retention, data residency', 'Support privacy and telecom-specific data obligations', 0, 'E', '#platform'],
+  ['AI Governance', 'Model evaluation, monitoring, approvals, audit logs, policy enforcement', 'Extend governance to AI agents and sensitive business decisions', 0, 'E', '#platform'],
+  ['Cloud & Infrastructure', 'Cloud, sovereign hosting, private infrastructure, container orchestration', 'Deploy according to workload sensitivity and residency requirements', 0, 'C', ''],
+  ['DevSecOps & MLOps', 'CI/CD, testing, software monitoring, model registries and deployment controls', 'Maintain reliable software and AI delivery pipelines', 0, 'C', ''],
+  ['Enterprise Architecture', 'Application inventory, integration mapping, technical standards', 'Avoid duplicating systems already operating within e&', 0, 'C', ''],
+  ['Business Continuity', 'Backup, disaster recovery, resilience testing, recovery planning', 'Maintain availability of critical services and intelligence systems', 0, 'C', ''],
+  ['e& UAE Intelligence Center', 'UAE market analytics, network intelligence, customer intelligence', 'Combine authorized local telecom information into a strategic view', 0, 'P', 'tm:uae|tm:market'],
+  ['e& International Intelligence Center', 'Multi-country market tracking, local regulatory intelligence, comparative KPIs', 'Compare countries and identify opportunities for cross-market learning', 1, 'P', '#positioning'],
+  ['e& Enterprise Intelligence Center', 'Enterprise accounts, cloud/AI demand, sales intelligence, solution profitability', 'Identify demand for digital transformation and managed services', 1, 'P', 'tm:enterprise'],
+  ['e& Life Intelligence Center', 'Fintech, entertainment and lifestyle performance analytics', 'Analyze authorized cross-product trends while preserving data separation', 1, 'P', 'tm:digital'],
+  ['e& Capital Intelligence Center', 'Venture sourcing, company screening, portfolio analytics and technology trends', 'Evaluate startups and strategic investment opportunities', 1, 'P', 'tm:capital'],
+  ['Executive Reporting Service', 'Automated daily, weekly and monthly intelligence summaries', 'Deliver role-specific briefings to e& leadership', 0, 'P', 'tm:exec'],
+  ['Intelligence-as-a-Service', 'Subscription analytics, market reports, benchmarking dashboards', 'Potential new enterprise service, subject to commercial and data rights', 2, 'P', '#business'],
+  ['Innovation Commercialization', 'Product business cases, pilot management, go-to-market planning', 'Convert validated ideas into commercial propositions', 1, 'P', 'od:ideas'],
+  ['Telecom Partner Ecosystem', 'Partner onboarding, API access, billing, certification and partnerships', 'Expand developer and enterprise ecosystems', 1, 'E', 'ag:ro'],
+  ['Performance Measurement', 'KPI baselines, benefit tracking, operational scorecards', 'Measure value generated by each integrated capability', 0, 'P', '#value'],
+  ['Enterprise Rollout Management', 'Pilot environments, change management, user training, adoption metrics', 'Deploy by business unit without disrupting existing systems', 0, 'P', '#launch'],
+  ['Continuous Optimization', 'Feedback loops, performance reviews, model monitoring and backlog', 'Improve the platform based on measurable outcomes', 1, 'P', '']
+];
+// the main platform is for any operator group: neutral names for the five business-unit centers
+const MP_NEUTRAL = { 123: ['Home-Market Intelligence Center', 'Home-market analytics, network intelligence, customer intelligence'], 124: ['International Intelligence Center'], 125: ['Enterprise Intelligence Center'], 126: ['Digital Life Intelligence Center'], 127: ['Ventures & Capital Intelligence Center'] };
+const MP_ROLE = { P: ['Provides', 'Cellvoyant provides this capability.'], E: ['Extends', 'Cellvoyant adds intelligence on top of the existing system and leaves it in place.'], C: ['Connects', 'This stays in the system of record. Cellvoyant reads approved data from it and does not replace it.'] };
+const MP_ZONES = {
+  mkt: ['Market & public intelligence', 'Public and licensed sources. Results can be shared widely across business units.'],
+  corp: ['Corporate & financial controls', 'Finance, HR, legal and audit stay in their own systems; only approved KPIs leave them.'],
+  cust: ['Customer data', 'Tokenized and aggregated before it leaves the BSS; consent, retention and residency rules apply.'],
+  net: ['Network operations', 'Read-only feeds; nothing changes on the live network without an engineer’s approval.'],
+  plat: ['Platform, AI & governance', 'Agents and the decision engine see approved outputs only and log every step.']
+};
+// recommended first implementation: the executive view, existing corporate data, market feeds, competitor and regulatory tracking, AI research, and the guardrails they need
+const MP_PHASE1 = [1, 111, 85, 86, 87, 90, 98, 99, 128, 115, 117, 118];
+const MP_PHASES = [
+  ['Phase 1 · Foundation', 'Intelligence first', 'Integrate the executive dashboard, existing corporate data, market intelligence feeds, competitor tracking, regulatory monitoring and AI-supported research. It starts with the 30-day pilot and touches no customer or network system.', MP_PHASE1],
+  ['Phase 2 · Connect', 'Authorized OSS/BSS data and advanced agents', 'Extend to approved OSS and BSS data, then to the finance, network, customer, security and revenue agents, the agent orchestrator and the decision engine, one business unit at a time.', [25, 27, 35, 36, 37, 45, 49, 69, 100, 101, 102, 104, 108, 110, 112]],
+  ['Phase 3 · Advance', 'Advanced innovation', 'The P2 capabilities: digital twins, closed-loop autonomy, edge, satellite, strategic simulation and intelligence-as-a-service, each behind its own business case.', null]
+];
+// public e& announcements this plan connects to instead of duplicating (checked 9 Nov 2026)
+const MP_ANN = [
+  ['26 Jan 2026', 'e& UAE earned TM Forum’s “Running on ODA” accreditation', 'More than 30 TM Forum Open APIs certified, so Cellvoyant can plug in through standard interfaces instead of custom links.', [112, 30, 31], 'https://www.eand.com/en/news/26-jan-26-eand-achieves-running-on-oda-accreditation-from-tm-forum.html'],
+  ['21 May 2026', 'The UAE Sovereign AI Platform, with the UAE Cyber Security Council and Open Innovation AI', 'Launched at ISNR 2026 to vet and monitor AI models, agents and workflows on UAE-controlled infrastructure. Cellvoyant’s agents would run under it rather than beside it.', [118, 119, 108], 'https://www.eand.com/en/news/21-may-26-eand-cybersecurity-and-openai-collaboration.html'],
+  ['22 Jun 2026', '“The Path to Full Autonomy” with TM Forum', 'e& UAE’s blueprint targets Level 4 autonomous networks by 2030 across RAN, core, transport, IP and fixed. Network capabilities feed that roadmap.', [53, 68, 66], 'https://www.eand.com/en/news/22-06-26-eand-tm-strategic-blueprint.html'],
+  ['17 Aug 2026', 'Agentic AI embedded in core business connectivity', 'Built into Business Pro and enterprise internet plans, on UAE-hosted Sovereign AI Compute. The enterprise center tracks demand and rival responses.', [72, 125, 79], 'https://www.eand.com/en/news/17-08-26-eand-agentic-ai-core-connectivity.html']
+];
+const MP_PRINCIPLES = [
+  ['Use the standard interfaces you have', 'Connect through TM Forum Open APIs and your integration platform instead of custom links.', [112, 30]],
+  ['Run AI under your governance', 'Agents work inside your AI-governance, identity and residency rules, on infrastructure you choose.', [118, 115, 119]],
+  ['Feed your network roadmap', 'Network intelligence supports the autonomy roadmap you already have instead of a parallel one.', [53, 68]],
+  ['Leave systems of record in place', 'ERP, billing, CRM and the NOC stay where they are; Cellvoyant reads approved data from them.', [2, 27, 45]]
+];
+let MP_ALL = null;
+function mpBuild() {
+  if (MP_ALL) return MP_ALL;
+  return (MP_ALL = MP_ROWS.map(([n, tools, app, p, role, go], i) => {
+    const no = i + 1, D = [...MP_DOM].reverse().find(d => no >= d[2]), nn = EDITION === 'eand' ? null : MP_NEUTRAL[no];
+    const g = go.split('|'), where = EDITION === 'eand' ? g[0] : (g[1] || g[0]);
+    return { no, n: nn ? nn[0] : n, tools: nn && nn[1] ? nn[1] : tools, app, p, role, go: where, dom: D[0], dn: D[1], zone: D[3], phase: MP_PHASE1.includes(no) ? 1 : p === 2 ? 3 : 2 };
+  }));
+}
+const mpGet = no => mpBuild().find(c => c.no === +no);
+// a target on this page exists only if its section, view, terminal or department does
+function cvHas(tok) {
+  if (!tok) return false;
+  if (tok[0] === '#') return !!document.getElementById(tok.slice(1));
+  if (tok.startsWith('tab-')) return !!document.getElementById(tok);
+  const [t, v] = tok.split(':');
+  if (t === 'tm') return !!($('#tmApp') && tmGet(v));
+  if (t === 'ag') return !!($('#agApp') && AG_DEPTS.find(d => d.k === v));
+  if (t === 'od') return !!$(`#odTabs [data-t="${v}"]`);
+  if (t === 'dec') return !!$('#dcApp') && (!v || !!DC_SCN.find(s => s.k === v));
+  if (t === 'cap') return !!$('#mpList') && !!mpGet(v);
+  if (t === 'mp') return !!$('#mpList');
+  return false;
+}
+// one navigator for every link on the page: sections, console views, terminals, agent departments, desk tabs, the decision engine and capabilities
+function cvGo(tok) {
+  if (!cvHas(tok)) return false;
+  if (tok[0] === '#' || tok.startsWith('tab-')) { goTool(tok); return true; }
+  const [t, v] = tok.split(':');
+  if (t === 'tm') { tmOpen(v); findGo($('#terminals')); }
+  else if (t === 'ag') { const D = AG_DEPTS.find(d => d.k === v); AG.q = ''; $('#agFind').value = ''; AG.dept = D.k; AG.agent = D.agents[0].id; agRenderList(); findGo($('#agents')); }
+  else if (t === 'od') { $(`#odTabs [data-t="${v}"]`).click(); findGo($('#operators')); }
+  else if (t === 'dec') { if (v) dcRun(v); findGo($('#decision')); }
+  else if (t === 'cap') mpShow(+v);
+  else if (t === 'mp') { mpReset(); if (/^P[012]$/.test(v)) MP.p = v; else if (/^[A-I]$/.test(v)) MP.dom = v; else if (v === 'live') MP.live = true; mpRender(); findGo($('#masterplan')); }
+  return true;
+}
+const MP = { q: '', dom: 'all', p: 'all', role: 'all', live: false, star: false, open: new Set() };
+const MP_STAR_KEY = 'cv.shortlist.v1';
+let MP_STARS = new Set();
+try { MP_STARS = new Set(JSON.parse(localStorage.getItem(MP_STAR_KEY) || '[]').filter(n => +n >= 1 && +n <= MP_ROWS.length).map(Number)); } catch (e) { /* storage blocked: this visit only */ }
+const mpSaveStars = () => { try { localStorage.setItem(MP_STAR_KEY, JSON.stringify([...MP_STARS])); } catch (e) { /* this visit only */ } };
+function mpReset() { Object.assign(MP, { q: '', dom: 'all', p: 'all', role: 'all', live: false, star: false }); const q = $('#mpQ'); if (q) q.value = ''; }
+function mpFilter(f) {
+  const q = String(f.q || '').toLowerCase().trim(), words = q.split(/\s+/).filter(Boolean);
+  return mpBuild().filter(c => (f.dom === 'all' || !f.dom || c.dom === f.dom) && (f.p === 'all' || !f.p || 'P' + c.p === f.p) && (f.role === 'all' || !f.role || c.role === f.role)
+    && (!f.live || cvHas(c.go)) && (!f.star || MP_STARS.has(c.no)) && (!words.length || words.every(w => `${c.no} ${c.n} ${c.tools} ${EDITION === 'eand' ? c.app : ''} ${c.dn}`.toLowerCase().includes(w))));
+}
+const mpPill = p => `<span class="mp-p p${p}">P${p}</span>`;
+const mpRec = c => ({ no: c.no, area: `${c.dom}. ${c.dn}`, capability: c.n, tools_services_features: c.tools, ...(EDITION === 'eand' ? { application_for_eand: c.app } : {}), priority: 'P' + c.p, cellvoyant_role: MP_ROLE[c.role][0], phase: c.phase, live_on_this_page: cvHas(c.go) });
+function mpRowHtml(c) {
+  const live = cvHas(c.go), open = MP.open.has(c.no), star = MP_STARS.has(c.no);
+  const ann = EDITION === 'eand' ? MP_ANN.filter(a => a[3].includes(c.no)) : [];
+  return `<article class="mp-row${open ? ' open' : ''}" id="cap-${c.no}" data-no="${c.no}">
+    <span class="mp-no mono">${c.no}</span>
+    <div class="mp-main"><button type="button" class="mp-name" aria-expanded="${open}" aria-controls="capd-${c.no}" data-mpx="${c.no}">${esc(c.n)}</button><span class="small">${esc(c.tools)}</span></div>
+    ${EDITION === 'eand' ? `<span class="mp-app small">${esc(c.app)}</span>` : ''}
+    <div class="mp-tags">${mpPill(c.p)}<span class="mp-role r-${c.role}">${MP_ROLE[c.role][0]}</span>${live ? '<span class="stc st-live">Live here</span>' : ''}</div>
+    <button type="button" class="mp-star" data-mpstar="${c.no}" aria-pressed="${star}" aria-label="${star ? 'Remove from' : 'Add to'} shortlist: ${esc(c.n)}" title="${star ? 'Remove from' : 'Add to'} shortlist">${star ? '★' : '☆'}</button>
+    <div class="mp-det" id="capd-${c.no}"${open ? '' : ' hidden'}>
+      <div><span class="label">How Cellvoyant takes part</span><p class="small">${esc(MP_ROLE[c.role][1])}</p></div>
+      <div><span class="label">Rollout</span><p class="small">${esc(MP_PHASES[c.phase - 1][0])}. ${esc(MP_PHASES[c.phase - 1][1])}</p></div>
+      <div><span class="label">Data zone</span><p class="small"><b>${esc(MP_ZONES[c.zone][0])}.</b> ${esc(MP_ZONES[c.zone][1])}</p></div>
+      ${ann.length ? `<div><span class="label">Builds on</span>${ann.map(a => `<p class="small">${esc(a[0])}: ${esc(a[1])} <a href="${a[4]}" target="_blank" rel="noopener noreferrer">source ↗</a></p>`).join('')}</div>` : ''}
+      <div class="row-btns">${live ? `<button type="button" class="btn sm accent" data-mpgo="${esc(c.go)}">Open it here →</button>` : ''}<button type="button" class="btn sm" data-mpreq="${c.no}">Request scoping</button><button type="button" class="btn sm" data-cvlink="cap-${c.no}">Copy link</button></div>
+    </div>
+  </article>`;
+}
+function mpRender() {
+  const root = $('#mpList'); if (!root) return;
+  const all = mpBuild(), list = mpFilter(MP), cnt = f => all.filter(f).length;
+  $('#mpSum').innerHTML = [['Capabilities', all.length], ['P0 · foundational', cnt(c => c.p === 0)], ['P1 · high-value', cnt(c => c.p === 1)], ['P2 · advanced', cnt(c => c.p === 2)], ['Live on this page', cnt(c => cvHas(c.go))]]
+    .map(([l, v]) => `<div><b>${v}</b><span>${l}</span></div>`).join('');
+  $('#mpMatrix').innerHTML = `<div class="mp-mx" role="table" aria-label="Capabilities by area and priority"><div class="mp-mh" role="row"><span role="columnheader">Area</span>${['P0', 'P1', 'P2'].map(p => `<span role="columnheader">${p}</span>`).join('')}<span role="columnheader">All</span></div>${MP_DOM.map(([k, n]) => {
+    const inD = all.filter(c => c.dom === k), cell = p => { const v = inD.filter(c => p === 'all' || 'P' + c.p === p).length, on = MP.dom === k && MP.p === p; return `<button type="button" role="cell" class="mp-c${v ? '' : ' z'}${on ? ' on' : ''}" data-mpcell="${k}|${p}" style="--a:${(v / 18).toFixed(2)}" aria-label="${esc(n)}, ${p === 'all' ? 'all priorities' : p}: ${v}"${v ? '' : ' disabled'}>${v}</button>`; };
+    return `<div class="mp-mr" role="row"><span role="rowheader"><b>${k}</b> ${esc(n)}</span>${cell('P0')}${cell('P1')}${cell('P2')}${cell('all')}</div>`;
+  }).join('')}</div>`;
+  $$('#mpPri [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === MP.p)));
+  $$('#mpRole [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === MP.role)));
+  $('#mpDom').value = MP.dom; $('#mpLive').setAttribute('aria-pressed', String(MP.live)); $('#mpStar').setAttribute('aria-pressed', String(MP.star));
+  $('#mpStarN').textContent = MP_STARS.size; $('#mpScope').disabled = !MP_STARS.size;
+  $('#mpCount').textContent = `${list.length} of ${all.length}`;
+  root.innerHTML = MP_DOM.map(([k, n]) => {
+    const rows = list.filter(c => c.dom === k); if (!rows.length) return '';
+    return `<div class="mp-g"><h4 class="mp-gh"><span class="mono">${k}</span>${esc(n)}<span class="tiny muted">${rows.length}</span></h4>${rows.map(mpRowHtml).join('')}</div>`;
+  }).join('') || '<p class="small muted">No capability matches. <button type="button" class="btn sm" data-mpreset>Clear filters</button></p>';
+}
+function mpShow(no) {
+  const c = mpGet(no); if (!c) return;
+  if (!mpFilter(MP).some(x => x.no === c.no)) mpReset();
+  MP.open.add(c.no); mpRender();
+  const el = document.getElementById('cap-' + c.no); findGo(el, true);
+}
+const mpCSV = list => {
+  const q = v => /[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : String(v);
+  const head = ['#', 'Area', 'Department / system', 'Tools, services and features', ...(EDITION === 'eand' ? ['Special application for e&'] : []), 'Priority', 'Cellvoyant role', 'Rollout phase', 'Live in Cellvoyant'];
+  return [head, ...list.map(c => [c.no, `${c.dom}. ${c.dn}`, c.n, c.tools, ...(EDITION === 'eand' ? [c.app] : []), 'P' + c.p, MP_ROLE[c.role][0], c.phase, cvHas(c.go) ? 'Yes' : 'No'])].map(r => r.map(q).join(',')).join('\n');
+};
+// saves a text file: the viewer's download prompt inside Claude, a normal download elsewhere
+async function saveText(filename, data, type) {
+  if (downloadsNs) { try { await downloadsNs.save({ filename, data }); toast('Saved ' + filename); return; } catch (e) { if (e && e.code === 'declined') { toast('Save cancelled'); return; } } }
+  try { const u = URL.createObjectURL(new Blob([data], { type: type || 'text/plain' })), a = document.createElement('a'); a.href = u; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); toast('Downloaded ' + filename); }
+  catch (e) { toast('This view can’t save files.'); }
+}
+// share links: inside Claude they point at the public site, which opens the same item
+async function cvCopyLink(hash) {
+  const url = (IN_CLAUDE ? LIVE_PUBLIC : location.href.split('#')[0]) + '#' + hash;
+  try { await navigator.clipboard.writeText(url); toast('Link copied: ' + url); } catch (e) { toast('Copy this link: ' + url); }
+}
+document.addEventListener('click', e => { const l = e.target.closest('[data-cvlink]'); if (l) cvCopyLink(l.dataset.cvlink); });
+function mpPhasesHtml() {
+  const all = mpBuild(), chip = n => { const c = mpGet(n); return `<button type="button" class="chip mp-chip" data-mpshow="${n}" title="${esc(c.tools)}"><span class="mono">${n}</span> ${esc(c.n)}</button>`; };
+  return MP_PHASES.map(([h, sub, d, picks], i) => {
+    const inP = all.filter(c => c.phase === i + 1), show = picks || inP.map(c => c.no);
+    return `<article class="mp-ph"><span class="label">${esc(h)}</span><h4>${esc(sub)}</h4><p class="small">${esc(d)}</p><p class="tiny muted">${inP.length} capabilities · ${inP.filter(c => c.p === 0).length} P0 · ${inP.filter(c => c.p === 1).length} P1 · ${inP.filter(c => c.p === 2).length} P2${picks && i ? ' · highlights below' : ''}</p><div class="chips">${show.map(chip).join('')}</div></article>`;
+  }).join('');
+}
+function mpZonesHtml() {
+  const all = mpBuild(), z = k => `<div class="mp-z z-${k}"><b>${esc(MP_ZONES[k][0])}</b><span class="small">${esc(MP_ZONES[k][1])}</span><span class="tiny muted">${all.filter(c => c.zone === k).length} capabilities · areas ${[...new Set(all.filter(c => c.zone === k).map(c => c.dom))].join(', ')}</span></div>`;
+  return `${z('mkt')}${z('corp')}<div class="mp-z mp-core"><b>Decision engine &amp; AI agents</b><span class="small">Receive only approved, aggregated outputs from each zone. Every step is logged, and a person approves every action.</span><span class="tiny muted">${all.filter(c => c.zone === 'plat').length} capabilities · areas F, G</span></div>${z('cust')}${z('net')}`;
+}
+function mpConnectHtml() {
+  const chips = ns => `<div class="chips">${ns.map(n => `<button type="button" class="chip mp-chip" data-mpshow="${n}"><span class="mono">${n}</span> ${esc(mpGet(n).n)}</button>`).join('')}</div>`;
+  if (EDITION === 'eand') return `<p class="small muted mp-note">e& has already announced substantial AI and network capabilities. The plan connects to and extends them; it does not replace them with a duplicate system.</p><div class="mp-ann">${MP_ANN.map(([d, t, w, ns, u]) => `<article><span class="label">${esc(d)}</span><b>${esc(t)}</b><span class="small">${esc(w)}</span>${chips(ns)}<a class="tiny" href="${u}" target="_blank" rel="noopener noreferrer">e& announcement ↗</a></article>`).join('')}</div>`;
+  return `<p class="small muted mp-note">Most operator groups already run ERP, billing, CRM, a NOC and an AI programme. The plan connects to and extends them instead of building duplicates.</p><div class="mp-ann">${MP_PRINCIPLES.map(([t, w, ns]) => `<article><b>${esc(t)}</b><span class="small">${esc(w)}</span>${chips(ns)}</article>`).join('')}</div>`;
+}
+function initMasterPlan() {
+  const root = $('#masterplan'); if (!root) return;
+  $('#mpDom').innerHTML = '<option value="all">All areas</option>' + MP_DOM.map(([k, n]) => `<option value="${k}">${k}. ${esc(n)}</option>`).join('');
+  const seg = (id, key, vals) => { $(id).innerHTML = vals.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${MP[key] === v}">${esc(l)}</button>`).join(''); $(id).addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (!b) return; MP[key] = b.dataset.v; mpRender(); }); };
+  seg('#mpPri', 'p', [['all', 'All'], ['P0', 'P0'], ['P1', 'P1'], ['P2', 'P2']]);
+  seg('#mpRole', 'role', [['all', 'All'], ['P', 'Provides'], ['E', 'Extends'], ['C', 'Connects']]);
+  $('#mpDom').addEventListener('change', e => { MP.dom = e.target.value; mpRender(); });
+  let st; $('#mpQ').addEventListener('input', e => { clearTimeout(st); st = setTimeout(() => { MP.q = e.target.value; mpRender(); }, 120); });
+  $('#mpLive').onclick = () => { MP.live = !MP.live; mpRender(); };
+  $('#mpStar').onclick = () => { MP.star = !MP.star; mpRender(); };
+  $('#mpCsv').onclick = () => saveText(MP.star ? 'cellvoyant-shortlist.csv' : 'cellvoyant-master-plan.csv', mpCSV(mpFilter(MP)), 'text/csv');
+  $('#mpScope').onclick = async e => {
+    const b = e.currentTarget, list = [...MP_STARS].sort((x, y) => x - y).map(mpGet); b.disabled = true;
+    try { const q = await createRequest({ service: 'capability', details: `${EDITION === 'eand' ? 'e&' : 'Operator group'} shortlist of ${list.length}: ${list.map(c => `#${c.no} ${c.n} (P${c.p})`).join('; ')}`, urgency: 'standard', via: 'master plan' }); toast(`Requested ${q.label}${q.saved ? '' : ' (this visit only)'}`); }
+    catch (err) { toast(err.message); } finally { b.disabled = !MP_STARS.size; }
+  };
+  root.addEventListener('click', async e => {
+    const x = e.target.closest('[data-mpx]'); if (x) { const n = +x.dataset.mpx, row = x.closest('.mp-row'), open = !MP.open.has(n); open ? MP.open.add(n) : MP.open.delete(n); row.classList.toggle('open', open); x.setAttribute('aria-expanded', String(open)); $('.mp-det', row).hidden = !open; return; }
+    const s = e.target.closest('[data-mpstar]'); if (s) { const n = +s.dataset.mpstar; MP_STARS.has(n) ? MP_STARS.delete(n) : MP_STARS.add(n); mpSaveStars(); mpRender(); const b = $(`[data-mpstar="${n}"]`); if (b) b.focus(); return; }
+    const c = e.target.closest('[data-mpcell]'); if (c) { const [d, p] = c.dataset.mpcell.split('|'); const same = MP.dom === d && MP.p === p; MP.dom = same ? 'all' : d; MP.p = same ? 'all' : p; mpRender(); $('#mpList').scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' }); return; }
+    const g = e.target.closest('[data-mpgo]'); if (g) { cvGo(g.dataset.mpgo); return; }
+    const sh = e.target.closest('[data-mpshow]'); if (sh) { mpShow(+sh.dataset.mpshow); return; }
+    if (e.target.closest('[data-mpreset]')) { mpReset(); mpRender(); return; }
+    const r = e.target.closest('[data-mpreq]'); if (r) { const k = mpGet(r.dataset.mpreq); r.disabled = true; try { const q = await createRequest({ service: 'capability', details: `#${k.no} ${k.n} (P${k.p}, ${MP_ROLE[k.role][0].toLowerCase()})`, urgency: 'standard', via: 'master plan' }); toast(`Requested ${q.label}${q.saved ? '' : ' (this visit only)'}`); r.textContent = 'Requested'; } catch (err) { toast(err.message); r.disabled = false; } }
+  });
+  $('#mpList').classList.toggle('has-app', EDITION === 'eand'); $('#mpTotal').textContent = MP_ROWS.length;
+  $('#mpPhases').innerHTML = mpPhasesHtml();
+  $('#mpZones').innerHTML = mpZonesHtml();
+  $('#mpConnect').innerHTML = mpConnectHtml();
+  mpRender();
+}
+// answers master-plan questions in the built-in assistant
+function mpAnswer(q) {
+  const s = q.toLowerCase();
+  if (!/master ?plan|capabilit(y|ies)\b|first implementation|implement first|\bphase [123]\b|\bp[012]\b|decision engine|shortlist/.test(s)) return null;
+  if (/decision engine/.test(s)) return `<p><b>Decision engine</b>: a rival move goes from detection to a sourced recommendation, and a person decides.</p><div class="cv-acts">${DC_SCN.map(x => cvAct(dcT(x.t, x), () => { cvGo('dec:' + x.k); return 'Opened the decision engine.'; })).join('')}</div>`;
+  const m = s.match(/(?:capability|#|item|number|no\.?)\s*(\d{1,3})\b/), one = m && mpGet(+m[1]);
+  if (one) return `<p><b>#${one.no} ${esc(one.n)}</b> · P${one.p} · ${esc(MP_ROLE[one.role][0])} · ${esc(MP_PHASES[one.phase - 1][0])}</p><p class="small">${esc(one.tools)}${EDITION === 'eand' ? '. For e&: ' + esc(one.app) + '.' : '.'}</p><div class="cv-acts">${cvAct('Show it in the master plan', () => { mpShow(one.no); return `Opened #${one.no}.`; })}</div>`;
+  const ph = s.match(/phase ([123])/) || (/first implementation|implement first|start with|first phase/.test(s) && [0, '1']);
+  const pr = (s.match(/\bp([012])\b/) || [])[1];
+  const DOMW = [['A', /corporate|executive|erp|finance|hr\b|legal/], ['B', /\bbss\b|billing|customer|revenue|charging/], ['C', /\boss\b|network|infrastructure/], ['D', /product|digital service|5g|fiber|fibre|iot/], ['E', /market intelligence|competit|research/], ['F', /\bai\b|agent|innovation|analytics/], ['G', /security|governance|technology|data platform|privacy/], ['H', /pillar|intelligence cent/], ['I', /commerciali|rollout|execution/]];
+  const dom = (DOMW.find(([, re]) => re.test(s)) || [])[0];
+  const list = mpBuild().filter(c => (!ph || c.phase === +ph[1]) && (pr == null || c.p === +pr) && (!dom || c.dom === dom));
+  const head = ph ? MP_PHASES[+ph[1] - 1][0] + ': ' + MP_PHASES[+ph[1] - 1][2] : `${list.length} capabilities${pr != null ? ' at P' + pr : ''}${dom ? ' in ' + MP_DOM.find(d => d[0] === dom)[1] : ''}.`;
+  return `<p>${esc(head)}</p>${cvList(list.slice(0, 10).map(c => `#${c.no} ${c.n} · P${c.p} · ${MP_ROLE[c.role][0]}`))}${list.length > 10 ? `<p class="tiny muted">and ${list.length - 10} more</p>` : ''}<div class="cv-acts">${cvAct('Open the master plan', () => { mpReset(); if (pr != null) MP.p = 'P' + pr; if (dom) MP.dom = dom; mpRender(); findGo($('#masterplan')); return 'Opened the master plan.'; })}</div>`;
+}
+
+/* ---------- DECISION ENGINE: market intelligence hub → AI innovation department → intelligent decision engine → a person decides ---------- */
+const DC_OP = EDITION === 'eand' ? 'etisalat' : 'Nimbus Mobile';
+const DC_FX = EDITION === 'eand' ? 1 : 1 / 3.67; // figures are set in AED; the main page shows them in USD
+const dcM = v => { const s = v < 0 ? '−' : '', a = Math.abs(v), c = EDITION === 'eand' ? 'AED ' : '$'; return s + c + (a >= 1e9 ? (a / 1e9).toFixed(2) + 'bn' : a >= 1e6 ? (a / 1e6).toFixed(1) + 'm' : a >= 1e3 ? Math.round(a / 1e3) + 'k' : Math.round(a)); };
+const dcP = v => dcM(Math.round(v * DC_FX));
+// [option, what it means, cost in months of segment revenue, share of revenue at risk it keeps, execution risk 0-1, who decides]
+const DC_SCN = [
+  { k: 'price', type: 'Price change', rival: ['du', 'Arcline Wireless'], t: '{rival} cuts its 5G postpaid plan price by 15%', seg: 'Premium 5G postpaid customers', subs: [900000, 400000], price: 300, ro: 300, rn: 255, kk: .4,
+    src: [['{rival} tariff page', 'Plan price changed from {ro} to {rn} a month', .92, 2], ['{rival} app listing', 'The same price shows in the app’s plan screen', .8, 5], ['Official social media', '“More 5G for less” campaign started', .7, 9]],
+    cmp: [['Monthly price', '{p}', '{ro}', '{rn}'], ['Data', 'Unlimited 5G', 'Unlimited 5G', 'Unlimited 5G'], ['Extras', 'Streaming included', 'None', 'None'], ['Commitment', '12 months', '12 months', '12 months']],
+    opts: [['Hold and monitor', 'Keep prices, watch port-outs daily and re-run in 7 days.', 0, 0, .05, 'Strategy team'], ['Targeted retention offer', '10% off for 6 months, only for the quarter of the segment the churn model flags.', .15, .55, .25, 'Retention and pricing committee'], ['Add value at the same price', 'An extra streaming or data add-on for the segment, no price change.', .128, .45, .15, 'Product and pricing committee'], ['Match the price', 'Cut the plan by 15% for everyone.', 1.8, .9, .6, 'Pricing committee and executive committee']] },
+  { k: 'bundle', type: 'New bundle', rival: ['du', 'Pulsar Cable Mobile'], t: '{rival} launches a fibre, mobile and streaming bundle at {rn} a month', seg: 'Fibre households', subs: [600000, 250000], price: 450, ro: null, rn: 399, kk: .35,
+    src: [['{rival} website', 'New bundle page and terms published', .9, 3], ['{rival} press release', 'Launch announced with a start date', .95, 4], ['Store check', 'Stores show the bundle', .65, 20]],
+    cmp: [['Monthly price', '{p} (fibre + mobile)', 'No bundle', '{rn} (fibre + mobile + streaming)'], ['Home speed', '1 Gbps', '—', '1 Gbps'], ['Streaming', 'Add-on', '—', 'Included']],
+    opts: [['Hold and monitor', 'Track bundle take-up and household port-outs for two weeks.', 0, 0, .05, 'Strategy team'], ['Converged offer for at-risk homes', 'A 12% household discount for 6 months, for the fifth of homes most likely to switch.', .144, .5, .2, 'Home and pricing committee'], ['Free streaming for 6 months', 'Add the streaming service free for 6 months to every fibre household.', .167, .45, .15, 'Product and partnerships'], ['Match the bundle price', 'Cut household bundles to the rival’s price for everyone.', 1.36, .85, .55, 'Pricing committee and executive committee']] },
+  { k: 'enterprise', type: 'Enterprise offer', rival: ['du', 'Arcline Wireless'], t: '{rival} offers SD-WAN with a free 3-month private 5G trial', seg: 'Enterprise accounts', subs: [4000, 1500], price: 25000, ro: null, rn: null, gap: .12, kk: .3,
+    src: [['{rival} business website', 'Trial offer page published', .88, 6], ['Public tender portal', 'The offer is cited in two public tenders', .9, 30], ['Trade media', 'Interview with {rival}’s enterprise head', .75, 48]],
+    cmp: [['SD-WAN', 'Managed, 99.9% SLA', 'Managed', 'Managed'], ['Private 5G', 'Quoted per site', 'Quoted per site', 'Free 3-month trial'], ['Contract', '36 months', '36 months', '36 months after the trial']],
+    opts: [['Hold and monitor', 'Watch tenders and account renewals for a month.', 0, 0, .05, 'Enterprise sales leadership'], ['Account-team outreach', 'Account managers call the 200 largest accounts with a site-readiness review.', .01, .35, .1, 'Enterprise sales leadership'], ['Matching trial for at-risk accounts', 'A private 5G trial for accounts with renewals in the next 12 months.', .03, .6, .2, 'Enterprise sales and network'], ['Blanket 15% discount', 'Cut enterprise connectivity prices by 15% for everyone.', 1.8, .9, .6, 'Pricing committee and executive committee']] },
+  { k: 'roaming', type: 'Roaming offer', rival: ['du', 'Vertex Telecom'], t: '{rival} adds 7 free roaming days a year to postpaid plans', seg: 'Frequent travellers', subs: [350000, 150000], price: 250, ro: null, rn: null, gap: .1, kk: .4,
+    src: [['{rival} roaming page', 'Free days added to the plan terms', .9, 5], ['{rival} app', 'Banner announces the free days', .8, 6]],
+    cmp: [['Free roaming days', 'None', 'None', '7 a year'], ['Daily roaming pass', 'Yes', 'Yes', 'Yes'], ['Eligible plans', '—', '—', 'All postpaid']],
+    opts: [['Hold and monitor', 'Watch travel-season port-outs and re-run before the next holiday peak.', 0, 0, .05, 'Strategy team'], ['Travel pass for at-risk travellers', 'A discounted multi-day pass, offered before trips to customers who travel most.', .05, .5, .15, 'Roaming and retention'], ['5 free days on premium plans', 'Add five free roaming days to the top postpaid plans.', .08, .55, .2, 'Product and pricing committee'], ['Match 7 free days for all', 'Seven free roaming days on every postpaid plan.', .25, .85, .35, 'Pricing committee and executive committee']] },
+  { k: 'digital', type: 'Digital plan price', rival: ['Virgin Mobile UAE', 'Kite'], t: '{rival} cuts its digital plan price by 20%', seg: 'Young digital-first customers', subs: [500000, 300000], price: 150, ro: 150, rn: 120, kk: .45,
+    src: [['{rival} app store listing', 'New price in the release notes', .85, 1], ['{rival} website', 'Price shown on the plan page', .9, 2], ['Official social media', 'Influencer campaign started', .6, 12]],
+    cmp: [['Monthly price', '{p}', '{ro}', '{rn}'], ['Sign-up', 'App or store', 'App only', 'App only'], ['Data', '50 GB', '50 GB', '50 GB']],
+    opts: [['Hold and monitor', 'Watch app ratings and port-outs for this segment for 7 days.', 0, 0, .05, 'Strategy team'], ['Youth retention offer in the app', 'A personal in-app offer for customers the model flags as likely to leave.', .12, .5, .2, 'Digital and retention'], ['Double data for 3 months', 'Double data for the whole segment for 3 months, price unchanged.', .1, .45, .15, 'Product and pricing committee'], ['Match the price', 'Cut the digital plan by 20% for everyone.', 2.4, .9, .6, 'Pricing committee and executive committee']] }
+];
+const DC_STEPS = [['Detect', 'Market intelligence hub', [85, 86, 87, 96]], ['Compare', 'Competitor pricing engine', [87, 30]], ['Estimate', 'Approved data and models', [6, 36, 100]], ['Options', 'AI innovation department', [105, 106]], ['Recommend', 'Intelligent decision engine', [110, 97, 118]]];
+const DC = { k: null, live: null, aware: .5, sens: 'mid', out: null, memo: null };
+const DC_SENS = { low: .7, mid: 1, high: 1.45 };
+const dcRival = x => EDITION === 'eand' ? x.rival[0] : x.rival[1];
+const dcT = (s, x) => String(s).replace(/\{rival\}/g, dcRival(x)).replace(/\{op\}/g, DC_OP).replace(/\{p\}/g, dcP(x.price)).replace(/\{ro\}/g, x.ro ? dcP(x.ro) : '—').replace(/\{rn\}/g, x.rn ? dcP(x.rn) : '—');
+// the whole flow as numbers: evidence, revenue at risk and options ranked by risk-adjusted value
+function dcCalc(x, aware, sens) {
+  const subs = EDITION === 'eand' ? x.subs[0] : x.subs[1], price = x.price * DC_FX;
+  const ev = 1 - x.src.reduce((a, [, , r, h]) => a * (1 - r * .6 * (1 - Math.min(.5, h / 96))), 1);
+  const gap = x.gap != null ? x.gap : (x.price - x.rn) / x.price;
+  const share = Math.min(.2, x.kk * DC_SENS[sens] * gap * aware), atRisk = subs * share, rev = atRisk * price * 12;
+  const opts = x.opts.map(([n, d, c, sv, r, owner]) => { const cost = subs * price * c, saved = rev * sv, net = saved - cost, score = (saved * ev - cost) * (1 - r / 2); return { n, d, cost, saved, net, r, owner, score }; });
+  const ranked = [...opts].sort((a, b) => b.score - a.score), best = ranked[0].score > 0 ? ranked[0] : opts[0];
+  return { subs, gap, share, atRisk, rev, lo: rev * .65, hi: rev * 1.35, ev, opts, ranked, best, verify: ev < .6 };
+}
+const dcPct = v => Math.round(v * 100) + '%';
+const dcEvL = e => e >= .8 ? 'Strong' : e >= .6 ? 'Good' : 'Weak: verify first';
+function dcRun(k, live) {
+  const x = DC_SCN.find(s => s.k === k); if (!x || !$('#dcApp')) return;
+  DC.k = k; DC.live = live || null; DC.memo = null;
+  $$('#dcPick [data-dck]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.dck === k && !live)));
+  dcRender(true);
+}
+const dcScn = () => { const x = DC_SCN.find(s => s.k === DC.k); if (!x || !DC.live) return x; const L = DC.live; return Object.assign({}, x, { t: L.title, live: L, src: [[L.domain || 'Live news', L.title, .75, L.hours]] }); };
+function dcRender(anim) {
+  const x = dcScn(), out = $('#dcOut'); if (!x || !out) return;
+  const R = DC.out = dcCalc(x, DC.aware, DC.sens), rv = dcRival(x);
+  const node = (i, inner, cls) => `<article class="dc-card${anim ? ' in' : ''}${cls ? ' ' + cls : ''}" style="--d:${i * 140}ms"><header><span class="dc-n">${i + 1}</span><div><b>${DC_STEPS[i][0]}</b><span class="tiny muted">${esc(DC_STEPS[i][1])} · ${DC_STEPS[i][2].map(n => `<button type="button" class="dc-cap" data-mpshow="${n}" title="${esc(mpGet(n).n)}">#${n}</button>`).join(' ')}</span></div></header>${inner}</article>`;
+  const srcRows = x.src.map(([s, f, r, h]) => `<li><b>${esc(dcT(s, x))}</b><span class="small">${esc(dcT(f, x))}</span><span class="tiny muted">${h < 1 ? 'just now' : h < 48 ? Math.round(h) + ' h ago' : Math.round(h / 24) + ' days ago'} · reliability ${dcPct(r)}</span></li>`).join('');
+  const liveLink = x.live && x.live.url ? `<p class="tiny"><a href="${esc(x.live.url)}" target="_blank" rel="noopener noreferrer">Open the article ↗</a> · classified as a ${esc(x.type.toLowerCase())}; the comparison below uses illustrative offer data until the hub reads the actual offer.</p>` : '';
+  out.innerHTML = [
+    node(0, `<p class="dc-head">${esc(dcT(x.t, x))}</p><ul class="dc-src">${srcRows}</ul>${liveLink}<div class="dc-ev"><span>Evidence score</span><b>${dcPct(R.ev)}</b><span class="tiny">${esc(dcEvL(R.ev))}</span><i style="--w:${dcPct(R.ev)}"></i></div>`),
+    node(1, `<div class="dc-tw"><table class="dc-t"><thead><tr><th scope="col"><span class="sr">Item</span></th><th scope="col">${esc(DC_OP)} today</th><th scope="col">${esc(rv)} before</th><th scope="col">${esc(rv)} now</th></tr></thead><tbody>${x.cmp.map(r => `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map((v, i) => `<td${i === 2 ? ' class="dc-new"' : ''}>${esc(dcT(v, x))}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="tiny muted">Segment: ${esc(x.seg)}. Relevant gap: ${dcPct(R.gap)} in ${esc(rv)}’s favour.</p>`),
+    node(2, `<div class="dc-ctl"><label class="small" for="dcAware">Share of the segment that sees the offer <b id="dcAwareV">${dcPct(DC.aware)}</b></label><input type="range" id="dcAware" min="10" max="90" step="5" value="${Math.round(DC.aware * 100)}"><span class="small">Price sensitivity</span><div class="seg-btns" id="dcSens" role="group" aria-label="Price sensitivity">${[['low', 'Low'], ['mid', 'Medium'], ['high', 'High']].map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${DC.sens === v}">${l}</button>`).join('')}</div></div><div class="dc-kpi" id="dcKpi"></div>`),
+    node(3, `<div class="dc-opts" id="dcOpts"></div><p class="tiny muted">Ranked by risk-adjusted value: (revenue kept × evidence score − cost) × (1 − risk ÷ 2).</p>`),
+    node(4, `<div class="dc-rec" id="dcRec"></div>
+      <ul class="dc-guard">${[`Based only on public information about ${rv}; no contact or coordination with any competitor.`, 'No price or offer changes automatically. A person decides, and the owning team acts in its own systems.', `Customer figures are aggregated; a pilot uses approved, tokenized ${DC_OP} data.`, 'Any offer passes consumer-protection review before launch.', 'Every step is logged with its sources (AI governance, #118).'].map(g => `<li>${esc(g)}</li>`).join('')}</ul>
+      <div class="row-btns" id="dcBtns"></div><div id="dcMemo"></div>`, 'dc-final')
+  ].join('');
+  dcFill();
+}
+// recomputes the estimate, the options and the recommendation in place
+function dcFill() {
+  const x = dcScn(); if (!x || !$('#dcKpi')) return;
+  const R = DC.out = dcCalc(x, DC.aware, DC.sens), max = Math.max(...R.opts.map(o => Math.abs(o.score)), 1);
+  $('#dcAwareV').textContent = dcPct(DC.aware);
+  $$('#dcSens [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === DC.sens)));
+  $('#dcKpi').innerHTML = `<div><b>${fmtInt(R.atRisk)}</b><span>customers at risk of ${fmtInt(R.subs)}</span></div><div><b>${dcM(R.rev)}</b><span>revenue at risk over 12 months</span></div><div><b>${dcM(R.lo)}–${dcM(R.hi)}</b><span>range</span></div>`;
+  $('#dcOpts').innerHTML = R.opts.map(o => `<div class="dc-opt${o === R.best ? ' best' : ''}"><div><b>${esc(o.n)}</b><span class="small">${esc(o.d)}</span></div><dl><div><dt>Keeps</dt><dd>${dcM(o.saved)}</dd></div><div><dt>Costs</dt><dd>${dcM(o.cost)}</dd></div><div><dt>Net</dt><dd class="${o.net < 0 ? 'down' : o.net > 0 ? 'up' : ''}">${dcM(o.net)}</dd></div><div><dt>Risk</dt><dd>${dcPct(o.r)}</dd></div></dl><span class="dc-bar${o.score < 0 ? ' neg' : ''}" aria-hidden="true"><i style="--w:${(Math.abs(o.score) / max * 100).toFixed(0)}%"></i></span></div>`).join('');
+  $('#dcRec').innerHTML = `<span class="label">Recommendation for human review</span><b>${esc(R.best.n)}</b><p class="small">${esc(R.best.d)} ${R.best.score > 0 ? `Estimated net ${dcM(R.best.net)} over 12 months, with ${dcPct(R.best.r)} execution risk.` : 'No response beats holding at this evidence level and exposure.'}${R.verify ? ' The evidence is weak, so an analyst should confirm the move before any response.' : ''}</p><p class="small">Decision owner: <b>${esc(R.best.owner)}</b>.</p>`;
+  $('#dcBtns').innerHTML = `<button type="button" class="btn sm accent" data-dcsend>Send for review</button>${R.verify ? '<button type="button" class="btn sm" data-dcverify>Ask an analyst to verify</button>' : ''}<button type="button" class="btn sm" data-dcmemo>${sample ? 'Draft the briefing with Claude' : 'Draft the briefing'}</button><button type="button" class="btn sm" data-cvlink="dc-${esc(x.k)}">Copy link</button>`;
+  $('#dcMemo').innerHTML = ''; DC.memo = null;
+}
+function dcMemoMD() {
+  const x = dcScn(), R = DC.out, rv = dcRival(x), d = new Date(Date.now() + 2 * 864e5).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  return [`# Decision brief: ${dcT(x.t, x)}`, '', `Prepared by Cellvoyant for human review. Figures are illustrative${EDITION === 'eand' ? ', not du’s, Virgin Mobile UAE’s or etisalat’s actual prices or volumes' : ''}; a pilot uses approved ${DC_OP} data. Nothing changes automatically.`, '',
+    '## What happened', ...x.src.map(([s, f, r]) => `- ${dcT(s, x)}: ${dcT(f, x)} (reliability ${dcPct(r)})`), `- Evidence score: ${dcPct(R.ev)} (${dcEvL(R.ev)})`, '',
+    '## How it compares', `| | ${DC_OP} today | ${rv} before | ${rv} now |`, '|---|---|---|---|', ...x.cmp.map(r => `| ${r[0]} | ${r.slice(1).map(v => dcT(v, x)).join(' | ')} |`), '',
+    '## Estimated effect over 12 months', `- Segment: ${x.seg}, ${fmtInt(R.subs)} customers; ${dcPct(DC.aware)} see the offer; ${DC.sens === 'mid' ? 'medium' : DC.sens} price sensitivity`, `- Customers at risk: ${fmtInt(R.atRisk)}`, `- Revenue at risk: ${dcM(R.rev)} (range ${dcM(R.lo)} to ${dcM(R.hi)})`, '',
+    '## Options, ranked', ...R.ranked.map((o, i) => `${i + 1}. **${o.n}**: keeps ${dcM(o.saved)}, costs ${dcM(o.cost)}, net ${dcM(o.net)}, risk ${dcPct(o.r)}. ${o.d}`), '',
+    '## Recommendation', `**${R.best.n}**. Decision owner: ${R.best.owner}, by ${d}.${R.verify ? ' Verify the move with an analyst first: the evidence is weak.' : ''}`, '',
+    '## Guardrails', `- Public information only; no contact or coordination with ${rv} or any competitor.`, '- A person approves; the owning team executes in its own systems.', '- Offers pass consumer-protection review.', '- Every step is logged with its sources.'].join('\n');
+}
+async function dcMemo(btn) {
+  const box = $('#dcMemo'), md = dcMemoMD(); DC.memo = md;
+  const show = (t, by) => { box.innerHTML = `<div class="ai-out"><span class="by">${esc(by)}</span>${mdLite(t)}<div class="row-btns"><button type="button" class="btn sm" data-dcsave>Save the briefing</button></div></div>`; };
+  if (!sample) { show(md, 'Built-in briefing'); return; }
+  btn.disabled = true; box.innerHTML = '<div class="ai-out"><span class="by">Claude · drafting</span><span class="muted">Thinking…</span></div>';
+  try {
+    const { text } = await sample(`You write decision briefs for a telecom strategy team. Improve this draft brief: keep every number exactly as given, keep the headings, add a short "Risks to watch" section with three risks and a one-line "If the rival goes further" note. Never suggest contacting or coordinating with competitors. Answer in ${LANG_NAME[LANG.cur] || 'English'}, in Markdown.\n\n${md}`, { modelTier: 'quick', cache: false, onText: ({ text: t }) => { box.innerHTML = `<div class="ai-out"><span class="by">Claude · drafting</span>${mdLite(t)}</div>`; } });
+    DC.memo = text; show(text, 'Claude · check the numbers against the steps above');
+  } catch (e) { show(md, aiFail(e) + '; built-in briefing'); }
+  finally { btn.disabled = false; }
+}
+const DC_KEY = 'cv.decisions.v1';
+let DC_Q = [];
+try { DC_Q = JSON.parse(localStorage.getItem(DC_KEY) || '[]').filter(d => d && d.id).slice(0, 20); } catch (e) { /* this visit only */ }
+const dcSaveQ = () => { try { localStorage.setItem(DC_KEY, JSON.stringify(DC_Q.slice(0, 20))); } catch (e) { /* this visit only */ } };
+const dcNow = () => new Date().toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+const DC_ST = { wait: ['Awaiting review', 'st-proto'], ok: ['Approved for the owning team', 'st-live'], chg: ['Changes requested', 'st-svc'], no: ['Rejected', 'st-prod'] };
+function dcSend() {
+  const x = dcScn(), R = DC.out, id = 'D-' + String(1000 + Math.floor(Math.random() * 9000));
+  DC_Q.unshift({ id, t: dcT(x.t, x), opt: R.best.n, net: dcM(R.best.net), ev: dcPct(R.ev), owner: R.best.owner, st: 'wait', log: [[dcNow(), `Detected by the hub (#85), compared (#87), estimated, options drafted (#105) and ranked (#110). Evidence ${dcPct(R.ev)}.`], [dcNow(), `Sent to ${R.best.owner} for review.`]] });
+  dcSaveQ(); dcQueue(); toast(`${id} sent to ${R.best.owner}`);
+}
+function dcQueue() {
+  const box = $('#dcQueue'); if (!box) return;
+  box.innerHTML = DC_Q.length ? DC_Q.map(d => `<article class="dc-qi"><div class="dc-qh"><b class="mono">${esc(d.id)}</b><span class="stc ${DC_ST[d.st][1]}">${esc(DC_ST[d.st][0])}</span></div><b>${esc(d.opt)}</b><span class="small">${esc(d.t)}</span><span class="tiny muted">Net ${esc(d.net)} · evidence ${esc(d.ev)} · owner: ${esc(d.owner)}</span>
+    <details><summary class="tiny">Audit log (${d.log.length})</summary><ul class="tiny">${d.log.map(([t, l]) => `<li><span class="mono">${esc(t)}</span> ${esc(l)}</li>`).join('')}</ul></details>
+    ${d.st === 'wait' || d.st === 'chg' ? `<div class="row-btns"><button type="button" class="btn sm accent" data-dcact="ok|${esc(d.id)}">Approve</button><button type="button" class="btn sm" data-dcact="chg|${esc(d.id)}">Request changes</button><button type="button" class="btn sm" data-dcact="no|${esc(d.id)}">Reject</button></div>` : `<button type="button" class="btn sm" data-dctask="${esc(d.id)}">Add to the team workspace</button>`}</article>`).join('')
+    : '<p class="small muted">Nothing waiting. Run a scenario and send its recommendation for review.</p>';
+}
+const DC_ACT = { ok: 'Approved. The owning team executes in its own systems; Cellvoyant changes nothing.', chg: 'Changes requested: back to the strategy team with comments.', no: 'Rejected and closed.' };
+async function dcLiveList(btn) {
+  const box = $('#dcLive'); box.hidden = false; box.innerHTML = '<p class="small muted">Searching live news…</p>'; btn.disabled = true;
+  const q = EDITION === 'eand' ? '(etisalat OR "du telecom" OR "Virgin Mobile UAE" OR "e& UAE")' : '(telecom OR telco) (tariff OR bundle OR "5G plan" OR "price cut")';
+  try {
+    const L = lvTake(await liveNews(q, { days: 14, max: 12, lang: 'english' }), 6);
+    if (!L.length) { box.innerHTML = `<p class="small muted">${L.source && L.source !== 'GDELT' ? 'The live news service is busy: it allows one search every few seconds from each address. Try again in a minute, or pick a scenario above.' : 'No matching headlines in the last 14 days. Pick a scenario above.'}</p>`; return; }
+    DC.liveItems = L;
+    box.innerHTML = `<p class="tiny muted">Live from ${esc(L.source === 'GDELT' ? 'GDELT world news, last 14 days' : L.source || 'public news')}. Pick a headline to run it through the flow.</p>${L.map((n, i) => `<button type="button" class="dc-lv" data-dclive="${i}"><b>${esc(n.title)}</b><span class="tiny muted">${esc([n.domain, n.date].filter(Boolean).join(' · '))}</span></button>`).join('')}`;
+  } catch (e) { box.innerHTML = `<p class="small muted">${esc(e.message || 'Live news is unavailable here.')}${LV.blocked ? ` <a href="${esc(LIVE_PUBLIC)}#decision" target="_blank" rel="noopener">Open the public site ↗</a>` : ''}</p>`; }
+  finally { btn.disabled = false; }
+}
+function dcClassify(t) { const s = t.toLowerCase(); return /roam|travel/.test(s) ? 'roaming' : /business|enterprise|sd-wan|private 5g|cloud|government/.test(s) ? 'enterprise' : /fib(re|er)|home|bundle|tv|stream/.test(s) ? 'bundle' : /app|digital|esim|youth/.test(s) ? 'digital' : 'price'; }
+function initDecision() {
+  const app = $('#dcApp'); if (!app) return;
+  $('#dcFlow').innerHTML = DC_STEPS.map(([n, w, caps], i) => `<li><span class="dc-n">${i + 1}</span><b>${n}</b><span class="tiny muted">${esc(w)}</span><span class="tiny mono">${caps.map(c => '#' + c).join(' ')}</span></li>`).join('') + '<li class="dc-human"><span class="dc-n">✓</span><b>Decide</b><span class="tiny muted">A person reviews</span><span class="tiny mono">human approval</span></li>';
+  $('#dcPick').innerHTML = DC_SCN.map(x => `<button type="button" class="dc-s" data-dck="${x.k}" aria-pressed="false"><span class="label">${esc(x.type)}</span><b>${esc(dcT(x.t, x))}</b></button>`).join('') + '<button type="button" class="dc-s dc-s-live" id="dcLiveBtn"><span class="label">Live</span><b>Use a real headline from the news</b></button>';
+  app.addEventListener('click', async e => {
+    const s = e.target.closest('[data-dck]'); if (s) { dcRun(s.dataset.dck); return; }
+    if (e.target.closest('#dcLiveBtn')) { dcLiveList(e.target.closest('#dcLiveBtn')); return; }
+    const lv = e.target.closest('[data-dclive]'); if (lv) { const n = DC.liveItems[+lv.dataset.dclive], h = n.date ? Math.max(1, (Date.now() - new Date(n.date)) / 36e5) : 24; dcRun(dcClassify(n.title), { title: n.title, url: n.url, domain: n.domain, hours: isFinite(h) ? h : 24 }); $('#dcOut').scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' }); return; }
+    const sv = e.target.closest('#dcSens [data-v]'); if (sv) { DC.sens = sv.dataset.v; dcFill(); return; }
+    if (e.target.closest('[data-dcsend]')) { dcSend(); return; }
+    const m = e.target.closest('[data-dcmemo]'); if (m) { dcMemo(m); return; }
+    if (e.target.closest('[data-dcsave]')) { saveText('cellvoyant-decision-brief.md', DC.memo || dcMemoMD(), 'text/markdown'); return; }
+    const vf = e.target.closest('[data-dcverify]'); if (vf) { vf.disabled = true; try { const q = await createRequest({ service: 'analyst', details: `Verify before responding: ${dcT(dcScn().t, dcScn())}`, urgency: 'urgent', via: 'decision engine' }); toast(`Requested ${q.label}${q.saved ? '' : ' (this visit only)'}`); vf.textContent = 'Analyst requested'; } catch (err) { toast(err.message); vf.disabled = false; } return; }
+    const a = e.target.closest('[data-dcact]'); if (a) { const [st, id] = a.dataset.dcact.split('|'), d = DC_Q.find(q => q.id === id); if (!d) return; d.st = st; d.log.push([dcNow(), DC_ACT[st]]); dcSaveQ(); dcQueue(); return; }
+    const tk = e.target.closest('[data-dctask]'); if (tk) { const d = DC_Q.find(q => q.id === tk.dataset.dctask); tk.disabled = true; await addTask({ title: `${d.id}: ${d.opt} (${d.t})`, kind: 'manual', dept: 'st', prio: 'high' }); return; }
+    const mp = e.target.closest('[data-mpshow]'); if (mp) mpShow(+mp.dataset.mpshow);
+  });
+  app.addEventListener('input', e => { if (e.target.id !== 'dcAware') return; DC.aware = +e.target.value / 100; dcFill(); });
+  dcRun('price'); dcQueue();
+}
+function dcPanelHtml() {
+  const rows = DC_Q.slice(0, 6).map(d => tmRow(`<b class="mono">${esc(d.id)}</b> ${esc(d.opt)}`, esc(DC_ST[d.st][0]), 'tiny muted')).join('');
+  return (rows || '<p class="small muted">Nothing waiting for review.</p>') + `<div class="row-btns" style="margin-top:8px">${DC_SCN.map(x => `<button type="button" class="chip" data-tmrun="DECIDE ${x.k}">${esc(x.type)}</button>`).join('')}</div>`;
+}
+function mpPanelHtml() {
+  const all = mpBuild();
+  return MP_DOM.map(([k, n]) => { const d = all.filter(c => c.dom === k); return `<button type="button" class="tm-line" data-tmrun="CAP ${k}"><span class="mono">${k}</span><span>${esc(n)}</span><span class="tiny muted">${d.filter(c => c.p === 0).length} · ${d.filter(c => c.p === 1).length} · ${d.filter(c => c.p === 2).length}</span></button>`; }).join('') + '<p class="tiny muted">P0 · P1 · P2 per area. Try CAP 87, CAP P0 or CAP phase 1.</p>';
+}
+function mpCmd(arg) {
+  const a = arg.trim(), all = mpBuild();
+  if (!a) return [`${all.length} capabilities: ${all.filter(c => c.p === 0).length} P0, ${all.filter(c => c.p === 1).length} P1, ${all.filter(c => c.p === 2).length} P2; ${all.filter(c => cvHas(c.go)).length} live on this page.`, ...MP_DOM.map(([k, n]) => `${k}. ${n}: ${all.filter(c => c.dom === k).length}`), 'Try CAP 87, CAP P0, CAP C, CAP phase 1 or CAP pricing.'];
+  if (/^\d{1,3}$/.test(a)) { const c = mpGet(+a); if (!c) return [`There are ${all.length} capabilities.`]; return [`#${c.no} ${c.n} · P${c.p} · ${MP_ROLE[c.role][0]} · ${MP_PHASES[c.phase - 1][0]}`, c.tools, ...(EDITION === 'eand' ? ['For e&: ' + c.app] : []), MP_ROLE[c.role][1], `Data zone: ${MP_ZONES[c.zone][0]}`, cvHas(c.go) ? 'Live on this page: type FIND ' + c.n : 'Not on this page yet: request scoping in the master plan.']; }
+  const ph = a.match(/^phase\s*([123])$/i), f = ph ? all.filter(c => c.phase === +ph[1]) : /^P[012]$/i.test(a) ? all.filter(c => 'P' + c.p === a.toUpperCase()) : /^[A-I]$/i.test(a) ? all.filter(c => c.dom === a.toUpperCase()) : mpFilter({ q: a });
+  return f.length ? [`${f.length} match${f.length === 1 ? '' : 'es'}:`, ...f.slice(0, 30).map(c => `#${c.no} P${c.p} ${c.n} (${MP_ROLE[c.role][0].toLowerCase()})`), ...(f.length > 30 ? [`and ${f.length - 30} more`] : [])] : [];
+}
+function dcCmd(arg) {
+  const k = (DC_SCN.find(x => x.k === arg.trim().toLowerCase()) || DC_SCN[0]).k, x = DC_SCN.find(s => s.k === k), R = dcCalc(x, .5, 'mid');
+  return [dcT(x.t, x), `Evidence ${dcPct(R.ev)} (${dcEvL(R.ev)}) · ${fmtInt(R.atRisk)} customers and ${dcM(R.rev)} a year at risk (illustrative)`, ...R.ranked.map((o, i) => `${i + 1}. ${o.n}: net ${dcM(o.net)}, risk ${dcPct(o.r)}`), `Recommendation for review: ${R.best.n} (owner: ${R.best.owner}). Nothing changes automatically.`, 'Open the decision engine to adjust the estimate and send it for review.'];
+}
+TM_PANELS.mplan = ['Master plan', '134 capabilities by area and priority'];
+TM_PANELS.decide = ['Decision queue', 'Recommendations waiting for human review'];
+TM_PRESETS.splice(TM_PRESETS.findIndex(t => t.id === 'exec') + 1, 0, { id: 'plan', n: 'Master plan & decisions', p: '134 capabilities, the rollout and recommendations waiting for review', panels: [['mplan'], ['decide'], ['agent', 'st:board'], ['news', LIVE_OPS[1]], ['notes']] });
+TM_HELP.push(['CAP [n|P0|A-I|phase n|words]', 'the 134-capability master plan, e.g. CAP 87'], ['DECIDE [price|bundle|enterprise|roaming|digital]', 'run the decision engine on a rival move']);
+CV_TOOLDEFS.push(
+  { name: 'master_plan', description: 'Search the 134-capability master plan: department or system, tools and features, priority (P0 foundational, P1 high-value, P2 advanced), Cellvoyant’s role (provides, extends, connects), rollout phase and whether it runs on this page.', inputSchema: { type: 'object', properties: { query: { type: 'string' }, priority: { type: 'string', enum: ['P0', 'P1', 'P2'] }, area: { type: 'string', description: 'A-I' }, phase: { type: 'integer', description: '1-3' } } }, run: a => mpFilter({ q: a.query, p: a.priority, dom: a.area }).filter(c => !a.phase || c.phase === +a.phase).slice(0, 25).map(mpRec) },
+  { name: 'decision_scenario', description: 'Run the decision engine on a rival move (price, bundle, enterprise, roaming, digital): evidence score, customers and revenue at risk, and options ranked by risk-adjusted value. Figures are illustrative; a person approves and nothing changes automatically.', inputSchema: { type: 'object', properties: { scenario: { type: 'string', enum: DC_SCN.map(x => x.k) }, awareness_pct: { type: 'integer', description: '10-90, default 50' } }, required: ['scenario'] }, run: a => { const x = DC_SCN.find(s => s.k === a.scenario) || DC_SCN[0], R = dcCalc(x, clamp((+a.awareness_pct || 50) / 100, .1, .9), 'mid'); return { move: dcT(x.t, x), evidence_pct: Math.round(R.ev * 100), customers_at_risk: Math.round(R.atRisk), revenue_at_risk_12m: dcM(R.rev), options: R.ranked.map(o => ({ option: o.n, net_12m: dcM(o.net), risk_pct: Math.round(o.r * 100), owner: o.owner })), recommendation: R.best.n, illustrative: true }; } }
+);
+
+/* ---------- START HERE: the shortest path for each role ---------- */
+const ROLES = [
+  ['exec', 'Executive', [['tm:exec', 'Executive terminal', 'Signals, market moves, forecasts and tasks on one screen'], ['dec', 'Decision engine', 'Sourced recommendations that wait for your approval'], ['mp:P0', 'The P0 foundation', 'What to build first in the master plan'], ['ag:st', 'Strategy agents', '12 agents for strategy and investment']]],
+  ['mkt', 'Marketing & pricing', [['tm:pricing', 'Pricing terminal', 'Compare plans and test a response before you move'], ['dec:price', 'A rival price cut', 'Run it from detection to recommendation'], ['cap:87', 'Competitor pricing engine', 'Capability #87 in the master plan'], ['ag:pr', 'Pricing agents', '12 agents for pricing and offers']]],
+  ['cust', 'Customers & retention', [['tm:customer', 'Customers terminal', 'Where churn spreads and who to save today'], ['dec:digital', 'A rival’s digital plan cut', 'Who is at risk and the best response'], ['cap:36', 'Churn management', 'Capability #36 in the master plan'], ['ag:rl', 'Retention agents', '12 agents for retention and loyalty']]],
+  ['ent', 'Enterprise & SME', [['tm:enterprise', 'Enterprise terminal', 'Tenders, accounts and business offers'], ['dec:enterprise', 'A rival enterprise offer', 'SD-WAN with a free private 5G trial'], ['mp:D', 'Products & digital services', 'Area D of the master plan'], ['ag:en', 'Enterprise agents', '12 agents for enterprise and government']]],
+  ['net', 'Network & technology', [['tm:network', 'Network terminal', 'Coverage truth, rival builds and capex priorities'], ['mp:C', 'Network operations (OSS)', 'Area C of the master plan'], ['tab-geo', 'Geo radar', 'Churn, coverage and retail hotspots by district'], ['ag:nw', 'Network agents', '12 agents for network and technology']]],
+  ['fin', 'Finance & investment', [['tm:capital', 'Capital markets terminal', 'Valuations, movers and deals across telecom'], ['tab-cap', 'Capital radar', 'State, private-equity and hedge-fund moves'], ['cap:6', 'Financial planning & analysis', 'Capability #6 in the master plan'], ['ag:fn', 'Finance agents', '12 agents for finance and investor relations']]],
+  ['data', 'Data, AI & security', [['#platform', 'How the platform works', 'From signal to decision, with guardrails'], ['mp:G', 'Technology, security & governance', 'Area G of the master plan'], ['cap:118', 'AI governance', 'Capability #118 in the master plan'], ['ag:da', 'Data & AI agents', '12 agents for data, AI and analytics']]]
+];
+const ROLE_KEY = 'cv.role';
+function roleRender(k) {
+  const box = $('#roleStart'); if (!box) return;
+  const R = ROLES.find(r => r[0] === k) || ROLES[0];
+  $$('#roleSeg [data-role]', box).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.role === R[0])));
+  $('#roleCards', box).innerHTML = R[2].filter(([tok]) => cvHas(tok)).map(([tok, t, d]) => `<button type="button" class="role-card" data-cvgo="${esc(tok)}"><b>${esc(t)}</b><span class="small">${esc(d)}</span><span class="tiny">Open →</span></button>`).join('');
+}
+function initRoleStart() {
+  const box = $('#roleStart'); if (!box) return;
+  let k = 'exec'; try { k = localStorage.getItem(ROLE_KEY) || 'exec'; } catch (e) { /* default role */ }
+  box.innerHTML = `<div class="role-h"><span class="label">Start here</span><b>What do you work on?</b></div><div class="seg-btns" id="roleSeg" role="group" aria-label="Your role">${ROLES.map(([rk, n]) => `<button type="button" data-role="${rk}" aria-pressed="false">${esc(n)}</button>`).join('')}</div><div class="role-cards" id="roleCards"></div>`;
+  box.addEventListener('click', e => {
+    const r = e.target.closest('[data-role]'); if (r) { try { localStorage.setItem(ROLE_KEY, r.dataset.role); } catch (err) { /* this visit only */ } roleRender(r.dataset.role); return; }
+    const g = e.target.closest('[data-cvgo]'); if (g) cvGo(g.dataset.cvgo);
+  });
+  roleRender(k);
+}
+
+/* ---------- DEEP LINKS: #cap-87, #dc-price, #tm-pricing open the item itself ---------- */
+function cvDeepLink() {
+  const h = decodeURIComponent(location.hash.slice(1)); let m;
+  if ((m = h.match(/^cap-(\d{1,3})$/)) && mpGet(+m[1])) { setTimeout(() => mpShow(+m[1]), 60); return; }
+  if ((m = h.match(/^dc-([a-z]+)$/)) && cvHas('dec:' + m[1])) { setTimeout(() => cvGo('dec:' + m[1]), 60); return; }
+  if ((m = h.match(/^tm-([\w-]+)$/)) && cvHas('tm:' + m[1])) setTimeout(() => cvGo('tm:' + m[1]), 60);
+}
+addEventListener('hashchange', cvDeepLink);
+
 /* ---------- boot ---------- */
 $('#simClock').textContent = fmtClock();
 setLive(live);
 renderFeed(); kpis(); renderDetail();
-[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initTerminals, initFind, initChat, initLang]
+[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initTerminals, initMasterPlan, initDecision, initRoleStart, initFind, initChat, initLang]
   .forEach(f => { try { f(); } catch (err) { console.warn('Cellvoyant: ' + f.name + ' skipped', err); } });
 const radar = initRadar();
 renderServices(); renderReqs();
 { const top = [...events].sort((a, b) => score(b) - score(a))[0];
   addMsg('a', mdLite(`I'm the Cellvoyant assistant. I run the console's engines for you (signal scans, Tariff DNA comparisons, prediction what-ifs, war-room simulations, market sizing), write briefs and battlecards, and book services like analyst verification or a war-gaming sprint.\nMost urgent right now: **[${top.id}]** ${top.text}.`), 'Cellvoyant assistant'); }
+cvDeepLink();
 })();

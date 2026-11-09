@@ -1,5 +1,5 @@
 /* Cellvoyant offline cache: pages network-first, everything else cache-first with background refresh. */
-const CACHE = 'cellvoyant-3f8da3f6c2';
+const CACHE = 'cellvoyant-cec1530767';
 const CORE = ["./", "index.html", "eand.html", "cellvoyant.js", "landscape.js", "positioning.js", "manifest.webmanifest", "eand.webmanifest", "assets/icon-192.png", "assets/icon-512.png", "assets/apple-touch-icon.png"];
 self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting())));
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())));
