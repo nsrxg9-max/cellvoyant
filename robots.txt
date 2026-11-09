@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nsrxg9-max.github.io/cellvoyant/sitemap.xml
