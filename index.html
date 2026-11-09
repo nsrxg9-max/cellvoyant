@@ -1668,6 +1668,133 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 .dc-qi .small{color:var(--ink-2)}
 .dc-qi ul{margin:6px 0 0;padding-inline-start:16px;display:grid;gap:3px}
 .tm-link{padding:4px 10px;font-size:12px}
+/* crisis radar */
+.cr-strip{margin-top:clamp(18px,2.5vw,26px);display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 16px;border:1px solid color-mix(in srgb,var(--crit) 45%,var(--line));border-radius:14px;background:color-mix(in srgb,var(--crit) 8%,var(--surface))}
+.cr-strip[hidden],.cr-strip:empty{display:none}
+.cr-pulse{width:10px;height:10px;border-radius:50%;background:var(--crit);flex:none;animation:crPulse 1.8s infinite}
+@keyframes crPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--crit) 60%,transparent)}70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.cr-st-t{display:grid;gap:2px;flex:1 1 260px;min-width:0}
+.cr-st-t b{font-size:15px}
+.cr-st-t .small{color:var(--ink-2)}
+.cr{display:grid;gap:16px}
+.cr-sum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.cr-sum div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:2px;align-content:start}
+.cr-sum b{font-family:var(--f-display);font-size:28px;font-weight:850;line-height:1;color:var(--ink)}
+.cr-sum span{font-size:13px;color:var(--ink-2)}
+.cr-sum .hot{border-color:color-mix(in srgb,var(--crit) 55%,var(--line));background:color-mix(in srgb,var(--crit) 7%,var(--surface))}
+.cr-sum .hot b{color:var(--crit)}
+.cr-bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.cr-bar>*{min-width:0}
+.cr-top{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:16px;align-items:start}
+.cr-top .res-h{margin-top:0}
+.cr-screen{--cr-trace:#3CCFD9;--cr-ext:#FF5A4E;--cr-crit:#FFB547;--cr-high:#46C2CC;--cr-watch:#7C97A3;background:var(--screen);border:1px solid var(--line-strong);border-radius:16px;padding:10px}
+.cr-svg{display:block;width:100%;height:auto;max-height:560px;margin:auto}
+.cr-bg{fill:var(--screen-2)}
+.cr-ring{fill:none;stroke:var(--screen-grid);stroke-width:1}
+.cr-ring.now{fill:rgba(255,90,78,.09);stroke:rgba(255,90,78,.45)}
+.cr-spoke{stroke:var(--screen-grid)}
+.cr-sl{fill:var(--screen-dim);font:600 12px var(--f-body)}
+.cr-sl.on{fill:var(--screen-ink)}
+.cr-rl{fill:var(--screen-dim);font:500 9.5px var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+.cr-beam{stroke:var(--cr-trace);stroke-opacity:.55;stroke-width:1.2}
+.cr-sweep{transform-origin:240px 240px;animation:crSweep 7s linear infinite;pointer-events:none}
+@keyframes crSweep{to{transform:rotate(360deg)}}
+.cr-b{cursor:pointer;outline:none}
+.cr-b .cr-dot{stroke:var(--screen);stroke-width:1.5}
+.cr-b text{font:700 9.5px var(--f-mono);fill:#08131C;pointer-events:none}
+.cr-b.s-ext .cr-dot,.cr-b.s-ext .cr-ping{fill:var(--cr-ext)}
+.cr-b.s-crit .cr-dot{fill:var(--cr-crit)}
+.cr-b.s-high .cr-dot{fill:var(--cr-high)}
+.cr-b.s-watch .cr-dot{fill:var(--cr-watch)}
+.cr-ping{opacity:0;pointer-events:none}
+.cr-b.s-ext .cr-ping{transform-box:fill-box;transform-origin:center;animation:crPing 2.2s ease-out infinite}
+@keyframes crPing{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(2.6)}}
+.cr-b.up .cr-dot{stroke:#FFFFFF;stroke-width:2;stroke-dasharray:3 2}
+.cr-b.sel .cr-dot,.cr-b:focus-visible .cr-dot{stroke:#FFFFFF;stroke-width:3;stroke-dasharray:none}
+.cr-b.dim{opacity:.22}
+.cr-legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 6px 2px;color:var(--screen-dim);font-size:12px}
+.cr-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-inline-end:5px;vertical-align:-1px}
+.cr-queue{display:grid;gap:6px;align-content:start}
+.cr-q{appearance:none;font:inherit;color:var(--ink);text-align:start;display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--line-strong);border-radius:10px;padding:9px 12px;cursor:pointer;transition:background .15s}
+.cr-q.s-ext{border-inline-start-color:var(--crit)}
+.cr-q.s-crit{border-inline-start-color:var(--signal)}
+.cr-q.s-high{border-inline-start-color:var(--accent)}
+.cr-q:hover{background:var(--surface-2)}
+.cr-q.on{box-shadow:0 0 0 2px var(--accent)}
+.cr-rk{font-size:13px;color:var(--muted);text-align:center}
+.cr-qm{display:grid;gap:2px;min-width:0}
+.cr-qm b{font-size:14.5px;line-height:1.3}
+.cr-qs{display:grid;justify-items:end;gap:3px}
+.cr-qs .mono{font-size:17px;font-weight:700}
+.cr-sev{display:inline-block;font:700 10.5px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:6px;white-space:nowrap}
+.cr-sev.s-ext{background:var(--crit);color:var(--bg)}
+.cr-sev.s-crit{background:var(--signal-soft);color:var(--signal)}
+.cr-sev.s-high{background:var(--accent-soft);color:var(--ink)}
+.cr-sev.s-watch{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+.cr-up{color:var(--crit);font-weight:600}
+.cr-open{color:var(--good);font-weight:600}
+.cr-hint{padding:14px;border:1px dashed var(--line-strong);border-radius:12px;margin:0}
+.cr-d{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--line-strong);border-radius:14px;padding:clamp(16px,2.4vw,24px);display:grid;gap:14px;scroll-margin-top:84px}
+.cr-d.s-ext{border-top-color:var(--crit)}
+.cr-d.s-crit{border-top-color:var(--signal)}
+.cr-d.s-high{border-top-color:var(--accent)}
+.cr-d header{display:grid;gap:8px}
+.cr-d h3{margin:0;font-family:var(--f-display);font-size:clamp(20px,2.4vw,26px);line-height:1.2}
+.cr-d header p,.cr-d>p{margin:0}
+.cr-d header>p{color:var(--ink-2)}
+.cr-dh{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+.cr-score{font-size:14px;font-weight:700}
+.cr-prec{background:var(--surface-2);border-radius:8px;padding:8px 10px}
+.cr-prec .label{margin-inline-end:6px}
+.cr-cost{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px;align-items:stretch}
+.cr-cost>.label{align-self:center}
+.cr-cost div{background:color-mix(in srgb,var(--crit) 7%,var(--surface-2));border-radius:8px;padding:8px 10px;display:grid;gap:2px;align-content:start}
+.cr-cost b{font-size:12.5px;color:var(--crit)}
+.cr-mid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px}
+.cr-mid ul{margin:6px 0 0;padding-inline-start:18px;display:grid;gap:3px;color:var(--ink-2)}
+.cr-live{margin:8px 0 0;padding:6px 10px;border-radius:8px;background:var(--surface-2)}
+.cr-live.l-1{background:var(--signal-soft)}
+.cr-live.l-2{background:var(--crit-soft)}
+.cr-lv{display:grid;grid-template-columns:84px minmax(0,1fr) 48px;gap:8px;align-items:center;font-size:13px;margin-top:6px}
+.cr-lv i{height:8px;border-radius:4px;background:var(--surface-2);position:relative;overflow:hidden}
+.cr-lv i::after{content:"";position:absolute;top:0;bottom:0;inset-inline-start:0;width:var(--w);background:var(--crit);border-radius:4px}
+.cr-play{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cr-pc{background:var(--surface-2);border-radius:10px;padding:12px;border-top:3px solid var(--line-strong)}
+.cr-pc.p0{border-top-color:var(--crit)}
+.cr-pc.p1{border-top-color:var(--signal)}
+.cr-pc.p2{border-top-color:var(--good)}
+.cr-pc ol{margin:6px 0 0;padding-inline-start:18px;display:grid;gap:5px;font-size:13.5px}
+.cr-go{align-items:center}
+.cr-go .dc-cap{font-family:var(--f-body);text-align:start}
+.cr-sens{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:10px}
+.cr-sn{background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--line-strong);border-radius:12px;padding:12px;display:grid;gap:6px;align-content:start;min-width:0}
+.cr-sn header{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.cr-sn p{margin:0}
+.cr-st{font:700 11px var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);white-space:nowrap}
+.cr-sn.l-0{border-inline-start-color:var(--good)}
+.cr-sn.l-0 .cr-st{color:var(--good)}
+.cr-sn.l-1{border-inline-start-color:var(--signal)}
+.cr-sn.l-1 .cr-st{color:var(--signal)}
+.cr-sn.l-2{border-inline-start-color:var(--crit)}
+.cr-sn.l-2 .cr-st{color:var(--crit)}
+.cr-sr{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.cr-sr li{display:grid;gap:1px;font-size:13px;min-width:0;overflow-wrap:anywhere}
+.cr-sr a{color:var(--ink);text-decoration:none}
+.cr-sr a:hover{color:var(--accent);text-decoration:underline}
+.cr-resp{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr));gap:10px;align-items:start}
+.cr-r{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:6px;scroll-margin-top:84px}
+.cr-r.closed{opacity:.78}
+.cr-r ul{margin:6px 0 0;padding-inline-start:16px;display:grid;gap:3px}
+.cr-prog{display:block;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.cr-prog i{display:block;height:100%;width:var(--w);background:var(--good)}
+.cr-chk{display:grid;gap:4px;margin-top:8px}
+.cr-chk label{display:flex;gap:8px;align-items:flex-start;line-height:1.35}
+.cr-chk input{margin-top:3px;accent-color:var(--good);flex:none}
+.cr-closed{grid-column:1/-1}
+.cr-closed>.cr-r{margin-top:8px}
+@media (max-width:980px){.cr-top,.cr-mid,.cr-play,.cr-cost{grid-template-columns:minmax(0,1fr)}.cr-sum{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.cr-sum{grid-template-columns:repeat(2,minmax(0,1fr))}.cr-q{grid-template-columns:22px minmax(0,1fr) auto;gap:8px;padding:9px 10px}}
+@media (prefers-reduced-motion:reduce){.cr-sweep{display:none}.cr-pulse,.cr-b.s-ext .cr-ping{animation:none}}
 </style>
 
 <a class="skip" href="#top">Skip to content</a>
@@ -1688,6 +1815,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
       <a href="#terminals">Terminals</a>
       <a href="#agents">AI agents</a>
       <a href="#masterplan">Master plan</a>
+      <a href="#crisis">Crisis radar</a>
       <a href="#academy">Academy</a>
       <a href="#lab">Innovation</a>
       <a href="#patent">Patent</a>
@@ -1729,6 +1857,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
       <div><b>−2%</b><span>Forecast global telecom capex for 2026, so every investment has to count</span><cite><a href="#src-7">Dell'Oro, Apr 2026</a></cite></div>
       <div><b>2×</b><span>CI teams that share insights weekly are twice as likely to see revenue impact (79% vs 41%)</span><cite><a href="#src-24">Crayon, 2026</a></cite></div>
     </div>
+    <div class="cr-strip" id="crStrip" role="region" aria-label="Crisis alert"></div>
     <div class="role-start" id="roleStart"></div>
   </div>
 </section>
@@ -2417,7 +2546,33 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="academy">
+<section class="sec" id="crisis">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Crisis radar · act now</div>
+      <h2>The extreme risks that need solving now, with a playbook for the first hour</h2>
+      <p class="lede">Twenty-one high-risk problems a telecom operator can face, from subsea cable cuts and ransomware to SIM-swap fraud, billing errors and a rival’s price war. Each one is scored by likelihood, impact and speed and placed by how soon you must act. Each one also says what happens if nobody acts, what to do in the first hour and the first day, who owns it, and how to fix the cause. Live sensors read real public data and raise a risk when a threshold is crossed. Start a response and the playbook becomes a checklist with a clock.</p>
+    </div>
+    <div class="cr" id="crApp">
+      <div class="cr-sum" id="crSum"></div>
+      <div class="cr-bar"><span class="label">Area</span><div class="seg-btns" id="crSec" role="group" aria-label="Area"></div><span class="label">Severity</span><div class="seg-btns" id="crSev" role="group" aria-label="Severity"></div></div>
+      <div class="cr-top">
+        <div class="cr-screen"><div id="crRadar"></div><div class="cr-legend" aria-hidden="true"><span><i style="background:#FF5A4E"></i>Extreme</span><span><i style="background:#FFB547"></i>Critical</span><span><i style="background:#46C2CC"></i>High</span><span><i style="background:#7C97A3"></i>Watch</span><span>Centre: act within 1 hour · dashed ring: raised by a live sensor</span></div></div>
+        <div><h3 class="res-h" id="cr-now">Solve now, highest score first</h3><div class="cr-queue" id="crQueue"></div></div>
+      </div>
+      <div id="crDetail" aria-live="polite"></div>
+      <h3 class="res-h" id="cr-sensors">Live sensors</h3>
+      <div class="cr-bar"><button type="button" class="btn sm accent" id="crScan">Scan the live sources</button><span class="small muted" id="crScanSt" aria-live="polite">The radar scans the live sources when you open it.</span></div>
+      <div class="cr-sens" id="crSens"></div>
+      <h3 class="res-h" id="cr-responses">Responses</h3>
+      <p class="small muted mp-note">Each response tracks its playbook step by step, with the time since it started and when the first actions are due. Responses are kept in this browser. Statements are drafts for the communications and legal teams and are never sent automatically.</p>
+      <div class="cr-resp" id="crResp"></div>
+      <p class="tiny muted" id="crNote">Scores are Cellvoyant’s illustrative assessment for a Gulf operator: likelihood × impact × speed (each 1 to 5) ÷ 1.25, so 100 is the maximum. 60 and above is extreme, 36 critical and 18 high. In a pilot, the risk team sets the scores and connects network alarms, security tools and complaints. Live sensors use public data from USGS, Open-Meteo, CISA, Cloudflare, a currency API and GDELT, and past incidents link to their sources.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="academy">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Cellvoyant Academy</div>
@@ -2436,7 +2591,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band" id="resources">
+<section class="sec" id="resources">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Resources &amp; tools</div>
@@ -2448,7 +2603,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="lab">
+<section class="sec band" id="lab">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Innovation lab</div>
@@ -2460,7 +2615,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band" id="patent">
+<section class="sec" id="patent">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Intellectual property</div>
@@ -2680,7 +2835,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="business">
+<section class="sec band" id="business">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Business model &amp; go-to-market</div>
@@ -2755,7 +2910,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
     </div>
   </div>
 </section>
-<section class="sec band" id="launch">
+<section class="sec" id="launch">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Launch</div>
@@ -2800,6 +2955,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
         <div class="lc ok"><i>✓</i><span>Six languages: English, Arabic, French, Hindi, Urdu and Chinese, right-to-left where needed</span></div>
         <div class="lc ok"><i>✓</i><span>Master plan of 134 capabilities with priorities, rollout phases, data zones, a shortlist and CSV export</span></div>
         <div class="lc ok"><i>✓</i><span>Decision engine: rival move to sourced recommendation, with a human review queue and audit log</span></div>
+        <div class="lc ok"><i>✓</i><span>Crisis radar: 21 high-risk problems with first-hour playbooks, live sensors, tracked responses and draft statements</span></div>
         <div class="lc ok"><i>✓</i><span>Start-here paths for seven roles, and share links to any capability, scenario or terminal</span></div>
         <div class="lc ok"><i>✓</i><span>216 AI agents in 18 departments, each with tools, services and resources</span></div>
         <div class="lc ok"><i>✓</i><span>Search across the whole platform (Ctrl K or ⌘ K)</span></div>
@@ -2900,7 +3056,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 <footer class="foot">
   <div class="wrap">
     <span>Cellvoyant is a concept by its author. The prototype uses simulated data for fictional operators. Research figures cite their sources below.</span>
-    <span class="mono">v2.3 · 9 Nov 2026</span>
+    <span class="mono">v2.4 · 9 Nov 2026</span>
   </div>
 </footer>
 

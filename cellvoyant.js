@@ -2649,6 +2649,7 @@ const SERVICES = [
   { k: 'board_brief', name: 'Weekly board brief', turn: 'weekly', desc: 'An analyst-reviewed brief on rivals, capital moves and recommended responses.' },
   { k: 'op_desk', name: 'Operator desk: full edition for one operator', turn: '3 weeks', desc: 'A segment-by-segment marketing plan, sales playbook, strategy horizons and rival-response playbook for your operator.' },
   { k: 'strategy_sprint', name: 'Strategy sprint for a big problem', turn: '1–2 weeks', desc: 'Analysts and AI work one complex problem into options, a recommendation, a 90-day plan and KPIs with your team.' },
+  { k: 'crisis', name: 'Crisis tabletop exercise', turn: '1 week', desc: 'Rehearse a crisis-radar playbook with network, security, legal and communications teams, with timed injects and a debrief.' },
   { k: 'capability', name: 'Master plan: scope a capability', turn: 'scoped in 2 weeks', desc: 'Scope one or more master-plan capabilities: data needed, integration points, owners, KPIs and a pilot plan.' },
   { k: 'lab_item', name: 'Innovation lab: scope or pilot a tool', turn: 'scoped in 1 week', desc: 'Scope, build and pilot any tool, agent or service from the innovation lab.' },
   { k: 'pilot', name: 'Pilot program (30-day shadow mode)', turn: 'kick-off within 2 weeks', desc: 'Run Cellvoyant next to your current process for 30 days and measure how much earlier it catches each competitor move.' }
@@ -4000,6 +4001,7 @@ function tmPanelHtml(k, arg, tid) {
   if (k === 'toolbox') return tlPanelHtml(tid, arg);
   if (k === 'mplan') return mpPanelHtml();
   if (k === 'decide') return dcPanelHtml();
+  if (k === 'crisis') return crPanelHtml();
   if (k === 'services') return svPanelHtml(tid, arg);
   if (k === 'notes') return `<label class="sr" for="tmNote${tid}">Notes</label><textarea class="tm-q" id="tmNote${tid}" rows="6" data-tmnote placeholder="Notes for this terminal">${esc(TM.notes[TM.active] || '')}</textarea><p class="tiny muted">Saved in this browser only.</p>`;
   return '';
@@ -4119,6 +4121,7 @@ async function tmCmd(raw) {
     else if (C === 'TASK') { if (!arg) tmOut('Example: TASK Call back the top three at-risk accounts'); else await addTask({ title: arg, kind: 'manual', dept: 'st', prio: 'normal' }); }
     else if (C === 'CAP') rows(mpCmd(arg));
     else if (C === 'DECIDE') rows(dcCmd(arg));
+    else if (C === 'RISK') rows(crCmd(arg));
     else tmOut(`Unknown command ${esc(C)}. Type HELP.`);
   } catch (e) { tmOut(`<span class="tm-err">${esc(e.message || String(e))}</span>`); }
 }
@@ -4456,11 +4459,12 @@ function findIndex() {
   $$('main details > summary').forEach(sm => { const d = sm.parentElement; if (d.closest('#resGrid')) return; add(d.closest('.faq') ? 'Question' : 'Detail', txtOf(sm), txtOf(d.closest('section') && $('h2', d.closest('section'))), () => { d.open = true; findGo(d, true); }); });
   if ($('#tmApp')) { tlBuild().forEach(t => add('Tool', t.n, `${t.fam} · ${t.d}`, () => { tmOpen('tools'); tmCmd('TOOL ' + t.id); findGo($('#terminals')); })); SVC_CAT.forEach(x => add('Service', x.name, `${x.dn} · ${x.turn} · ${x.desc}`, () => { tmOpen('tools'); tmCmd('SERVICES ' + x.name); findGo($('#terminals')); })); }
   if ($('#mpList')) mpBuild().forEach(c => add('Capability', `${c.no}. ${c.n}`, `${c.dom}. ${c.dn} · P${c.p} · ${MP_ROLE[c.role][0]} · ${c.tools}`, () => mpShow(c.no), EDITION === 'eand' ? c.app : ''));
+  if ($('#crApp')) CR_ITEMS.forEach(x => add('Risk', crT(x.t), `Crisis radar · ${CR_SECN[x.sec]} · ${CR_H[x.h][1]}`, () => cvGo('cr:' + x.k), x.sig.map(crT).join(' ')));
   if ($('#dcApp')) DC_SCN.forEach(x => add('Decision scenario', dcT(x.t, x), `${x.type} · from detection to a recommendation for review`, () => cvGo('dec:' + x.k)));
   TOOLDEFS.forEach(d => add('Assistant tool', d.name.replace(/_/g, ' '), d.description, () => { selectTab('tab-ask'); findGo($('#app')); }));
   return (FIND.items = it);
 }
-const FIND_ORDER = ['Chapter', 'Terminal', 'Capability', 'Decision scenario', 'Tool', 'Service', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
+const FIND_ORDER = ['Chapter', 'Terminal', 'Risk', 'Capability', 'Decision scenario', 'Tool', 'Service', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
 function findSearch(raw) {
   const q = raw.trim().toLowerCase(), items = findIndex();
   if (!q) return items.filter(x => x.kind === 'Chapter').map(x => ({ x, sc: 1 }));
@@ -4555,23 +4559,23 @@ const RTL = new Set(['ar', 'ur']);
 // interface strings; keys are the English text as it appears on the page
 const I18N_KEYS = ['Problem', 'Market', 'Platform', 'Operator desk', 'Live console', 'Terminals', 'AI agents', 'Academy', 'Innovation', 'Patent', 'Business', 'Join the pilot', 'Overview', 'Customers', 'Competition', 'Innovation lab', 'Solutions', 'Value', 'Request a pilot', 'Search',
   'Search chapters, tools, agents, companies, operators, sources…', 'Ask Cellvoyant', 'Type or speak a question…', 'Send', 'Listening…', 'Speak answers', 'Stop', 'HELLO', '+ New terminal', 'Run', 'Run agent', 'Run tool', 'Request', 'Open a terminal', 'Language',
-  'Translating the page…', 'Page translated on this device', 'IFACE_ONLY', 'Show original', 'VOICE_NA', 'MIC_BLOCKED', 'Find an agent or a skill…', 'Clear', 'Thinking…', 'Translated by Claude', 'Master plan', 'Decision engine'];
+  'Translating the page…', 'Page translated on this device', 'IFACE_ONLY', 'Show original', 'VOICE_NA', 'MIC_BLOCKED', 'Find an agent or a skill…', 'Clear', 'Thinking…', 'Translated by Claude', 'Master plan', 'Decision engine', 'Crisis radar'];
 const I18N_ROWS = {
   ar: ['المشكلة', 'السوق', 'المنصة', 'مكتب المشغّل', 'وحدة التحكم المباشرة', 'المحطات الطرفية', 'وكلاء الذكاء الاصطناعي', 'الأكاديمية', 'الابتكار', 'براءة الاختراع', 'نموذج العمل', 'انضم إلى التجربة', 'نظرة عامة', 'العملاء', 'المنافسة', 'مختبر الابتكار', 'الحلول', 'القيمة', 'اطلب تجربة', 'بحث',
     'ابحث في الفصول والأدوات والوكلاء والشركات والمشغّلين والمصادر…', 'اسأل Cellvoyant', 'اكتب سؤالك أو تحدّث…', 'إرسال', 'أستمع…', 'قراءة الإجابات بصوت', 'إيقاف', 'مرحبًا! اسألني عن السوق، أو اطلب مني فتح أي قسم أو أداة.', '+ محطة جديدة', 'تشغيل', 'تشغيل الوكيل', 'تشغيل الأداة', 'اطلب', 'افتح محطة', 'اللغة',
-    'جارٍ ترجمة الصفحة…', 'تمت ترجمة الصفحة على هذا الجهاز', 'تمت ترجمة الواجهة. تحتاج ترجمة الصفحة كاملة إلى مترجم Chrome المدمج أو نسخة Claude.', 'عرض الأصل', 'الإدخال الصوتي غير متاح في هذا المتصفح.', 'لا يمكن الوصول إلى الميكروفون هنا.', 'ابحث عن وكيل أو مهارة…', 'مسح', 'جارٍ التفكير…', 'ترجمة Claude', 'الخطة الرئيسية', 'محرّك القرار'],
+    'جارٍ ترجمة الصفحة…', 'تمت ترجمة الصفحة على هذا الجهاز', 'تمت ترجمة الواجهة. تحتاج ترجمة الصفحة كاملة إلى مترجم Chrome المدمج أو نسخة Claude.', 'عرض الأصل', 'الإدخال الصوتي غير متاح في هذا المتصفح.', 'لا يمكن الوصول إلى الميكروفون هنا.', 'ابحث عن وكيل أو مهارة…', 'مسح', 'جارٍ التفكير…', 'ترجمة Claude', 'الخطة الرئيسية', 'محرّك القرار', 'رادار الأزمات'],
   fr: ['Problème', 'Marché', 'Plateforme', 'Bureau opérateur', 'Console en direct', 'Terminaux', 'Agents IA', 'Académie', 'Innovation', 'Brevet', 'Modèle économique', 'Rejoindre le pilote', 'Vue d’ensemble', 'Clients', 'Concurrence', 'Laboratoire d’innovation', 'Solutions', 'Valeur', 'Demander un pilote', 'Rechercher',
     'Rechercher chapitres, outils, agents, entreprises, opérateurs, sources…', 'Demander à Cellvoyant', 'Écrivez ou dites votre question…', 'Envoyer', 'J’écoute…', 'Lire les réponses à voix haute', 'Arrêter', 'Bonjour ! Posez-moi une question sur le marché, ou demandez-moi d’ouvrir une section ou un outil.', '+ Nouveau terminal', 'Lancer', 'Lancer l’agent', 'Lancer l’outil', 'Demander', 'Ouvrir un terminal', 'Langue',
-    'Traduction de la page…', 'Page traduite sur cet appareil', 'Interface traduite. La traduction complète de la page nécessite le traducteur intégré de Chrome ou la version Claude.', 'Afficher l’original', 'La saisie vocale n’est pas disponible dans ce navigateur.', 'Le micro n’est pas accessible ici.', 'Trouver un agent ou une compétence…', 'Effacer', 'Réflexion…', 'Traduit par Claude', 'Plan directeur', 'Moteur de décision'],
+    'Traduction de la page…', 'Page traduite sur cet appareil', 'Interface traduite. La traduction complète de la page nécessite le traducteur intégré de Chrome ou la version Claude.', 'Afficher l’original', 'La saisie vocale n’est pas disponible dans ce navigateur.', 'Le micro n’est pas accessible ici.', 'Trouver un agent ou une compétence…', 'Effacer', 'Réflexion…', 'Traduit par Claude', 'Plan directeur', 'Moteur de décision', 'Radar des crises'],
   hi: ['समस्या', 'बाज़ार', 'प्लेटफ़ॉर्म', 'ऑपरेटर डेस्क', 'लाइव कंसोल', 'टर्मिनल', 'एआई एजेंट', 'अकादमी', 'नवाचार', 'पेटेंट', 'व्यवसाय मॉडल', 'पायलट में शामिल हों', 'अवलोकन', 'ग्राहक', 'प्रतिस्पर्धा', 'नवाचार प्रयोगशाला', 'समाधान', 'मूल्य', 'पायलट का अनुरोध करें', 'खोजें',
     'अध्याय, टूल, एजेंट, कंपनियाँ, ऑपरेटर और स्रोत खोजें…', 'Cellvoyant से पूछें', 'प्रश्न लिखें या बोलें…', 'भेजें', 'सुन रहा हूँ…', 'उत्तर बोलकर सुनाएँ', 'रोकें', 'नमस्ते! बाज़ार के बारे में कुछ भी पूछें, या कोई अनुभाग या टूल खोलने को कहें।', '+ नया टर्मिनल', 'चलाएँ', 'एजेंट चलाएँ', 'टूल चलाएँ', 'अनुरोध करें', 'टर्मिनल खोलें', 'भाषा',
-    'पेज का अनुवाद हो रहा है…', 'पेज का अनुवाद इसी डिवाइस पर हुआ', 'इंटरफ़ेस का अनुवाद हो गया। पूरे पेज के अनुवाद के लिए Chrome का अंतर्निहित अनुवादक या Claude संस्करण चाहिए।', 'मूल दिखाएँ', 'इस ब्राउज़र में आवाज़ से इनपुट उपलब्ध नहीं है।', 'यहाँ माइक्रोफ़ोन उपलब्ध नहीं है।', 'एजेंट या कौशल खोजें…', 'साफ़ करें', 'सोच रहा हूँ…', 'Claude द्वारा अनुवादित', 'मास्टर प्लान', 'निर्णय इंजन'],
+    'पेज का अनुवाद हो रहा है…', 'पेज का अनुवाद इसी डिवाइस पर हुआ', 'इंटरफ़ेस का अनुवाद हो गया। पूरे पेज के अनुवाद के लिए Chrome का अंतर्निहित अनुवादक या Claude संस्करण चाहिए।', 'मूल दिखाएँ', 'इस ब्राउज़र में आवाज़ से इनपुट उपलब्ध नहीं है।', 'यहाँ माइक्रोफ़ोन उपलब्ध नहीं है।', 'एजेंट या कौशल खोजें…', 'साफ़ करें', 'सोच रहा हूँ…', 'Claude द्वारा अनुवादित', 'मास्टर प्लान', 'निर्णय इंजन', 'संकट रडार'],
   ur: ['مسئلہ', 'مارکیٹ', 'پلیٹ فارم', 'آپریٹر ڈیسک', 'لائیو کنسول', 'ٹرمینلز', 'اے آئی ایجنٹس', 'اکیڈمی', 'جدت', 'پیٹنٹ', 'کاروباری ماڈل', 'پائلٹ میں شامل ہوں', 'جائزہ', 'صارفین', 'مسابقت', 'جدت کی لیب', 'حل', 'قدر', 'پائلٹ کی درخواست کریں', 'تلاش',
     'ابواب، ٹولز، ایجنٹس، کمپنیاں، آپریٹرز اور ذرائع تلاش کریں…', 'Cellvoyant سے پوچھیں', 'سوال لکھیں یا بولیں…', 'بھیجیں', 'سن رہا ہوں…', 'جوابات بول کر سنائیں', 'روکیں', 'السلام علیکم! مارکیٹ کے بارے میں کچھ بھی پوچھیں، یا کوئی حصہ یا ٹول کھولنے کو کہیں۔', '+ نیا ٹرمینل', 'چلائیں', 'ایجنٹ چلائیں', 'ٹول چلائیں', 'درخواست کریں', 'ٹرمینل کھولیں', 'زبان',
-    'صفحے کا ترجمہ ہو رہا ہے…', 'صفحے کا ترجمہ اسی ڈیوائس پر ہوا', 'انٹرفیس کا ترجمہ ہو گیا۔ پورے صفحے کے ترجمے کے لیے Chrome کا بلٹ اِن مترجم یا Claude ورژن درکار ہے۔', 'اصل دکھائیں', 'اس براؤزر میں آواز سے ان پٹ دستیاب نہیں۔', 'یہاں مائیکروفون دستیاب نہیں۔', 'ایجنٹ یا مہارت تلاش کریں…', 'صاف کریں', 'سوچ رہا ہوں…', 'Claude کا ترجمہ', 'ماسٹر پلان', 'فیصلہ انجن'],
+    'صفحے کا ترجمہ ہو رہا ہے…', 'صفحے کا ترجمہ اسی ڈیوائس پر ہوا', 'انٹرفیس کا ترجمہ ہو گیا۔ پورے صفحے کے ترجمے کے لیے Chrome کا بلٹ اِن مترجم یا Claude ورژن درکار ہے۔', 'اصل دکھائیں', 'اس براؤزر میں آواز سے ان پٹ دستیاب نہیں۔', 'یہاں مائیکروفون دستیاب نہیں۔', 'ایجنٹ یا مہارت تلاش کریں…', 'صاف کریں', 'سوچ رہا ہوں…', 'Claude کا ترجمہ', 'ماسٹر پلان', 'فیصلہ انجن', 'بحران ریڈار'],
   zh: ['问题', '市场', '平台', '运营商工作台', '实时控制台', '终端', 'AI 智能体', '学院', '创新', '专利', '商业模式', '加入试点', '概览', '客户', '竞争', '创新实验室', '解决方案', '价值', '申请试点', '搜索',
     '搜索章节、工具、智能体、公司、运营商、来源…', '询问 Cellvoyant', '输入或说出你的问题…', '发送', '正在聆听…', '朗读回答', '停止', '你好！可以问我任何关于市场的问题，或让我打开某个章节或工具。', '+ 新建终端', '运行', '运行智能体', '运行工具', '申请', '打开终端', '语言',
-    '正在翻译页面…', '已在本设备上翻译页面', '界面已翻译。整页翻译需要 Chrome 内置翻译器或 Claude 版本。', '显示原文', '此浏览器不支持语音输入。', '此处无法使用麦克风。', '查找智能体或技能…', '清除', '正在思考…', 'Claude 翻译', '总体规划', '决策引擎']
+    '正在翻译页面…', '已在本设备上翻译页面', '界面已翻译。整页翻译需要 Chrome 内置翻译器或 Claude 版本。', '显示原文', '此浏览器不支持语音输入。', '此处无法使用麦克风。', '查找智能体或技能…', '清除', '正在思考…', 'Claude 翻译', '总体规划', '决策引擎', '危机雷达']
 };
 const I18N_EN = { HELLO: 'Hello! Ask me anything about the market, or tell me what to open.', IFACE_ONLY: 'Interface translated. Full-page translation needs Chrome’s built-in translator or the Claude version.', VOICE_NA: 'Voice input isn’t available in this browser.', MIC_BLOCKED: 'The microphone can’t be used here.' };
 const I18N = Object.fromEntries(Object.entries(I18N_ROWS).map(([l, row]) => [l, Object.fromEntries(I18N_KEYS.map((k, i) => [k, row[i]]))]));
@@ -4697,7 +4701,7 @@ function cvSay(text) {
 const CV_SECTIONS = () => $$('main section[id]').map(s => [s.id, txtOf($('h2', s)), txtOf($('.eyebrow', s)).replace(/^\d+/, '')]);
 function cvNavigate(q) {
   const s = q.toLowerCase();
-  const t = !/capabilit|master ?plan|\bp[012]\b/.test(s) && tmAll().find(x => s.includes(x.n.toLowerCase()) || s.includes(x.id)); if (t && /terminal|open|show|launch|افتح|ouvrir|खोल|کھول|打开/.test(s)) { tmOpen(t.id); findGo($('#terminals')); return `Opened the ${t.n} terminal.`; }
+  const t = !/capabilit|master ?plan|\bp[012]\b|radar/.test(s) && tmAll().find(x => s.includes(x.n.toLowerCase()) || s.includes(x.id)); if (t && /terminal|open|show|launch|افتح|ouvrir|खोल|کھول|打开/.test(s)) { tmOpen(t.id); findGo($('#terminals')); return `Opened the ${t.n} terminal.`; }
   const lang = LANGS.find(([k, n]) => s.includes(n.toLowerCase()) || (k !== 'en' && new RegExp('\\b' + LANG_NAME[k].toLowerCase().split(' ').pop() + '\\b').test(s)) || (k === 'en' && /\benglish\b/.test(s)));
   if (lang && /language|switch|speak|translate|in |لغة|langue|भाषा|زبان|语言/.test(s)) { setLang(lang[0], true); return `Switched the language to ${lang[1]}.`; }
   if (/\b(open|show|go to|take me to|scroll to)\b|افتح|اعرض|ouvre|खोलो|دکھائیں|打开/.test(s)) {
@@ -4711,6 +4715,7 @@ function cvNavigate(q) {
 async function cvLocal(q) {
   const s = q.toLowerCase(), subj = x => q.replace(x, '').replace(/[?.!]/g, '').trim();
   const nav = cvNavigate(q); if (nav) return esc(nav);
+  const cr = crAnswer(q); if (cr) return cr;
   const mp = mpAnswer(q); if (mp) return mp;
   if (/^(hi|hello|hey|help|what can you do|مرحبا|bonjour|नमस्ते|سلام|你好)/i.test(s)) return `<p>${esc(tr('HELLO'))}</p>${cvList(['Live news: “news about stc this week”', 'Exchange rates: “dirham exchange rates”', 'Country data: “mobile subscriptions in the Gulf”', 'App ratings: “app ratings for du”', 'Tools: “calculate ARPU 1.2 billion 4 million 12”', 'Agents: “run churn sentinel”', 'Navigation: “open the pricing terminal”, “switch to Arabic”'])}`;
   if (/\bnews|headline|latest on|what'?s happening|أخبار|actualit|समाचार|خبریں|新闻/.test(s)) {
@@ -5036,6 +5041,7 @@ function cvHas(tok) {
   if (t === 'dec') return !!$('#dcApp') && (!v || !!DC_SCN.find(s => s.k === v));
   if (t === 'cap') return !!$('#mpList') && !!mpGet(v);
   if (t === 'mp') return !!$('#mpList');
+  if (t === 'cr') return !!$('#crApp') && (!v || !!crGet(v));
   return false;
 }
 // one navigator for every link on the page: sections, console views, terminals, agent departments, desk tabs, the decision engine and capabilities
@@ -5048,6 +5054,7 @@ function cvGo(tok) {
   else if (t === 'od') { $(`#odTabs [data-t="${v}"]`).click(); findGo($('#operators')); }
   else if (t === 'dec') { if (v) dcRun(v); findGo($('#decision')); }
   else if (t === 'cap') mpShow(+v);
+  else if (t === 'cr') { if (v) crShow(v, true); else findGo($('#crisis')); }
   else if (t === 'mp') { mpReset(); if (/^P[012]$/.test(v)) MP.p = v; else if (/^[A-I]$/.test(v)) MP.dom = v; else if (v === 'live') MP.live = true; mpRender(); findGo($('#masterplan')); }
   return true;
 }
@@ -5368,15 +5375,526 @@ CV_TOOLDEFS.push(
   { name: 'decision_scenario', description: 'Run the decision engine on a rival move (price, bundle, enterprise, roaming, digital): evidence score, customers and revenue at risk, and options ranked by risk-adjusted value. Figures are illustrative; a person approves and nothing changes automatically.', inputSchema: { type: 'object', properties: { scenario: { type: 'string', enum: DC_SCN.map(x => x.k) }, awareness_pct: { type: 'integer', description: '10-90, default 50' } }, required: ['scenario'] }, run: a => { const x = DC_SCN.find(s => s.k === a.scenario) || DC_SCN[0], R = dcCalc(x, clamp((+a.awareness_pct || 50) / 100, .1, .9), 'mid'); return { move: dcT(x.t, x), evidence_pct: Math.round(R.ev * 100), customers_at_risk: Math.round(R.atRisk), revenue_at_risk_12m: dcM(R.rev), options: R.ranked.map(o => ({ option: o.n, net_12m: dcM(o.net), risk_pct: Math.round(o.r * 100), owner: o.owner })), recommendation: R.best.n, illustrative: true }; } }
 );
 
+/* ---------- CRISIS RADAR: the extreme risks that need solving now, live sensors, first-hour playbooks and tracked responses ---------- */
+const CR_W = EDITION === 'eand'
+  ? { op: 'etisalat', rival: 'du', reg: 'TDRA', dpa: 'the UAE Data Office', sos: '999, 998 and 997', cert: 'the UAE Cyber Security Council', home: 'the UAE', cur: 'dirham' }
+  : { op: 'Nimbus Mobile', rival: 'Arcline Wireless', reg: 'the telecom regulator', dpa: 'the data protection authority', sos: 'emergency numbers', cert: 'the national CERT', home: 'the home market', cur: 'home-currency' };
+const crT = s => String(s == null ? '' : s).replace(/\{(\w+)\}/g, (m, k) => CR_W[k] != null ? CR_W[k] : m);
+const CR_SEC = [['net', 'Network'], ['cyber', 'Cyber & fraud'], ['cust', 'Customers'], ['mkt', 'Market'], ['reg', 'Regulation'], ['fin', 'Finance & supply']];
+const CR_SECN = { net: 'Network & infrastructure', cyber: 'Cyber security & fraud', cust: 'Customers & reputation', mkt: 'Market & competition', reg: 'Regulation & legal', fin: 'Finance, supply & geopolitics' };
+const CR_DEPT = { net: 'nw', cyber: 'rg', cust: 'cx', mkt: 'pm', reg: 'rg', fin: 'fi' };
+const CR_H = [['Now', 'Act within 1 hour', 36e5], ['Today', 'Act within 24 hours', 864e5], ['This week', 'Act within 7 days', 7 * 864e5], ['This month', 'Act within 30 days', 30 * 864e5]];
+const CR_SEV = [[60, 'ext', 'Extreme'], [36, 'crit', 'Critical'], [18, 'high', 'High'], [0, 'watch', 'Watch']];
+// likelihood, impact and speed (1-5 each); h = when to act (0 now … 3 this month); cx = what customers notice (null: no public notice); to = who gets the formal notice (null: none)
+const CR_ITEMS = [
+  { k: 'cable', sec: 'net', t: 'Subsea cables cut: international capacity drops within minutes', L: 4, I: 5, S: 5, h: 0, live: 'quake',
+    why: 'Several cable systems share the Red Sea and Gulf corridors, so one incident can cut two or more at once. Cloud, video and enterprise links slow within minutes, and repairs take weeks.',
+    prec: ['Sep 2025: the SMW4 and IMEWE cables were cut near Jeddah, and UAE customers of both main operators reported slow internet for days', 'https://www.thenationalnews.com/news/uae/2025/09/08/uae-internet-disrupted-after-red-sea-cables-severed', 'The National'],
+    sig: ['Latency to Europe and Asia jumps on network probes', 'Notices from cable consortia', 'Internet routes shift to longer paths', 'Earthquakes or ship incidents near cable routes'],
+    cost: ['Cloud apps, video and gaming slow down; complaints start', 'Enterprise SLAs breached; complaints and press coverage peak', 'Enterprise customers move links to providers on other routes'],
+    now: ['Confirm which systems are down and how much capacity each route has lost', 'Reroute over terrestrial and other cables; put emergency, government and enterprise traffic first', 'Serve more from local caches and ask large content partners to use regional servers', 'Post a plain service notice on the app, website and social channels'],
+    day: ['Buy temporary capacity on other routes, and satellite where licensed', 'Call enterprise customers with SLAs and update them daily', 'Brief {reg} on impact and the restoration plan', 'Track the repair-ship schedule with the cable consortium'],
+    fix: ['No single corridor carries more than 40% of international capacity', 'Pre-signed capacity-swap agreements with regional carriers', 'More terrestrial routes and more content hosted in-country', 'A tested playbook with a threshold for each step'],
+    owner: 'CTO and the network operations centre', esc: 'Crisis committee if more than 30% of international capacity is lost', done: 'Normal latency on every route and a route-diversity plan approved',
+    cx: 'some customers are seeing slower internet, especially for international websites and apps', to: '{reg}', caps: [80, 45, 60, 122, 69], go: ['tm:network', 'ag:nw'] },
+  { k: 'ransom', sec: 'cyber', t: 'Ransomware or a breach in IT and subscriber systems', L: 4, I: 5, S: 5, h: 0, live: 'kev',
+    why: 'Attackers break in through internet-facing VPNs and firewalls, then move to billing, CRM and subscriber databases. SIM keys and identities for millions of people can be exposed.',
+    prec: ['2025: SK Telecom in Korea leaked 26.96 million pieces of USIM data, replaced SIMs free of charge and was fined about $97 million', 'https://totaltele.com/korean-regulator-hits-skt-with-97m-fine-over-data-breach/', 'Total Telecom'],
+    sig: ['Newly exploited flaws in VPNs, firewalls and gateways you run (CISA list)', 'Unusual admin logins, or data leaving at night', 'Backups deleted or files being encrypted', 'Posts on criminal forums naming {op}'],
+    cost: ['The attacker spreads from the first server', 'Billing, CRM or customer care go down; data may be leaking', 'Regulator fines, a SIM re-issue and lawsuits'],
+    now: ['Isolate affected systems and cut the attacker’s access, keeping the evidence', 'Protect the most critical assets first: the subscriber database, SIM keys, billing and backups', 'Call the incident-response retainer and the legal team', 'Prepare the notice to {cert} and {dpa}'],
+    day: ['Close the entry point and reset admin and service passwords', 'Decide with legal whether customers must be told, and tell them plainly', 'Plan a SIM re-issue if SIM keys or identities were exposed', 'Watch for fraud that uses the stolen data'],
+    fix: ['Patch internet-facing equipment within 48 hours of an exploited flaw', 'Phishing-resistant sign-in for every administrator', 'Offline backups, restored in a test every quarter', 'Segment the network so one breach can’t reach subscriber systems'],
+    owner: 'CISO', esc: 'CEO, legal and the crisis committee at once if customer data or core systems are touched', done: 'Attacker removed, systems restored from clean backups and notices filed',
+    cx: 'some of our systems are affected by a security incident and some services may be slower', to: '{cert} and {dpa}', caps: [116, 115, 103, 76, 122], go: ['ag:sc', 'tm:regulatory'] },
+  { k: 'simswap', sec: 'cyber', t: 'A SIM-swap fraud wave empties customers’ bank accounts', L: 4, I: 4, S: 5, h: 0,
+    why: 'Banks still send one-time codes by text message. A criminal who takes over a number can empty accounts within an hour, and the operator gets the blame.',
+    sig: ['SIM swaps per hour above normal, especially at night or at one store', 'Swaps followed within minutes by banking logins', 'Fraud reports from banks'],
+    cost: ['Accounts emptied; customers call their banks and {op}', 'Media stories name {op}', 'Regulator and banks demand changes'],
+    now: ['Hold high-risk SIM swaps for an extra identity check', 'Share the affected numbers with banks’ fraud teams', 'Suspend agents or stores with unusual swap patterns'],
+    day: ['Contact affected customers and help them with their banks', 'Brief {reg} and the banks’ fraud teams together'],
+    fix: ['A SIM-swap check that banks can call before sending codes', 'Stronger identity checks for every swap', 'Continuous monitoring of agents and stores'],
+    owner: 'Fraud management', esc: 'CISO if losses pass the agreed threshold', done: 'SIM-swap fraud back to its normal level for 7 days',
+    cx: 'criminals are trying to take over phone numbers; we have added extra checks to protect you', to: '{reg}', caps: [38, 32, 115, 79], go: ['ag:sc'] },
+  { k: 'core', sec: 'net', t: 'Nationwide core outage, including calls to {sos}', L: 3, I: 5, S: 5, h: 0,
+    why: 'A faulty change or upgrade in the core network can take voice, data and emergency calls down for the whole country at once. The cost is counted in lives, licence obligations and leadership changes.',
+    prec: ['Nov 2023: Optus in Australia lost service for 10 million people for up to 14 hours; 2,697 emergency calls failed and the CEO stepped down', 'https://www.canberratimes.com.au/story/8496311/optus-outage-2697-triple-zero-calls-failed-during-blackout/', 'The Canberra Times'],
+    sig: ['A core change or upgrade in progress', 'Failed network registrations rising fast', 'Emergency-call success rate falling', 'Calls to the contact centre and social posts surging within minutes'],
+    cost: ['Customers and businesses can’t call or pay; emergency calls fail', 'Regulator investigation, front-page coverage and compensation claims', 'Licence penalties, executive accountability and lasting churn'],
+    now: ['Freeze all network changes and roll back the most recent one', 'Make sure emergency calls can use other networks, and tell the emergency services', 'Open a crisis bridge with the core-network vendor', 'Post a notice within 30 minutes and update it every 30 minutes'],
+    day: ['Restore service in order: emergency, government, hospitals, enterprise, consumers', 'Notify {reg} formally with the timeline and the cause so far', 'Credit affected customers automatically'],
+    fix: ['Staged rollouts with automatic rollback; no country-wide change in one step', 'Emergency calls tested to work when the core is down', 'A plan for total loss of service, rehearsed twice a year', 'An independent review, with the findings published'],
+    owner: 'CTO with the CEO and the crisis committee', esc: 'CEO, the crisis committee and {reg} immediately', done: 'Full service restored, emergency calls verified and the regulator report filed',
+    cx: 'calls and mobile data are not working for many customers', to: '{reg}', caps: [55, 64, 60, 122, 49], go: ['tm:network', 'ag:cx'] },
+  { k: 'billing', sec: 'cust', t: 'A billing error overcharges thousands of customers', L: 3, I: 4, S: 5, h: 0,
+    why: 'One wrong rate or a duplicated bill run reaches thousands of customers at once, triggers automatic payments and goes viral within hours.',
+    sig: ['Average bill jumps in one bill run', 'Calls about bills spike', 'Automatic payments above the normal volume'],
+    cost: ['Money leaves customers’ accounts', 'Social media storm and an overloaded call centre', 'Refunds, fines and churn'],
+    now: ['Stop the bill run and any payments in progress', 'Find the faulty rate or step', 'Tell customers: we found an error and you will not pay it'],
+    day: ['Refund or credit everyone automatically', 'Inform {reg}', 'Give front-line staff one clear answer'],
+    fix: ['Automatic checks before every bill run', 'Revenue assurance on every rate change'],
+    owner: 'Billing and revenue assurance', esc: 'CFO and the customer officer', done: 'Everyone refunded and pre-bill checks in place',
+    cx: 'some customers received a bill with an error; you will not pay the wrong amount', to: '{reg}', caps: [27, 37, 28, 39], go: ['ag:cx'] },
+  { k: 'viral', sec: 'cust', t: 'A customer complaint goes viral', L: 4, I: 3, S: 5, h: 0, live: 'news',
+    why: 'A video of a bad experience can reach millions of people in hours. Silence or a stock reply makes it worse.',
+    sig: ['Mentions of {op} up fivefold in an hour', 'Negative posts trending', 'Journalists asking for comment'],
+    cost: ['The story spreads', 'National media coverage', 'Brand damage and churn'],
+    now: ['Get the facts from the customer’s case owner', 'Reply publicly within an hour with what you will do', 'Fix the customer’s problem first'],
+    day: ['If the issue is wider, say so and fix it', 'Brief front-line staff with the same answer'],
+    fix: ['Social listening with alerts', 'Let care staff fix problems and compensate on the spot'],
+    owner: 'Communications and customer experience', esc: 'CEO office if national media picks it up', done: 'Customer’s problem solved and sentiment back to normal',
+    cx: 'we have seen the concerns raised today and are putting things right', to: null, caps: [93, 35, 40], go: ['tm:customer', 'ag:cx'] },
+  { k: 'ddos', sec: 'cyber', t: 'A massive DDoS attack takes down DNS, the app or a large customer', L: 3, I: 4, S: 5, h: 0,
+    why: 'Attacks of several terabits per second can overwhelm DNS, the app and payment pages or an enterprise customer, and spill over onto the shared network.',
+    sig: ['Traffic spikes toward one target', 'DNS failures rising', 'Threats or ransom notes'],
+    cost: ['App, DNS or payments down', 'Complaints and SLA penalties', 'Enterprise customers question resilience'],
+    now: ['Turn on scrubbing and rate limits; block only the targeted address if needed', 'Protect DNS and the app first', 'Tell affected enterprise customers'],
+    day: ['Ask upstream carriers to filter traffic at the source', 'Report the attack to {cert}'],
+    fix: ['Always-on scrubbing sized to the largest recent attacks', 'DNS spread across providers', 'DDoS protection offered to enterprise customers'],
+    owner: 'Security operations', esc: 'CISO and CTO if consumer services are affected', done: 'Attack absorbed and services stable for 24 hours',
+    cx: 'some online services are slow because of a cyberattack we are blocking', to: '{cert}', caps: [116, 76, 119], go: ['ag:sc'] },
+  { k: 'appdown', sec: 'cust', t: 'The app, website or payments go down on a peak day', L: 3, I: 3, S: 5, h: 0, live: 'cloud',
+    why: 'On salary days, sales and holidays, an outage of the app or payments blocks top-ups, renewals and orders, and sends everyone to stores and the call centre.',
+    sig: ['Error rates and failed logins rising', 'Incidents at payment, cloud or CDN providers', 'Store and call-centre queues growing'],
+    cost: ['Top-ups and orders fail', 'Stores and the call centre overwhelmed', 'Lost sales and falling app ratings'],
+    now: ['Roll back the last release or switch to the standby site', 'Show a status banner and offer another way to top up (text message or USSD)', 'Extend grace periods so nobody loses service for not paying'],
+    day: ['Fix and test the root cause', 'Compensate customers who couldn’t top up'],
+    fix: ['No releases just before peak days', 'Load tests at three times the peak', 'A second payment provider'],
+    owner: 'Digital and IT operations', esc: 'CIO if it lasts more than an hour', done: 'Stable for 48 hours and the peak-day plan updated',
+    cx: 'the app and online payments are not working for some customers; your service will not be cut off while we fix it', to: null, caps: [34, 39, 119, 120], go: ['tm:digital', 'ag:dg'] },
+  { k: 'sanction', sec: 'fin', t: 'A key vendor or partner is sanctioned overnight', L: 2, I: 5, S: 5, h: 0,
+    why: 'New sanctions or export controls can stop software updates, support and spare parts for equipment that runs the network.',
+    sig: ['New sanctions lists or export-control announcements', 'Vendor warnings about support', 'Banks blocking payments to a partner'],
+    cost: ['Orders and payments stuck', 'No updates or support for parts of the network', 'Forced, costly replacement'],
+    now: ['Freeze new orders and payments until legal clears them', 'List every system, contract and spare part that depends on the vendor', 'Ask the vendor what support continues and for how long'],
+    day: ['Brief the board with options', 'Talk to {reg} and the relevant authorities', 'Buy critical spares while still allowed'],
+    fix: ['Two vendors for critical systems where possible', 'Daily sanctions screening of every partner', 'Exit plans written into contracts'],
+    owner: 'Legal, procurement and the CTO', esc: 'CEO and the board the same day', done: 'Legal position clear and supply secured for 12 months',
+    cx: null, to: '{reg} and the relevant authorities', caps: [9, 10, 17, 18, 53], go: ['tm:regulatory', 'ag:rg'] },
+  { k: 'weather', sec: 'net', t: 'Flash floods, extreme heat or sandstorms knock out sites and power', L: 3, I: 4, S: 4, h: 1, live: 'weather',
+    why: 'Low-lying sites, street cabinets and power feeds fail in floods; heat above 48 °C strains cooling and batteries. Outages hit just when people need to call for help.',
+    prec: ['Apr 2024: 254 mm of rain fell in under 24 hours at Khatm Al Shakla, the most since UAE records began in 1949', 'https://en.wikipedia.org/wiki/2024_United_Arab_Emirates_floods', 'Wikipedia'],
+    sig: ['Forecast rain above 20 mm a day, heat above 48 °C or gusts above 60 km/h', 'Sites switching to battery', 'Mains power alarms by district', 'Fuel levels at generator sites'],
+    cost: ['Sites in low areas run on battery', 'Batteries run out, leaving coverage holes where people are stranded', 'Equipment replacement and rebuilds'],
+    now: ['Pre-position generators and fuel at low-lying and critical sites', 'Move battery and cooling alarms to the top of the operations queue', 'Staff field teams in shifts with safe access routes', 'Coordinate public warnings with civil defence'],
+    day: ['Restore critical sites first: hospitals, emergency services and shelters', 'Offer free calls or data in affected areas', 'Report status to {reg} twice a day'],
+    fix: ['A flood-risk map of every site, with equipment raised where needed', 'Longer battery backup at critical sites', 'Cooling upgrades at the hottest sites'],
+    owner: 'Network operations and field services', esc: 'Crisis committee if more than 5% of sites are down', done: 'Every site back on mains power with no coverage holes',
+    cx: 'severe weather is affecting coverage in some areas; our teams are restoring it', to: '{reg}', caps: [61, 63, 62, 67, 122], go: ['tm:network', 'tab-geo'] },
+  { k: 'gnss', sec: 'net', t: 'GPS jamming throws off network timing', L: 3, I: 4, S: 4, h: 1,
+    why: '4G and 5G sites take their timing from satellite signals. Jamming or spoofing in a region makes sites interfere with each other and drop calls and data across an area.',
+    sig: ['Sites in one cluster losing satellite lock', 'Timing alarms and rising interference', 'Reports of navigation problems at sea or in the air nearby'],
+    cost: ['Sites run on backup clocks', 'Backup clocks drift; dropped calls and slow data in the area', 'Unusable coverage until timing is fixed'],
+    now: ['Find the affected cluster and switch to timing over fibre where available', 'Check how long each site’s backup clock can hold', 'Report the interference to {reg}'],
+    day: ['Reduce load or switch off sites that cause interference', 'Install portable timing sources at key sites'],
+    fix: ['Timing over fibre as the main source at every critical site', 'Better backup clocks', 'Interference monitoring with alerts'],
+    owner: 'Network engineering', esc: 'CTO if more than 50 sites are affected', done: 'Every site on stable timing with at least 24 hours of backup',
+    cx: 'some customers in parts of the network may see dropped calls or slower data', to: '{reg}', caps: [54, 46, 47, 66], go: ['tm:network'] },
+  { k: 'pricewar', sec: 'mkt', t: '{rival} starts an all-out price war', L: 3, I: 4, S: 4, h: 1,
+    why: 'A deep cut across every plan can pull away a large share of high-value customers in weeks, and matching it everywhere can wipe out a year of profit growth.',
+    sig: ['Prices changed on {rival}’s plan pages', 'Port-outs rising in the premium segment', 'A jump in {rival}’s advertising'],
+    cost: ['Port-outs start', 'Hundreds of thousands of customers at risk', 'Lasting margin damage'],
+    now: ['Confirm the move from public sources', 'Run it through the decision engine', 'Brief retention teams, and don’t match blindly'],
+    day: ['Targeted offers for the customers most likely to leave', 'An executive decision on the response'],
+    fix: ['Compete on value: bundles and service quality', 'Early warning on rival pricing'],
+    owner: 'Pricing committee', esc: 'Executive committee', done: 'Port-outs back to normal',
+    cx: null, to: null, caps: [87, 86, 110, 36], go: ['dec:price', 'tm:pricing'] },
+  { k: 'scam', sec: 'cyber', t: 'Scam calls and texts impersonate {op} or banks', L: 5, I: 3, S: 3, h: 1, live: 'news',
+    why: 'Fake messages about bills, prizes or parcels steal logins and money, and customers stop trusting genuine messages from {op}.',
+    sig: ['Customer reports of fake messages', 'A spike in messages with new links from foreign routes', 'Lookalike websites registered'],
+    cost: ['Customers click and lose money', 'Trust in genuine messages falls', 'Pressure from the regulator and banks'],
+    now: ['Block the sending routes and links at the SMS firewall', 'Warn customers in the app and from the verified sender name', 'Ask hosting providers to take down lookalike sites'],
+    day: ['Share the scam details with banks and {reg}', 'Report the numbers to the police'],
+    fix: ['Only registered sender names for brands', 'AI filtering of scam calls and texts', 'A one-tap report button in the app'],
+    owner: 'Fraud management and messaging', esc: 'Head of fraud if losses are reported', done: 'Campaign blocked and reports back to normal',
+    cx: 'scam messages pretending to be from {op} are circulating; we never ask for passwords or codes', to: '{reg}', caps: [38, 76, 93], go: ['ag:sc'] },
+  { k: 'privacy', sec: 'reg', t: 'Customer data used or shared without consent', L: 3, I: 5, S: 3, h: 1,
+    why: 'A campaign, partner or AI model that uses personal data without a lawful basis breaks data-protection law and destroys trust.',
+    sig: ['Complaints about unexpected messages', 'Data shared with a partner without an agreement', 'A model trained on data it should not use'],
+    cost: ['The data spreads further', 'Complaints and questions from the regulator', 'Fines and lasting loss of trust'],
+    now: ['Stop the processing or the campaign', 'Find what data, which customers and who received it', 'Tell the data protection officer'],
+    day: ['Notify {dpa} if the law requires it', 'Ask partners to delete the data and confirm it in writing'],
+    fix: ['Consent checks built into campaign tools', 'A privacy review before any new use of data, including AI'],
+    owner: 'Data protection officer', esc: 'Legal and the CEO if many customers are affected', done: 'Processing stopped, data deleted and any required notice filed',
+    cx: null, to: '{dpa}', caps: [117, 118, 25, 111], go: ['ag:rg', '#platform'] },
+  { k: 'churn', sec: 'cust', t: 'Churn spikes in a high-value segment', L: 3, I: 4, S: 3, h: 1,
+    why: 'When premium or young digital customers start leaving together, they pull friends and family with them, and next quarter’s revenue is already lost.',
+    sig: ['Daily port-outs above the normal range in one segment', 'Falling app ratings', 'More cancellations at renewal'],
+    cost: ['More customers decide to leave', 'A visible drop in the quarter', 'Rivals win whole households'],
+    now: ['Find the segment, district and reason', 'Run the churn model on that segment', 'Hold the retention budget for those customers'],
+    day: ['Personal offers for the customers most at risk, inside contact rules', 'Fix the cause if it is service-related'],
+    fix: ['Early-warning model for every segment', 'Right-time engagement instead of mass discounts'],
+    owner: 'Retention and customer experience', esc: 'Customer officer', done: 'Port-outs back in the normal range for 4 weeks',
+    cx: null, to: null, caps: [36, 102, 26, 35], go: ['dec:digital', 'tm:customer', 'ag:rl'] },
+  { k: 'signal', sec: 'cyber', t: 'Signalling attacks used to track or intercept customers', L: 3, I: 4, S: 3, h: 2,
+    why: 'Old links between operators (SS7 and Diameter) can be abused to locate phones or intercept codes, often aimed at officials and executives.',
+    sig: ['Location requests from unusual foreign networks', 'Signalling-firewall hits', 'Requests about government or VIP numbers'],
+    cost: ['Locations or codes exposed', 'Targeted fraud or espionage', 'A national-security concern'],
+    now: ['Block the sending network at the signalling firewall', 'Check which numbers were queried'],
+    day: ['Tell the security teams of the customers affected', 'Report it to {cert}'],
+    fix: ['Signalling-firewall rules for every message type', 'Monitoring of VIP numbers'],
+    owner: 'Security operations', esc: 'CISO', done: 'Source blocked and no further attempts for 7 days',
+    cx: null, to: '{cert}', caps: [116, 55, 43], go: ['ag:sc'] },
+  { k: 'fx', sec: 'fin', t: 'A sharp currency fall in an international market', L: 3, I: 4, S: 3, h: 2, live: 'fx',
+    why: 'A devaluation cuts the {cur} value of local revenue and raises the cost of equipment and debt priced in dollars.',
+    sig: ['Currency more than 5% weaker in 30 days', 'Central bank moves or capital controls', 'A gap between official and parallel rates'],
+    cost: ['Dollar costs rise overnight', 'Profit in {cur} terms falls', 'Debt covenants and dividends under pressure'],
+    now: ['Check exposure: revenue, costs and debt by currency', 'Pause non-urgent dollar purchases in that market'],
+    day: ['Treasury decides on hedging', 'Review prices with the local team'],
+    fix: ['Natural hedges: local-currency costs and debt', 'Price indexation where the rules allow it'],
+    owner: 'Group treasury and the CFO', esc: 'CFO', done: 'Exposure hedged and the budget reset',
+    cx: null, to: null, caps: [7, 6, 4, 124], go: ['tm:capital', 'tab-cap'] },
+  { k: 'consumer', sec: 'reg', t: 'The regulator orders refunds for unclear charges', L: 3, I: 3, S: 3, h: 2,
+    why: 'Add-ons, roaming charges or renewals that customers did not understand lead to refund orders, fines and new rules.',
+    sig: ['Complaints about one charge rising', 'Posts about unexpected bills', 'Questions from {reg}'],
+    cost: ['Complaints rise', 'Refunds and fines', 'Rules that limit future offers'],
+    now: ['Pause the charge in question', 'Count the customers and amounts affected'],
+    day: ['Offer refunds before they are ordered', 'Fix the wording on bills and in the app'],
+    fix: ['A plain-language review of every charge', 'Spending alerts for customers'],
+    owner: 'Consumer affairs and billing', esc: 'Regulatory affairs', done: 'Refunds paid and the charge rewritten',
+    cx: 'we are refunding a charge that was not explained clearly', to: '{reg}', caps: [27, 37, 40], go: ['ag:rg', 'ag:cx'] },
+  { k: 'tender', sec: 'mkt', t: 'Losing a top government or enterprise contract', L: 2, I: 4, S: 3, h: 2,
+    why: 'A handful of large accounts carry a big share of enterprise revenue, and losing one at renewal hits revenue for years.',
+    sig: ['A tender issued early or with changed terms', 'The client asking rivals for references', 'Service complaints from the account'],
+    cost: ['The client starts talking to rivals', 'The contract goes to tender', 'Years of revenue lost'],
+    now: ['Executive call with the client', 'Fix any open service issues'],
+    day: ['A renewal offer built on what the client values', 'Run the rival’s likely offer through the decision engine'],
+    fix: ['Quarterly business reviews for the top 50 accounts', 'Early warning on tenders'],
+    owner: 'Enterprise sales leadership', esc: 'CEO for the top 10 accounts', done: 'Contract renewed or a recovery plan agreed',
+    cx: null, to: null, caps: [41, 72, 15, 125], go: ['dec:enterprise', 'tm:enterprise'] },
+  { k: 'bypass', sec: 'mkt', t: 'Big tech and satellite players go straight to customers', L: 3, I: 4, S: 2, h: 3,
+    why: 'eSIM stores, satellite direct-to-phone services and messaging apps can take over the customer relationship and the most valuable traffic.',
+    sig: ['Satellite direct-to-device launches in the region', 'eSIM travel apps climbing the app stores', 'Device makers bundling connectivity'],
+    cost: ['Travellers and young users try alternatives', 'Roaming and international revenue fall', 'The customer relationship moves to the platform'],
+    now: ['Map which segments are exposed'],
+    day: ['Open partner talks with satellite providers', 'Own the eSIM experience in the app'],
+    fix: ['Partner rather than compete where it makes sense', 'Network APIs that make {op} part of the platforms'],
+    owner: 'Strategy', esc: 'Executive committee', done: 'A partnership or a response approved',
+    cx: null, to: null, caps: [81, 32, 91, 95, 79], go: ['tm:innovation', 'ag:dg'] },
+  { k: 'ai', sec: 'reg', t: 'An AI system acts without human review', L: 2, I: 4, S: 2, h: 3,
+    why: 'An agent that changes offers, messages customers or makes credit decisions without approval breaks the platform’s own rules and AI regulations.',
+    sig: ['Agent actions with no approval record', 'Model drift or bias alerts'],
+    cost: ['Wrong offers or messages sent', 'Complaints', 'Regulatory action'],
+    now: ['Pause the agent', 'Review what it did and undo it'],
+    day: ['Tell affected customers if needed'],
+    fix: ['Human approval for every external action', 'An audit log for every agent step'],
+    owner: 'AI governance board', esc: 'CTO and legal', done: 'Agent fixed and re-approved',
+    cx: null, to: null, caps: [118, 108, 120], go: ['#agents'] }
+];
+const CR = { sec: 'all', sev: 'all', sel: null, all: false, bump: {}, read: {}, scanned: 0, scanning: false, seen: false, stmt: null };
+const crGet = k => CR_ITEMS.find(x => x.k === k);
+const crSevOf = v => CR_SEV.find(s => v >= s[0]);
+function crItems() {
+  return CR_ITEMS.map(x => { const b = CR.bump[x.k] || 0, L = Math.min(5, x.L + b), v = Math.round(L * x.I * x.S / 1.25); return Object.assign({}, x, { base: Math.round(x.L * x.I * x.S / 1.25), Ll: L, v, up: L > x.L, sev: crSevOf(v) }); })
+    .sort((a, b) => b.v - a.v || a.h - b.h).map((x, i) => Object.assign(x, { rank: i + 1 }));
+}
+const crShown = x => (CR.sec === 'all' || x.sec === CR.sec) && (CR.sev === 'all' || (CR.sev === 'ext' ? x.sev[1] === 'ext' : ['ext', 'crit'].includes(x.sev[1])));
+const crAge = ms => { const m = Math.max(0, Math.round(ms / 6e4)); return m < 60 ? m + ' min' : m < 48 * 60 ? Math.floor(m / 60) + ' h ' + (m % 60) + ' min' : Math.round(m / 1440) + ' days'; };
+const crBadge = x => `<span class="cr-sev s-${x.sev[1]}">${esc(x.sev[2])}</span>`;
+
+// the radar: six sectors, four rings (the centre is "act now"), one blip per risk
+function crRadarSvg(L) {
+  const C = 240, R = [24, 96, 140, 176, 205], rad = d => (d - 90) * Math.PI / 180, f = n => n.toFixed(1);
+  const pt = (r, d) => [C + r * Math.cos(rad(d)), C + r * Math.sin(rad(d))];
+  let s = `<defs><linearGradient id="crSw" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--cr-trace)" stop-opacity="0"/><stop offset="1" stop-color="var(--cr-trace)" stop-opacity=".28"/></linearGradient></defs>`;
+  s += `<circle cx="${C}" cy="${C}" r="${R[4]}" class="cr-bg"/>`;
+  R.slice(1).forEach((r, i) => { s += `<circle cx="${C}" cy="${C}" r="${r}" class="cr-ring${i === 0 ? ' now' : ''}"/>`; });
+  CR_SEC.forEach(([k, n], i) => {
+    const [x, y] = pt(R[4], i * 60), [lx, ly] = pt(R[4] + 12, i * 60 + 30);
+    s += `<line x1="${C}" y1="${C}" x2="${f(x)}" y2="${f(y)}" class="cr-spoke"/><text x="${f(lx)}" y="${f(ly + 4)}" text-anchor="${lx < C - 30 ? 'end' : lx > C + 30 ? 'start' : 'middle'}" class="cr-sl${CR.sec === k ? ' on' : ''}">${esc(n)}</text>`;
+  });
+  CR_H.forEach(([n], i) => { s += `<text x="${C + 5}" y="${C - R[i + 1] + 13}" class="cr-rl">${esc(n)}</text>`; });
+  const [ax, ay] = pt(R[4], 0), [bx, by] = pt(R[4], 50);
+  s += `<g class="cr-sweep" aria-hidden="true"><path d="M${C} ${C}L${f(ax)} ${f(ay)}A${R[4]} ${R[4]} 0 0 1 ${f(bx)} ${f(by)}Z" fill="url(#crSw)"/><line x1="${C}" y1="${C}" x2="${f(bx)}" y2="${f(by)}" class="cr-beam"/></g>`;
+  CR_SEC.forEach(([k], si) => {
+    // spread the risks of one ring across the sector and stagger them in depth so no two blips touch
+    L.filter(x => x.sec === k).sort((a, b) => a.h - b.h || b.v - a.v).forEach((x, j, inSec) => {
+      const ring = inSec.filter(y => y.h === x.h), q = ring.indexOf(x), m = ring.length;
+      const ang = si * 60 + (m === 1 ? 30 + (x.h % 2 ? -9 : 9) : 60 * (q + 1) / (m + 1)), r0 = R[x.h], r1 = R[x.h + 1], rr = r0 + (r1 - r0) * (m > 1 ? (q % 2 ? .72 : .3) : .5);
+      const [bx2, by2] = pt(rr, ang), br = 6 + x.I * .9, cls = `cr-b s-${x.sev[1]}${crShown(x) ? '' : ' dim'}${CR.sel === x.k ? ' sel' : ''}${x.up ? ' up' : ''}`;
+      s += `<g class="${cls}" data-crk="${x.k}" tabindex="0" role="button" aria-label="${esc(`${x.rank}. ${crT(x.t)}: ${x.sev[2]}, score ${x.v}, ${CR_H[x.h][1].toLowerCase()}`)}"><title>${esc(`${x.rank}. ${crT(x.t)} (${x.v})`)}</title><circle class="cr-ping" cx="${f(bx2)}" cy="${f(by2)}" r="${f(br)}"/><circle class="cr-dot" cx="${f(bx2)}" cy="${f(by2)}" r="${f(br)}"/><text x="${f(bx2)}" y="${f(by2 + 3.4)}" text-anchor="middle">${x.rank}</text></g>`;
+    });
+  });
+  return `<svg viewBox="-64 0 608 480" class="cr-svg" role="group" aria-label="Crisis radar: risks by area, with the most urgent at the centre">${s}</svg>`;
+}
+function crSummary(L) {
+  const open = CR_R.filter(r => !r.closed), sens = CR_SENS.filter(s => (CR.read[s.k] || {}).lvl > 0).length, oldest = open.reduce((a, r) => Math.min(a, r.at), Infinity);
+  return [[L.filter(x => x.sev[1] === 'ext').length, 'Extreme risks'], [L.filter(x => x.sev[1] === 'crit').length, 'Critical risks'], [L.filter(x => x.h === 0).length, 'Need action within 1 hour'],
+    [CR.scanned ? `${sens}/${CR_SENS.length}` : '—', CR.scanned ? 'Live sensors on watch or alert' : 'Live sensors not scanned yet'], [open.length, open.length ? `Responses open · oldest ${crAge(Date.now() - oldest)}` : 'Responses open']]
+    .map(([v, l], i) => `<div class="${i === 0 && v ? 'hot' : ''}"><b>${esc(String(v))}</b><span>${esc(l)}</span></div>`).join('');
+}
+function crQueueHtml(L) {
+  const f = L.filter(crShown), show = CR.all ? f : f.slice(0, 8);
+  if (!f.length) return '<p class="small muted">No risks match these filters.</p>';
+  return show.map(x => { const r = crOpenFor(x.k); return `<button type="button" class="cr-q s-${x.sev[1]}${CR.sel === x.k ? ' on' : ''}" data-crk="${x.k}"><span class="cr-rk mono">${x.rank}</span><span class="cr-qm"><b>${esc(crT(x.t))}</b><span class="tiny muted">${esc(CR_SECN[x.sec])} · ${esc(CR_H[x.h][1])} · ${esc(crT(x.owner))}</span>${r ? `<span class="tiny cr-open">Response ${esc(r.id)} open · ${esc(crStage(r)[0])}</span>` : ''}</span><span class="cr-qs">${crBadge(x)}<b class="mono">${x.v}</b>${x.up ? `<span class="tiny cr-up">live +${x.v - x.base}</span>` : ''}</span></button>`; }).join('')
+    + (f.length > 8 ? `<button type="button" class="btn sm" data-crall>${CR.all ? 'Show the top 8' : `Show all ${f.length}`}</button>` : '');
+}
+const crBar = (l, v, up) => `<div class="cr-lv"><span>${esc(l)}</span><i style="--w:${v * 20}%"></i><b class="mono">${v}/5${up ? ' ▲' : ''}</b></div>`;
+function crDetailHtml(x) {
+  const r = crOpenFor(x.k), rd = x.live && CR.read[x.live], due = CR_H[x.h];
+  const col = (h, list, cls) => `<div class="cr-pc ${cls}"><span class="label">${esc(h)}</span><ol>${list.map(t => `<li>${esc(crT(t))}</li>`).join('')}</ol></div>`;
+  const go = x.go.filter(cvHas).map(tok => `<button type="button" class="chip" data-cvgo="${esc(tok)}">${esc(crGoName(tok))} →</button>`).join('');
+  return `<article class="cr-d s-${x.sev[1]}">
+    <header><div class="cr-dh">${crBadge(x)}<span class="mono cr-score">Score ${x.v}${x.up ? ` <span class="cr-up">live, was ${x.base}</span>` : ''}</span><span class="tiny muted">${esc(CR_SECN[x.sec])} · ${esc(due[1])}</span></div><h3>${x.rank}. ${esc(crT(x.t))}</h3><p>${esc(crT(x.why))}</p>
+    ${x.prec ? `<p class="small cr-prec"><span class="label">It has happened</span> ${esc(x.prec[0])}. <a href="${esc(x.prec[1])}" target="_blank" rel="noopener noreferrer">${esc(x.prec[2])} ↗</a></p>` : ''}</header>
+    <div class="cr-cost"><span class="label">If nobody acts</span>${['After 1 hour', 'After 24 hours', 'After 7 days'].map((h, i) => `<div><b>${h}</b><span class="small">${esc(crT(x.cost[i]))}</span></div>`).join('')}</div>
+    <div class="cr-mid"><div><span class="label">Early warning signals</span><ul class="small">${x.sig.map(t => `<li>${esc(crT(t))}</li>`).join('')}</ul>${rd ? `<p class="small cr-live l-${rd.lvl || 0}"><b>Live:</b> ${esc(rd.err || rd.line)}</p>` : x.live ? '<p class="tiny muted">A live sensor watches this risk. Scan the live sources below to see it.</p>' : ''}</div>
+      <div><span class="label">Why it scores ${x.v}</span>${crBar('Likelihood', x.Ll, x.up)}${crBar('Impact', x.I)}${crBar('Speed', x.S)}<p class="tiny muted">Likelihood × impact × speed ÷ 1.25. ${x.up ? 'A live sensor raised the likelihood.' : ''}</p></div></div>
+    <div class="cr-play">${col('First hour', x.now, 'p0')}${col('First 24 hours', x.day, 'p1')}${col('Fix the cause', x.fix, 'p2')}</div>
+    <p class="small">Owner: <b>${esc(crT(x.owner))}</b> · Escalate: ${esc(crT(x.esc))}</p><p class="small">Solved when: ${esc(crT(x.done))}</p>
+    <div class="row-btns">${r ? `<button type="button" class="btn sm accent" data-crjump="${esc(r.id)}">Go to response ${esc(r.id)}</button>` : `<button type="button" class="btn sm accent" data-crstart="${x.k}">Start the response</button>`}<button type="button" class="btn sm" data-crstmt="${x.k}">${sample ? 'Draft statements with Claude' : 'Draft statements'}</button><button type="button" class="btn sm" data-crtable="${x.k}">Book a tabletop exercise</button><button type="button" class="btn sm" data-cvlink="cr-${x.k}">Copy link</button></div>
+    ${go ? `<div class="row-btns cr-go"><span class="tiny muted">Work on it in</span>${go}</div>` : ''}
+    <div class="row-btns cr-go"><span class="tiny muted">Master plan</span>${x.caps.map(n => `<button type="button" class="dc-cap" data-mpshow="${n}" title="${esc(mpGet(n).n)}">#${n} ${esc(mpGet(n).n)}</button>`).join('')}</div>
+    <div id="crStmt"></div></article>`;
+}
+const CR_GON = { tm: t => (tmGet(t) || {}).n + ' terminal', ag: k => ((AG_DEPTS.find(d => d.k === k) || {}).n || '') + ' agents', dec: () => 'Decision engine', tab: () => 'Live console' };
+function crGoName(tok) {
+  if (tok === '#platform') return 'How the platform works'; if (tok === '#agents') return 'AI agents'; if (tok === 'tab-geo') return 'Geo radar'; if (tok === 'tab-cap') return 'Capital radar';
+  const [t, v] = tok.split(':'); return (CR_GON[t] || (() => tok))(v);
+}
+
+// responses: started from a playbook, ticked off step by step, kept in this browser
+const CR_KEY = 'cv.crisis.v1';
+let CR_R = [];
+try { CR_R = JSON.parse(localStorage.getItem(CR_KEY) || '[]').filter(r => r && r.id && crGet(r.k)).slice(0, 30); } catch (e) { /* this visit only */ }
+const crSaveR = () => { try { localStorage.setItem(CR_KEY, JSON.stringify(CR_R.slice(0, 30))); } catch (e) { /* this visit only */ } };
+const crOpenFor = k => CR_R.find(r => r.k === k && !r.closed);
+const crSteps = x => [...x.now.map((t, i) => ['n' + i, t, 0]), ...x.day.map((t, i) => ['d' + i, t, 1]), ...x.fix.map((t, i) => ['f' + i, t, 2])];
+function crStage(r) {
+  if (r.closed) return ['Closed', 'st-prod'];
+  const x = crGet(r.k), has = p => crSteps(x).filter(s => s[2] === p).every(s => r.done.includes(s[0]));
+  return has(0) && has(1) && has(2) ? ['Fixed', 'st-live'] : has(0) && has(1) ? ['Stabilised', 'st-live'] : has(0) ? ['Contained', 'st-svc'] : ['Responding', 'st-proto'];
+}
+function crDue(r) {
+  const x = crGet(r.k), left = r.at + CR_H[x.h][2] - Date.now(), firstDone = x.now.every((t, i) => r.done.includes('n' + i));
+  if (r.closed || firstDone) return `<span data-crdue="${esc(r.id)}"></span>`;
+  return `<span class="tiny${left < 0 ? ' down' : ''}" data-crdue="${esc(r.id)}">${left >= 0 ? `First actions due in ${crAge(left)}` : `First actions overdue by ${crAge(-left)}`}</span>`;
+}
+function crStart(k) {
+  const x = crGet(k); if (!x) return null;
+  const ex = crOpenFor(k); if (ex) return ex;
+  const r = { id: 'R-' + String(1000 + Math.floor(Math.random() * 9000)), k, at: Date.now(), done: [], log: [[dcNow(), `Response started from the crisis radar (score ${crItems().find(y => y.k === k).v}). Owner: ${crT(x.owner)}.`]], closed: 0 };
+  CR_R.unshift(r); crSaveR(); toast(`${r.id} started: ${crT(x.owner)} owns it`); return r;
+}
+function crRespHtml() {
+  if (!CR_R.length) return '<p class="small muted">No responses yet. Open a risk and start its response: the playbook becomes a checklist with a clock.</p>';
+  const open = CR_R.filter(r => !r.closed), closed = CR_R.filter(r => r.closed).slice(0, 5);
+  const card = r => {
+    const x = crGet(r.k), st = crStage(r), steps = crSteps(x), n = steps.filter(s => r.done.includes(s[0])).length;
+    return `<article class="cr-r${r.closed ? ' closed' : ''}" id="crr-${esc(r.id)}"><div class="dc-qh"><b class="mono">${esc(r.id)}</b><span class="stc ${st[1]}">${esc(st[0])}</span></div><b>${esc(crT(x.t))}</b>
+      <span class="tiny muted">Owner: ${esc(crT(x.owner))} · ${r.closed ? 'closed after ' + crAge(r.closed - r.at) : `open <span data-crage="${r.at}">${crAge(Date.now() - r.at)}</span>`}</span>${crDue(r)}
+      <span class="cr-prog" aria-label="${n} of ${steps.length} steps done"><i style="--w:${Math.round(n / steps.length * 100)}%"></i></span>
+      ${r.closed ? '' : `<details${n < steps.length ? ' open' : ''}><summary class="small">${n} of ${steps.length} steps done</summary>${[['First hour', 0], ['First 24 hours', 1], ['Fix the cause', 2]].map(([h, p]) => `<div class="cr-chk"><span class="label">${h}</span>${steps.filter(s => s[2] === p).map(([id, t]) => `<label class="small"><input type="checkbox" data-crchk="${esc(r.id)}|${id}"${r.done.includes(id) ? ' checked' : ''}> ${esc(crT(t))}</label>`).join('')}</div>`).join('')}</details>`}
+      <details><summary class="tiny">Log (${r.log.length})</summary><ul class="tiny">${r.log.map(([t, l]) => `<li><span class="mono">${esc(t)}</span> ${esc(l)}</li>`).join('')}</ul></details>
+      ${r.closed ? '' : `<div class="row-btns"><button type="button" class="btn sm" data-crstmt="${x.k}">Draft statements</button><button type="button" class="btn sm" data-crtask="${esc(r.id)}">Add to the team workspace</button><button type="button" class="btn sm" data-crclose="${esc(r.id)}">Close the response</button></div>`}</article>`;
+  };
+  return open.map(card).join('') + (closed.length ? `<details class="cr-closed"><summary class="small">Closed responses (${closed.length})</summary>${closed.map(card).join('')}</details>` : '');
+}
+
+// draft statements for customers, the regulator and staff: drafts for the communications and legal teams, never sent automatically
+function crStmtMD(x) {
+  const r = crOpenFor(x.k), t = new Date(), at = d => new Date(t.getTime() + d).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), seen = new Date(r ? r.at : t.getTime());
+  const doneList = r ? crSteps(x).filter(s => r.done.includes(s[0])).map(s => crT(s[1])) : [];
+  return [`# Draft statements: ${crT(x.t)}`, '', `Prepared by Cellvoyant for the communications and legal teams${r ? ` (response ${r.id})` : ''}. Nothing is sent automatically; check every fact before release.`, '',
+    '## Customer notice', x.cx ? `We know that ${crT(x.cx)}. Our teams are working on it now. We will update you by ${at(36e5)} on the ${CR_W.op} app, website and social channels. We are sorry for the disruption.` : 'No public notice is recommended yet. Keep a short notice ready in case customers notice the issue.', '',
+    `## Notice to ${x.to ? crT(x.to) : 'the regulator'}`, x.to ? [`Incident: ${crT(x.t)}.`, `Detected: ${seen.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}.`, `Impact so far: [the owner confirms customers, services and areas affected].`, `Risk if not contained within 24 hours: ${crT(x.cost[1]).replace(/^./, c => c.toLowerCase())}.`, `Actions ${doneList.length ? 'taken' : 'under way'}: ${(doneList.length ? doneList : x.now.map(crT)).join('; ')}.`, `Next update: ${at(2 * 36e5)}.`, `Contact: ${crT(x.owner)}.`].join('\n') : 'No formal notice is needed for this risk. Keep the log of decisions and sources.', '',
+    '## Staff brief', `What is happening: ${crT(x.t)}.`, `What to tell customers: ${x.cx ? crT(x.cx) : 'nothing yet; send questions to the communications team'}.`, 'Don’t speculate about causes, promise times we can’t keep or comment on other operators.', `Escalate: ${crT(x.esc)}.`].join('\n');
+}
+async function crStmt(k, btn) {
+  const x = crGet(k), box = $('#crStmt'); if (!x) return;
+  if (!box || CR.sel !== k) { crShow(k, false); return crStmt(k, $(`#crDetail [data-crstmt="${k}"]`)); }
+  const md = crStmtMD(x); CR.stmt = md;
+  const show = (t, by) => { box.innerHTML = `<div class="ai-out"><span class="by">${esc(by)}</span>${mdLite(t)}<div class="row-btns"><button type="button" class="btn sm" data-crsave>Save the statements</button></div></div>`; };
+  if (!sample) { show(md, 'Built-in drafts'); box.scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'nearest' }); return; }
+  if (btn) btn.disabled = true; box.innerHTML = '<div class="ai-out"><span class="by">Claude · drafting</span><span class="muted">Thinking…</span></div>';
+  try {
+    const { text } = await sample(`You help a telecom operator's communications and legal teams in a crisis. Improve these three draft statements: keep the headings and every fact exactly as given, keep them short, plain and calm, and add nothing that is not supported. Never blame anyone, never speculate about causes and never mention other operators. Answer in ${LANG_NAME[LANG.cur] || 'English'}, in Markdown.\n\n${md}`, { modelTier: 'quick', cache: false, onText: ({ text: t }) => { box.innerHTML = `<div class="ai-out"><span class="by">Claude · drafting</span>${mdLite(t)}</div>`; } });
+    CR.stmt = text; show(text, 'Claude · drafts for the communications and legal teams');
+  } catch (e) { show(md, aiFail(e) + '; built-in drafts'); }
+  finally { if (btn) btn.disabled = false; }
+}
+
+// live sensors: real public data that raises a risk's likelihood when a threshold is crossed
+const CR_CITIES = EDITION === 'eand' ? [['Abu Dhabi', 24.45, 54.38], ['Dubai', 25.2, 55.27], ['Al Ain', 24.21, 55.74], ['Fujairah', 25.12, 56.33]] : [['Riyadh', 24.71, 46.68], ['Dubai', 25.2, 55.27], ['Doha', 25.29, 51.53], ['Kuwait City', 29.38, 47.98]];
+const CR_FXC = EDITION === 'eand' ? [['EGP', 'Egypt'], ['PKR', 'Pakistan'], ['MAD', 'Morocco']] : [['EGP', 'Egypt'], ['PKR', 'Pakistan'], ['TRY', 'Türkiye'], ['MAD', 'Morocco'], ['NGN', 'Nigeria']];
+const CR_EDGE = /cisco|fortinet|ivanti|palo alto|juniper|citrix|sonicwall|\bf5\b|check point|arista|huawei|ericsson|nokia|zte|vmware|zyxel|exchange server|sharepoint/i;
+const CR_NEWS_Q = EDITION === 'eand' ? '(UAE OR Emirates OR Gulf OR etisalat OR "du telecom") (outage OR "subsea cable" OR cyberattack OR ransomware OR "data breach" OR scam OR fraud)' : '(telecom OR telco OR "mobile operator") (outage OR "subsea cable" OR ransomware OR cyberattack OR "data breach" OR "SIM swap")';
+const crDay = ms => new Date(ms).toISOString().slice(0, 10);
+const crWhen = ms => new Date(ms).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+function crClassify(t) { const s = t.toLowerCase(); return /sim[- ]swap/.test(s) ? 'simswap' : /ddos/.test(s) ? 'ddos' : /cable|subsea|undersea/.test(s) ? 'cable' : /ransom|breach|hack|cyber|leak/.test(s) ? 'ransom' : /scam|phish|fraud/.test(s) ? 'scam' : /sanction|export control/.test(s) ? 'sanction' : /bill|overcharg/.test(s) ? 'billing' : /price|tariff/.test(s) ? 'pricewar' : /flood|storm|heat|rain/.test(s) ? 'weather' : /outage|down|disrupt|blackout/.test(s) ? 'core' : null; }
+const CR_SENS = [
+  { k: 'quake', n: 'Earthquakes near cable routes', src: ['USGS', 'https://earthquake.usgs.gov/earthquakes/map/'], risk: 'cable', run: async () => {
+    const j = await liveGet(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${crDay(Date.now() - 14 * 864e5)}&minmagnitude=4.5&minlatitude=5&maxlatitude=36&minlongitude=30&maxlongitude=75&orderby=magnitude&limit=12`, 30 * 60e3);
+    const Q = (j.features || []).map(f => ({ m: f.properties.mag, p: f.properties.place || 'Unknown place', t: f.properties.time, url: f.properties.url, sea: /sea|gulf|strait|ocean|ridge|fracture|off the coast|offshore/i.test(f.properties.place || '') }));
+    const lvl = Q.some(q => q.sea && q.m >= 6) ? 2 : Q.some(q => q.sea && q.m >= 5) ? 1 : 0;
+    return { lvl, bump: lvl ? { cable: lvl } : {}, line: Q.length ? `${Q.length} quake${Q.length === 1 ? '' : 's'} of magnitude 4.5+ in the region in 14 days; ${lvl ? 'a strong one at sea near the cable routes' : 'none strong enough at sea to threaten the cables'}.` : 'No quakes of magnitude 4.5+ in the Red Sea, Gulf and Arabian Sea region in 14 days.',
+      rows: Q.slice(0, 4).map(q => [`M${q.m.toFixed(1)} · ${q.p}${q.sea ? ' (at sea)' : ''}`, crWhen(q.t), q.url]) };
+  } },
+  { k: 'weather', n: 'Weather at the main cities', src: ['Open-Meteo', 'https://open-meteo.com/'], risk: 'weather', run: async () => {
+    const j = await liveGet(`https://api.open-meteo.com/v1/forecast?latitude=${CR_CITIES.map(c => c[1]).join(',')}&longitude=${CR_CITIES.map(c => c[2]).join(',')}&daily=temperature_2m_max,precipitation_sum,wind_gusts_10m_max&timezone=auto&forecast_days=3`, 30 * 60e3);
+    const W = (Array.isArray(j) ? j : [j]).map((d, i) => { const D = d.daily || {}, mx = a => Math.max(...(a || [0]).map(v => +v || 0)); return { c: CR_CITIES[i][0], t: mx(D.temperature_2m_max), r: mx(D.precipitation_sum), g: mx(D.wind_gusts_10m_max) }; });
+    const lv = w => w.r >= 50 || w.t >= 50 || w.g >= 80 ? 2 : w.r >= 20 || w.t >= 48 || w.g >= 60 ? 1 : 0, lvl = Math.max(0, ...W.map(lv));
+    return { lvl, bump: lvl ? { weather: lvl } : {}, line: lvl ? `Severe weather in the next 3 days: ${W.filter(w => lv(w)).map(w => w.c).join(', ')}.` : 'No flood, heat or wind thresholds crossed in the next 3 days.',
+      rows: W.map(w => [`${w.c}: up to ${Math.round(w.t)} °C, ${Math.round(w.r)} mm of rain, gusts ${Math.round(w.g)} km/h`, 'next 3 days', 'https://open-meteo.com/']) };
+  } },
+  { k: 'kev', n: 'Exploited flaws in network-edge gear', src: ['CISA KEV catalog', 'https://www.cisa.gov/known-exploited-vulnerabilities-catalog'], risk: 'ransom', run: async () => {
+    const j = await liveGet('https://raw.githubusercontent.com/cisagov/kev-data/main/known_exploited_vulnerabilities.json', 6 * 3600e3);
+    const since = crDay(Date.now() - 14 * 864e5), V = (j.vulnerabilities || []).filter(v => v.dateAdded >= since && (CR_EDGE.test(`${v.vendorProject} ${v.product}`) || v.knownRansomwareCampaignUse === 'Known')).sort((a, b) => b.dateAdded.localeCompare(a.dateAdded));
+    const lvl = V.some(v => v.knownRansomwareCampaignUse === 'Known') ? 2 : V.length ? 1 : 0;
+    return { lvl, bump: lvl ? { ransom: 1 } : {}, line: V.length ? `${V.length} actively exploited flaw${V.length === 1 ? '' : 's'} in VPNs, firewalls, gateways or servers added in 14 days${lvl === 2 ? ', some used by ransomware gangs' : ''}. Check that these are patched.` : 'No new exploited flaws in network-edge equipment in 14 days.',
+      rows: V.slice(0, 5).map(v => [`${v.vulnerabilityName}${v.knownRansomwareCampaignUse === 'Known' ? ' · used by ransomware' : ''}`, crWhen(new Date(v.dateAdded).getTime()), `https://nvd.nist.gov/vuln/detail/${v.cveID}`]) };
+  } },
+  { k: 'cloud', n: 'Cloud and CDN providers', src: ['Cloudflare status', 'https://www.cloudflarestatus.com/'], risk: 'appdown', run: async () => {
+    const j = await liveGet('https://www.cloudflarestatus.com/api/v2/incidents/unresolved.json', 5 * 60e3);
+    const I = (j.incidents || []).map(i => ({ n: i.name, imp: i.impact, t: Date.parse(i.created_at), url: i.shortlink || 'https://www.cloudflarestatus.com/' }));
+    const lvl = I.some(i => /major|critical/.test(i.imp)) ? 2 : I.length ? 1 : 0;
+    return { lvl, bump: lvl === 2 ? { appdown: 1, ddos: 1 } : {}, line: I.length ? `${I.length} open incident${I.length === 1 ? '' : 's'} at Cloudflare${lvl === 2 ? ', at least one major' : ', all minor'}.` : 'No open incidents at Cloudflare.',
+      rows: I.slice(0, 4).map(i => [`${i.n} (${i.imp})`, crWhen(i.t), i.url]) };
+  } },
+  { k: 'fx', n: EDITION === 'eand' ? 'Currencies in e&’s international markets' : 'Currencies in international markets', src: ['Currency API (jsDelivr)', 'https://github.com/fawazahmed0/exchange-api'], risk: 'fx', run: async () => {
+    const base = 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@', now = await liveGet(base + 'latest/v1/currencies/usd.min.json', 3600e3);
+    const past = d => liveGet(`${base}${crDay(Date.parse(now.date) - d * 864e5)}/v1/currencies/usd.min.json`, 24 * 3600e3);
+    const then = await past(30).catch(() => past(31));
+    const F = CR_FXC.map(([c, n]) => { const a = now.usd[c.toLowerCase()], b = then.usd[c.toLowerCase()]; return { c, n, a, d: a && b ? a / b - 1 : 0 }; }).filter(f => f.a);
+    const lvl = Math.max(0, ...F.map(f => f.d >= .1 ? 2 : f.d >= .05 ? 1 : 0));
+    return { lvl, bump: lvl ? { fx: lvl } : {}, line: lvl ? `Sharp fall in 30 days: ${F.filter(f => f.d >= .05).map(f => `${f.n} ${tlNum(f.d * 100, 1)}% weaker`).join(', ')}.` : 'No currency more than 5% weaker against the dollar in 30 days.',
+      rows: F.map(f => [`${f.c} (${f.n}): ${tlNum(f.a, 2)} per US dollar, ${f.d >= 0 ? tlNum(f.d * 100, 1) + '% weaker' : tlNum(-f.d * 100, 1) + '% stronger'} than 30 days ago`, now.date, 'https://github.com/fawazahmed0/exchange-api']) };
+  } },
+  { k: 'news', n: 'News on outages, attacks and fraud', src: ['GDELT world news', 'https://www.gdeltproject.org/'], risk: null, run: async () => {
+    const L = lvTake(await liveNews(CR_NEWS_Q, { days: 7, max: 15, lang: 'english' }), 6), hits = L.map(a => ({ a, k: crClassify(a.title) }));
+    const n = hits.filter(h => h.k).length;
+    return { lvl: n ? 1 : 0, bump: {}, line: L.length ? `${L.length} recent headline${L.length === 1 ? '' : 's'} from ${L.source || 'GDELT'}${n ? `; ${n} match a risk on the radar` : ''}. Headlines don’t change scores until an analyst confirms them.` : (L.source && L.source !== 'GDELT' ? 'The news service is busy; try the scan again in a minute.' : 'No matching headlines in the last 7 days.'),
+      rows: hits.map(({ a, k }) => [`${a.title}${k ? ' → ' + crT(crGet(k).t) : ''}`, [a.domain, a.date.slice(0, 10)].filter(Boolean).join(' · '), a.url]) };
+  } }
+];
+function crSensHtml() {
+  const st = ['Normal', 'Watch', 'Alert'];
+  return CR_SENS.map(s => {
+    const r = CR.read[s.k], x = s.risk && crGet(s.risk);
+    const body = !r ? `<p class="small muted">${CR.scanning ? 'Reading…' : 'Not scanned yet.'}</p>` : r.err ? `<p class="small muted">${esc(r.err)}</p>` : `<p class="small">${esc(r.line)}</p>${r.rows.length ? `<ul class="cr-sr">${r.rows.map(([t, d, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(t)}</a><span class="tiny muted">${esc(d)}</span></li>`).join('')}</ul>` : ''}`;
+    return `<article class="cr-sn l-${r && !r.err ? r.lvl : 'x'}"><header><b>${esc(s.n)}</b><span class="cr-st">${r && !r.err ? st[r.lvl] : r ? 'No data' : '—'}</span></header>${body}<p class="tiny muted">Source: <a href="${esc(s.src[1])}" target="_blank" rel="noopener noreferrer">${esc(s.src[0])}</a>${x ? ` · raises “${esc(crT(x.t))}”` : ' · context only'}</p></article>`;
+  }).join('');
+}
+async function crScan(btn) {
+  if (CR.scanning) return; CR.scanning = true; CR.seen = true; if (btn) btn.disabled = true;
+  const stEl = $('#crScanSt'); if (stEl) stEl.textContent = `Scanning ${CR_SENS.length} live sources…`;
+  $('#crSens').innerHTML = crSensHtml();
+  const res = await Promise.allSettled(CR_SENS.map(s => s.run())), bump = {};
+  res.forEach((r, i) => {
+    const s = CR_SENS[i]; CR.read[s.k] = r.status === 'fulfilled' ? r.value : { err: (r.reason && r.reason.message) || 'This source is unavailable right now.' };
+    if (r.status === 'fulfilled') Object.entries(r.value.bump || {}).forEach(([k, n]) => { bump[k] = Math.min(2, (bump[k] || 0) + n); });
+  });
+  CR.bump = bump; CR.scanned = Date.now(); CR.scanning = false; if (btn) btn.disabled = false;
+  const ok = res.filter(r => r.status === 'fulfilled').length, up = Object.keys(bump).length;
+  if (stEl) stEl.innerHTML = ok ? `Scanned ${new Date(CR.scanned).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · ${ok} of ${CR_SENS.length} sources answered · ${up ? `${up} risk${up === 1 ? '' : 's'} raised` : 'no scores changed'}` : `${LV.blocked ? `Live sources can’t be reached from this view. <a href="${esc(LIVE_PUBLIC)}#crisis" target="_blank" rel="noopener">Open the public site ↗</a>` : 'The live sources didn’t answer. Try again in a minute.'}`;
+  crRender();
+}
+function crStrip() {
+  const box = $('#crStrip'); if (!box) return;
+  if (!$('#crApp')) { box.hidden = true; return; }
+  const L = crItems(), ext = L.filter(x => x.sev[1] === 'ext'), top = L[0], open = CR_R.filter(r => !r.closed).length;
+  box.innerHTML = `<span class="cr-pulse" aria-hidden="true"></span><span class="cr-st-t"><b>${ext.length} extreme risk${ext.length === 1 ? '' : 's'} need action now</b><span class="small">Top: ${esc(crT(top.t))} · score ${top.v}${top.up ? ' (live)' : ''}${open ? ` · ${open} response${open === 1 ? '' : 's'} open` : ''}</span></span><button type="button" class="btn sm" data-cvgo="cr:${top.k}">Open the playbook</button><button type="button" class="btn sm accent" data-cvgo="cr">Crisis radar →</button>`;
+}
+function crRender() {
+  const app = $('#crApp'); if (!app) return;
+  const L = crItems();
+  $('#crSum').innerHTML = crSummary(L);
+  $('#crRadar').innerHTML = crRadarSvg(L);
+  $('#crQueue').innerHTML = crQueueHtml(L);
+  $$('#crSec [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === CR.sec)));
+  $$('#crSev [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === CR.sev)));
+  const x = L.find(y => y.k === CR.sel);
+  $('#crDetail').innerHTML = x ? crDetailHtml(x) : '<p class="small muted cr-hint">Pick a risk on the radar or in the list to open its playbook.</p>';
+  $('#crSens').innerHTML = crSensHtml();
+  $('#crResp').innerHTML = crRespHtml();
+  crStrip();
+}
+// after a checklist tick: refresh the counts and cards, leave the open playbook as it is
+function crRenderLive() { const L = crItems(); $('#crSum').innerHTML = crSummary(L); $('#crQueue').innerHTML = crQueueHtml(L); $('#crResp').innerHTML = crRespHtml(); crStrip(); }
+function crShow(k, scroll) {
+  if (!crGet(k) || !$('#crApp')) return;
+  CR.sel = k; crRender();
+  if (scroll) findGo($('#crDetail'));
+}
+function crTick() {
+  $$('[data-crage]').forEach(el => { el.textContent = crAge(Date.now() - +el.dataset.crage); });
+  $$('[data-crdue]').forEach(el => { const r = CR_R.find(y => y.id === el.dataset.crdue); if (r) el.outerHTML = crDue(r); });
+}
+function initCrisis() {
+  const strip = $('#crStrip'); if (strip) strip.addEventListener('click', e => { const g = e.target.closest('[data-cvgo]'); if (g) cvGo(g.dataset.cvgo); });
+  const app = $('#crApp'); if (!app) { crStrip(); return; }
+  $('#crSec').innerHTML = [['all', 'All areas']].concat(CR_SEC).map(([v, n]) => `<button type="button" data-v="${v}" aria-pressed="false">${esc(n)}</button>`).join('');
+  $('#crSev').innerHTML = [['all', 'All'], ['top', 'Extreme + critical'], ['ext', 'Extreme only']].map(([v, n]) => `<button type="button" data-v="${v}" aria-pressed="false">${esc(n)}</button>`).join('');
+  app.addEventListener('click', async e => {
+    const b = e.target.closest('[data-crk]'); if (b) { crShow(b.dataset.crk, true); return; }
+    const sc = e.target.closest('#crSec [data-v]'); if (sc) { CR.sec = sc.dataset.v; crRender(); return; }
+    const sv = e.target.closest('#crSev [data-v]'); if (sv) { CR.sev = sv.dataset.v; crRender(); return; }
+    if (e.target.closest('[data-crall]')) { CR.all = !CR.all; crRender(); return; }
+    if (e.target.closest('#crScan')) { crScan(e.target.closest('#crScan')); return; }
+    const st = e.target.closest('[data-crstart]'); if (st) { const r = crStart(st.dataset.crstart); crRender(); const el = r && document.getElementById('crr-' + r.id); if (el) findGo(el, true); return; }
+    const jp = e.target.closest('[data-crjump]'); if (jp) { const el = document.getElementById('crr-' + jp.dataset.crjump); if (el) findGo(el, true); return; }
+    const sm = e.target.closest('[data-crstmt]'); if (sm) { if (CR.sel !== sm.dataset.crstmt) crShow(sm.dataset.crstmt, true); crStmt(sm.dataset.crstmt, $(`#crDetail [data-crstmt="${sm.dataset.crstmt}"]`)); return; }
+    if (e.target.closest('[data-crsave]')) { saveText('cellvoyant-crisis-statements.md', CR.stmt || crStmtMD(crGet(CR.sel)), 'text/markdown'); return; }
+    const tb = e.target.closest('[data-crtable]'); if (tb) { tb.disabled = true; try { const q = await createRequest({ service: 'crisis', details: `Tabletop exercise: ${crT(crGet(tb.dataset.crtable).t)}`, urgency: 'standard', via: 'crisis radar' }); toast(`Requested ${q.label}${q.saved ? '' : ' (this visit only)'}`); tb.textContent = 'Exercise requested'; } catch (err) { toast(err.message); tb.disabled = false; } return; }
+    const tk = e.target.closest('[data-crtask]'); if (tk) { const r = CR_R.find(y => y.id === tk.dataset.crtask), x = r && crGet(r.k); if (!x) return; await addTask({ title: `${r.id}: ${crT(x.t)} (owner: ${crT(x.owner)})`, kind: 'manual', dept: CR_DEPT[x.sec], prio: 'high' }, tk); return; }
+    const cl = e.target.closest('[data-crclose]'); if (cl) { const r = CR_R.find(y => y.id === cl.dataset.crclose); if (!r) return; r.closed = Date.now(); r.log.push([dcNow(), `Closed after ${crAge(r.closed - r.at)} with ${r.done.length} of ${crSteps(crGet(r.k)).length} steps done. Record the lessons in the post-incident review.`]); crSaveR(); crRender(); toast(`${r.id} closed`); return; }
+    const go = e.target.closest('[data-cvgo]'); if (go) { cvGo(go.dataset.cvgo); return; }
+    const mp = e.target.closest('[data-mpshow]'); if (mp) mpShow(+mp.dataset.mpshow);
+  });
+  app.addEventListener('change', e => {
+    const c = e.target.closest('[data-crchk]'); if (!c) return;
+    const [id, step] = c.dataset.crchk.split('|'), r = CR_R.find(y => y.id === id); if (!r) return;
+    const x = crGet(r.k), before = crStage(r)[0], s = crSteps(x).find(y => y[0] === step);
+    r.done = c.checked ? [...new Set(r.done.concat(step))] : r.done.filter(y => y !== step);
+    r.log.push([dcNow(), `${c.checked ? 'Done' : 'Reopened'}: ${crT(s[1])}`]);
+    const after = crStage(r)[0]; if (after !== before) r.log.push([dcNow(), `Stage: ${after}.`]);
+    crSaveR(); crRenderLive();
+    const again = $(`[data-crchk="${c.dataset.crchk}"]`); if (again) again.focus();
+  });
+  app.addEventListener('keydown', e => { const b = e.target.closest('.cr-b'); if (b && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); crShow(b.dataset.crk, false); } });
+  // scan the live sources the first time the radar comes into view
+  if ('IntersectionObserver' in window) { const io = new IntersectionObserver(es => { if (es.some(x => x.isIntersecting) && !CR.seen) { io.disconnect(); crScan($('#crScan')); } }, { rootMargin: '0px 0px -30% 0px' }); io.observe(app); }
+  setInterval(crTick, 30e3);
+  crRender();
+}
+function crPanelHtml() {
+  const L = crItems(), open = CR_R.filter(r => !r.closed);
+  return L.slice(0, 7).map(x => `<button type="button" class="tm-line" data-tmrun="RISK ${x.k}"><span class="tm-sev s-${x.sev[1] === 'ext' ? 'crit' : x.sev[1] === 'crit' ? 'high' : 'med'}">${esc(x.sev[2])}</span><span>${esc(crT(x.t))}</span><span class="mono muted">${x.v}</span></button>`).join('')
+    + `<p class="tiny muted">${open.length ? `${open.length} response${open.length === 1 ? '' : 's'} open: ${open.map(r => r.id).join(', ')}` : 'No responses open'} · RISK cable shows a playbook.</p>`;
+}
+function crCmd(arg) {
+  const a = arg.trim().toLowerCase(), L = crItems(), sec = a && CR_SEC.find(([k, n]) => k === a || n.toLowerCase().startsWith(a));
+  const one = !sec && !/^(extreme|critical)$/.test(a) && (L.find(x => x.k === a) || (a.length > 3 && L.find(x => crT(x.t).toLowerCase().includes(a))));
+  if (one) return [`${one.rank}. ${crT(one.t)} · ${one.sev[2]} · score ${one.v}${one.up ? ' (raised by a live sensor)' : ''} · ${CR_H[one.h][1]}`, crT(one.why), 'First hour:', ...one.now.map((t, i) => `  ${i + 1}. ${crT(t)}`), `Owner: ${crT(one.owner)} · Escalate: ${crT(one.esc)}`, 'Open the crisis radar to start the response and draft statements.'];
+  const f = sec ? L.filter(x => x.sec === sec[0]) : a === 'extreme' ? L.filter(x => x.sev[1] === 'ext') : a === 'critical' ? L.filter(x => ['ext', 'crit'].includes(x.sev[1])) : a ? [] : L.slice(0, 10);
+  if (!f.length) return [`No risk matches “${arg}”. Try RISK extreme, RISK network or RISK cable.`];
+  return [`${f.length} risk${f.length === 1 ? '' : 's'}${sec ? ' in ' + CR_SECN[sec[0]] : ''}, highest score first:`, ...f.map(x => `${x.rank}. [${x.sev[2]} ${x.v}] ${crT(x.t)} · ${CR_H[x.h][1].toLowerCase()} (RISK ${x.k})`), CR.scanned ? `Live sensors read at ${new Date(CR.scanned).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}.` : 'Live sensors not scanned yet: open the crisis radar to scan.'];
+}
+// words people use for each risk, so "how do we handle a SIM swap wave?" opens the right playbook
+const CR_KW = { cable: /subsea|undersea|cable cut/, ransom: /ransomware|breach|hacked/, simswap: /sim[- ]?swap/, core: /core (network )?outage|nationwide outage|emergency calls?/, billing: /billing error|overcharg/, viral: /viral|social media storm/, ddos: /ddos|denial of service/, appdown: /app (is )?down|payments? (are |is )?down|website (is )?down/, sanction: /sanction|export control/, weather: /flood|sandstorm|extreme heat|storm/, gnss: /\bgps\b|gnss|jamming/, pricewar: /price war/, scam: /scam|phishing|smishing/, privacy: /consent|data protection|privacy/, churn: /churn spike/, signal: /ss7|diameter|signalling attack/, fx: /devaluation|currency (fall|crash|drop)/, consumer: /refund|unclear charge/, tender: /tender|lose (a |our )?(big |top )?contract/, bypass: /direct[- ]to[- ](device|cell)|esim store|bypass/, ai: /\bai\b.*without (human )?(review|approval)/ };
+function crAnswer(q) {
+  const s = q.toLowerCase(), kw = Object.keys(CR_KW).find(k => CR_KW[k].test(s)), act = /playbook|what (do|should|to)|how (do|should|to|would|can)|respond|response|first hour|\brisk|crisis|statement|handle|deal with|prepare/.test(s);
+  if (!(kw && act) && !/crisis|crises|risk radar|extreme(ly)? (high )?risk|high[- ]risk|biggest risks?|top risks?|needs? (solving|fixing)|urgent problems?|solve (now|first|directly)|first hour|holding statement/.test(s)) return null;
+  const L = crItems(), one = kw && act && L.find(x => x.k === kw);
+  if (one) return `<p><b>${one.rank}. ${esc(crT(one.t))}</b> · ${esc(one.sev[2])} · score ${one.v} · ${esc(CR_H[one.h][1].toLowerCase())}</p><p class="small">${esc(crT(one.why))}</p><p class="small"><b>First hour</b></p>${cvList(one.now.map(crT))}<p class="small">Owner: ${esc(crT(one.owner))}.</p><div class="cv-acts">${cvAct('Open the playbook', () => { crShow(one.k, true); return 'Opened the playbook.'; })}${cvAct('Start the response', () => { crStart(one.k); crShow(one.k, true); return 'Started the response.'; })}</div>`;
+  const top = L.filter(x => ['ext', 'crit'].includes(x.sev[1])).slice(0, 8);
+  return `<p>${L.filter(x => x.sev[1] === 'ext').length} extreme and ${L.filter(x => x.sev[1] === 'crit').length} critical risks on the crisis radar, highest score first:</p>${cvList(top.map(x => `${x.rank}. ${crT(x.t)} · ${x.sev[2]} ${x.v} · ${CR_H[x.h][1].toLowerCase()}`))}<p class="tiny muted">Scores are illustrative${CR.scanned ? '; live sensors read ' + new Date(CR.scanned).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : ''}.</p><div class="cv-acts">${cvAct('Open the crisis radar', () => { cvGo('cr'); return 'Opened the crisis radar.'; })}${cvAct('Open the top playbook', () => { crShow(L[0].k, true); return 'Opened the playbook.'; })}</div>`;
+}
+TM_PANELS.crisis = ['Crisis radar', 'Extreme risks, live sensors and open responses'];
+TM_PRESETS.splice(TM_PRESETS.findIndex(t => t.id === 'plan') + 1, 0, { id: 'crisis', n: 'Crisis war room', p: 'The extreme risks, live outage and attack news, and the agents a crisis team needs', panels: [['crisis'], ['news', '(outage OR cyberattack OR "subsea cable") telecom'], ['agent', 'sc:breach'], ['agent', 'cx:outage'], ['roster', 'sc'], ['notes']] });
+TM_HELP.push(['RISK [name|extreme|critical|network|cyber…]', 'the crisis radar, e.g. RISK cable']);
+CV_TOOLDEFS.push({ name: 'crisis_radar', description: 'The crisis radar: extreme and critical telecom risks that need action now (network, cyber and fraud, customers, market, regulation, finance), each with a score (likelihood × impact × speed), when to act, the owner, the first-hour actions and what happens if nobody acts. Live sensors (earthquakes near cable routes, weather, exploited vulnerabilities, cloud incidents, currencies) can raise scores. Scores are illustrative.', inputSchema: { type: 'object', properties: { risk: { type: 'string', enum: CR_ITEMS.map(x => x.k) }, severity: { type: 'string', enum: ['extreme', 'critical', 'all'] }, area: { type: 'string', enum: CR_SEC.map(s => s[0]) } } },
+  run: a => crItems().filter(x => (!a.risk || x.k === a.risk) && (!a.area || x.sec === a.area) && (a.severity === 'all' || a.risk || (a.severity === 'extreme' ? x.sev[1] === 'ext' : ['ext', 'crit'].includes(x.sev[1])))).map(x => ({ rank: x.rank, risk: crT(x.t), severity: x.sev[2], score: x.v, raised_by_live_sensor: x.up, act: CR_H[x.h][1], owner: crT(x.owner), escalate: crT(x.esc), first_hour: x.now.map(crT), if_nobody_acts: x.cost.map(crT), solved_when: crT(x.done), illustrative: true })) });
+
 /* ---------- START HERE: the shortest path for each role ---------- */
 const ROLES = [
-  ['exec', 'Executive', [['tm:exec', 'Executive terminal', 'Signals, market moves, forecasts and tasks on one screen'], ['dec', 'Decision engine', 'Sourced recommendations that wait for your approval'], ['mp:P0', 'The P0 foundation', 'What to build first in the master plan'], ['ag:st', 'Strategy agents', '12 agents for strategy and investment']]],
+  ['exec', 'Executive', [['cr', 'Crisis radar', 'The extreme risks that need action now, with first-hour playbooks'], ['tm:exec', 'Executive terminal', 'Signals, market moves, forecasts and tasks on one screen'], ['dec', 'Decision engine', 'Sourced recommendations that wait for your approval'], ['mp:P0', 'The P0 foundation', 'What to build first in the master plan']]],
   ['mkt', 'Marketing & pricing', [['tm:pricing', 'Pricing terminal', 'Compare plans and test a response before you move'], ['dec:price', 'A rival price cut', 'Run it from detection to recommendation'], ['cap:87', 'Competitor pricing engine', 'Capability #87 in the master plan'], ['ag:pr', 'Pricing agents', '12 agents for pricing and offers']]],
-  ['cust', 'Customers & retention', [['tm:customer', 'Customers terminal', 'Where churn spreads and who to save today'], ['dec:digital', 'A rival’s digital plan cut', 'Who is at risk and the best response'], ['cap:36', 'Churn management', 'Capability #36 in the master plan'], ['ag:rl', 'Retention agents', '12 agents for retention and loyalty']]],
+  ['cust', 'Customers & retention', [['tm:customer', 'Customers terminal', 'Where churn spreads and who to save today'], ['cr:billing', 'A billing error', 'The playbook when thousands are overcharged'], ['dec:digital', 'A rival’s digital plan cut', 'Who is at risk and the best response'], ['ag:rl', 'Retention agents', '12 agents for retention and loyalty']]],
   ['ent', 'Enterprise & SME', [['tm:enterprise', 'Enterprise terminal', 'Tenders, accounts and business offers'], ['dec:enterprise', 'A rival enterprise offer', 'SD-WAN with a free private 5G trial'], ['mp:D', 'Products & digital services', 'Area D of the master plan'], ['ag:en', 'Enterprise agents', '12 agents for enterprise and government']]],
-  ['net', 'Network & technology', [['tm:network', 'Network terminal', 'Coverage truth, rival builds and capex priorities'], ['mp:C', 'Network operations (OSS)', 'Area C of the master plan'], ['tab-geo', 'Geo radar', 'Churn, coverage and retail hotspots by district'], ['ag:nw', 'Network agents', '12 agents for network and technology']]],
+  ['net', 'Network & technology', [['cr:cable', 'Subsea cable cuts', 'The first-hour playbook for the top network risk'], ['tm:network', 'Network terminal', 'Coverage truth, rival builds and capex priorities'], ['mp:C', 'Network operations (OSS)', 'Area C of the master plan'], ['ag:nw', 'Network agents', '12 agents for network and technology']]],
   ['fin', 'Finance & investment', [['tm:capital', 'Capital markets terminal', 'Valuations, movers and deals across telecom'], ['tab-cap', 'Capital radar', 'State, private-equity and hedge-fund moves'], ['cap:6', 'Financial planning & analysis', 'Capability #6 in the master plan'], ['ag:fn', 'Finance agents', '12 agents for finance and investor relations']]],
-  ['data', 'Data, AI & security', [['#platform', 'How the platform works', 'From signal to decision, with guardrails'], ['mp:G', 'Technology, security & governance', 'Area G of the master plan'], ['cap:118', 'AI governance', 'Capability #118 in the master plan'], ['ag:da', 'Data & AI agents', '12 agents for data, AI and analytics']]]
+  ['data', 'Data, AI & security', [['cr:ransom', 'Ransomware or a breach', 'What to do in the first hour, and who to tell'], ['mp:G', 'Technology, security & governance', 'Area G of the master plan'], ['cap:118', 'AI governance', 'Capability #118 in the master plan'], ['ag:da', 'Data & AI agents', '12 agents for data, AI and analytics']]]
 ];
 const ROLE_KEY = 'cv.role';
 function roleRender(k) {
@@ -5401,6 +5919,7 @@ function cvDeepLink() {
   const h = decodeURIComponent(location.hash.slice(1)); let m;
   if ((m = h.match(/^cap-(\d{1,3})$/)) && mpGet(+m[1])) { setTimeout(() => mpShow(+m[1]), 60); return; }
   if ((m = h.match(/^dc-([a-z]+)$/)) && cvHas('dec:' + m[1])) { setTimeout(() => cvGo('dec:' + m[1]), 60); return; }
+  if ((m = h.match(/^cr-([a-z]+)$/)) && cvHas('cr:' + m[1])) { setTimeout(() => cvGo('cr:' + m[1]), 60); return; }
   if ((m = h.match(/^tm-([\w-]+)$/)) && cvHas('tm:' + m[1])) setTimeout(() => cvGo('tm:' + m[1]), 60);
 }
 addEventListener('hashchange', cvDeepLink);
@@ -5409,7 +5928,7 @@ addEventListener('hashchange', cvDeepLink);
 $('#simClock').textContent = fmtClock();
 setLive(live);
 renderFeed(); kpis(); renderDetail();
-[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initTerminals, initMasterPlan, initDecision, initRoleStart, initFind, initChat, initLang]
+[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initTerminals, initMasterPlan, initDecision, initCrisis, initRoleStart, initFind, initChat, initLang]
   .forEach(f => { try { f(); } catch (err) { console.warn('Cellvoyant: ' + f.name + ' skipped', err); } });
 const radar = initRadar();
 renderServices(); renderReqs();
