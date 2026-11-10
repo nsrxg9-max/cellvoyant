@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="canonical" href="https://nsrxg9-max.github.io/cellvoyant/">
 <meta name="robots" content="index, follow, max-image-preview:large">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "Cellvoyant", "alternateName": "Cellvoyant telecom intelligence", "url": "https://nsrxg9-max.github.io/cellvoyant/", "description": "Cellvoyant — AI market and competitor intelligence for telecom operators: research, a live operations console, departments and teams, a right-time customer engagement model, workshops, resources and a provisional patent draft.", "inLanguage": ["en", "ar", "fr", "hi", "ur", "zh"]}, {"@type": "SoftwareApplication", "name": "Cellvoyant", "url": "https://nsrxg9-max.github.io/cellvoyant/", "applicationCategory": "BusinessApplication", "operatingSystem": "Web browser", "description": "Cellvoyant — AI market and competitor intelligence for telecom operators: research, a live operations console, departments and teams, a right-time customer engagement model, workshops, resources and a provisional patent draft.", "image": "https://nsrxg9-max.github.io/cellvoyant/assets/og.png", "featureList": ["Crisis radar with first-hour playbooks and live sensors", "Engagement AI: the best moment, channel and action for each customer, with churn and uplift models", "Decision engine for rival moves with human review", "134-capability master plan", "216 AI agents in 18 departments", "Terminals with 450+ tools and live public data", "Assistant in six languages"]}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "Cellvoyant", "alternateName": "Cellvoyant telecom intelligence", "url": "https://nsrxg9-max.github.io/cellvoyant/", "description": "Cellvoyant — AI market and competitor intelligence for telecom operators: research, a live operations console, departments and teams, a right-time customer engagement model, workshops, resources and a provisional patent draft.", "inLanguage": ["en", "ar", "fr", "hi", "ur", "zh"]}, {"@type": "SoftwareApplication", "name": "Cellvoyant", "url": "https://nsrxg9-max.github.io/cellvoyant/", "applicationCategory": "BusinessApplication", "operatingSystem": "Web browser", "description": "Cellvoyant — AI market and competitor intelligence for telecom operators: research, a live operations console, departments and teams, a right-time customer engagement model, workshops, resources and a provisional patent draft.", "image": "https://nsrxg9-max.github.io/cellvoyant/assets/og.png", "featureList": ["Crisis radar with first-hour playbooks and live sensors", "Engagement AI: the best moment, channel and action for each customer, with churn and uplift models", "Cellvoyant One: CRM, ERP, supply chain and a central database with a permissioned ledger and smart contracts", "Decision engine for rival moves with human review", "134-capability master plan", "264 AI agents in 22 departments", "Terminals with 450+ tools and live public data", "Assistant in six languages"]}]}</script>
 <meta name="theme-color" content="#08131C">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Cellvoyant">
@@ -1835,6 +1835,56 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 .eg-mc td.nowrap{white-space:nowrap;font-weight:600}
 @media (max-width:980px){.eg-top,.eg-two{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:720px){.eg-k{grid-template-columns:repeat(2,minmax(0,1fr))}.eg-plan-l li{grid-template-columns:minmax(0,1fr);gap:2px}}
+/* Cellvoyant One */
+.su,.su-body{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.su-body{gap:14px}
+.su-bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.su-bar>*{min-width:0}
+.su-two{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;align-items:start}
+.su-k{grid-template-columns:repeat(4,minmax(0,1fr))}
+.su-sql{width:100%;font:13px/1.45 var(--f-mono);padding:10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface-2);color:var(--ink);resize:vertical}
+.su-err{color:var(--crit)}.su-okt{color:var(--good)}
+.su-role{display:inline-flex;gap:6px;align-items:center;text-transform:none;letter-spacing:0;font:12.5px var(--f-body);color:var(--ink-2)}
+.su-z{font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--surface-2);white-space:nowrap}
+.su-z.z-restricted{background:var(--crit-soft);color:var(--crit)}.su-z.z-confidential{background:var(--signal-soft);color:var(--signal)}.su-z.z-public{background:var(--good-soft);color:var(--good)}
+.su-board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.su-col{display:grid;gap:8px;align-content:start;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:10px;min-width:0}
+.su-col-h{display:flex;justify-content:space-between;gap:6px;align-items:baseline;flex-wrap:wrap}
+.su-opp{appearance:none;font:inherit;color:var(--ink);text-align:start;display:grid;gap:3px;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 10px;cursor:pointer;min-width:0}
+.su-opp b{font-size:13px}.su-opp.on,.su-opp:hover{border-color:var(--accent)}
+.su-pbar{height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden}.su-pbar i{display:block;height:100%;background:var(--accent)}
+.su-anl{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.su-anl li{display:grid;gap:2px;padding:8px 10px;border:1px solid var(--line);border-inline-start:4px solid var(--crit);border-radius:8px}
+.su-anl li.fp{border-inline-start-color:var(--line-strong)}
+.su-st{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.su-st.crit{background:var(--crit-soft);color:var(--crit)}.su-st.warn{background:var(--signal-soft);color:var(--signal)}.su-st.ok{background:var(--good-soft);color:var(--good)}.su-st.muted{background:var(--surface-2);color:var(--muted)}
+.su-on td{background:var(--accent-soft)}
+.su-nodes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.su-nodes div{display:grid;gap:2px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--good);border-radius:10px;padding:10px 12px;min-width:0}
+.su-chain{display:flex;gap:14px;overflow-x:auto;padding:2px 2px 8px}
+.su-blk{flex:0 0 210px;display:grid;gap:3px;align-content:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;position:relative}
+.su-blk:not(:last-child)::after{content:"←";position:absolute;inset-inline-end:-12px;top:40%;color:var(--muted);font-size:12px}
+[dir="rtl"] .su-blk:not(:last-child)::after{content:"→"}
+.su-blk.ok{border-color:color-mix(in srgb,var(--good) 50%,var(--line))}
+.su-blk.bad{border-color:var(--crit);background:var(--crit-soft)}
+.su-sigs{display:flex;gap:4px;margin-top:3px}.su-sigs i{width:10px;height:10px;border-radius:50%}.su-sigs i.y{background:var(--good)}.su-sigs i.n{background:var(--crit)}
+.su-cts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.su-code{margin:8px 0 0;padding:10px 12px;background:var(--surface-2);border-radius:8px;font:12px/1.5 var(--f-mono);white-space:pre-wrap;overflow-wrap:anywhere}
+.su-h4{margin:6px 0 0;font-size:17px}
+.su-rej li{color:var(--crit)}
+.su-gates{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.su-gates div{display:grid;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.su-gates b{font-family:var(--f-display);font-size:24px;font-weight:800}
+.su-gates span{font-size:12.5px;color:var(--ink-2)}
+.su-npv{display:inline-block;width:56px;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden;vertical-align:middle;margin-inline-end:8px}.su-npv i{display:block;height:100%}
+.su .tm-cmd{border:1px solid var(--line-strong);border-radius:8px}
+.su-out{margin:10px 0 0;min-height:170px;max-height:380px;overflow:auto;padding:12px;border-radius:8px;background:var(--screen);color:var(--screen-ink);font:12px/1.55 var(--f-mono);white-space:pre}
+.su .wb-table td:nth-child(n){font-family:var(--f-body)}
+.su .wb-table td.mono:nth-child(n){font-family:var(--f-mono)}
+.su-fnt td{white-space:normal}
+@media (max-width:980px){.su-two,.su-cts{grid-template-columns:minmax(0,1fr)}.su-board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.su-k,.su-nodes{grid-template-columns:repeat(2,minmax(0,1fr))}.su-gates{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:480px){.su-board{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 <a class="skip" href="#top">Skip to content</a>
@@ -1857,6 +1907,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
       <a href="#masterplan">Master plan</a>
       <a href="#crisis">Crisis radar</a>
       <a href="#engagement">Engagement AI</a>
+      <a href="#suite">Cellvoyant One</a>
       <a href="#academy">Academy</a>
       <a href="#lab">Innovation</a>
       <a href="#patent">Patent</a>
@@ -2511,7 +2562,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">AI agent departments</div>
-      <h2><span id="agCount">216</span> AI agents in <span id="agDeptN">18</span> departments</h2>
+      <h2><span id="agCount">264</span> AI agents in <span id="agDeptN">22</span> departments</h2>
       <p class="lede">Every department has at least twelve agents. Each agent has a job, the sources it searches, the tools it runs, the services it can book and the resources it works with. Give it a task: it searches the knowledge base, runs its tools and writes a brief with findings and recommended actions, which go to the workspace in one click. In the Claude viewer agents reason with Claude; elsewhere a built-in agent runs the same tools. Every agent also runs from the terminals.</p>
     </div>
     <div class="ag-wrap" id="agApp">
@@ -2647,7 +2698,23 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="academy">
+<section class="sec" id="suite">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Cellvoyant One · enterprise suite</div>
+      <h2>Run the whole operator on one platform: CRM, ERP, supply chain and a secured ledger</h2>
+      <p class="lede">One central database with role-based access feeds every team. Sales works the pipeline with win predictions, finance forecasts revenue and catches anomalies, supply chain plans stock and suppliers, and product teams forecast how fast new ideas will spread. Payments, purchase orders, queries and decisions are recorded on a permissioned ledger that four validators sign, with smart contracts for SLA credits, supplier milestones, roaming settlement and data sharing. Market functions bring valuation, screening and events to the command line.</p>
+    </div>
+    <div class="su" id="suApp">
+      <div class="cr-sum" id="suSum" aria-live="polite"></div>
+      <div class="su-bar"><div class="seg-btns" id="suTabs" role="group" aria-label="Modules"></div></div>
+      <div class="su-body" id="suBody"></div>
+      <p class="tiny muted" id="suNote">Enterprise data here is synthetic and illustrative, for a fictional operator, Nimbus Mobile; operator and company data in the market functions is sourced. The suite can run on its own for a business unit or a client, or sit on top of existing ERP, CRM and billing systems through standard interfaces. The ledger is a permissioned prototype that runs in your browser, with no cryptocurrency.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="academy">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Cellvoyant Academy</div>
@@ -2666,7 +2733,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band" id="resources">
+<section class="sec" id="resources">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Resources &amp; tools</div>
@@ -2678,7 +2745,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="lab">
+<section class="sec band" id="lab">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Innovation lab</div>
@@ -2690,7 +2757,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band" id="patent">
+<section class="sec" id="patent">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Intellectual property</div>
@@ -2910,7 +2977,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="business">
+<section class="sec band" id="business">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Business model &amp; go-to-market</div>
@@ -2985,7 +3052,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
     </div>
   </div>
 </section>
-<section class="sec band" id="launch">
+<section class="sec" id="launch">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Launch</div>
@@ -3032,8 +3099,10 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
         <div class="lc ok"><i>✓</i><span>Decision engine: rival move to sourced recommendation, with a human review queue and audit log</span></div>
         <div class="lc ok"><i>✓</i><span>Crisis radar: 21 high-risk problems with first-hour playbooks, live sensors, tracked responses and draft statements</span></div>
         <div class="lc ok"><i>✓</i><span>Engagement AI: whether, when, how and with what to engage each customer, app user and business client, with a daily plan and a learning loop</span></div>
+        <div class="lc ok"><i>✓</i><span>Cellvoyant One: a central database with role-based access, CRM, finance forecasting and anomaly detection, supply chain planning, product innovation, system value and market functions</span></div>
+        <div class="lc ok"><i>✓</i><span>Permissioned ledger: SHA-256 blocks signed by 3 of 4 validators, tamper detection and four smart contracts</span></div>
         <div class="lc ok"><i>✓</i><span>Start-here paths for seven roles, and share links to any capability, scenario or terminal</span></div>
-        <div class="lc ok"><i>✓</i><span>216 AI agents in 18 departments, each with tools, services and resources</span></div>
+        <div class="lc ok"><i>✓</i><span>264 AI agents in 22 departments, each with tools, services and resources</span></div>
         <div class="lc ok"><i>✓</i><span>Search across the whole platform (Ctrl K or ⌘ K)</span></div>
         <div class="lc ok"><i>✓</i><span>Installable app with offline access and share previews (public site)</span></div></div>
       <div class="lc-col"><span class="label">Data &amp; trust</span>
@@ -3064,7 +3133,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec sources" id="sources">
+<section class="sec band sources" id="sources">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Sources</div>
@@ -3132,7 +3201,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 <footer class="foot">
   <div class="wrap">
     <span>Cellvoyant is a concept by its author. The prototype uses simulated data for fictional operators. Research figures cite their sources below.</span>
-    <span class="mono">v2.5 · 10 Nov 2026</span>
+    <span class="mono">v3.0 · 10 Nov 2026</span>
   </div>
 </footer>
 

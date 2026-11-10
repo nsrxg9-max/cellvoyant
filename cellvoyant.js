@@ -1789,7 +1789,8 @@ const AG_CALL = t => {
     pred: ['predict_move', { move_id: a || 'fwa' }], pos: ['market_position', { map: 'operators', region: a || 'Gulf (GCC)', limit: 6 }],
     vend: ['market_position', { map: 'competitors', limit: 6 }], deals: ['capital_deals', a ? { investor_type: a, limit: 5 } : { limit: 5 }],
     val: ['valuation_pulse', { metric: a || 'mcap', limit: 6 }], cp: ['contact_plan', { goal: a || 'retention', limit: 5 }], size: ['size_market', {}],
-    co: ['company_lookup', a === 'pe' || a === 'state' ? { involvement: a, limit: 5 } : { segment: a || 'Operator', limit: 5 }]
+    co: ['company_lookup', a === 'pe' || a === 'state' ? { involvement: a, limit: 5 } : { segment: a || 'Operator', limit: 5 }],
+    su: ['enterprise_suite', { module: a || 'fin' }], eg: ['engagement_ai', { goal: a || 'churn' }]
   })[k] || null;
 };
 // [id, name, role, default task, calls, sources, actions, gets better with (optional)]
@@ -2029,6 +2030,60 @@ const AG_SPEC = [
     ['safety', 'Trust & Safety Agent', 'Protects children and vulnerable customers online', 'Are our parental controls and safety tools good enough?', 'kb:parental controls child safety', 'social reg', 'Make controls easy to find|Report safety statistics'],
     ['seccard', 'Security Scorecard Agent', 'Reports incidents, fraud losses and fix times', 'Build this month’s security scorecard.', 'sig:crit|kb:security incidents', 'int', 'Review every month|Fix repeat incidents']] }
 ];
+// four more departments that run on Cellvoyant One: business development, supply chain, product and innovation, enterprise systems
+AG_SPEC.push(
+  { k: 'bd', n: 'Business Development & Partnerships', lead: 'st', svc: ['diligence', 'strategy_sprint', 'suite'], res: ['go:#suite', 'go:#positioning'], learn: 'Partner pipeline|Deal room records', a: [
+    ['partners', 'Partnership Scout', 'Finds partners that open new revenue', 'Which partnerships would open new revenue for {op} this year?', 'kb:partnership alliance|vend', 'media web fin', 'Shortlist three partners with a revenue case|Open talks with the best fit'],
+    ['mna', 'M&A Screener', 'Screens acquisition and stake targets', 'Which acquisition or stake targets fit our strategy?', 'deals|val:mcap_to_revenue', 'fin research', 'Rank targets by fit and price|Prepare a first-look memo'],
+    ['jv', 'Joint Venture Planner', 'Shapes joint ventures for towers, fibre and data centres', 'Should we form a joint venture for towers, fibre or data centres?', 'deals:infrastructure|kb:joint venture towers fibre', 'fin media', 'Model the value of each structure|Agree the governance early'],
+    ['expansion', 'Market Expansion Analyst', 'Sizes new countries and segments', 'Which new market or segment should we enter next?', 'pos|size', 'stats fin', 'Rank markets by size and fit|Plan an entry test'],
+    ['b2b2c', 'B2B2C Channel Builder', 'Builds bundles with banks, retailers and platforms', 'Which bundles with banks, retailers or platforms would win customers?', 'kb:bundle partnership bank retailer|eg:churn', 'web media', 'Pilot one bundle per quarter|Track partner-sourced sales'],
+    ['wholesale', 'Wholesale Deal Agent', 'Finds wholesale and MVNO opportunities', 'Which wholesale or MVNO deals should we pursue?', 'kb:mvno wholesale|pos', 'reg fin', 'Price wholesale to protect retail|Sign the best fit'],
+    ['venture', 'Venture Scout', 'Finds start-ups to back or buy', 'Which telecom start-ups should our venture arm back?', 'deals|kb:startup venture telecom', 'research media', 'Shortlist five start-ups|Run a pilot before investing'],
+    ['govprog', 'Government Programs Agent', 'Matches national programs and tenders', 'Which government programs and tenders fit our capabilities?', 'kb:government program tender digital', 'gov reg', 'Bid where we have an edge|Partner where we do not'],
+    ['pipeline', 'Partner Pipeline Agent', 'Tracks partner deals like a sales pipeline', 'Which partner and enterprise deals are stuck, and why?', 'su:crm', 'int', 'Unblock the top three deals|Review the pipeline weekly'],
+    ['valuecase', 'Deal Value Agent', 'Builds the value case for each deal', 'What is this partnership worth over five years?', 'su:value|size', 'fin int', 'Show NPV and payback|Stress-test the assumptions'],
+    ['ecosystem', 'Ecosystem Mapper', 'Maps who works with whom across the market', 'Who are rivals partnering with, and where are the gaps?', 'vend|kb:partnership rival', 'media web', 'Close the gaps rivals leave|Avoid partners locked to rivals'],
+    ['bdcard', 'Business Development Scorecard', 'Reports partner revenue, deals and pipeline', 'Build this month’s business development scorecard.', 'su:crm|deals', 'int fin', 'Review every month|Give every stalled deal an owner']] },
+  { k: 'scm', n: 'Supply Chain & Procurement', lead: 'fi', svc: ['suite', 'ledger'], res: ['go:#suite'], learn: 'Warehouse system|Supplier portal', a: [
+    ['planner', 'Demand Planner', 'Forecasts demand for every item in every warehouse', 'What will we need of each device and part over the next 30 days?', 'su:scm', 'int', 'Reorder before the reorder point|Review the forecast weekly'],
+    ['stockout', 'Stockout Guard', 'Warns before any item runs out', 'Which items will run out before new stock arrives?', 'su:scm', 'int', 'Expedite the top risks|Move stock between warehouses'],
+    ['supplier', 'Supplier Risk Agent', 'Scores suppliers on delivery, quality and risk', 'Which suppliers are the biggest risk to our network build?', 'su:scm|kb:supplier risk sanction', 'int media', 'Add a second source for single-source parts|Review high-risk suppliers monthly'],
+    ['sourcing', 'Sourcing Agent', 'Runs tenders and compares bids', 'Where can we buy the same quality for less?', 'kb:tender price equipment|su:value', 'int web', 'Re-tender the top spend categories|Bundle volumes across group companies'],
+    ['p2p', '3-Way Match Agent', 'Matches orders, receipts and invoices before payment', 'Which supplier invoices do not match their order and receipt?', 'su:ledger', 'int', 'Hold mismatched invoices|Fix the cause with the supplier'],
+    ['logistics', 'Logistics Agent', 'Tracks shipments, ports and customs', 'Which shipments are delayed, and what will it cost us?', 'kb:shipping port delay customs', 'media', 'Re-route delayed shipments|Warn sales about late devices'],
+    ['spares', 'Network Spares Planner', 'Keeps radio and power spares where outages happen', 'Do we have the right spares near the sites that fail most?', 'su:scm|geo:coverage', 'int', 'Stock spares near the worst sites|Cut repair time'],
+    ['device', 'Device Launch Planner', 'Plans stock for new handset launches', 'How many units of the new flagship should each warehouse hold?', 'su:scm|kb:handset launch', 'int web', 'Allocate by forecast demand|Rebalance in week one'],
+    ['escrow', 'Contract Payments Agent', 'Runs supplier payments through smart contracts', 'Which milestone payments are due, and are they attested?', 'su:ledger', 'int', 'Release only attested milestones|Flag disputes early'],
+    ['carbon', 'Supply Carbon Agent', 'Measures the carbon in what we buy', 'What is the carbon footprint of our top purchases?', 'kb:carbon emissions supplier', 'int research', 'Prefer lower-carbon suppliers|Report to the board every year'],
+    ['disrupt', 'Disruption Watch', 'Watches for events that cut supply', 'Which events could disrupt our supply this month?', 'sig|kb:shortage disruption export control', 'media gov', 'Build buffer stock for exposed items|Pre-approve alternates'],
+    ['scmcard', 'Supply Chain Scorecard', 'Reports service level, stock and supplier performance', 'Build this month’s supply chain scorecard.', 'su:scm', 'int', 'Review every month|Give every stockout an owner']] },
+  { k: 'pi', n: 'Product & Innovation', lead: 'pm', svc: ['lab_item', 'strategy_sprint'], res: ['go:#suite', 'go:#lab'], learn: 'Experiment results|Customer research panel', a: [
+    ['ideas', 'Idea Ranker', 'Ranks product ideas by reach, impact, confidence and effort', 'Which product ideas should we build next?', 'su:inno', 'int', 'Fund the top three|Stop ideas that stall twice'],
+    ['adoption', 'Adoption Forecaster', 'Forecasts how fast a new product will spread', 'How many customers will use this product in five years?', 'su:inno', 'int research', 'Plan capacity for the forecast|Re-forecast after the pilot'],
+    ['gap', 'Product Gap Finder', 'Finds what rivals offer that we do not', 'What do rivals offer that we are missing?', 'plan:nim-u|kb:new product launch', 'web app', 'Close gaps that cost customers|Ignore gaps nobody uses'],
+    ['experiment', 'Experiment Designer', 'Designs A/B tests and reads the results', 'How should we test this product before launch?', 'cp:upsell|kb:pilot test', 'int', 'Test with a control group|Decide on the result, not opinion'],
+    ['voice', 'Customer Voice Agent', 'Turns reviews and complaints into product fixes', 'What are customers asking us to build or fix?', 'kb:reviews complaints feature request', 'ios gplay social', 'Fix the top complaint first|Tell customers what changed'],
+    ['pricing', 'Launch Pricing Agent', 'Sets launch prices against rivals', 'What should the launch price be?', 'plan:nim-u|sim:arc:10', 'web', 'Price for value, not to match|Review after 30 days'],
+    ['bundle', 'Bundle Designer', 'Designs bundles that lower churn', 'Which bundle would keep customers longer?', 'eg:churn|kb:bundle', 'int', 'Bundle the stickiest services|Measure churn by bundle'],
+    ['techscout', 'Technology Scout', 'Tracks new technology ready for products', 'Which new technology is ready to become a product?', 'kb:technology 5G-Advanced satellite AI', 'research media', 'Pilot one technology a quarter|Retire what does not scale'],
+    ['launchready', 'Launch Readiness Agent', 'Checks that a launch is ready on every front', 'Are we ready to launch: network, stock, systems and staff?', 'su:scm|su:crm', 'int', 'Block launches with open gaps|Run a launch rehearsal'],
+    ['portfolio', 'Portfolio Pruner', 'Finds products to retire', 'Which products cost more than they earn?', 'su:value|kb:legacy product', 'int fin', 'Retire the bottom products|Move their customers with care'],
+    ['ipwatch', 'Patent Watch', 'Tracks patents that affect our products', 'Which patents could block or protect our products?', 'kb:patent standard essential', 'research', 'File where we lead|License where we must'],
+    ['picard', 'Innovation Scorecard', 'Reports pipeline, launches and revenue from new products', 'Build this quarter’s innovation scorecard.', 'su:inno', 'int', 'Review every quarter|Give every stalled idea an owner']] },
+  { k: 'es', n: 'Enterprise Systems & Data', lead: 'da', svc: ['suite', 'ledger', 'sysvalue'], res: ['go:#suite'], learn: 'ERP and CRM records|Data-quality checks', a: [
+    ['dataq', 'Data Quality Agent', 'Checks every table for gaps, duplicates and stale data', 'Which tables in the data hub have quality problems?', 'su:hub', 'int', 'Fix the source, not the copy|Report quality weekly'],
+    ['sql', 'Query Assistant', 'Answers plain questions from the central database', 'How many persuadable customers do we have by audience?', 'su:hub|eg:churn', 'int', 'Use aggregates for personal data|Save useful queries'],
+    ['recon', 'Reconciliation Agent', 'Reconciles the ledger, ERP and bank records', 'Do the ledger, ERP and bank records agree this month?', 'su:ledger|su:fin', 'int fin', 'Explain every difference|Close the month faster'],
+    ['anomaly', 'Anomaly Hunter', 'Finds unusual revenue, fraud and network patterns', 'What looks unusual in revenue, fraud or the network?', 'su:fin', 'int', 'Investigate within a day|Turn repeat anomalies into rules'],
+    ['forecast', 'Forecast Agent', 'Forecasts revenue and EBITDA by line', 'What will revenue and EBITDA be over the next year?', 'su:fin', 'int fin', 'Update every month|Explain changes against the budget'],
+    ['crm', 'CRM Hygiene Agent', 'Keeps accounts and deals complete and current', 'Which deals have no next step or stale contacts?', 'su:crm', 'int', 'Give every deal a next step|Close dead deals'],
+    ['access', 'Access Governance Agent', 'Checks who can read what', 'Who can read restricted data, and do they need it?', 'su:hub|su:ledger', 'int', 'Remove unused access|Record every restricted query'],
+    ['ledger', 'Ledger Auditor', 'Verifies the ledger and its smart contracts', 'Is the ledger intact, and did every contract run correctly?', 'su:ledger', 'int', 'Verify every day|Investigate any refusal'],
+    ['integr', 'Integration Agent', 'Connects ERP, CRM, billing and network systems', 'Which systems still exchange data by spreadsheet?', 'kb:integration API ERP CRM', 'int', 'Replace spreadsheets with APIs|Monitor every interface'],
+    ['value', 'Systems Value Agent', 'Measures the business value of each system', 'Which enterprise systems pay back, and which do not?', 'su:value', 'int fin', 'Fund systems that pay back|Fix or retire the rest'],
+    ['migrate', 'Migration Planner', 'Plans moves off legacy systems', 'How do we move off legacy ERP and billing safely?', 'kb:migration legacy ERP|su:value', 'int', 'Migrate in waves|Run old and new side by side'],
+    ['escard', 'Enterprise Systems Scorecard', 'Reports uptime, data quality and adoption', 'Build this month’s enterprise systems scorecard.', 'su:hub|su:value', 'int', 'Review every month|Give every issue an owner']] });
 const AG_DEPTS = AG_SPEC.map(D => ({
   k: D.k, n: D.n, lead: D.lead, svc: D.svc, res: D.res,
   agents: D.a.map(([id, n, role, q, calls, src, acts, learn]) => ({
@@ -2649,6 +2704,9 @@ const SERVICES = [
   { k: 'board_brief', name: 'Weekly board brief', turn: 'weekly', desc: 'An analyst-reviewed brief on rivals, capital moves and recommended responses.' },
   { k: 'op_desk', name: 'Operator desk: full edition for one operator', turn: '3 weeks', desc: 'A segment-by-segment marketing plan, sales playbook, strategy horizons and rival-response playbook for your operator.' },
   { k: 'strategy_sprint', name: 'Strategy sprint for a big problem', turn: '1–2 weeks', desc: 'Analysts and AI work one complex problem into options, a recommendation, a 90-day plan and KPIs with your team.' },
+  { k: 'suite', name: 'Cellvoyant One pilot: CRM, ERP, supply chain and data hub', turn: '16 weeks', desc: 'Connect one business unit’s customer, finance and supply data to the central hub, run CRM, finance forecasting, anomaly detection and supply planning in shadow mode, then go live module by module.' },
+  { k: 'ledger', name: 'Permissioned ledger and smart-contract pilot', turn: '10 weeks', desc: 'Run validator nodes in separate teams, move one settlement (roaming, SLA credits or supplier milestones) onto smart contracts and record audit events from ERP and the data hub.' },
+  { k: 'sysvalue', name: 'Enterprise systems business case', turn: '3 weeks', desc: 'NPV, IRR and payback for ERP, CRM, supply chain, data hub, ledger and AI systems, built from your own figures.' },
   { k: 'engage', name: 'Engagement AI pilot', turn: '12 weeks', desc: 'Tokenize customer, app and account data, train the routine, timing, churn and persuadability models, run in shadow mode, then an A/B test with a 10% holdout to measure customers kept.' },
   { k: 'crisis', name: 'Crisis tabletop exercise', turn: '1 week', desc: 'Rehearse a crisis-radar playbook with network, security, legal and communications teams, with timed injects and a debrief.' },
   { k: 'capability', name: 'Master plan: scope a capability', turn: 'scoped in 2 weeks', desc: 'Scope one or more master-plan capabilities: data needed, integration points, owners, KPIs and a pilot plan.' },
@@ -4004,6 +4062,7 @@ function tmPanelHtml(k, arg, tid) {
   if (k === 'decide') return dcPanelHtml();
   if (k === 'crisis') return crPanelHtml();
   if (k === 'engage') return egPanelHtml();
+  if (k === 'ledger' || SU_PANEL[k]) return suPanelHtml(k);
   if (k === 'services') return svPanelHtml(tid, arg);
   if (k === 'notes') return `<label class="sr" for="tmNote${tid}">Notes</label><textarea class="tm-q" id="tmNote${tid}" rows="6" data-tmnote placeholder="Notes for this terminal">${esc(TM.notes[TM.active] || '')}</textarea><p class="tiny muted">Saved in this browser only.</p>`;
   return '';
@@ -4125,6 +4184,8 @@ async function tmCmd(raw) {
     else if (C === 'DECIDE') rows(dcCmd(arg));
     else if (C === 'RISK') rows(crCmd(arg));
     else if (C === 'ENGAGE') rows(egCmd(arg));
+    else if (C === 'LEDGER') rows(await suLedgerCmd(arg));
+    else if (['COMP', 'SCRN', 'WATCH', 'CAL', 'SQL', 'FCST', 'ANOM', 'PIPE', 'STOCK'].includes(C)) rows(suMktCmd(C, arg) || []);
     else tmOut(`Unknown command ${esc(C)}. Type HELP.`);
   } catch (e) { tmOut(`<span class="tm-err">${esc(e.message || String(e))}</span>`); }
 }
@@ -4462,13 +4523,14 @@ function findIndex() {
   $$('main details > summary').forEach(sm => { const d = sm.parentElement; if (d.closest('#resGrid')) return; add(d.closest('.faq') ? 'Question' : 'Detail', txtOf(sm), txtOf(d.closest('section') && $('h2', d.closest('section'))), () => { d.open = true; findGo(d, true); }); });
   if ($('#tmApp')) { tlBuild().forEach(t => add('Tool', t.n, `${t.fam} · ${t.d}`, () => { tmOpen('tools'); tmCmd('TOOL ' + t.id); findGo($('#terminals')); })); SVC_CAT.forEach(x => add('Service', x.name, `${x.dn} · ${x.turn} · ${x.desc}`, () => { tmOpen('tools'); tmCmd('SERVICES ' + x.name); findGo($('#terminals')); })); }
   if ($('#mpList')) mpBuild().forEach(c => add('Capability', `${c.no}. ${c.n}`, `${c.dom}. ${c.dn} · P${c.p} · ${MP_ROLE[c.role][0]} · ${c.tools}`, () => mpShow(c.no), EDITION === 'eand' ? c.app : ''));
+  if ($('#suApp')) SU_TABS.forEach(([k, n]) => add('Enterprise suite', `Cellvoyant One · ${n}`, 'CRM, finance and ERP, supply chain, ledger, innovation, system value and market functions', () => cvGo('su:' + k), 'erp crm scm sap blockchain smart contract database sql forecast anomaly bloomberg terminal'));
   if ($('#egApp')) EG_GOALS.forEach(([g, n]) => add('Engagement', `Engagement AI · ${n}`, 'Today’s plan: who to contact, when, how and with what', () => cvGo('eg:' + g), 'best time to contact churn persuadable next best action customers users clients'));
   if ($('#crApp')) CR_ITEMS.forEach(x => add('Risk', crT(x.t), `Crisis radar · ${CR_SECN[x.sec]} · ${CR_H[x.h][1]}`, () => cvGo('cr:' + x.k), x.sig.map(crT).join(' ')));
   if ($('#dcApp')) DC_SCN.forEach(x => add('Decision scenario', dcT(x.t, x), `${x.type} · from detection to a recommendation for review`, () => cvGo('dec:' + x.k)));
   TOOLDEFS.forEach(d => add('Assistant tool', d.name.replace(/_/g, ' '), d.description, () => { selectTab('tab-ask'); findGo($('#app')); }));
   return (FIND.items = it);
 }
-const FIND_ORDER = ['Chapter', 'Terminal', 'Risk', 'Engagement', 'Capability', 'Decision scenario', 'Tool', 'Service', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
+const FIND_ORDER = ['Chapter', 'Terminal', 'Risk', 'Engagement', 'Enterprise suite', 'Capability', 'Decision scenario', 'Tool', 'Service', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
 function findSearch(raw) {
   const q = raw.trim().toLowerCase(), items = findIndex();
   if (!q) return items.filter(x => x.kind === 'Chapter').map(x => ({ x, sc: 1 }));
@@ -4563,23 +4625,23 @@ const RTL = new Set(['ar', 'ur']);
 // interface strings; keys are the English text as it appears on the page
 const I18N_KEYS = ['Problem', 'Market', 'Platform', 'Operator desk', 'Live console', 'Terminals', 'AI agents', 'Academy', 'Innovation', 'Patent', 'Business', 'Join the pilot', 'Overview', 'Customers', 'Competition', 'Innovation lab', 'Solutions', 'Value', 'Request a pilot', 'Search',
   'Search chapters, tools, agents, companies, operators, sources…', 'Ask Cellvoyant', 'Type or speak a question…', 'Send', 'Listening…', 'Speak answers', 'Stop', 'HELLO', '+ New terminal', 'Run', 'Run agent', 'Run tool', 'Request', 'Open a terminal', 'Language',
-  'Translating the page…', 'Page translated on this device', 'IFACE_ONLY', 'Show original', 'VOICE_NA', 'MIC_BLOCKED', 'Find an agent or a skill…', 'Clear', 'Thinking…', 'Translated by Claude', 'Master plan', 'Decision engine', 'Crisis radar', 'Engagement AI'];
+  'Translating the page…', 'Page translated on this device', 'IFACE_ONLY', 'Show original', 'VOICE_NA', 'MIC_BLOCKED', 'Find an agent or a skill…', 'Clear', 'Thinking…', 'Translated by Claude', 'Master plan', 'Decision engine', 'Crisis radar', 'Engagement AI', 'Cellvoyant One'];
 const I18N_ROWS = {
   ar: ['المشكلة', 'السوق', 'المنصة', 'مكتب المشغّل', 'وحدة التحكم المباشرة', 'المحطات الطرفية', 'وكلاء الذكاء الاصطناعي', 'الأكاديمية', 'الابتكار', 'براءة الاختراع', 'نموذج العمل', 'انضم إلى التجربة', 'نظرة عامة', 'العملاء', 'المنافسة', 'مختبر الابتكار', 'الحلول', 'القيمة', 'اطلب تجربة', 'بحث',
     'ابحث في الفصول والأدوات والوكلاء والشركات والمشغّلين والمصادر…', 'اسأل Cellvoyant', 'اكتب سؤالك أو تحدّث…', 'إرسال', 'أستمع…', 'قراءة الإجابات بصوت', 'إيقاف', 'مرحبًا! اسألني عن السوق، أو اطلب مني فتح أي قسم أو أداة.', '+ محطة جديدة', 'تشغيل', 'تشغيل الوكيل', 'تشغيل الأداة', 'اطلب', 'افتح محطة', 'اللغة',
-    'جارٍ ترجمة الصفحة…', 'تمت ترجمة الصفحة على هذا الجهاز', 'تمت ترجمة الواجهة. تحتاج ترجمة الصفحة كاملة إلى مترجم Chrome المدمج أو نسخة Claude.', 'عرض الأصل', 'الإدخال الصوتي غير متاح في هذا المتصفح.', 'لا يمكن الوصول إلى الميكروفون هنا.', 'ابحث عن وكيل أو مهارة…', 'مسح', 'جارٍ التفكير…', 'ترجمة Claude', 'الخطة الرئيسية', 'محرّك القرار', 'رادار الأزمات', 'ذكاء التفاعل'],
+    'جارٍ ترجمة الصفحة…', 'تمت ترجمة الصفحة على هذا الجهاز', 'تمت ترجمة الواجهة. تحتاج ترجمة الصفحة كاملة إلى مترجم Chrome المدمج أو نسخة Claude.', 'عرض الأصل', 'الإدخال الصوتي غير متاح في هذا المتصفح.', 'لا يمكن الوصول إلى الميكروفون هنا.', 'ابحث عن وكيل أو مهارة…', 'مسح', 'جارٍ التفكير…', 'ترجمة Claude', 'الخطة الرئيسية', 'محرّك القرار', 'رادار الأزمات', 'ذكاء التفاعل', 'Cellvoyant One'],
   fr: ['Problème', 'Marché', 'Plateforme', 'Bureau opérateur', 'Console en direct', 'Terminaux', 'Agents IA', 'Académie', 'Innovation', 'Brevet', 'Modèle économique', 'Rejoindre le pilote', 'Vue d’ensemble', 'Clients', 'Concurrence', 'Laboratoire d’innovation', 'Solutions', 'Valeur', 'Demander un pilote', 'Rechercher',
     'Rechercher chapitres, outils, agents, entreprises, opérateurs, sources…', 'Demander à Cellvoyant', 'Écrivez ou dites votre question…', 'Envoyer', 'J’écoute…', 'Lire les réponses à voix haute', 'Arrêter', 'Bonjour ! Posez-moi une question sur le marché, ou demandez-moi d’ouvrir une section ou un outil.', '+ Nouveau terminal', 'Lancer', 'Lancer l’agent', 'Lancer l’outil', 'Demander', 'Ouvrir un terminal', 'Langue',
-    'Traduction de la page…', 'Page traduite sur cet appareil', 'Interface traduite. La traduction complète de la page nécessite le traducteur intégré de Chrome ou la version Claude.', 'Afficher l’original', 'La saisie vocale n’est pas disponible dans ce navigateur.', 'Le micro n’est pas accessible ici.', 'Trouver un agent ou une compétence…', 'Effacer', 'Réflexion…', 'Traduit par Claude', 'Plan directeur', 'Moteur de décision', 'Radar des crises', 'IA d’engagement'],
+    'Traduction de la page…', 'Page traduite sur cet appareil', 'Interface traduite. La traduction complète de la page nécessite le traducteur intégré de Chrome ou la version Claude.', 'Afficher l’original', 'La saisie vocale n’est pas disponible dans ce navigateur.', 'Le micro n’est pas accessible ici.', 'Trouver un agent ou une compétence…', 'Effacer', 'Réflexion…', 'Traduit par Claude', 'Plan directeur', 'Moteur de décision', 'Radar des crises', 'IA d’engagement', 'Cellvoyant One'],
   hi: ['समस्या', 'बाज़ार', 'प्लेटफ़ॉर्म', 'ऑपरेटर डेस्क', 'लाइव कंसोल', 'टर्मिनल', 'एआई एजेंट', 'अकादमी', 'नवाचार', 'पेटेंट', 'व्यवसाय मॉडल', 'पायलट में शामिल हों', 'अवलोकन', 'ग्राहक', 'प्रतिस्पर्धा', 'नवाचार प्रयोगशाला', 'समाधान', 'मूल्य', 'पायलट का अनुरोध करें', 'खोजें',
     'अध्याय, टूल, एजेंट, कंपनियाँ, ऑपरेटर और स्रोत खोजें…', 'Cellvoyant से पूछें', 'प्रश्न लिखें या बोलें…', 'भेजें', 'सुन रहा हूँ…', 'उत्तर बोलकर सुनाएँ', 'रोकें', 'नमस्ते! बाज़ार के बारे में कुछ भी पूछें, या कोई अनुभाग या टूल खोलने को कहें।', '+ नया टर्मिनल', 'चलाएँ', 'एजेंट चलाएँ', 'टूल चलाएँ', 'अनुरोध करें', 'टर्मिनल खोलें', 'भाषा',
-    'पेज का अनुवाद हो रहा है…', 'पेज का अनुवाद इसी डिवाइस पर हुआ', 'इंटरफ़ेस का अनुवाद हो गया। पूरे पेज के अनुवाद के लिए Chrome का अंतर्निहित अनुवादक या Claude संस्करण चाहिए।', 'मूल दिखाएँ', 'इस ब्राउज़र में आवाज़ से इनपुट उपलब्ध नहीं है।', 'यहाँ माइक्रोफ़ोन उपलब्ध नहीं है।', 'एजेंट या कौशल खोजें…', 'साफ़ करें', 'सोच रहा हूँ…', 'Claude द्वारा अनुवादित', 'मास्टर प्लान', 'निर्णय इंजन', 'संकट रडार', 'एंगेजमेंट एआई'],
+    'पेज का अनुवाद हो रहा है…', 'पेज का अनुवाद इसी डिवाइस पर हुआ', 'इंटरफ़ेस का अनुवाद हो गया। पूरे पेज के अनुवाद के लिए Chrome का अंतर्निहित अनुवादक या Claude संस्करण चाहिए।', 'मूल दिखाएँ', 'इस ब्राउज़र में आवाज़ से इनपुट उपलब्ध नहीं है।', 'यहाँ माइक्रोफ़ोन उपलब्ध नहीं है।', 'एजेंट या कौशल खोजें…', 'साफ़ करें', 'सोच रहा हूँ…', 'Claude द्वारा अनुवादित', 'मास्टर प्लान', 'निर्णय इंजन', 'संकट रडार', 'एंगेजमेंट एआई', 'Cellvoyant One'],
   ur: ['مسئلہ', 'مارکیٹ', 'پلیٹ فارم', 'آپریٹر ڈیسک', 'لائیو کنسول', 'ٹرمینلز', 'اے آئی ایجنٹس', 'اکیڈمی', 'جدت', 'پیٹنٹ', 'کاروباری ماڈل', 'پائلٹ میں شامل ہوں', 'جائزہ', 'صارفین', 'مسابقت', 'جدت کی لیب', 'حل', 'قدر', 'پائلٹ کی درخواست کریں', 'تلاش',
     'ابواب، ٹولز، ایجنٹس، کمپنیاں، آپریٹرز اور ذرائع تلاش کریں…', 'Cellvoyant سے پوچھیں', 'سوال لکھیں یا بولیں…', 'بھیجیں', 'سن رہا ہوں…', 'جوابات بول کر سنائیں', 'روکیں', 'السلام علیکم! مارکیٹ کے بارے میں کچھ بھی پوچھیں، یا کوئی حصہ یا ٹول کھولنے کو کہیں۔', '+ نیا ٹرمینل', 'چلائیں', 'ایجنٹ چلائیں', 'ٹول چلائیں', 'درخواست کریں', 'ٹرمینل کھولیں', 'زبان',
-    'صفحے کا ترجمہ ہو رہا ہے…', 'صفحے کا ترجمہ اسی ڈیوائس پر ہوا', 'انٹرفیس کا ترجمہ ہو گیا۔ پورے صفحے کے ترجمے کے لیے Chrome کا بلٹ اِن مترجم یا Claude ورژن درکار ہے۔', 'اصل دکھائیں', 'اس براؤزر میں آواز سے ان پٹ دستیاب نہیں۔', 'یہاں مائیکروفون دستیاب نہیں۔', 'ایجنٹ یا مہارت تلاش کریں…', 'صاف کریں', 'سوچ رہا ہوں…', 'Claude کا ترجمہ', 'ماسٹر پلان', 'فیصلہ انجن', 'بحران ریڈار', 'انگیجمنٹ اے آئی'],
+    'صفحے کا ترجمہ ہو رہا ہے…', 'صفحے کا ترجمہ اسی ڈیوائس پر ہوا', 'انٹرفیس کا ترجمہ ہو گیا۔ پورے صفحے کے ترجمے کے لیے Chrome کا بلٹ اِن مترجم یا Claude ورژن درکار ہے۔', 'اصل دکھائیں', 'اس براؤزر میں آواز سے ان پٹ دستیاب نہیں۔', 'یہاں مائیکروفون دستیاب نہیں۔', 'ایجنٹ یا مہارت تلاش کریں…', 'صاف کریں', 'سوچ رہا ہوں…', 'Claude کا ترجمہ', 'ماسٹر پلان', 'فیصلہ انجن', 'بحران ریڈار', 'انگیجمنٹ اے آئی', 'Cellvoyant One'],
   zh: ['问题', '市场', '平台', '运营商工作台', '实时控制台', '终端', 'AI 智能体', '学院', '创新', '专利', '商业模式', '加入试点', '概览', '客户', '竞争', '创新实验室', '解决方案', '价值', '申请试点', '搜索',
     '搜索章节、工具、智能体、公司、运营商、来源…', '询问 Cellvoyant', '输入或说出你的问题…', '发送', '正在聆听…', '朗读回答', '停止', '你好！可以问我任何关于市场的问题，或让我打开某个章节或工具。', '+ 新建终端', '运行', '运行智能体', '运行工具', '申请', '打开终端', '语言',
-    '正在翻译页面…', '已在本设备上翻译页面', '界面已翻译。整页翻译需要 Chrome 内置翻译器或 Claude 版本。', '显示原文', '此浏览器不支持语音输入。', '此处无法使用麦克风。', '查找智能体或技能…', '清除', '正在思考…', 'Claude 翻译', '总体规划', '决策引擎', '危机雷达', '客户互动 AI']
+    '正在翻译页面…', '已在本设备上翻译页面', '界面已翻译。整页翻译需要 Chrome 内置翻译器或 Claude 版本。', '显示原文', '此浏览器不支持语音输入。', '此处无法使用麦克风。', '查找智能体或技能…', '清除', '正在思考…', 'Claude 翻译', '总体规划', '决策引擎', '危机雷达', '客户互动 AI', 'Cellvoyant One']
 };
 const I18N_EN = { HELLO: 'Hello! Ask me anything about the market, or tell me what to open.', IFACE_ONLY: 'Interface translated. Full-page translation needs Chrome’s built-in translator or the Claude version.', VOICE_NA: 'Voice input isn’t available in this browser.', MIC_BLOCKED: 'The microphone can’t be used here.' };
 const I18N = Object.fromEntries(Object.entries(I18N_ROWS).map(([l, row]) => [l, Object.fromEntries(I18N_KEYS.map((k, i) => [k, row[i]]))]));
@@ -4721,6 +4783,7 @@ async function cvLocal(q) {
   const nav = cvNavigate(q); if (nav) return esc(nav);
   const cr = crAnswer(q); if (cr) return cr;
   const eg = egAnswer(q); if (eg) return eg;
+  const su = suAnswer(q); if (su) return su;
   const mp = mpAnswer(q); if (mp) return mp;
   if (/^(hi|hello|hey|help|what can you do|مرحبا|bonjour|नमस्ते|سلام|你好)/i.test(s)) return `<p>${esc(tr('HELLO'))}</p>${cvList(['Live news: “news about stc this week”', 'Exchange rates: “dirham exchange rates”', 'Country data: “mobile subscriptions in the Gulf”', 'App ratings: “app ratings for du”', 'Tools: “calculate ARPU 1.2 billion 4 million 12”', 'Agents: “run churn sentinel”', 'Navigation: “open the pricing terminal”, “switch to Arabic”'])}`;
   if (/\bnews|headline|latest on|what'?s happening|أخبار|actualit|समाचार|خبریں|新闻/.test(s)) {
@@ -5048,6 +5111,7 @@ function cvHas(tok) {
   if (t === 'mp') return !!$('#mpList');
   if (t === 'cr') return !!$('#crApp') && (!v || !!crGet(v));
   if (t === 'eg') return !!$('#egApp') && (!v || !!EG_GN[v] || /^[cub]-[0-9a-f]{6}$/i.test(v));
+  if (t === 'su') return !!$('#suApp') && (!v || SU_TABS.some(x => x[0] === v));
   return false;
 }
 // one navigator for every link on the page: sections, console views, terminals, agent departments, desk tabs, the decision engine and capabilities
@@ -5061,6 +5125,7 @@ function cvGo(tok) {
   else if (t === 'dec') { if (v) dcRun(v); findGo($('#decision')); }
   else if (t === 'cap') mpShow(+v);
   else if (t === 'cr') { if (v) crShow(v, true); else findGo($('#crisis')); }
+  else if (t === 'su') { if (v) SU.tab = v; suRender(); findGo($('#suite')); }
   else if (t === 'eg') { if (v && EG_GN[v]) { EG.goal = v; egEnsure(); egRender(); findGo($('#eg-plan')); } else if (!v || !egShow(v, true)) findGo($('#engagement')); }
   else if (t === 'mp') { mpReset(); if (/^P[012]$/.test(v)) MP.p = v; else if (/^[A-I]$/.test(v)) MP.dom = v; else if (v === 'live') MP.live = true; mpRender(); findGo($('#masterplan')); }
   return true;
@@ -6500,15 +6565,626 @@ CV_TOOLDEFS.push({ name: 'engagement_ai', description: 'Engagement AI on synthet
     if (p) return { id: p.id, audience: EG_AUDN[p.aud], segment: p.seg.l, group: EG_GRP[p.grp][0], churn_risk_90d: +p.risk.toFixed(3), next_best_action: p.nba ? egActN(p.nba.a, p) : null, channel: p.nba ? EG_CHN[p.nba.best.ch] : null, when: p.nba ? egSlot(p.nba.best) : null, reply_chance: p.nba ? +p.nba.best.e.toFixed(3) : null, act: egWindow(p)[0], moments: EG_X.filter(k => p[k]).map(k => EG_XL[k]), synthetic: true };
     const P = egPlan(a.goal || EG.goal, a.audience || 'all'); return { goal: EG_GN[P.G], contacts: P.out.length, expected_replies: Math.round(P.ai.e), replies_today_practice: Math.round(P.fx.e), customers_kept: P.G === 'churn' ? Math.round(P.ai.kept) : null, kept_today_practice: P.G === 'churn' ? Math.round(P.fx.kept) : null, first: P.out.slice(0, 10).map(o => ({ time: `${RT_DAYS[o.d]} ${pad(o.h)}:00`, id: o.p.id, segment: o.p.seg.l, action: egActN(o.a, o.p), channel: EG_CHN[o.ch], reply_chance: +o.e.toFixed(3) })), synthetic: true }; } });
 
+/* ---------- CELLVOYANT ONE: an enterprise suite on one central database (CRM, finance and ERP, supply chain, a permissioned ledger with smart contracts, product innovation, system value and market functions) ---------- */
+const SU_W = EDITION === 'eand'
+  ? { op: 'etisalat UAE', wh: ['Dubai DC', 'Abu Dhabi hub', 'Al Ain hub'], rival: 'du', partner: 'a Gulf roaming partner', cities: ['Dubai', 'Abu Dhabi', 'Sharjah', 'Al Ain', 'Ajman', 'Fujairah'] }
+  : { op: 'Nimbus Mobile', wh: ['Central DC', 'North hub', 'South hub'], rival: 'Arcline Wireless', partner: 'a regional roaming partner', cities: ['Capital City', 'Port City', 'North City', 'Lake City', 'East City', 'Hill City'] };
+const SU_TABS = [['hub', 'Data hub'], ['crm', 'CRM'], ['fin', 'Finance & ERP'], ['scm', 'Supply chain'], ['ledger', 'Ledger'], ['inno', 'Innovation'], ['value', 'System value'], ['mkt', 'Market functions']];
+const SU = { seed: 3, ready: false, tab: 'hub', role: 'analyst', sl: .95, scen: { price: 0, churn: 0, ent: 0 }, wacc: 9, q: '', qres: null, item: null, opp: null, idea: null, pos: [], led: null, ab: {} };
+const suMoney = v => EG_W.money(v);
+const suGauss = R => () => Math.sqrt(-2 * Math.log(R() || 1e-9)) * Math.cos(2 * Math.PI * R());
+const suSum = a => a.reduce((s, v) => s + v, 0);
+const suMean = a => a.length ? suSum(a) / a.length : 0;
+const suMed = a => { const s = a.slice().sort((x, y) => x - y), m = s.length >> 1; return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : 0; };
+const suMonth = k => { const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + k); return d.toLocaleDateString('en-GB', { month: 'short', year: '2-digit' }); };
+const suDay = k => { const d = new Date(Date.now() + k * 864e5); return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); };
+
+// additive Holt-Winters with a small grid search over the smoothing weights (minimum one-step error)
+function suHW(y, m, h) {
+  let best = null;
+  for (const a of [.2, .35, .5, .7]) for (const b of [.01, .05, .15]) for (const g of [.1, .25, .45]) {
+    const n = y.length; let L = suMean(y.slice(0, m)), T = (suMean(y.slice(m, 2 * m)) - L) / m; const S = y.slice(0, m).map(v => v - L), fit = []; let sse = 0;
+    for (let t = 0; t < n; t++) { const s = S[t % m], f = L + T + s; fit.push(f); if (t >= m) sse += (y[t] - f) ** 2; const L0 = L; L = a * (y[t] - s) + (1 - a) * (L + T); T = b * (L - L0) + (1 - b) * T; S[t % m] = g * (y[t] - L) + (1 - g) * s; }
+    if (!best || sse < best.sse) best = { sse, a, b, g, L, T, S: S.slice(), fit, n };
+  }
+  const sd = Math.sqrt(best.sse / Math.max(1, y.length - m - 3));
+  return { fit: best.fit, fc: Array.from({ length: h }, (_, k) => best.L + (k + 1) * best.T + best.S[(best.n + k) % m]), sd, a: best.a, b: best.b, g: best.g };
+}
+const suMape = (act, fc) => suMean(act.map((v, i) => Math.abs(v - fc[i]) / Math.abs(v))) * 100;
+
+function suBuild() {
+  const R = rtRng(SU.seed * 131 + 17), g = suGauss(R), pick = a => a[Math.floor(R() * a.length)], id = (p, n) => p + '-' + (1000 + n);
+  // finance: 36 months of revenue lines and costs (US$ millions, illustrative)
+  const LINES = [['mobile', 'Mobile consumer', 168, .015, [1, .98, 1.01, 1.02, 1.03, 1, .99, 1.01, 1.02, 1.03, 1.04, 1.07]], ['fixed', 'Fixed and home', 54, .05, [1, 1, 1, 1, 1, 1, .99, .99, 1, 1.01, 1.01, 1.02]],
+    ['ent', 'Enterprise and government', 51, .06, [.96, .97, 1.06, .98, .99, 1.07, .97, .96, 1.05, .99, 1, 1.12]], ['whs', 'Wholesale and roaming', 18, .02, [.9, .88, .92, .95, 1, 1.12, 1.25, 1.22, 1.02, .95, .92, .98]], ['dig', 'Digital and fintech', 12, .28, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.05]]];
+  const COST = [['net', 'Network and IT', .22], ['staff', 'Staff', .12], ['comm', 'Sales and marketing', .14], ['ic', 'Interconnect and roaming', .08], ['oth', 'Other operating costs', .06]];
+  const m0 = new Date().getMonth(), months = Array.from({ length: 36 }, (_, i) => i - 36);
+  const fin = LINES.map(([k, n, base, gr, seas]) => ({ k, n, y: months.map((mi, i) => { const moy = ((m0 + mi) % 12 + 12) % 12; return base * Math.pow(1 + gr, i / 12) * seas[moy] * (1 + g() * .012); }) }));
+  const rev = months.map((_, i) => suSum(fin.map(l => l.y[i])));
+  const cost = COST.map(([k, n, sh]) => ({ k, n, y: rev.map(r => r * sh * (1 + g() * .015)) }));
+  // daily operations: 180 days of five series with known incidents planted in them
+  const D = 180, dow = d => (new Date(Date.now() - (D - d) * 864e5).getDay() + 6) % 7;
+  const ser = [['rev', 'Daily revenue (US$ m)', 10.2, [1, 1, 1, 1.02, 1.05, .93, .9], .02], ['intl', 'International call minutes (m)', 4.1, [1, 1, 1, 1, 1.15, 1.2, .95], .04], ['refund', 'Refund requests (k)', 2.2, [1.1, 1, 1, 1, .9, .8, 1.2], .07], ['drop', 'Dropped-call rate (%)', .62, [1, 1, 1, 1, 1, .95, .95], .05], ['data', 'Data traffic (PB)', 9.5, [.97, .97, .98, 1, 1.06, 1.08, 1.02], .025]]
+    .map(([k, n, base, wk, nz]) => ({ k, n, y: Array.from({ length: D }, (_, d) => base * (1 + d * .0004) * wk[dow(d)] * (1 + g() * nz)), truth: new Set(), dow: Array.from({ length: D }, (_, d) => dow(d)) }));
+  const S = Object.fromEntries(ser.map(s => [s.k, s]));
+  const plant = (k, d, f, why) => { S[k].y[d] *= f; S[k].truth.add(d); (S[k].why || (S[k].why = {}))[d] = why; };
+  plant('rev', 41, .8, 'A billing run failed overnight'); plant('refund', 42, 4.6, 'Customers chasing the failed billing run'); plant('refund', 43, 2.6, 'Customers chasing the failed billing run');
+  plant('intl', 97, 3.4, 'International revenue-share fraud: calls to premium numbers abroad'); plant('intl', 98, 2.8, 'International revenue-share fraud: calls to premium numbers abroad');
+  plant('drop', 133, 2.1, 'A fibre cut between two exchanges'); plant('data', 133, .78, 'Traffic lost during the fibre cut'); plant('rev', 151, 1.14, 'Customers charged twice for a bundle renewal'); plant('refund', 152, 3.1, 'Refunds for the double charge');
+  plant('data', 171, 1.32, 'A viral streaming event'); plant('intl', 166, .45, 'An interconnect route dropped calls abroad');
+  // CRM: accounts, closed history (for the win model) and the open pipeline
+  const IND = ['Logistics', 'Healthcare', 'Retail', 'Banking', 'Hospitality', 'Construction', 'Education', 'Energy', 'Government', 'Manufacturing'], SIZE = [['SME', 2.5e3], ['Mid-size', 2.4e4], ['Enterprise', 1.6e5], ['Government', 2.6e5]];
+  const PROD = [['p5g', 'Private 5G'], ['sdwan', 'SD-WAN'], ['iot', 'IoT fleet'], ['sec', 'Cloud and security'], ['fwa', 'Fixed wireless'], ['fleet', 'Mobile fleet']], STG = ['Lead', 'Qualified', 'Proposal', 'Negotiation'];
+  const acc = Array.from({ length: 64 }, (_, i) => { const [sz, v] = pick(SIZE); return { id: id('A', i), ind: pick(IND), size: sz, city: pick(SU_W.cities), mrr: Math.round(v * (.5 + R()) / 12), health: Math.round(Math.min(98, Math.max(18, 68 + g() * 16))), endIn: Math.floor(R() * 720), am: 'AM-' + (1 + Math.floor(R() * 8)), nps: Math.round(Math.min(10, Math.max(0, 7 + g() * 2))) }; });
+  const oppX = o => [1, o.dm, o.touch / 30, o.comp, o.disc / 10, o.health / 100, o.age / 100, o.fit, o.stage === 1 ? 1 : 0, o.stage === 2 ? 1 : 0, o.stage === 3 ? 1 : 0];
+  const oppTrue = o => rtSig(-1.6 + .55 * o.dm - .9 * o.touch / 30 - .75 * o.comp + .25 * o.disc / 10 + 1.4 * o.health / 100 - .45 * o.age / 100 + .8 * o.fit + [0, .5, 1.1, 1.9][o.stage]);
+  const mkOpp = (i, open) => { const a = pick(acc), o = { id: id('O', i), acc: a.id, ind: a.ind, size: a.size, prod: pick(PROD), stage: Math.floor(R() * 4), dm: Math.floor(R() * 4), touch: Math.floor(R() * R() * 45), comp: R() < .45 ? 1 : 0, disc: Math.round(R() * R() * 25), health: a.health, age: Math.floor(10 + R() * 160), fit: Math.round(R() * 100) / 100 };
+    o.value = Math.round((a.size === 'SME' ? 8e3 : a.size === 'Mid-size' ? 6e4 : a.size === 'Enterprise' ? 3.2e5 : 5.4e5) * (.4 + R() * 1.2)); o.close = Math.floor(5 + R() * 120); if (!open) o.won = R() < oppTrue(o) ? 1 : 0; return o; };
+  const hist = Array.from({ length: 900 }, (_, i) => mkOpp(5000 + i, false)), opps = Array.from({ length: 84 }, (_, i) => mkOpp(i, true));
+  const trO = hist.slice(0, 720).map(o => egRow(oppX(o), o.won)), teO = hist.slice(720);
+  const wo = egFit(trO, 11, R, 25, .08, 5e-4), winAuc = rtAuc(teO.map(o => rtSig(egDot(wo, oppX(o)))), teO.map(o => o.won));
+  opps.forEach(o => { o.p = rtSig(egDot(wo, oppX(o))); o.truth = oppTrue(o); });
+  // receivables: 12 months of invoices
+  const inv = []; acc.forEach(a => { for (let mth = 0; mth < 12; mth++) { const late = R() < (a.health < 45 ? .35 : .1) ? Math.floor(R() * 120) : Math.floor(R() * 8) - 4; const issued = -(mth * 30 + Math.floor(R() * 10)); inv.push({ id: id('INV', inv.length), acc: a.id, amount: Math.round(a.mrr * (.9 + R() * .2)), issued, due: issued + 30, paidLate: mth === 0 && R() < .5 ? null : late }); } });
+  // supply chain: suppliers, items in each warehouse, 120 days of demand
+  const SUP = [['S-11', 'RAN equipment', 'Europe', .93, .98, 70, 1], ['S-12', 'RAN equipment', 'East Asia', .88, .96, 55, 0], ['S-21', 'Handsets', 'East Asia', .91, .97, 21, 0], ['S-22', 'Handsets', 'North America', .95, .99, 28, 0], ['S-31', 'Routers and CPE', 'East Asia', .84, .95, 35, 1],
+    ['S-41', 'Fibre and passive', 'South Asia', .9, .97, 30, 0], ['S-51', 'SIM and eSIM', 'Europe', .97, .995, 14, 1], ['S-61', 'Power and batteries', 'East Asia', .86, .94, 42, 0]]
+    .map(([sid, cat, region, ot, ql, lt, single]) => ({ id: sid, cat, region, ot, ql, lt, single, risk: Math.round(100 * (.35 * (1 - ot) / .16 + .25 * (1 - ql) / .06 + .2 * single + .2 * (region === 'East Asia' ? .7 : region === 'South Asia' ? .5 : .3))) }));
+  const ITEMS = [['HS-5GP', 'Premium 5G handset', 'S-22', 780, 38], ['HS-5GM', 'Mid-range 5G handset', 'S-21', 260, 64], ['CPE-FWA', '5G home router', 'S-31', 145, 41], ['ONT-FB', 'Fibre ONT', 'S-41', 48, 52], ['SIM-1K', 'SIM card pack (1,000)', 'S-51', 320, 6], ['RRU-35', 'Radio unit spare (3.5 GHz)', 'S-11', 6200, .9], ['BAT-48', 'Site battery pack', 'S-61', 410, 3.2], ['FIB-2K', 'Fibre cable drum (2 km)', 'S-41', 1900, 1.4], ['IOT-TRK', 'IoT fleet tracker', 'S-12', 39, 30], ['WCH-5G', '5G smartwatch', 'S-21', 230, 12]];
+  const inv2 = [];
+  ITEMS.forEach(([sku, n, sup, cost, base]) => SU_W.wh.forEach((wh, wi) => {
+    const sh = [1, .62, .38][wi], promo = Math.floor(30 + R() * 80), y = Array.from({ length: 120 }, (_, d) => { const w = [.92, .95, 1, 1.03, 1.12, 1.18, .8][(d + 3) % 7]; const v = base * sh * (1 + d * .0012) * w * (d >= promo && d < promo + 6 && base > 5 ? 1.5 : 1) * (1 + g() * .18); return Math.max(0, base > 5 ? Math.round(v) : Math.round(v * 10) / 10); });
+    const S2 = SUP.find(s => s.id === sup), mu = suMean(y.slice(-28));
+    inv2.push({ sku, n, wh, sup, cost, y, lt: S2.lt, onHand: Math.round(mu * (S2.lt * (.35 + R() * 1.9) + 7) * 10) / 10, onOrder: R() < .3 ? Math.round(mu * 14) : 0 });
+  }));
+  // innovation pipeline: Bass diffusion parameters, price, margin and build cost (US$)
+  const IDEAS = [['fam5g', '5G home bundle for families', 'Fixed and home', 'Business case', 120e3, .012, .38, 38, .55, 2.2e6, 8, 3, .8, 2], ['esim', 'eSIM travel pass', 'Digital', 'Pilot', 400e3, .02, .45, 9, .7, .6e6, 9, 2, .8, 1],
+    ['smesec', 'SME cyber shield', 'Enterprise', 'Concept', 25e3, .008, .3, 45, .6, 1.4e6, 4, 3, .5, 3], ['iotfleet', 'IoT fleet tracking for SMEs', 'Enterprise', 'Business case', 18e3, .01, .32, 60, .5, 1.1e6, 3, 2, .6, 3], ['aiasst', 'AI call assistant', 'Digital', 'Ideation', 600e3, .006, .5, 3, .8, .9e6, 10, 1, .4, 2],
+    ['bnpl', 'Buy-now-pay-later for handsets', 'Digital and fintech', 'Pilot', 90e3, .015, .35, 12, .45, 1.8e6, 6, 2, .7, 2], ['p5gport', 'Private 5G for ports and campuses', 'Enterprise', 'Concept', 40, .02, .25, 52e3, .4, 3.5e6, .05, 3, .5, 5], ['gamepass', 'Low-latency gaming pass', 'Mobile consumer', 'Ideation', 300e3, .007, .42, 6, .75, .5e6, 7, 1, .5, 1],
+    ['solar', 'Solar backup for rural sites', 'Network', 'Business case', 900, .05, .2, 5200, .3, 2.6e6, .2, 2, .7, 4], ['kids', 'Safe kids plan with smartwatch', 'Mobile consumer', 'Concept', 70e3, .01, .4, 14, .5, .7e6, 5, 2, .6, 2]]
+    .map(([k, n, unit, stage, m, p, q, price, margin, build, reach, impact, conf, effort]) => ({ k, n, unit, stage, m, p: +(p * 2.5).toFixed(3), q, price, margin, build, rice: Math.round(reach * impact * conf / effort * 10) / 10 }));
+  Object.assign(SU, { fin, rev, cost, ser, S, acc, opps, hist, wo, winAuc, inv: inv, sup: SUP, items: inv2, ideas: IDEAS, prod: Object.fromEntries(PROD), stg: STG, m0 });
+  SU.ready = true; SU.fc = null; SU.an = null; SU.item = SU.item && inv2.find(i => i.sku + i.wh === SU.item.sku + SU.item.wh) || null;
+}
+const suEnsure = () => { if (!SU.ready) suBuild(); };
+
+/* finance: revenue forecast by line with scenarios, a backtest and EBITDA */
+function suForecast() {
+  if (SU.fc && SU.fc.key === JSON.stringify(SU.scen)) return SU.fc;
+  const sc = SU.scen, lines = SU.fin.map(l => {
+    const f = suHW(l.y, 12, 12), bt = suHW(l.y.slice(0, 30), 12, 6), naive = l.y.slice(18, 24);
+    const adj = 1 + (l.k === 'mobile' || l.k === 'fixed' ? sc.price / 100 * .6 - sc.churn / 100 * 1.5 : 0) + (l.k === 'ent' ? sc.ent / 100 : 0);
+    return { k: l.k, n: l.n, y: l.y, fc: f.fc.map((v, i) => v * (1 + (adj - 1) * Math.min(1, (i + 1) / 4))), sd: f.sd, mape: suMape(l.y.slice(30), bt.fc), mapeN: suMape(l.y.slice(30), naive) };
+  });
+  const fc = Array.from({ length: 12 }, (_, i) => suSum(lines.map(l => l.fc[i]))), sd = Math.sqrt(suSum(lines.map(l => l.sd ** 2)));
+  const costSh = suSum(SU.cost.map(c => suSum(c.y.slice(-12)))) / suSum(SU.rev.slice(-12)), ebitda = fc.map(v => v * (1 - costSh));
+  const yA = suSum(SU.rev.slice(-12)), yF = suSum(fc);
+  return (SU.fc = { key: JSON.stringify(sc), lines, fc, sd, ebitda, costSh, yA, yF, growth: yF / yA - 1, mape: suMean(lines.map(l => l.mape)), mapeN: suMean(lines.map(l => l.mapeN)) });
+}
+/* anomaly detection: a robust z-score of each day against the same weekday's median over the previous 8 weeks */
+function suAnomalies() {
+  if (SU.an) return SU.an;
+  const flags = [], stats = [];
+  SU.ser.forEach(s => {
+    let tp = 0, fp = 0; const found = new Set();
+    for (let d = 56; d < s.y.length; d++) {
+      const same = []; for (let k = 1; k <= 8; k++) same.push(s.y[d - 7 * k]);
+      const base = suMed(same), mad = suMed(same.map(v => Math.abs(v - base))) * 1.4826, z = (s.y[d] - base) / Math.max(mad, base * .03);  // a 3% floor keeps quiet weeks from looking alarming
+      if (Math.abs(z) >= 4) { const hit = s.truth.has(d); hit ? tp++ : fp++; found.add(d); flags.push({ k: s.k, n: s.n, d, v: s.y[d], base, z, hit, why: hit ? s.why[d] : 'No known incident: check the source system' }); }
+    }
+    const truth = [...s.truth].filter(d => d >= 56); stats.push({ k: s.k, n: s.n, tp, fp, fn: truth.filter(d => !found.has(d)).length });
+  });
+  flags.sort((a, b) => b.d - a.d || Math.abs(b.z) - Math.abs(a.z));
+  const tp = suSum(stats.map(s => s.tp)), fp = suSum(stats.map(s => s.fp)), fn = suSum(stats.map(s => s.fn));
+  return (SU.an = { flags, stats, prec: tp / Math.max(1, tp + fp), rec: tp / Math.max(1, tp + fn), tp, fp, fn });
+}
+/* supply chain: Holt-Winters demand forecast per item and warehouse, safety stock, reorder point and order size */
+const SU_Z = { .9: 1.2816, .95: 1.6449, .99: 2.3263 };
+function suPlanItem(it) {
+  const f = suHW(it.y, 7, 30), mu = Math.max(.01, suMean(f.fc)), sdD = Math.max(f.sd, mu * .05), z = SU_Z[SU.sl];
+  const ss = z * sdD * Math.sqrt(it.lt), rop = mu * it.lt + ss, D = mu * 365, eoq = Math.sqrt(2 * D * 250 / (it.cost * .25)), pos = it.onHand + it.onOrder;
+  const cover = it.onHand / mu, status = it.onHand < mu * it.lt * .5 ? 'Stockout risk' : pos <= rop ? 'Reorder' : cover > 120 ? 'Overstock' : 'OK';
+  const qty = status === 'Stockout risk' || status === 'Reorder' ? Math.max(Math.ceil(eoq), Math.ceil(rop - pos + mu * 7)) : 0;
+  return { it, f, mu, ss, rop, eoq, cover, status, qty, out: cover < it.lt ? Math.floor(cover) : null };
+}
+const suPlan = () => SU.items.map(suPlanItem);
+/* CRM: next best action for an opportunity, from the drivers the win model weighs */
+function suOppNba(o) {
+  if (o.touch > 14) return `Re-engage: no contact for ${o.touch} days`;
+  if (o.dm < 2) return 'Bring in a second decision maker';
+  if (o.comp) return `Send the battlecard against ${SU_W.rival}`;
+  if (o.disc > 15) return 'Hold the price; add service value instead';
+  return o.stage < 2 ? 'Book a discovery workshop' : 'Book the proposal review';
+}
+function suPipe() {
+  const O = SU.opps, q = O.filter(o => o.close <= 90), wt = suSum(q.map(o => o.value * o.p)), commit = suSum(q.filter(o => o.p >= .65).map(o => o.value)), best = suSum(q.filter(o => o.p >= .35).map(o => o.value));
+  const won = SU.hist.slice(-200), wr = suMean(won.map(o => o.won)), quota = Math.round(suSum(won.filter(o => o.won).map(o => o.value)) / 200 * 84 * .55 / 1e4) * 1e4;
+  return { O, q, wt, commit, best, all: suSum(O.map(o => o.value)), wr, quota };
+}
+function suAging() {
+  const B = [['Current', -1e9, 0], ['1–30 days', 1, 30], ['31–60 days', 31, 60], ['61–90 days', 61, 90], ['Over 90 days', 91, 1e9]], out = B.map(([n]) => ({ n, v: 0, c: 0 }));
+  // an invoice is open until the day it is paid (due + days late); age is days past due
+  SU.inv.forEach(i => { if (i.paidLate != null && i.due + i.paidLate <= 0) return; const age = -i.due, b = B.findIndex(([, lo, hi]) => age >= lo && age <= hi); out[b].v += i.amount; out[b].c++; });
+  return out;
+}
+/* innovation: Bass diffusion forecast and a 3-year NPV at the chosen discount rate */
+function suBass(I, months = 60) {
+  const out = []; let N = 0;
+  for (let t = 0; t < months; t++) { const n = (I.p + I.q * N / I.m) * (I.m - N) / 12; N += n; out.push(N); }
+  return out;
+}
+function suIdeaVal(I) {
+  const c = suBass(I), r = SU.wacc / 100 / 12; let npv = -I.build;
+  c.forEach((N, t) => { npv += N * I.price * I.margin / Math.pow(1 + r, t + 1); });
+  return { curve: c, users5: c[c.length - 1], npv };
+}
+/* business value of enterprise systems: benefits from the operator's own figures, 5-year NPV, IRR and payback */
+const SU_SYS = [
+  ['erp', 'ERP finance and procurement', 'Faster close, 3-way match and fewer duplicate payments', (Y) => Y.cost * .008, 35e6, 6e6],
+  ['crm', 'CRM and sales pipeline', 'Higher win rate and shorter sales cycles in enterprise', (Y) => Y.ent * .025, 12e6, 3e6],
+  ['scm', 'Supply chain planning', 'Less stock tied up and fewer stockouts', (Y) => Y.rev * .0025, 8e6, 2e6],
+  ['hub', 'Central data hub', 'One source of truth; analysts stop rebuilding data', (Y) => 4e6 + Y.rev * .0006, 10e6, 2.5e6],
+  ['led', 'Permissioned ledger and smart contracts', 'Automatic settlement, fewer disputes, tamper-evident audit', (Y) => Y.whs * .02 + 4e5, 4e6, 1e6],
+  ['anom', 'Anomaly detection and revenue assurance', 'Revenue leaks and fraud caught days earlier', (Y) => Y.rev * .003, 3e6, 1e6],
+  ['eng', 'Engagement AI', 'Customers kept by the right contact at the right moment', (Y) => Y.mobile * .006, 4e6, 1.2e6]];
+function suIrr(cf) { let lo = -.9, hi = 10; const npv = r => cf.reduce((s, c, t) => s + c / Math.pow(1 + r, t), 0); if (npv(lo) * npv(hi) > 0) return null; for (let i = 0; i < 80; i++) { const m = (lo + hi) / 2; npv(lo) * npv(m) <= 0 ? hi = m : lo = m; } return (lo + hi) / 2; }
+function suValue() {
+  const yr = k => suSum(SU.fin.find(l => l.k === k).y.slice(-12)) * 1e6, Y = { rev: suSum(SU.rev.slice(-12)) * 1e6, cost: suSum(SU.cost.map(c => suSum(c.y.slice(-12)))) * 1e6, ent: yr('ent'), whs: yr('whs'), mobile: yr('mobile') }, ramp = [0, .4, .8, 1, 1, 1], r = SU.wacc / 100;
+  const rows = SU_SYS.map(([k, n, why, ben, build, run]) => {
+    const b = ben(Y), cf = ramp.map((f, t) => t === 0 ? -build : b * f - run), npv = cf.reduce((s, c, t) => s + c / Math.pow(1 + r, t), 0), irr = suIrr(cf);
+    let cum = 0, pay = null; cf.forEach((c, t) => { const prev = cum; cum += c; if (pay == null && cum >= 0 && t > 0) pay = t - 1 + (-prev / c); });
+    return { k, n, why, b, build, run, cf, npv, irr, pay };
+  });
+  const cf = ramp.map((_, t) => suSum(rows.map(x => x.cf[t])));
+  return { rows, Y, cf, npv: suSum(rows.map(x => x.npv)), irr: suIrr(cf), build: suSum(rows.map(x => x.build)) };
+}
+
+/* ledger: a permissioned chain of SHA-256 blocks with Merkle roots, each sealed only when at least 3 of the 4 validator nodes sign it (ECDSA P-256) */
+const SU_NODES = [['fin', 'Finance'], ['net', 'Network operations'], ['legal', 'Legal and compliance'], ['audit', 'Internal audit']];
+const suHex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+const suEnc = s => new TextEncoder().encode(s);
+const suSha = async s => suHex(await crypto.subtle.digest('SHA-256', suEnc(s)));
+async function suMerkle(hs) { if (!hs.length) return suSha(''); let L = hs.slice(); while (L.length > 1) { const N = []; for (let i = 0; i < L.length; i += 2) N.push(await suSha(L[i] + (L[i + 1] || L[i]))); L = N; } return L[0]; }
+const suTxStr = t => JSON.stringify([t.id, t.type, t.at, t.by, t.data]);
+const suHdr = b => JSON.stringify([b.h, b.prev, b.root, b.at, b.n]);
+let suTxN = 0;
+const suTx = (type, by, data, at) => ({ id: 'TX-' + (++suTxN).toString(16).toUpperCase().padStart(5, '0'), type, by, data, at: at || Date.now() });
+// what each validator checks before it signs; '' means it approves
+function suNodeCheck(k, t) {
+  const d = t.data;
+  if (k === 'fin' && /payment|credit|invoice|settlement/.test(t.type) && !(d.amount > 0)) return 'Amount must be positive';
+  if (k === 'audit' && t.type === 'supplier_invoice' && d.po && Math.abs(d.amount - d.po) / d.po > .02) return `Invoice ${Math.round((d.amount / d.po - 1) * 100)}% above the purchase order (3-way match failed)`;
+  if (k === 'fin' && t.type === 'supplier_invoice' && d.po && d.amount > d.po * 1.02) return 'Pays more than the purchase order';
+  if (k === 'legal' && t.type === 'data_access' && d.restricted && !d.aggregate) return 'Row-level access to restricted personal data';
+  return '';
+}
+async function suLedInit() {
+  if (SU.led) return SU.led;
+  if (!(window.crypto && crypto.subtle)) { SU.led = { off: true }; return SU.led; }
+  const nodes = [];
+  for (const [k, n] of SU_NODES) { const keys = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign', 'verify']); const raw = await crypto.subtle.exportKey('raw', keys.publicKey); nodes.push({ k, n, keys, fp: (await suSha(suHex(raw))).slice(0, 12) }); }
+  const L = SU.led = { nodes, chain: [], pool: [], rejected: [], log: [], verified: null, saved: null, cs: {} };
+  // history: genesis, then the last weeks of finance, supply-chain, sales and data events
+  const day = 864e5, t0 = Date.now() - 40 * day, a = SU.acc;
+  const batches = [
+    [suTx('genesis', 'Internal audit', { note: `${SU_W.op} ledger opened; validators: ${SU_NODES.map(x => x[1]).join(', ')}` }, t0)],
+    [suTx('invoice', 'Finance', { account: a[0].id, amount: a[0].mrr }, t0 + 2 * day), suTx('invoice', 'Finance', { account: a[1].id, amount: a[1].mrr }, t0 + 2 * day), suTx('invoice', 'Finance', { account: a[2].id, amount: a[2].mrr }, t0 + 2 * day)],
+    [suTx('po_created', 'Procurement', { po: 'PO-7001', supplier: 'S-22', sku: 'HS-5GP', qty: 400, amount: 312000 }, t0 + 5 * day), suTx('contract_deployed', 'Legal and compliance', { contract: 'escrow', po: 'PO-7001' }, t0 + 5 * day)],
+    [suTx('payment', 'Finance', { account: a[0].id, amount: a[0].mrr }, t0 + 9 * day), suTx('data_access', 'Data office', { table: 'customers', role: 'Analyst', aggregate: true, restricted: true, rows: 6 }, t0 + 9 * day)],
+    [suTx('goods_receipt', 'Warehouse', { po: 'PO-7001', qty: 400 }, t0 + 16 * day), suTx('quality_pass', 'Quality', { po: 'PO-7001', defects: 0 }, t0 + 16 * day), suTx('escrow_release', 'Contract: escrow', { po: 'PO-7001', amount: 187200, milestone: 'Goods received and passed (60%)' }, t0 + 16 * day)],
+    [suTx('payment', 'Finance', { account: a[1].id, amount: a[1].mrr }, t0 + 20 * day), suTx('sla_attested', 'Network operations', { account: a[3].id, month: suMonth(-1), uptime: 99.95 }, t0 + 20 * day)],
+    [suTx('settlement', 'Contract: roaming', { partner: SU_W.partner, amount: 418000, net: 'partner pays' }, t0 + 25 * day), suTx('decision', 'Strategy', { decision: 'Approve the 5G home bundle business case', gate: 'Business case' }, t0 + 25 * day)],
+    [suTx('payment', 'Finance', { account: a[2].id, amount: a[2].mrr }, t0 + 31 * day), suTx('sla_credit', 'Contract: SLA', { account: a[4].id, month: suMonth(-1), uptime: 99.71, amount: Math.round(a[4].mrr * .1) }, t0 + 31 * day)],
+    [suTx('data_access', 'Data office', { table: 'journal', role: 'Finance', aggregate: true, restricted: true, rows: 12 }, t0 + 36 * day), suTx('invoice', 'Finance', { account: a[5].id, amount: a[5].mrr }, t0 + 36 * day)]
+  ];
+  for (const txs of batches) await suSeal(txs, txs[0].at);
+  if (SU.pend) { L.pool.push(...SU.pend); SU.pend = null; }
+  return L;
+}
+async function suBlock(txs, at, prev, h) {
+  const th = []; for (const t of txs) th.push(await suSha(suTxStr(t)));
+  const b = { h, prev, at, n: txs.length, txs, root: await suMerkle(th) }; b.hash = await suSha(suHdr(b)); return b;
+}
+// a block is sealed when 3 of 4 validators sign; transactions a validator refuses are taken out and recorded as rejected
+async function suSeal(txs, at) {
+  const L = SU.led, prev = L.chain.length ? L.chain[L.chain.length - 1].hash : '0'.repeat(64), refused = [];
+  const bad = txs.filter(t => SU_NODES.filter(([k]) => suNodeCheck(k, t)).length > 1);
+  bad.forEach(t => { refused.push({ t, why: SU_NODES.map(([k, n]) => [n, suNodeCheck(k, t)]).filter(x => x[1]) }); L.rejected.unshift({ t, why: refused[refused.length - 1].why, at: Date.now() }); });
+  const ok = txs.filter(t => !bad.includes(t)); if (!ok.length) return { refused, b: null };
+  const b = await suBlock(ok, at || Date.now(), prev, L.chain.length); b.sigs = [];
+  for (const N of L.nodes) { const why = ok.map(t => suNodeCheck(N.k, t)).find(Boolean); if (why) { b.sigs.push({ k: N.k, n: N.n, no: why }); continue; } const s = await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, N.keys.privateKey, suEnc(b.hash)); b.sigs.push({ k: N.k, n: N.n, sig: suHex(s) }); }
+  if (b.sigs.filter(s => s.sig).length < 3) { ok.forEach(t => L.rejected.unshift({ t, why: [['Quorum', 'Fewer than 3 of 4 validators signed']], at: Date.now() })); return { refused, b: null }; }
+  L.chain.push(b); return { refused, b };
+}
+// verification recomputes every transaction hash, Merkle root, block hash and link, and checks each signature with the node's public key
+async function suVerify() {
+  const L = SU.led, out = []; let prev = '0'.repeat(64), broken = null;
+  for (const b of L.chain) {
+    const why = [], th = []; for (const t of b.txs) th.push(await suSha(suTxStr(t)));
+    if (await suMerkle(th) !== b.root) why.push('Merkle root does not match its transactions');
+    const hh = await suSha(suHdr(b)); if (hh !== b.hash) why.push('Block hash does not match its header');
+    if (b.prev !== prev) why.push('Link to the previous block is broken');
+    let good = 0; for (const s of b.sigs) { if (!s.sig) continue; const N = L.nodes.find(x => x.k === s.k), bytes = new Uint8Array(s.sig.match(/../g).map(x => parseInt(x, 16))); if (await crypto.subtle.verify({ name: 'ECDSA', hash: 'SHA-256' }, N.keys.publicKey, bytes, suEnc(hh))) good++; }
+    if (good < 3) why.push(`Only ${good} valid validator signatures`);
+    if (why.length && broken == null) broken = b.h; out.push({ h: b.h, why }); prev = b.hash;
+  }
+  return (L.verified = { at: Date.now(), out, broken, ok: broken == null });
+}
+function suTamper() {
+  const L = SU.led, b = L.chain.find(x => x.txs.some(t => t.data.amount)) && L.chain.filter(x => x.txs.some(t => t.data.amount)).slice(-2)[0]; if (!b) return null;
+  const t = b.txs.find(x => x.data.amount); L.saved = { h: b.h, id: t.id, amount: t.data.amount }; t.data.amount = Math.round(t.data.amount * 10); L.verified = null; return { b, t };
+}
+function suRestore() { const L = SU.led, s = L.saved; if (!s) return; const t = L.chain[s.h].txs.find(x => x.id === s.id); t.data.amount = s.amount; L.saved = null; L.verified = null; }
+// transactions wait here until the ledger has started
+const suPool = t => { if (SU.led && !SU.led.off) SU.led.pool.push(t); else if (!SU.led) (SU.pend || (SU.pend = [])).push(t); };
+
+/* smart contracts: deterministic rules every validator can re-run; each run emits events recorded as transactions */
+const SU_CONTRACTS = [
+  { k: 'sla', n: 'Enterprise SLA credits', who: 'Operator and enterprise client', terms: 'Monthly uptime of 99.9% or better. Below that, a credit of 5% of the monthly fee for each 0.1 point missed, capped at 30%. Network operations attests the uptime; the credit is issued without a claim.',
+    code: 'contract SlaCredit {\n  target = 99.9   step = 5%   cap = 30%\n  on uptimeAttested(account, month, uptime) by NetworkOps {\n    if uptime >= target: emit NoCredit(account, month)\n    else credit = min(cap, ceil((target - uptime) / 0.1) × step) × fee(account)\n         emit CreditIssued(account, month, credit)\n  }\n}' },
+  { k: 'escrow', n: 'Supplier milestone payments', who: 'Operator and supplier', terms: '30% when the supplier confirms shipment, 60% when goods are received and pass quality (2 of 3 attestations: warehouse, quality, finance), 10% after 30 days without defects. An invoice more than 2% above the order fails the 3-way match.',
+    code: 'contract MilestoneEscrow {\n  on shipped(po) by Supplier            → release 30% of po.amount\n  on attest(po, party) by Warehouse | Quality | Finance {\n    if count(attestations) >= 2: release 60% of po.amount\n  }\n  on day(po.received + 30) if defects == 0 → release 10%\n  require invoice.amount <= po.amount × 1.02   // 3-way match\n}' },
+  { k: 'roam', n: 'Roaming settlement', who: `Operator and ${SU_W.partner}`, terms: 'Each side submits its traffic records for the month. The contract nets what each owes into one payment. If the two records differ by more than 2%, it opens a dispute instead of paying.',
+    code: 'contract RoamingSettlement {\n  on submit(month, ourRecords, theirRecords) {\n    gap = |ourRecords.total - theirRecords.total| / ourRecords.total\n    if gap > 2%: emit Dispute(month, gap)\n    else net = weOwe - theyOwe\n         emit Settled(month, net, payer = net > 0 ? us : them)\n  }\n}' },
+  { k: 'data', n: 'Data-sharing consent', who: 'Data office and requesting team', terms: 'Personal data leaves the data zone only as aggregates of 10 or more people, and only for a purpose the customers consented to. Every request and decision is recorded.',
+    code: 'contract DataSharing {\n  minGroup = 10\n  on request(team, table, purpose, groupBy) {\n    if purpose not in consent(table): emit Denied("no consent for purpose")\n    else if smallestGroup(table, groupBy) < minGroup: emit Denied("groups under 10")\n    else emit Released(aggregate only)\n  }\n}' }];
+const SU_DREQ = [['churn', 'Strategy: churn rate by segment', 'planning', 'segment'], ['district', 'Marketing: customers by district and age band', 'marketing', 'district × age band'], ['partner', 'Partner: customer list for co-marketing', 'third-party marketing', 'none'], ['risk', 'Retention: persuadable customers by audience', 'service', 'audience']];
+function suRunContract(k, x) {
+  const ev = [], add = (type, by, data, msg) => { suPool(suTx(type, by, data)); ev.push(msg); };
+  if (k === 'sla') {
+    const a = SU.acc.find(q => q.id === x.account) || SU.acc[0], u = +x.uptime;
+    add('sla_attested', 'Network operations', { account: a.id, month: suMonth(-1), uptime: u }, `Network operations attested ${u.toFixed(2)}% uptime for ${a.id}`);
+    if (u >= 99.9) ev.push('No credit: the target was met');
+    else { const c = Math.min(.3, Math.ceil(+((99.9 - u) / .1).toFixed(6)) * .05), amt = Math.round(c * a.mrr); add('sla_credit', 'Contract: SLA', { account: a.id, month: suMonth(-1), uptime: u, amount: amt }, `Credit issued automatically: ${Math.round(c * 100)}% of the monthly fee, ${suMoney(amt)}`); }
+  } else if (k === 'escrow') {
+    const p = x.po, att = ['warehouse', 'quality', 'finance'].filter(q => x[q]);
+    if (!p) { ev.push('Create a purchase order in Supply chain first'); return ev; }
+    if (!p.shipped) { p.shipped = true; add('escrow_release', 'Contract: escrow', { po: p.id, amount: Math.round(p.amount * .3), milestone: 'Shipped (30%)' }, `Shipment confirmed: 30% released, ${suMoney(p.amount * .3)}`); }
+    if (att.length >= 2 && !p.received) { p.received = true; p.state = 'received'; att.forEach(q => add('attestation', q[0].toUpperCase() + q.slice(1), { po: p.id }, `${q[0].toUpperCase() + q.slice(1)} attested receipt`)); add('escrow_release', 'Contract: escrow', { po: p.id, amount: Math.round(p.amount * .6), milestone: 'Received and passed (60%)' }, `2 of 3 attestations: 60% released, ${suMoney(p.amount * .6)}`); }
+    else if (att.length < 2 && !p.received) ev.push(`Waiting for attestations: ${att.length} of the 2 needed`);
+    if (x.inv) { const amt = Math.round(p.amount * (1 + x.inv / 100)); add('supplier_invoice', 'Supplier', { po: p.amount, ref: p.id, amount: amt }, `Supplier invoiced ${suMoney(amt)} against an order of ${suMoney(p.amount)}${x.inv > 2 ? ': the 3-way match will fail when the block is sealed' : ''}`); }
+  } else if (k === 'roam') {
+    const R = rtRng(Date.now() % 1e6), ours = Math.round(5e5 + R() * 4e5), theirs = Math.round(ours * (1 + (x.gap / 100))), gap = Math.abs(theirs - ours) / ours;
+    if (gap > .02) add('dispute', 'Contract: roaming', { partner: SU_W.partner, ours, theirs, gap: +(gap * 100).toFixed(1) }, `Records differ by ${(gap * 100).toFixed(1)}%: dispute opened, nothing paid`);
+    else add('settlement', 'Contract: roaming', { partner: SU_W.partner, amount: Math.round(ours * .18), net: 'partner pays' }, `Records agree within ${(gap * 100).toFixed(1)}%: netted to one payment of ${suMoney(ours * .18)}`);
+  } else if (k === 'data') {
+    const r = SU_DREQ.find(q => q[0] === x.req) || SU_DREQ[0], small = r[0] === 'district', noConsent = r[2] === 'third-party marketing';
+    const dec = noConsent ? 'Denied: no consent for this purpose' : small ? 'Denied: some groups have fewer than 10 people' : 'Released as aggregates only';
+    add('data_access', 'Data office', { request: r[1], purpose: r[2], aggregate: true, restricted: true, approved: !noConsent && !small }, dec);
+  }
+  return ev;
+}
+
+/* central data hub: one catalog of every table on the platform, role-based access and a small SQL engine */
+const SU_ROLES = [['analyst', 'Analyst'], ['finance', 'Finance'], ['sales', 'Sales'], ['supply', 'Supply chain'], ['auditor', 'Auditor']];
+function suTables() {
+  const T = {}, add = (k, owner, zone, src, roles, rows) => { T[k] = { owner, zone, src, roles, rows }; };
+  const all = SU_ROLES.map(r => r[0]);
+  add('operators', 'Market intelligence', 'Public', 'Results, filings and market data', all, () => (POS ? POS.operators : []).map(o => ({ name: o.short || o.name, region: o.region, country: o.country, mcap_usd_bn: o.mcap && o.mcap.usd ? +(o.mcap.usd / 1e9).toFixed(2) : null, revenue_usd_bn: o.rev && o.rev.usd ? +(o.rev.usd / 1e9).toFixed(2) : null, growth_pct: o.growth && o.growth.v != null ? o.growth.v : null, subscribers_m: o.subs && typeof o.subs.v === 'number' ? o.subs.v : null })));
+  add('companies', 'Market intelligence', 'Public', 'Competitor and investor research', all, () => (LAND ? LAND.companies : []).map(c => ({ name: c.name, segment: c.seg, hq: c.hq, founded: c.founded, ownership: c.own })));
+  if (typeof crItems === 'function') add('risks', 'Risk office', 'Internal', 'Crisis radar', all, () => crItems().map(x => ({ key: x.k, risk: crT(x.t), area: CR_SECN[x.sec], score: x.v, severity: x.sev[2], act: CR_H[x.h][1] })));
+  add('customers', 'Customer data office', 'Restricted', 'Engagement AI (tokenized)', all, () => { egEnsure(); return EG.P.map(p => ({ token: p.id, audience: EG_AUDN[p.aud], segment: p.seg.l, churn_risk: +p.risk.toFixed(3), grp: EG_GRP[p.grp][0], value_month: p.val, tenure_months: p.tenure })); });
+  add('accounts', 'Enterprise sales', 'Confidential', 'CRM', ['sales', 'finance', 'auditor'], () => SU.acc.map(a => ({ account: a.id, industry: a.ind, size: a.size, city: a.city, mrr: a.mrr, health: a.health, contract_end_days: a.endIn, manager: a.am })));
+  add('opportunities', 'Enterprise sales', 'Confidential', 'CRM', ['sales', 'finance', 'auditor'], () => SU.opps.map(o => ({ opp: o.id, account: o.acc, product: o.prod[1], stage: SU.stg[o.stage], value: o.value, win_prob: +o.p.toFixed(3), close_days: o.close, competitor: o.comp ? 'yes' : 'no' })));
+  add('invoices', 'Finance', 'Confidential', 'ERP receivables', ['finance', 'auditor'], () => SU.inv.map(i => ({ invoice: i.id, account: i.acc, amount: i.amount, due_days: i.due, status: i.paidLate == null || i.due + i.paidLate > 0 ? (i.due < 0 ? 'overdue' : 'open') : 'paid' })));
+  add('journal', 'Finance', 'Restricted', 'ERP general ledger', ['finance', 'auditor'], () => SU.fin.flatMap(l => l.y.map((v, i) => ({ month: suMonth(i - 36), line: l.n, type: 'revenue', usd_m: +v.toFixed(2) }))).concat(SU.cost.flatMap(c => c.y.map((v, i) => ({ month: suMonth(i - 36), line: c.n, type: 'cost', usd_m: +v.toFixed(2) })))));
+  add('inventory', 'Supply chain', 'Internal', 'Warehouse system', all, () => suPlan().map(r => ({ sku: r.it.sku, item: r.it.n, warehouse: r.it.wh, on_hand: r.it.onHand, daily_demand: +r.mu.toFixed(1), days_cover: +r.cover.toFixed(1), reorder_point: Math.round(r.rop), status: r.status })));
+  add('suppliers', 'Procurement', 'Internal', 'Supplier records', all, () => SU.sup.map(s => ({ supplier: s.id, category: s.cat, region: s.region, on_time_pct: Math.round(s.ot * 100), quality_pct: +(s.ql * 100).toFixed(1), lead_time_days: s.lt, single_source: s.single ? 'yes' : 'no', risk: s.risk })));
+  add('anomalies', 'Revenue assurance', 'Confidential', 'Anomaly detection', ['finance', 'auditor'], () => suAnomalies().flags.map(f => ({ series: f.n, day: suDay(f.d - 180), value: +f.v.toFixed(2), expected: +f.base.toFixed(2), z: +f.z.toFixed(1), cause: f.why })));
+  add('ledger_blocks', 'Internal audit', 'Internal', 'Ledger', all, () => (SU.led && SU.led.chain || []).map(b => ({ height: b.h, hash: b.hash.slice(0, 16), transactions: b.n, signatures: b.sigs.filter(s => s.sig).length, sealed: new Date(b.at).toISOString().slice(0, 10) })));
+  return T;
+}
+const SU_EX = ['SELECT region, COUNT(*) AS operators, AVG(growth_pct) AS growth FROM operators GROUP BY region ORDER BY operators DESC', 'SELECT name, mcap_usd_bn, revenue_usd_bn FROM operators WHERE region = \'Gulf (GCC)\' ORDER BY mcap_usd_bn DESC LIMIT 8',
+  'SELECT grp, COUNT(*) AS people, AVG(churn_risk) AS risk FROM customers GROUP BY grp ORDER BY people DESC', 'SELECT stage, COUNT(*) AS deals, SUM(value) AS value FROM opportunities GROUP BY stage', 'SELECT item, warehouse, days_cover, status FROM inventory WHERE status != \'OK\' ORDER BY days_cover', 'SELECT * FROM risks WHERE score >= 60'];
+function suSql(q, role) {
+  const m = q.replace(/\s+/g, ' ').trim().match(/^select (.+?) from ([a-z_]+)(?: where (.+?))?(?: group by ([a-z_]+))?(?: order by ([a-z_]+|[a-z]+\([a-z_*]+\))(?: (asc|desc))?)?(?: limit (\d+))?;?$/i);
+  if (!m) throw new Error('Use SELECT … FROM table [WHERE …] [GROUP BY column] [ORDER BY column DESC] [LIMIT n]');
+  const [, sel, tn, wh, gb, ob, dir, lim] = m, T = suTables()[tn.toLowerCase()];
+  if (!T) throw new Error(`No table “${tn}”. Tables: ${Object.keys(suTables()).join(', ')}`);
+  if (!T.roles.includes(role)) throw new Error(`Access denied: the ${SU_ROLES.find(r => r[0] === role)[1]} role cannot read ${tn} (${T.zone.toLowerCase()} data owned by ${T.owner}). Switch the role to ${T.roles.map(k => SU_ROLES.find(r => r[0] === k)[1]).join(', ')}.`);
+  let rows = T.rows();
+  if (wh) {
+    const cond = c => { const k = c.trim().match(/^([a-z_]+) ?(>=|<=|!=|<>|=|>|<| like | contains ) ?(.+)$/i); if (!k) throw new Error(`Cannot read the condition “${c}”`); const v = k[3].trim().replace(/^'(.*)'$/, '$1'), num = v !== '' && !isNaN(+v), op = k[2].trim().toLowerCase();
+      return r => { const x = r[k[1]]; if (x === undefined) throw new Error(`No column “${k[1]}” in ${tn}`); const a = num && typeof x === 'number' ? x : String(x).toLowerCase(), b = num && typeof x === 'number' ? +v : v.toLowerCase();
+        return op === '=' ? a == b : op === '!=' || op === '<>' ? a != b : op === '>' ? a > b : op === '<' ? a < b : op === '>=' ? a >= b : op === '<=' ? a <= b : op === 'like' ? new RegExp('^' + b.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/%/g, '.*') + '$').test(a) : String(a).includes(b); }; };
+    const ors = wh.split(/ or /i).map(g => g.split(/ and /i).map(cond)); rows = rows.filter(r => ors.some(g => g.every(f => f(r))));
+  }
+  const items = sel.split(',').map(s => { const k = s.trim().match(/^(?:(count|sum|avg|min|max)\(([a-z_*]+)\)|([a-z_*]+))(?: as ([a-z_]+))?$/i); if (!k) throw new Error(`Cannot read “${s.trim()}”`); return { fn: k[1] && k[1].toLowerCase(), col: k[2] || k[3], as: k[4] || (k[1] ? `${k[1].toLowerCase()}(${k[2]})` : k[3]) }; });
+  const agg = items.some(i => i.fn);
+  if (T.zone === 'Restricted' && !agg && role !== 'auditor') throw new Error(`${tn} is restricted personal or financial data: use aggregates (COUNT, SUM, AVG) with GROUP BY`);
+  let out, note = '';
+  if (agg || gb) {
+    const loose = items.find(i => !i.fn && i.col !== gb); if (loose) throw new Error(`“${loose.col}” must be in GROUP BY or inside COUNT, SUM, AVG, MIN or MAX`);
+    const G = new Map(); rows.forEach(r => { const key = gb ? r[gb] : 'all'; if (gb && r[gb] === undefined) throw new Error(`No column “${gb}” in ${tn}`); (G.get(key) || G.set(key, []).get(key)).push(r); });
+    out = [...G.entries()].map(([key, rs]) => Object.fromEntries(items.map(i => { if (!i.fn) return [i.as, i.col === gb ? key : rs[0][i.col]]; const vs = rs.map(r => r[i.col]).filter(v => typeof v === 'number'); return [i.as, i.fn === 'count' ? rs.length : i.fn === 'sum' ? +suSum(vs).toFixed(2) : i.fn === 'avg' ? +suMean(vs).toFixed(3) : i.fn === 'min' ? Math.min(...vs) : Math.max(...vs)]; }).concat([['_n', rs.length]])));
+    if (T.zone === 'Restricted') { const small = out.filter(r => r._n < 10).length; out = out.filter(r => r._n >= 10); if (small) note = `${small} group${small === 1 ? '' : 's'} hidden: fewer than 10 people`; }
+    out.forEach(r => delete r._n);
+  } else out = rows.map(r => items[0].col === '*' ? r : Object.fromEntries(items.map(i => { if (r[i.col] === undefined) throw new Error(`No column “${i.col}” in ${tn}`); return [i.as, r[i.col]]; })));
+  if (ob) { const key = ob.toLowerCase(), alias = (items.find(i => i.as.toLowerCase() === key || (i.fn && `${i.fn}(${i.col})` === key)) || { as: ob }).as, s = dir && dir.toLowerCase() === 'desc' ? -1 : 1; out.sort((a, b) => (a[alias] > b[alias] ? 1 : a[alias] < b[alias] ? -1 : 0) * s); }
+  const total = out.length; out = out.slice(0, Math.min(500, lim ? +lim : 50));
+  return { table: tn.toLowerCase(), T, rows: out, total, note, cols: out.length ? Object.keys(out[0]) : items.map(i => i.as), agg };
+}
+
+/* rendering */
+const suTile = (l, v, s, c) => `<div${c ? ` class="${c}"` : ''}><span>${esc(l)}</span><b>${esc(v)}</b><span>${esc(s || '')}</span></div>`;
+const suTbl = (head, rows, cls) => `<div class="tbl-wrap"><table class="wb-table${cls ? ' ' + cls : ''}"><thead><tr>${head.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
+function suLine(series, opts) {
+  const W = opts.w || 560, H = opts.h || 200, l = 46, r = 10, t = 10, b = 24, all = series.flatMap(s => s.v.filter(v => v != null)).concat(opts.band ? opts.band.flatMap(x => [x[0], x[1]]) : []);
+  const y0 = opts.y0 != null ? opts.y0 : Math.min(...all) * .97, y1 = Math.max(...all) * 1.02, n = opts.n || Math.max(...series.map(s => s.v.length)), sx = i => l + i / Math.max(1, n - 1) * (W - l - r), sy = v => t + (y1 - v) / ((y1 - y0) || 1) * (H - t - b);
+  const ticks = [0, .5, 1].map(f => y0 + f * (y1 - y0));
+  return `<svg class="eg-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.label)}">${ticks.map(v => `<line x1="${l}" y1="${sy(v).toFixed(1)}" x2="${W - r}" y2="${sy(v).toFixed(1)}" style="stroke:var(--grid)"/><text x="${l - 6}" y="${(sy(v) + 4).toFixed(1)}" text-anchor="end" style="font:10px var(--f-mono);fill:var(--muted)">${esc(opts.fmt ? opts.fmt(v) : v.toFixed(0))}</text>`).join('')}
+    ${opts.band ? `<polygon points="${opts.band.map((x, i) => sx(opts.bandAt + i).toFixed(1) + ',' + sy(x[1]).toFixed(1)).join(' ')} ${opts.band.map((x, i) => sx(opts.bandAt + i).toFixed(1) + ',' + sy(x[0]).toFixed(1)).reverse().join(' ')}" style="fill:var(--accent);opacity:.14"/>` : ''}
+    ${(opts.x || []).map(([i, s]) => `<text x="${sx(i).toFixed(1)}" y="${H - 6}" text-anchor="middle" style="font:10px var(--f-mono);fill:var(--muted)">${esc(s)}</text>`).join('')}
+    ${series.map(s => `<polyline points="${s.v.map((v, i) => v == null ? null : sx((s.at || 0) + i).toFixed(1) + ',' + sy(v).toFixed(1)).filter(Boolean).join(' ')}" style="fill:none;stroke:${s.c};stroke-width:${s.w || 1.8}${s.dash ? ';stroke-dasharray:' + s.dash : ''}"/>`).join('')}
+    ${(opts.dots || []).map(([i, v, c, tt]) => `<circle cx="${sx(i).toFixed(1)}" cy="${sy(v).toFixed(1)}" r="4.5" style="fill:${c};stroke:var(--surface);stroke-width:1.5"><title>${esc(tt)}</title></circle>`).join('')}</svg>`;
+}
+function suHub() {
+  const T = suTables(), r = SU.qres;
+  return `<div class="su-two"><div class="box"><div class="box-h"><span><b>Query the central database</b></span><label class="su-role">Role <select id="suRole">${SU_ROLES.map(([k, n]) => `<option value="${k}"${k === SU.role ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select></label></div><div class="wb-body">
+      <label class="sr" for="suSql">SQL query</label><textarea id="suSql" class="su-sql" rows="3" spellcheck="false">${esc(SU.q || SU_EX[0])}</textarea>
+      <div class="row-btns"><button type="button" class="btn sm accent" data-suq>Run query</button>${r && r.rows ? '<button type="button" class="btn sm" data-sucsv>Download CSV</button>' : ''}</div>
+      <div class="chips">${SU_EX.map((x, i) => `<button type="button" class="chip" data-suex="${i}">${esc(x.replace(/^SELECT .*? FROM (\w+).*$/, (s, t) => t + ': ' + x.slice(7, 46) + '…'))}</button>`).join('')}</div>
+      <div id="suQres" aria-live="polite">${r ? r.err ? `<p class="small su-err">${esc(r.err)}</p>` : `<p class="tiny muted">${fmtInt(r.total)} row${r.total === 1 ? '' : 's'} from ${esc(r.table)}${r.total > r.rows.length ? `, first ${r.rows.length} shown` : ''}${r.note ? ' · ' + esc(r.note) : ''} · recorded on the ledger as an audit transaction</p>${suTbl(r.cols, r.rows.map(x => `<tr>${r.cols.map(c => `<td${typeof x[c] === 'number' ? ' class="mono"' : ''}>${esc(x[c] == null ? '—' : typeof x[c] === 'number' ? (Math.abs(x[c]) >= 1e4 ? fmtInt(x[c]) : x[c]) : x[c])}</td>`).join('')}</tr>`))}` : '<p class="tiny muted">Pick an example or write your own. Restricted tables answer only with aggregates of 10 or more people, and every query is recorded on the ledger.</p>'}</div></div></div>
+    <div class="box"><div class="box-h"><span><b>Data catalog</b></span><span>${Object.keys(T).length} tables</span></div>${suTbl(['Table', 'Rows', 'Owner', 'Zone', 'Comes from', 'You'], Object.entries(T).map(([k, t]) => `<tr><td class="mono"><button type="button" class="linkish mono" data-sutbl="${k}">${k}</button></td><td class="mono">${fmtInt(t.rows().length)}</td><td>${esc(t.owner)}</td><td><span class="su-z z-${t.zone.toLowerCase()}">${esc(t.zone)}</span></td><td>${esc(t.src)}</td><td>${t.roles.includes(SU.role) ? (t.zone === 'Restricted' && SU.role !== 'auditor' ? 'aggregates' : 'read') : 'no access'}</td></tr>`))}</div></div>`;
+}
+function suCrm() {
+  const P = suPipe(), sel = SU.opp || P.O.slice().sort((a, b) => b.value * b.p - a.value * a.p)[0], money = suMoney;
+  const cols = SU.stg.map((s, i) => { const L = P.O.filter(o => o.stage === i).sort((a, b) => b.value * b.p - a.value * a.p); return `<div class="su-col"><div class="su-col-h"><b>${esc(s)}</b><span class="mono tiny">${L.length} · ${esc(money(suSum(L.map(o => o.value))))}</span></div>${L.slice(0, 5).map(o => `<button type="button" class="su-opp${o === sel ? ' on' : ''}" data-suopp="${o.id}"><span class="mono tiny">${o.id} · ${esc(o.acc)}</span><b>${esc(o.prod[1])} · ${esc(money(o.value))}</b><span class="su-pbar" aria-hidden="true"><i style="width:${(o.p * 100).toFixed(0)}%"></i></span><span class="tiny">${egPct(o.p)} to win · ${esc(suOppNba(o))}</span></button>`).join('')}</div>`; }).join('');
+  const x = [1, sel.dm, sel.touch / 30, sel.comp, sel.disc / 10, sel.health / 100, sel.age / 100, sel.fit], names = ['', 'Decision makers engaged', 'Days since last contact', `Competing with ${SU_W.rival}`, 'Discount offered', 'Account health', 'Days open', 'Product fit'];
+  const avg = [1, 1.5, .4, .45, .6, .68, .85, .5], drv = x.map((v, i) => [names[i], SU.wo[i] * (v - avg[i])]).slice(1).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1])), dm = Math.max(...drv.map(d => Math.abs(d[1])), .01);
+  const risk = SU.acc.filter(a => a.health < 50 || a.endIn < 90).sort((a, b) => a.health - b.health).slice(0, 8);
+  return `<div class="ue-out su-k">${suTile('Pipeline', money(P.all), `${P.O.length} open deals`)}${suTile('Forecast, next 90 days', money(P.wt), 'value × predicted win chance', 'good')}${suTile('Commit · best case', `${money(P.commit)} · ${money(P.best)}`, '65% or higher · 35% or higher')}${suTile('Win model', 'AUC ' + SU.winAuc.toFixed(2), `on 180 closed deals it never saw · past win rate ${egPct(P.wr)}`)}</div>
+    <div class="su-board">${cols}</div>
+    <div class="su-two"><div class="box"><div class="box-h"><span><b>${esc(sel.id)}</b> · ${esc(sel.prod[1])} · ${esc(sel.acc)}</span><span>${egPct(sel.p)} to win</span></div><div class="wb-body">
+      <div class="rt-best"><span class="label">Next best action</span><b>${esc(suOppNba(sel))}</b><span class="rt-p">${esc(SU.stg[sel.stage])} · ${esc(money(sel.value))} a year · closes in about ${sel.close} days</span></div>
+      <div><span class="label">What moves the win chance (vs an average deal)</span><div class="rt-w">${drv.map(([n, v]) => `<div><span>${esc(n)}</span><span class="bar"><i style="width:${(Math.abs(v) / dm * 100).toFixed(0)}%;background:${v >= 0 ? 'var(--good)' : 'var(--crit)'}"></i></span><span class="mono tiny">${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(2)}</span></div>`).join('')}</div></div>
+      <div class="row-btns"><button type="button" class="btn sm accent" data-sutask="opp">Add the next step to my workspace</button></div></div></div>
+      <div class="box"><div class="box-h"><span><b>Accounts at risk</b></span><span>health under 50 or renewal within 90 days</span></div>${suTbl(['Account', 'Industry', 'Monthly', 'Health', 'Renewal'], risk.map(a => `<tr><td class="mono">${esc(a.id)}</td><td>${esc(a.ind)} · ${esc(a.size)}</td><td class="mono">${esc(money(a.mrr))}</td><td class="mono" style="color:${a.health < 50 ? 'var(--crit)' : 'inherit'}">${a.health}</td><td class="mono">${a.endIn} days</td></tr>`))}<p class="tiny muted" style="padding:8px 12px">Engagement AI picks the moment and action for each of these clients.</p></div></div>`;
+}
+function suFin() {
+  const F = suForecast(), A = suAnomalies(), ag = suAging(), money = v => suMoney(v * 1e6), sc = SU.scen, n = SU.rev.length;
+  const band = F.fc.map((v, i) => [v - 1.28 * F.sd * Math.sqrt(i + 1), v + 1.28 * F.sd * Math.sqrt(i + 1)]);
+  const chart = suLine([{ v: SU.rev, c: 'var(--ink-2)' }, { v: [SU.rev[n - 1]].concat(F.fc), at: n - 1, c: 'var(--accent)', w: 2.4, dash: '5 3' }], { label: 'Monthly revenue: 36 months of actuals and a 12-month forecast with an 80% band', n: n + 12, band, bandAt: n, fmt: v => money(v), x: [[0, suMonth(-36)], [24, suMonth(-12)], [n, suMonth(0)], [n + 11, suMonth(11)]] });
+  const amx = Math.max(...ag.map(a => a.v), 1);
+  return `<div class="su-bar"><label class="eg-sl">Price change <input type="range" data-susc="price" min="-10" max="10" step="1" value="${sc.price}"> <b class="mono">${sc.price > 0 ? '+' : ''}${sc.price}%</b></label><label class="eg-sl">Churn change <input type="range" data-susc="churn" min="-1" max="1" step=".1" value="${sc.churn}"> <b class="mono">${sc.churn > 0 ? '+' : ''}${(+sc.churn).toFixed(1)} pts</b></label><label class="eg-sl">Enterprise growth <input type="range" data-susc="ent" min="-10" max="20" step="1" value="${sc.ent}"> <b class="mono">${sc.ent > 0 ? '+' : ''}${sc.ent}%</b></label></div>
+    <div class="ue-out su-k">${suTile('Revenue, next 12 months', money(F.yF), `${F.growth >= 0 ? '+' : ''}${(F.growth * 100).toFixed(1)}% on the last 12 months`, 'good')}${suTile('EBITDA, next 12 months', money(suSum(F.ebitda)), `${Math.round((1 - F.costSh) * 100)}% margin at today’s cost ratio`)}${suTile('Forecast error (backtest)', F.mape.toFixed(1) + '%', `MAPE over 6 held-out months, vs ${F.mapeN.toFixed(1)}% for last year’s same month`)}${suTile('Anomaly detection', `${Math.round(A.rec * 100)}% found`, `${A.tp} of ${A.tp + A.fn} planted incidents · ${A.fp} false alarm${A.fp === 1 ? '' : 's'}`)}</div>
+    <div class="su-two"><div class="box"><div class="box-h"><span><b>Revenue forecast</b> · Holt-Winters by line</span><span>80% band</span></div><div class="wb-body">${chart}
+      ${suTbl(['Line', 'Last 12 months', 'Next 12 months', 'Change', 'Backtest error'], F.lines.map(l => { const a = suSum(l.y.slice(-12)), f = suSum(l.fc); return `<tr><td>${esc(l.n)}</td><td class="mono">${esc(money(a))}</td><td class="mono">${esc(money(f))}</td><td class="mono">${f >= a ? '+' : ''}${((f / a - 1) * 100).toFixed(1)}%</td><td class="mono">${l.mape.toFixed(1)}%</td></tr>`; }))}</div></div>
+      <div class="box"><div class="box-h"><span><b>Anomalies</b> · last 124 days</span><span>robust z ≥ 4</span></div><div class="wb-body"><ul class="su-anl">${A.flags.slice(0, 8).map((f, i) => `<li class="${f.hit ? '' : 'fp'}"><span class="mono tiny">${esc(suDay(f.d - 180))}</span><b>${esc(f.n)}: ${f.v > f.base ? '+' : '−'}${Math.abs((f.v / f.base - 1) * 100).toFixed(0)}% vs expected</b><span class="tiny muted">${esc(f.why)} · z ${f.z.toFixed(1)}</span><span class="row-btns"><button type="button" class="btn sm" data-suan="${i}">Investigate</button></span></li>`).join('')}</ul>
+      <p class="tiny muted">Each day is compared with the median of the same weekday over the previous 8 weeks; a robust z-score of 4 or more is flagged. Planted incidents let the detector be scored: ${Math.round(A.prec * 100)}% precision, ${Math.round(A.rec * 100)}% recall.</p></div></div></div>
+    <div class="box"><div class="box-h"><span><b>Receivables by age</b></span><span>${fmtInt(suSum(ag.map(a => a.c)))} open invoices</span></div><div class="wb-body">${ag.map(a => `<div class="rt-bar"><span>${esc(a.n)}</span><span class="bar"><i style="width:${(a.v / amx * 100).toFixed(1)}%;background:${/90/.test(a.n) ? 'var(--crit)' : /61|31/.test(a.n) ? 'var(--signal)' : 'var(--accent)'}"></i></span><b class="mono">${esc(suMoney(a.v))}</b></div>`).join('')}</div></div>`;
+}
+function suScm() {
+  const P = suPlan(), sel = SU.item ? P.find(r => r.it === SU.item) : P.filter(r => r.status !== 'OK').sort((a, b) => a.cover - b.cover)[0] || P[0], money = suMoney;
+  const need = P.filter(r => r.status === 'Reorder' || r.status === 'Stockout risk'), val = suSum(P.map(r => r.it.onHand * r.it.cost));
+  const it = sel.it, chart = suLine([{ v: it.y, c: 'var(--ink-2)', w: 1.2 }, { v: [it.y[it.y.length - 1]].concat(sel.f.fc), at: it.y.length - 1, c: 'var(--accent)', w: 2.2, dash: '5 3' }], { label: 'Daily demand: 120 days and a 30-day forecast', n: 150, y0: 0, band: sel.f.fc.map(v => [Math.max(0, v - 1.28 * sel.f.sd), v + 1.28 * sel.f.sd]), bandAt: 120, fmt: v => v < 10 ? v.toFixed(1) : fmtInt(v), x: [[0, suDay(-120)], [119, 'today'], [149, suDay(30)]] });
+  const cls = s => s === 'Stockout risk' ? 'crit' : s === 'Reorder' ? 'warn' : s === 'Overstock' ? 'muted' : 'ok';
+  return `<div class="su-bar"><span class="label">Service level</span><div class="seg-btns" role="group" aria-label="Service level">${[.9, .95, .99].map(v => `<button type="button" data-susl="${v}" aria-pressed="${SU.sl === v}">${Math.round(v * 100)}%</button>`).join('')}</div><span class="small muted">The chance of not running out while an order is on its way; higher means more safety stock.</span></div>
+    <div class="ue-out su-k">${suTile('Need an order', fmtInt(need.length), `of ${P.length} items across ${SU_W.wh.length} warehouses`, need.length ? 'bad' : 'good')}${suTile('Stockout risk', fmtInt(P.filter(r => r.status === 'Stockout risk').length), 'will run out before a new order arrives')}${suTile('Stock value', money(val), 'on hand, at cost')}${suTile('Orders placed here', fmtInt(SU.pos.length), 'each goes to the ledger and the escrow contract')}</div>
+    <div class="su-two"><div class="box"><div class="box-h"><span><b>${esc(it.n)}</b> · ${esc(it.wh)}</span><span>${esc(sel.status)}</span></div><div class="wb-body">${chart}
+      <div class="ue-out">${suTile('Daily demand', sel.mu < 10 ? sel.mu.toFixed(1) : fmtInt(sel.mu), 'forecast average')}${suTile('Reorder point', fmtInt(sel.rop), `${it.lt}-day lead time + ${fmtInt(sel.ss)} safety stock`)}${suTile('Order size', fmtInt(sel.eoq), 'economic order quantity')}</div>
+      ${sel.qty ? `<div class="row-btns"><button type="button" class="btn sm accent" data-supo="${esc(it.sku + '|' + it.wh)}">Create a purchase order for ${fmtInt(sel.qty)}</button></div>` : ''}</div></div>
+      <div class="box"><div class="box-h"><span><b>Suppliers</b></span><span>risk 0–100</span></div>${suTbl(['Supplier', 'Category', 'Region', 'On time', 'Quality', 'Lead time', 'Risk'], SU.sup.slice().sort((a, b) => b.risk - a.risk).map(s => `<tr><td class="mono">${s.id}</td><td>${esc(s.cat)}${s.single ? ' · single source' : ''}</td><td>${esc(s.region)}</td><td class="mono">${Math.round(s.ot * 100)}%</td><td class="mono">${(s.ql * 100).toFixed(1)}%</td><td class="mono">${s.lt} d</td><td class="mono" style="color:${s.risk >= 50 ? 'var(--crit)' : 'inherit'}">${s.risk}</td></tr>`))}</div></div>
+    <div class="box"><div class="box-h"><span><b>Stock plan</b> · every item in every warehouse</span><span>${Math.round(SU.sl * 100)}% service level</span></div>${suTbl(['Item', 'Warehouse', 'On hand', 'Days of cover', 'Reorder point', 'Status', 'Suggested order', ''], P.slice().sort((a, b) => ['Stockout risk', 'Reorder', 'OK', 'Overstock'].indexOf(a.status) - ['Stockout risk', 'Reorder', 'OK', 'Overstock'].indexOf(b.status) || a.cover - b.cover).map(r => `<tr${r === sel ? ' class="su-on"' : ''}><td><button type="button" class="linkish" data-suitem="${esc(r.it.sku + '|' + r.it.wh)}">${esc(r.it.n)}</button></td><td>${esc(r.it.wh)}</td><td class="mono">${fmtInt(r.it.onHand)}</td><td class="mono">${r.cover.toFixed(0)}</td><td class="mono">${fmtInt(r.rop)}</td><td><span class="su-st ${cls(r.status)}">${esc(r.status)}</span></td><td class="mono">${r.qty ? fmtInt(r.qty) : '—'}</td><td>${r.qty ? `<button type="button" class="btn sm" data-supo="${esc(r.it.sku + '|' + r.it.wh)}">Order</button>` : ''}</td></tr>`))}</div>`;
+}
+function suLedgerHtml() {
+  const L = SU.led;
+  if (!L) return '<p class="small muted">Starting the validator nodes…</p>';
+  if (L.off) return '<p class="small">This browser has no Web Crypto here, so the ledger cannot run. Open the public site over HTTPS.</p>';
+  const V = L.verified, bad = V && !V.ok ? V.out.find(o => o.h === V.broken) : null;
+  const blocks = L.chain.slice().reverse().map(b => { const st = V ? (V.out.find(o => o.h === b.h) || {}).why : null; return `<div class="su-blk${st && st.length ? ' bad' : V ? ' ok' : ''}"><span class="mono tiny">#${b.h} · ${new Date(b.at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span><b class="mono">${b.hash.slice(0, 12)}…</b><span class="tiny muted mono">prev ${b.prev.slice(0, 8)}…</span><span class="tiny">${b.n} transaction${b.n === 1 ? '' : 's'}: ${esc([...new Set(b.txs.map(t => t.type.replace(/_/g, ' ')))].join(', '))}</span><span class="su-sigs" title="Validator signatures">${b.sigs.map(s => `<i class="${s.sig ? 'y' : 'n'}" title="${esc(s.n)}: ${s.sig ? 'signed' : esc(s.no)}"></i>`).join('')}</span></div>`; }).join('');
+  const C = SU_CONTRACTS.map(c => { const st = SU.ab[c.k] || {}; let inp = '';
+    if (c.k === 'sla') inp = `<label class="eg-sl">Client <select data-suci="sla:account">${SU.acc.slice(0, 12).map(a => `<option value="${a.id}"${st.account === a.id ? ' selected' : ''}>${a.id} · ${esc(a.ind)}</option>`).join('')}</select></label><label class="eg-sl">Uptime <input type="range" data-suci="sla:uptime" min="99.4" max="100" step=".01" value="${st.uptime || 99.72}"> <b class="mono">${(+(st.uptime || 99.72)).toFixed(2)}%</b></label>`;
+    if (c.k === 'escrow') inp = `<label class="eg-sl">Order <select data-suci="escrow:po">${SU.pos.length ? SU.pos.map(p => `<option value="${p.id}"${st.po === p.id ? ' selected' : ''}>${p.id} · ${esc(p.n)}</option>`).join('') : '<option value="">Create one in Supply chain</option>'}</select></label>${['warehouse', 'quality', 'finance'].map(q => `<label class="eg-sl"><input type="checkbox" data-suci="escrow:${q}"${st[q] ? ' checked' : ''}> ${q[0].toUpperCase() + q.slice(1)}</label>`).join('')}<label class="eg-sl">Invoice vs order <input type="range" data-suci="escrow:inv" min="0" max="12" step="1" value="${st.inv || 0}"> <b class="mono">+${st.inv || 0}%</b></label>`;
+    if (c.k === 'roam') inp = `<label class="eg-sl">Gap between the two records <input type="range" data-suci="roam:gap" min="0" max="5" step=".1" value="${st.gap || .6}"> <b class="mono">${(+(st.gap || .6)).toFixed(1)}%</b></label>`;
+    if (c.k === 'data') inp = `<label class="eg-sl">Request <select data-suci="data:req">${SU_DREQ.map(r => `<option value="${r[0]}"${st.req === r[0] ? ' selected' : ''}>${esc(r[1])}</option>`).join('')}</select></label>`;
+    return `<div class="box su-ct"><div class="box-h"><span><b>${esc(c.n)}</b></span><span>${esc(c.who)}</span></div><div class="wb-body"><p class="small">${esc(c.terms)}</p><details><summary class="small">Contract code</summary><pre class="su-code">${esc(c.code)}</pre></details><div class="su-bar">${inp}</div><div class="row-btns"><button type="button" class="btn sm accent" data-surun="${c.k}">Execute</button></div>${st.ev ? `<ul class="cxl small">${st.ev.map(e => `<li>${esc(e)}</li>`).join('')}</ul>` : ''}</div></div>`; }).join('');
+  return `<div class="su-nodes">${L.nodes.map(N => `<div><b>${esc(N.n)}</b><span class="mono tiny">key ${N.fp}</span><span class="tiny muted">validator · ECDSA P-256</span></div>`).join('')}</div>
+    <div class="su-bar"><button type="button" class="btn sm accent" data-suverify>Verify the whole chain</button><button type="button" class="btn sm" data-sutamper${L.saved ? ' disabled' : ''}>Tamper with a payment</button>${L.saved ? '<button type="button" class="btn sm" data-surestore>Undo the tampering</button>' : ''}<span class="small${V ? V.ok ? ' su-okt' : ' su-err' : ' muted'}" aria-live="polite">${V ? V.ok ? `All ${L.chain.length} blocks verified: hashes, Merkle roots, links and ${L.chain.length * 3}+ signatures` : `Block #${V.broken} fails: ${bad.why.join('; ')}. Every validator would reject it.` : `${L.chain.length} blocks sealed. Verify recomputes every hash and checks every signature.`}</span></div>
+    <div class="su-chain" aria-label="Blocks, newest first">${blocks}</div>
+    <div class="su-two"><div class="box"><div class="box-h"><span><b>Waiting to be sealed</b></span><span>${L.pool.length} transaction${L.pool.length === 1 ? '' : 's'}</span></div><div class="wb-body">${L.pool.length ? `<ul class="cxl small">${L.pool.slice(-8).map(t => `<li><span class="mono">${t.id}</span> · ${esc(t.type.replace(/_/g, ' '))} · ${esc(t.by)}${t.data.amount ? ' · ' + esc(suMoney(t.data.amount)) : ''}</li>`).join('')}</ul>` : '<p class="small muted">Queries, purchase orders, contract runs and gate decisions land here.</p>'}<div class="row-btns"><button type="button" class="btn sm accent" data-suseal${L.pool.length ? '' : ' disabled'}>Seal a block (3 of 4 signatures)</button></div>
+      ${L.rejected.length ? `<p class="small"><b>Rejected by the validators</b></p><ul class="cxl small su-rej">${L.rejected.slice(0, 4).map(r => `<li><span class="mono">${r.t.id}</span> ${esc(r.t.type.replace(/_/g, ' '))}: ${esc(r.why.map(w => w[0] + ': ' + w[1]).join('; '))}</li>`).join('')}</ul>` : ''}</div></div>
+      <div class="box"><div class="box-h"><span><b>How it secures the platform</b></span></div><div class="wb-body small"><ul class="cxl"><li>Every block holds the hash of the one before it, so changing any past record breaks every link after it.</li><li>Four validators in different teams each re-check a block before signing; it needs three. No single team can approve its own transaction.</li><li>Finance and audit refuse invoices that fail the 3-way match; legal refuses row-level access to personal data.</li><li>Data-hub queries, purchase orders, contract payments and approved decisions are recorded, giving auditors one tamper-evident trail.</li></ul><p class="tiny muted">A permissioned ledger with no cryptocurrency and no mining. In a pilot it runs on the operator’s own nodes (for example Hyperledger Fabric) across separate data centres.</p></div></div></div>
+    <h4 class="su-h4">Smart contracts</h4><div class="su-cts">${C}</div>`;
+}
+function suInno() {
+  const V = SU.ideas.map(I => Object.assign({ I }, suIdeaVal(I))).sort((a, b) => b.I.rice - a.I.rice), sel = V.find(v => v.I === SU.idea) || V[0], G = ['Ideation', 'Concept', 'Business case', 'Pilot', 'Launch'];
+  const chart = suLine(V.slice(0, 4).map((v, i) => ({ v: v.curve.map(x => x / v.I.m * 100), c: ['var(--accent)', 'var(--cx-1)', 'var(--cx-2)', 'var(--cx-3)'][i], w: v === sel ? 2.8 : 1.6 })), { label: 'Share of the market reached over 60 months (Bass diffusion)', n: 60, y0: 0, fmt: v => v.toFixed(0) + '%', x: [[0, 'month 1'], [29, 'month 30'], [59, 'month 60']] });
+  return `<div class="su-gates">${G.map(g => `<div><b>${V.filter(v => v.I.stage === g).length}</b><span>${esc(g)}</span></div>`).join('')}</div>
+    <div class="su-two"><div class="box"><div class="box-h"><span><b>Product pipeline</b> · ranked by RICE</span><span>NPV at ${SU.wacc}%</span></div>${suTbl(['Idea', 'Stage', 'RICE', 'Users in 5 years', 'NPV', ''], V.map(v => `<tr${v === sel ? ' class="su-on"' : ''}><td><button type="button" class="linkish" data-suidea="${v.I.k}">${esc(v.I.n)}</button></td><td>${esc(v.I.stage)}</td><td class="mono">${v.I.rice}</td><td class="mono">${fmtInt(v.users5)}</td><td class="mono" style="color:${v.npv < 0 ? 'var(--crit)' : 'inherit'}">${esc(suMoney(v.npv))}</td><td>${v.I.stage !== 'Launch' ? `<button type="button" class="btn sm" data-sugate="${v.I.k}">Advance</button>` : ''}</td></tr>`))}</div>
+      <div class="box"><div class="box-h"><span><b>Adoption forecast</b> · top 4</span><span>Bass model</span></div><div class="wb-body">${chart}<div class="eg-leg">${V.slice(0, 4).map((v, i) => `<span><i class="eg-sw" style="background:${['var(--accent)', 'var(--cx-1)', 'var(--cx-2)', 'var(--cx-3)'][i]}"></i>${esc(v.I.n)}</span>`).join('')}</div>
+        <p class="small"><b>${esc(sel.I.n)}</b>: ${fmtInt(sel.users5)} ${esc(sel.I.unit === 'Enterprise' || sel.I.price > 1000 ? 'sites or clients' : 'users')} after 5 years (${Math.round(sel.users5 / sel.I.m * 100)}% of a market of ${fmtInt(sel.I.m)}), NPV ${esc(suMoney(sel.npv))} after a build cost of ${esc(suMoney(sel.I.build))}.</p>
+        <p class="tiny muted">The Bass model splits adoption into innovators (p = ${sel.I.p}) who buy on their own and imitators (q = ${sel.I.q}) who follow others. RICE = reach × impact × confidence ÷ effort. Advancing a stage gate is recorded on the ledger.</p></div></div></div>`;
+}
+function suValueHtml() {
+  const V = suValue(), money = suMoney, mx = Math.max(...V.rows.map(r => Math.abs(r.npv)), 1);
+  let cum = 0; const cumS = V.cf.map(c => (cum += c));
+  const chart = suLine([{ v: cumS.map(v => v / 1e6), c: 'var(--accent)', w: 2.4 }], { label: 'Cumulative cash flow of all seven systems, years 0 to 5', n: 6, fmt: v => money(v * 1e6), x: V.cf.map((_, i) => [i, 'Year ' + i]), dots: cumS.map((v, i) => [i, v / 1e6, v >= 0 ? 'var(--good)' : 'var(--crit)', `Year ${i}: ${money(v)}`]) });
+  return `<div class="su-bar"><label class="eg-sl">Discount rate (WACC) <input type="range" data-suwacc min="5" max="15" step=".5" value="${SU.wacc}"> <b class="mono">${SU.wacc}%</b></label><span class="small muted">Benefits come from ${esc(SU_W.op)}’s own figures in Finance & ERP; adoption ramps 40%, 80%, then 100%.</span></div>
+    <div class="ue-out su-k">${suTile('Net present value, 5 years', money(V.npv), 'all seven systems', V.npv >= 0 ? 'good' : 'bad')}${suTile('Internal rate of return', V.irr == null ? '—' : Math.round(V.irr * 100) + '%', 'on the combined cash flows')}${suTile('Investment', money(V.build), 'build or licence, year 0')}${suTile('Revenue base', money(V.Y.rev), 'last 12 months')}</div>
+    <div class="su-two"><div class="box"><div class="box-h"><span><b>Business value by system</b></span></div>${suTbl(['System', 'Where the value comes from', 'Benefit a year', 'NPV', 'IRR', 'Payback'], V.rows.map(r => `<tr><td><b>${esc(r.n)}</b></td><td class="small">${esc(r.why)}</td><td class="mono">${esc(money(r.b))}</td><td><span class="su-npv"><i style="width:${(Math.abs(r.npv) / mx * 100).toFixed(0)}%;background:${r.npv >= 0 ? 'var(--good)' : 'var(--crit)'}"></i></span><span class="mono">${esc(money(r.npv))}</span></td><td class="mono">${r.irr == null ? '—' : Math.round(r.irr * 100) + '%'}</td><td class="mono">${r.pay == null ? 'over 5 y' : r.pay.toFixed(1) + ' y'}</td></tr>`))}</div>
+      <div class="box"><div class="box-h"><span><b>Cumulative cash flow</b></span></div><div class="wb-body">${chart}<p class="tiny muted">Benefit assumptions are stated per system and are illustrative; a pilot replaces them with measured results from the operator’s data.</p></div></div></div>`;
+}
+// market functions: our own command set for a professional market terminal, run here or in the terminals
+const SU_FN = [['COMP', 'COMP stc', 'Relative valuation', 'An operator against its regional peers: value, revenue, value-to-revenue, growth, subscribers'], ['SCRN', 'SCRN region=gulf growth>3', 'Screener', 'Filter 108 operators by region, value, revenue, growth and subscribers'],
+  ['WATCH', 'WATCH add stc', 'Watchlist', 'Keep operators on a list with their latest value, growth and moves'], ['CAL', 'CAL gulf', 'Market events', 'Recent and coming events by market: offerings, exits, spectrum and licences'],
+  ['OP', 'OP du', 'Operator profile', 'Owners, value, revenue, strengths, weaknesses and recent moves'], ['CO', 'CO KKR', 'Company or investor', 'Competitors and investors with their stakes'], ['MCAP', 'MCAP 10', 'Largest by value', 'Largest telecom and intelligence companies by market value'], ['MOVERS', 'MOVERS', 'Movers', 'Biggest risers and fallers in market value'],
+  ['DEALS', 'DEALS 8', 'Deals', 'Latest capital deals: mergers, stakes and offerings'], ['NEWS', 'NEWS telecom spectrum auction', 'News', 'Live news search'], ['FX', 'FX usd', 'Currencies', 'Live exchange rates'], ['WB', 'WB mobile gulf', 'Economics', 'World Bank indicators by region'],
+  ['SQL', 'SQL SELECT region, COUNT(*) FROM operators GROUP BY region', 'Data hub query', 'Query the central database from the command line'], ['FCST', 'FCST', 'Financial forecast', 'Revenue and EBITDA for the next 12 months'], ['ANOM', 'ANOM', 'Anomalies', 'The latest anomalies in revenue, fraud, refunds and network'],
+  ['PIPE', 'PIPE', 'Sales pipeline', 'Deals most worth chasing, with win chance and next step'], ['STOCK', 'STOCK', 'Stock plan', 'Items to reorder and stockout risks'], ['LEDGER', 'LEDGER verify', 'Ledger', 'Verify the chain, or show its status']];
+const SU_WKEY = 'cv.watch.v1';
+let SU_WATCH = []; try { SU_WATCH = JSON.parse(localStorage.getItem(SU_WKEY) || '[]'); } catch (e) { /* this visit only */ }
+const suOpFind = a => { const s = a.trim().toLowerCase(); return POS && s ? POS.operators.find(o => (o.short || '').toLowerCase() === s || o.id === s) || POS.operators.find(o => o.name.toLowerCase().includes(s)) : null; };
+const suBn = v => v == null ? '—' : '$' + (v / 1e9).toFixed(v >= 1e10 ? 0 : 1) + 'bn';
+function suMktCmd(C, arg) {
+  if (!POS && ['COMP', 'SCRN', 'WATCH', 'CAL'].includes(C)) return ['Operator data is not loaded on this page.'];
+  if (C === 'COMP') {
+    const o = suOpFind(arg) || suOpFind('stc'); const peers = POS.operators.filter(p => p.region === o.region && p.mcap && p.mcap.usd).sort((a, b) => b.mcap.usd - a.mcap.usd).slice(0, 10);
+    const mult = p => p.rev && p.rev.usd ? p.mcap.usd / p.rev.usd : null, med = suMed(peers.map(mult).filter(v => v != null)), m = mult(o);
+    return [`${o.short || o.name} vs ${o.region} peers (value · revenue · value/revenue · growth · subscribers):`, ...peers.map(p => `${p === o ? '▶ ' : '  '}${(p.short || p.name).padEnd(14).slice(0, 14)} ${suBn(p.mcap.usd).padStart(7)} ${suBn(p.rev && p.rev.usd).padStart(7)} ${mult(p) == null ? '   —' : (mult(p).toFixed(1) + '×').padStart(5)} ${p.growth && p.growth.v != null ? (p.growth.v + '%').padStart(6) : '     —'} ${p.subs && typeof p.subs.v === 'number' ? p.subs.v + 'm' : ''}`), m != null ? `${o.short || o.name} trades at ${m.toFixed(1)}× revenue vs a peer median of ${med.toFixed(1)}×${m > med * 1.1 ? ': a premium' : m < med * .9 ? ': a discount' : ''}.` : 'No revenue figure to compare.'];
+  }
+  if (C === 'SCRN') {
+    const cs = arg.toLowerCase().split(/\s+/).filter(Boolean).map(c => c.match(/^(region|country|mcap|rev|growth|subs)(>=|<=|=|>|<)(.+)$/)).filter(Boolean);
+    const val = (o, k) => k === 'region' ? o.region.toLowerCase() : k === 'country' ? o.country.toLowerCase() : k === 'mcap' ? (o.mcap && o.mcap.usd || 0) / 1e9 : k === 'rev' ? (o.rev && o.rev.usd || 0) / 1e9 : k === 'growth' ? (o.growth && o.growth.v != null ? o.growth.v : -99) : (o.subs && o.subs.v != null ? o.subs.v : 0);
+    const L = POS.operators.filter(o => cs.every(([, k, op, v]) => { const x = val(o, k); if (typeof x === 'string') return x.includes(v); v = +v; return op === '>' ? x > v : op === '<' ? x < v : op === '>=' ? x >= v : op === '<=' ? x <= v : x === v; })).sort((a, b) => (b.mcap && b.mcap.usd || 0) - (a.mcap && a.mcap.usd || 0));
+    return cs.length ? [`${L.length} operator${L.length === 1 ? '' : 's'} match (${arg}); value in $bn:`, ...L.slice(0, 15).map(o => `${(o.short || o.name).padEnd(16).slice(0, 16)} ${o.country.padEnd(14).slice(0, 14)} ${suBn(o.mcap && o.mcap.usd).padStart(7)} growth ${o.growth && o.growth.v != null ? o.growth.v + '%' : '—'}`)] : ['Example: SCRN region=gulf growth>3 mcap>10 (mcap and rev in $bn, growth in %, subs in millions)'];
+  }
+  if (C === 'WATCH') {
+    const [act, ...rest] = arg.split(' '), o = suOpFind(rest.join(' '));
+    if (/^add$/i.test(act) && o) { if (!SU_WATCH.includes(o.id)) SU_WATCH.push(o.id); }
+    else if (/^(remove|rm)$/i.test(act) && o) SU_WATCH = SU_WATCH.filter(x => x !== o.id);
+    try { localStorage.setItem(SU_WKEY, JSON.stringify(SU_WATCH)); } catch (e) { /* this visit only */ }
+    const L = SU_WATCH.map(id => POS.operators.find(p => p.id === id)).filter(Boolean);
+    return L.length ? [`Watchlist (${L.length}):`, ...L.map(p => `${(p.short || p.name).padEnd(14).slice(0, 14)} ${suBn(p.mcap && p.mcap.usd).padStart(7)} growth ${p.growth && p.growth.v != null ? p.growth.v + '%' : '—'} · ${(mv => !mv ? 'no recent move' : (Array.isArray(mv) ? mv.join(': ') : mv.t || mv.text || String(mv)).slice(0, 80))(p.moves && p.moves[0])}`)] : ['The watchlist is empty. WATCH add stc adds an operator.'];
+  }
+  if (C === 'CAL') {
+    const a = arg.toLowerCase(), M = POS.markets.filter(m => !a || m.region.toLowerCase().includes(a) || m.country.toLowerCase().includes(a));
+    const ev = M.flatMap(m => (m.events || []).map(e => `${m.country.padEnd(14).slice(0, 14)} ${e}`));
+    return ev.length ? [`${ev.length} market event${ev.length === 1 ? '' : 's'}${a ? ' for ' + arg : ''}:`, ...ev.slice(0, 20)] : [`No events found for “${arg}”.`];
+  }
+  suEnsure();
+  if (C === 'SQL') { try { const r = suSql(arg, SU.role); suLogQuery(arg, r); return [`${r.total} rows from ${r.table}${r.note ? ' · ' + r.note : ''}`, r.cols.join(' | '), ...r.rows.slice(0, 15).map(x => r.cols.map(c => x[c]).join(' | '))]; } catch (e) { return [e.message]; } }
+  if (C === 'FCST') { const F = suForecast(); return [`Revenue, next 12 months: ${suMoney(F.yF * 1e6)} (${F.growth >= 0 ? '+' : ''}${(F.growth * 100).toFixed(1)}%) · EBITDA ${suMoney(suSum(F.ebitda) * 1e6)} · backtest error ${F.mape.toFixed(1)}%`, ...F.lines.map(l => `${l.n}: ${suMoney(suSum(l.fc) * 1e6)}`)]; }
+  if (C === 'ANOM') { const A = suAnomalies(); return [`${A.flags.length} anomalies flagged · precision ${Math.round(A.prec * 100)}% · recall ${Math.round(A.rec * 100)}%`, ...A.flags.slice(0, 8).map(f => `${suDay(f.d - 180)} ${f.n}: ${f.v > f.base ? '+' : '−'}${Math.abs((f.v / f.base - 1) * 100).toFixed(0)}% (z ${f.z.toFixed(1)}) · ${f.why}`)]; }
+  if (C === 'PIPE') { const P = suPipe(); return [`Pipeline ${suMoney(P.all)} · 90-day forecast ${suMoney(P.wt)} · commit ${suMoney(P.commit)}`, ...P.O.slice().sort((a, b) => b.value * b.p - a.value * a.p).slice(0, 8).map(o => `${o.id} ${o.prod[1]} · ${SU.stg[o.stage]} · ${suMoney(o.value)} · ${egPct(o.p)} · ${suOppNba(o)}`)]; }
+  if (C === 'STOCK') { const P = suPlan().filter(r => r.status !== 'OK' && r.status !== 'Overstock').sort((a, b) => a.cover - b.cover); return P.length ? [`${P.length} items need an order (${Math.round(SU.sl * 100)}% service level):`, ...P.slice(0, 10).map(r => `${r.status.padEnd(13)} ${r.it.n} · ${r.it.wh} · ${r.cover.toFixed(0)} days of cover · order ${fmtInt(r.qty)}`)] : ['No item needs an order.']; }
+  return null;
+}
+async function suLedgerCmd(arg) {
+  suEnsure(); await suLedInit(); const L = SU.led; if (L.off) return ['The ledger needs Web Crypto (HTTPS).'];
+  if (/verify/i.test(arg)) { const V = await suVerify(); if ($('#suApp') && SU.tab === 'ledger') suRender(); return [V.ok ? `Verified ${L.chain.length} blocks: every hash, Merkle root, link and signature checks out.` : `Block #${V.broken} fails: ${V.out.find(o => o.h === V.broken).why.join('; ')}`]; }
+  return [`${L.chain.length} blocks · ${suSum(L.chain.map(b => b.n))} transactions · ${L.pool.length} waiting · ${L.rejected.length} rejected`, `Latest block #${L.chain[L.chain.length - 1].h} ${L.chain[L.chain.length - 1].hash.slice(0, 24)}…`, 'LEDGER verify checks the whole chain.'];
+}
+const suLogQuery = (q, r) => suPool(suTx('data_access', 'Data hub', { query: q.slice(0, 120), table: r.table, role: SU.role, rows: r.total, aggregate: r.agg, restricted: r.T.zone === 'Restricted' }));
+function suMkt() {
+  return `<div class="su-two"><div class="box"><div class="box-h"><span><b>Function directory</b></span><span>${SU_FN.length} functions</span></div>${suTbl(['Code', 'Function', 'What it does', ''], SU_FN.map(([c, ex, n, d]) => `<tr><td class="mono"><b>${c}</b></td><td>${esc(n)}</td><td class="small">${esc(d)}</td><td><button type="button" class="btn sm" data-sufn="${esc(ex)}">Run</button></td></tr>`), 'su-fnt')}</div>
+    <div class="box"><div class="box-h"><span><b>Run a function</b></span></div><div class="wb-body"><form class="tm-cmd" data-sufm><label for="suFnIn" class="sr">Function</label><span aria-hidden="true">CV&gt;</span><input id="suFnIn" autocomplete="off" spellcheck="false" placeholder="COMP stc · SCRN region=gulf growth>3 · CAL uae"></form><pre class="su-out" id="suFnOut" aria-live="polite">${esc(SU.fnOut || 'Type a code and press Enter. Functions marked live (NEWS, FX, WB) open in the terminals.')}</pre>
+      <p class="tiny muted">Our own command set, built for operators: valuation, screening, watchlists and events from Cellvoyant’s sourced data on 108 operators and 140 companies, with live news, currencies and economics.</p></div></div></div>`;
+}
+function suRender() {
+  if (!$('#suApp')) return; suEnsure();
+  $$('#suTabs [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === SU.tab)));
+  const t = SU.tab, el = $('#suBody');
+  el.innerHTML = t === 'hub' ? suHub() : t === 'crm' ? suCrm() : t === 'fin' ? suFin() : t === 'scm' ? suScm() : t === 'ledger' ? suLedgerHtml() : t === 'inno' ? suInno() : t === 'value' ? suValueHtml() : suMkt();
+  if (t === 'ledger' && !SU.led) suLedInit().then(() => { if (SU.tab === 'ledger') suRender(); });
+  $('#suSum').innerHTML = suSumHtml();
+}
+function suSumHtml() {
+  const F = suForecast(), A = suAnomalies(), P = suPipe(), S = suPlan(), L = SU.led;
+  return [[suMoney(F.yF * 1e6), 'revenue forecast for the next 12 months'], [fmtInt(A.flags.length), 'anomalies flagged in 124 days of operations'], [suMoney(P.wt), 'sales forecast for the next 90 days'], [fmtInt(S.filter(r => r.status === 'Reorder' || r.status === 'Stockout risk').length), 'stock items that need an order', S.some(r => r.status === 'Stockout risk') ? 'hot' : ''], [L && !L.off ? fmtInt(L.chain.length) : '…', 'ledger blocks, each signed by 3 or more validators']]
+    .map(([v, l, c]) => `<div${c ? ` class="${c}"` : ''}><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join('');
+}
+async function suFnRun(cmd) {
+  const sp = cmd.indexOf(' '), C = (sp < 0 ? cmd : cmd.slice(0, sp)).toUpperCase(), arg = sp < 0 ? '' : cmd.slice(sp + 1).trim();
+  const out = C === 'LEDGER' ? await suLedgerCmd(arg) : suMktCmd(C, arg);
+  if (out) { SU.fnOut = `CV> ${cmd}\n` + out.join('\n'); const o = $('#suFnOut'); if (o) o.textContent = SU.fnOut; return; }
+  if (typeof tmCmd === 'function' && $('#tmApp')) { findGo($('#terminals')); await tmCmd(cmd); }
+}
+
+function suRunQuery() {
+  try { const r = suSql(SU.q, SU.role); SU.qres = r; suLogQuery(SU.q, r); } catch (err) { SU.qres = { err: err.message }; }
+  suRender();
+}
+function suCreatePo(key, btn) {
+  const [sku, wh] = key.split('|'), r = suPlan().find(x => x.it.sku === sku && x.it.wh === wh); if (!r || !r.qty) return;
+  const p = { id: 'PO-' + (7101 + SU.pos.length), sku, wh, n: r.it.n, qty: r.qty, amount: Math.round(r.qty * r.it.cost), sup: r.it.sup, state: 'ordered' };
+  SU.pos.push(p); r.it.onOrder += r.qty; SU.ab.escrow = Object.assign(SU.ab.escrow || {}, { po: p.id, ev: null });
+  suPool(suTx('po_created', 'Procurement', { po: p.id, supplier: p.sup, sku, qty: p.qty, amount: p.amount }));
+  toast(`${p.id}: ${fmtInt(p.qty)} × ${r.it.n} for ${suMoney(p.amount)}, recorded on the ledger`); suRender();
+}
+function initSuite() {
+  const app = $('#suApp'); if (!app) return;
+  $('#suTabs').innerHTML = SU_TABS.map(([k, n]) => `<button type="button" data-v="${k}" aria-pressed="false">${esc(n)}</button>`).join('');
+  const lab = el => { const b = el.parentElement && el.parentElement.querySelector('b.mono'); if (!b) return; const v = +el.value, k = el.dataset.susc || (el.dataset.suci || '').split(':')[1] || (el.hasAttribute('data-suwacc') ? 'wacc' : '');
+    b.textContent = k === 'price' || k === 'ent' ? `${v > 0 ? '+' : ''}${v}%` : k === 'churn' ? `${v > 0 ? '+' : ''}${v.toFixed(1)} pts` : k === 'uptime' ? v.toFixed(2) + '%' : k === 'inv' ? `+${v}%` : k === 'gap' ? v.toFixed(1) + '%' : v + '%'; };
+  app.addEventListener('click', async e => {
+    if (!SU.ready) go();
+    const T = e.target, tb = T.closest('#suTabs [data-v]'); if (tb) { SU.tab = tb.dataset.v; suRender(); return; }
+    if (T.closest('[data-suq]')) { SU.q = $('#suSql').value; suRunQuery(); return; }
+    const ex = T.closest('[data-suex]'); if (ex) { SU.q = SU_EX[+ex.dataset.suex]; suRunQuery(); return; }
+    const tl = T.closest('[data-sutbl]'); if (tl) { SU.q = suTables()[tl.dataset.sutbl].zone === 'Restricted' ? `SELECT COUNT(*) AS n FROM ${tl.dataset.sutbl}` : `SELECT * FROM ${tl.dataset.sutbl} LIMIT 20`; suRunQuery(); return; }
+    if (T.closest('[data-sucsv]')) { const r = SU.qres; saveText(`cellvoyant-${r.table}.csv`, [r.cols.join(',')].concat(r.rows.map(x => r.cols.map(c => `"${String(x[c] == null ? '' : x[c]).replace(/"/g, '""')}"`).join(','))).join('\n'), 'text/csv'); return; }
+    const op = T.closest('[data-suopp]'); if (op) { SU.opp = SU.opps.find(o => o.id === op.dataset.suopp); suRender(); return; }
+    const tk = T.closest('[data-sutask]'); if (tk) { const o = SU.opp || SU.opps.slice().sort((a, b) => b.value * b.p - a.value * a.p)[0]; await addTask({ title: `${suOppNba(o)}: ${o.id} (${o.prod[1]}, ${o.acc})`, kind: 'manual', dept: 'b2b', prio: o.p >= .5 ? 'high' : 'normal' }, tk); return; }
+    const an = T.closest('[data-suan]'); if (an) { const f = suAnomalies().flags[+an.dataset.suan]; await addTask({ title: `Investigate ${f.n} on ${suDay(f.d - 180)}: ${f.why}`, kind: 'signal', dept: 'fi', prio: 'high' }, an); suPool(suTx('investigation', 'Revenue assurance', { series: f.n, day: suDay(f.d - 180), z: +f.z.toFixed(1) })); return; }
+    const sl = T.closest('[data-susl]'); if (sl) { SU.sl = +sl.dataset.susl; suRender(); return; }
+    const it = T.closest('[data-suitem]'); if (it) { const [sku, wh] = it.dataset.suitem.split('|'); SU.item = SU.items.find(x => x.sku === sku && x.wh === wh); suRender(); findGo($('#suBody'), false); return; }
+    const po = T.closest('[data-supo]'); if (po) { suCreatePo(po.dataset.supo, po); return; }
+    if (T.closest('[data-suverify]')) { const b = T.closest('[data-suverify]'); b.disabled = true; b.textContent = 'Verifying…'; await suVerify(); suRender(); return; }
+    if (T.closest('[data-sutamper]')) { const r = suTamper(); suRender(); if (r) toast(`Changed ${r.t.id} in block #${r.b.h} to ${suMoney(r.t.data.amount)}. Now verify the chain.`); return; }
+    if (T.closest('[data-surestore]')) { suRestore(); await suVerify(); suRender(); return; }
+    if (T.closest('[data-suseal]')) { const L = SU.led, r = await suSeal(L.pool.splice(0)); L.verified = null; suRender(); toast(r.b ? `Block #${r.b.h} sealed with ${r.b.sigs.filter(s => s.sig).length} of 4 signatures${r.refused.length ? `; ${r.refused.length} transaction${r.refused.length === 1 ? '' : 's'} rejected` : ''}` : 'Nothing sealed: the validators rejected every transaction'); return; }
+    const rn = T.closest('[data-surun]'); if (rn) {
+      const k = rn.dataset.surun, st = SU.ab[k] || (SU.ab[k] = {}), x = Object.assign({ account: SU.acc[0].id, uptime: 99.72, gap: .6, req: 'churn' }, st);
+      if (k === 'escrow') x.po = SU.pos.find(p => p.id === st.po) || SU.pos[SU.pos.length - 1]; x.inv = +(st.inv || 0);
+      st.ev = suRunContract(k, x); suRender(); return;
+    }
+    const id = T.closest('[data-suidea]'); if (id) { SU.idea = SU.ideas.find(i => i.k === id.dataset.suidea); suRender(); return; }
+    const gt = T.closest('[data-sugate]'); if (gt) { const I = SU.ideas.find(i => i.k === gt.dataset.sugate), G = ['Ideation', 'Concept', 'Business case', 'Pilot', 'Launch'], nx = G[G.indexOf(I.stage) + 1]; suPool(suTx('decision', 'Product board', { decision: `Advance ${I.n} to ${nx}`, gate: I.stage })); I.stage = nx; SU.idea = I; suRender(); toast(`${I.n} moved to ${nx}; the gate decision is on the ledger`); return; }
+    const fn = T.closest('[data-sufn]'); if (fn) { await suFnRun(fn.dataset.sufn); return; }
+  });
+  app.addEventListener('input', e => { const el = e.target; if (el.matches('[data-susc],[data-suwacc],[data-suci][type=range]')) lab(el); });
+  app.addEventListener('change', e => {
+    const el = e.target;
+    if (el.id === 'suRole') { SU.role = el.value; SU.qres = null; suRender(); return; }
+    if (el.dataset.susc) { SU.scen[el.dataset.susc] = +el.value; suRender(); return; }
+    if (el.hasAttribute('data-suwacc')) { SU.wacc = +el.value; suRender(); return; }
+    if (el.dataset.suci) { const [k, f] = el.dataset.suci.split(':'), st = SU.ab[k] || (SU.ab[k] = {}); st[f] = el.type === 'checkbox' ? el.checked : el.value; }
+  });
+  app.addEventListener('submit', e => { const f = e.target.closest('[data-sufm]'); if (!f) return; e.preventDefault(); const v = $('#suFnIn').value.trim(); if (v) suFnRun(v); });
+  const start = () => { suEnsure(); suRender(); suLedInit().then(() => { if (SU.tab === 'ledger') suRender(); else $('#suSum').innerHTML = suSumHtml(); }); };
+  let started = false; const go = () => { if (started) return; started = true; start(); };
+  if ('IntersectionObserver' in window) { const io = new IntersectionObserver(es => { if (es.some(x => x.isIntersecting)) { io.disconnect(); go(); } }, { rootMargin: '600px' }); io.observe(app); }
+  setTimeout(go, 7000);
+}
+// terminals, assistant, search and the AI tool
+const SU_PANEL = { fcst: 'FCST', anom: 'ANOM', pipe: 'PIPE', stock: 'STOCK' };
+function suPanelHtml(k) {
+  suEnsure();
+  if (k === 'ledger') { const L = SU.led; if (!L) { suLedInit(); return '<p class="tiny muted">Starting the validator nodes…</p>'; } if (L.off) return '<p class="tiny muted">The ledger needs HTTPS.</p>'; const b = L.chain[L.chain.length - 1]; return tmRow(`<b>${L.chain.length} blocks</b>`, `${suSum(L.chain.map(x => x.n))} transactions`) + tmRow('Latest', `<span class="mono">#${b.h} ${b.hash.slice(0, 14)}…</span>`) + tmRow('Waiting', `${L.pool.length}`) + tmRow('Rejected', `${L.rejected.length}`) + tmRow('Verified', L.verified ? (L.verified.ok ? 'intact' : `block #${L.verified.broken} fails`) : 'not yet', L.verified && !L.verified.ok ? 'crit' : '') + '<p class="tiny muted">LEDGER verify checks every hash and signature.</p>'; }
+  const lines = suMktCmd(SU_PANEL[k], '') || [];
+  return `<p class="small"><b>${esc(lines[0] || '')}</b></p>` + lines.slice(1, 8).map(l => `<div class="tm-row"><span class="small">${esc(l)}</span></div>`).join('');
+}
+function suAnswer(q) {
+  const s = q.toLowerCase(), M = [['ledger', /blockchain|ledger|smart contract|tamper|escrow|settlement/], ['scm', /supply chain|inventory|stock ?out|reorder|purchase order|supplier|warehouse/], ['fin', /\berp\b|financial forecast|forecast (revenue|ebitda|profit)|revenue forecast|ebitda|anomal|fraud spike|revenue leak|receivable/],
+    ['crm', /\bcrm\b|sales pipeline|win (rate|probability|chance)|opportunit/], ['hub', /central (database|data)|data hub|\bsql\b|data catalog|single source of truth/], ['inno', /product (pipeline|development|idea)|innovation pipeline|stage.?gate|adoption forecast|bass model/],
+    ['value', /business value|value of (our )?enterprise systems|\bnpv\b|\birr\b|payback/], ['mkt', /bloomberg|market (terminal|functions?)|screener|watchlist|relative valuation|comparables/]];
+  const hit = M.find(([, re]) => re.test(s)); if (!hit && !/cellvoyant one|enterprise suite|\bsap\b/.test(s)) return null;
+  suEnsure(); const k = hit ? hit[0] : 'hub', n = SU_TABS.find(t => t[0] === k)[1];
+  const lines = k === 'ledger' ? [`${SU.led && !SU.led.off ? SU.led.chain.length : 9} blocks, each signed by at least 3 of 4 validators (finance, network, legal, audit)`, 'Four smart contracts: SLA credits, supplier milestone payments, roaming settlement and data-sharing consent', 'Tamper with a payment and verification shows the broken block']
+    : k === 'fin' ? suMktCmd('FCST', '').slice(0, 2).concat(suMktCmd('ANOM', '').slice(0, 3)) : k === 'crm' ? suMktCmd('PIPE', '').slice(0, 5) : k === 'scm' ? suMktCmd('STOCK', '').slice(0, 5)
+    : k === 'hub' ? [`${Object.keys(suTables()).length} tables in one catalog, with owners, zones and role-based access`, 'Restricted tables answer only with aggregates of 10 or more people', 'Every query is recorded on the ledger'] : k === 'inno' ? SU.ideas.slice().sort((a, b) => b.rice - a.rice).slice(0, 4).map(I => `${I.n}: RICE ${I.rice}, ${I.stage}`)
+    : k === 'value' ? (V => [`5-year NPV of all seven systems: ${suMoney(V.npv)}`, ...V.rows.slice().sort((a, b) => b.npv - a.npv).slice(0, 3).map(r => `${r.n}: ${suMoney(r.npv)}`)])(suValue()) : SU_FN.slice(0, 6).map(f => `${f[0]}: ${f[2]}`);
+  return `<p><b>Cellvoyant One · ${esc(n)}</b></p>${cvList(lines)}<p class="tiny muted">Synthetic enterprise data for ${esc(SU_W.op)}; illustrative figures.</p><div class="cv-acts">${cvAct('Open ' + n, () => { cvGo('su:' + k); return 'Opened ' + n + '.'; })}</div>`;
+}
+TM_PANELS.fcst = ['Financial forecast', 'Revenue and EBITDA for the next 12 months'];
+TM_PANELS.anom = ['Anomalies', 'Revenue, fraud, refunds and network'];
+TM_PANELS.pipe = ['Sales pipeline', 'Deals worth chasing and the next step'];
+TM_PANELS.stock = ['Stock plan', 'Items to reorder and stockout risks'];
+TM_PANELS.ledger = ['Ledger', 'Blocks, signatures and verification'];
+TM_PRESETS.splice(TM_PRESETS.findIndex(t => t.id === 'crisis') + 1, 0,
+  { id: 'cfo', n: 'Finance & ERP', p: 'Forecast, anomalies, the ledger and finance agents', panels: [['fcst'], ['anom'], ['ledger'], ['agent', 'es:recon'], ['agent', 'fn:budgetfc'], ['tasks']] },
+  { id: 'supply', n: 'Supply chain', p: 'Stock to reorder, supplier risk, supply news and the ledger', panels: [['stock'], ['agent', 'scm:supplier'], ['news', '(semiconductor OR "supply chain" OR shortage) telecom'], ['ledger'], ['roster', 'scm'], ['tasks']] });
+{ const tp = TM_PRESETS.find(t => t.id === 'enterprise'); if (tp) tp.panels.splice(0, 0, ['pipe']); }
+TM_HELP.push(['COMP · SCRN · WATCH · CAL', 'market functions, e.g. COMP stc, SCRN region=gulf growth>3, WATCH add du, CAL uae'], ['SQL query', 'query the central database, e.g. SQL SELECT region, COUNT(*) FROM operators GROUP BY region'], ['FCST · ANOM · PIPE · STOCK', 'forecast, anomalies, sales pipeline and stock plan'], ['LEDGER [verify]', 'the ledger, or verify every block']);
+CV_TOOLDEFS.push({ name: 'enterprise_suite', description: 'Cellvoyant One, an enterprise suite on one central database (synthetic, illustrative data): hub (tables, or a read-only SQL query with role-based access), crm (pipeline, win chances, next steps), fin (12-month revenue and EBITDA forecast, anomalies), scm (stock to reorder, supplier risk), ledger (permissioned blockchain status), inno (product pipeline with adoption forecasts) and value (5-year NPV of each enterprise system).', inputSchema: { type: 'object', properties: { module: { type: 'string', enum: SU_TABS.map(t => t[0]).filter(k => k !== 'mkt') }, query: { type: 'string', description: 'For module hub: SELECT … FROM table …' } } },
+  run: a => { suEnsure(); const m = a.module || 'fin';
+    if (m === 'hub') { if (a.query) { try { const r = suSql(a.query, 'analyst'); suLogQuery(a.query, r); return { table: r.table, total: r.total, rows: r.rows.slice(0, 20), note: r.note || null }; } catch (e) { return { error: e.message }; } } return { tables: Object.entries(suTables()).map(([k, t]) => ({ table: k, owner: t.owner, zone: t.zone, source: t.src })) }; }
+    if (m === 'ledger') { const L = SU.led; if (!L) { suLedInit(); return { status: 'starting the validator nodes; ask again in a moment' }; } return L.off ? { error: 'needs HTTPS' } : { blocks: L.chain.length, transactions: suSum(L.chain.map(b => b.n)), waiting: L.pool.length, rejected: L.rejected.length, verified: L.verified ? L.verified.ok : null, contracts: SU_CONTRACTS.map(c => c.n) }; }
+    if (m === 'inno') return { ideas: SU.ideas.map(I => Object.assign({ idea: I.n, stage: I.stage, rice: I.rice }, (v => ({ users_5y: Math.round(v.users5), npv: Math.round(v.npv) }))(suIdeaVal(I)))) };
+    if (m === 'value') { const V = suValue(); return { npv_5y: Math.round(V.npv), irr: V.irr, systems: V.rows.map(r => ({ system: r.n, benefit_per_year: Math.round(r.b), npv: Math.round(r.npv), payback_years: r.pay })) }; }
+    return { module: m, lines: suMktCmd({ crm: 'PIPE', fin: 'FCST', scm: 'STOCK' }[m], '').concat(m === 'fin' ? suMktCmd('ANOM', '').slice(0, 5) : []), illustrative: true }; } });
+
 /* ---------- START HERE: the shortest path for each role ---------- */
 const ROLES = [
   ['exec', 'Executive', [['cr', 'Crisis radar', 'The extreme risks that need action now, with first-hour playbooks'], ['tm:exec', 'Executive terminal', 'Signals, market moves, forecasts and tasks on one screen'], ['dec', 'Decision engine', 'Sourced recommendations that wait for your approval'], ['mp:P0', 'The P0 foundation', 'What to build first in the master plan']]],
   ['mkt', 'Marketing & pricing', [['tm:pricing', 'Pricing terminal', 'Compare plans and test a response before you move'], ['dec:price', 'A rival price cut', 'Run it from detection to recommendation'], ['cap:87', 'Competitor pricing engine', 'Capability #87 in the master plan'], ['ag:pr', 'Pricing agents', '12 agents for pricing and offers']]],
   ['cust', 'Customers & retention', [['eg', 'Engagement AI', 'Who to contact today, when, how and with what'], ['tm:customer', 'Customers terminal', 'Where churn spreads and who to save today'], ['cr:billing', 'A billing error', 'The playbook when thousands are overcharged'], ['ag:rl', 'Retention agents', '12 agents for retention and loyalty']]],
-  ['ent', 'Enterprise & SME', [['tm:enterprise', 'Enterprise terminal', 'Tenders, accounts and business offers'], ['dec:enterprise', 'A rival enterprise offer', 'SD-WAN with a free private 5G trial'], ['mp:D', 'Products & digital services', 'Area D of the master plan'], ['ag:en', 'Enterprise agents', '12 agents for enterprise and government']]],
+  ['ent', 'Enterprise & SME', [['su:crm', 'CRM and sales pipeline', 'Deals worth chasing, win chances and next steps'], ['tm:enterprise', 'Enterprise terminal', 'Tenders, accounts and business offers'], ['dec:enterprise', 'A rival enterprise offer', 'SD-WAN with a free private 5G trial'], ['ag:en', 'Enterprise agents', '12 agents for enterprise and government']]],
   ['net', 'Network & technology', [['cr:cable', 'Subsea cable cuts', 'The first-hour playbook for the top network risk'], ['tm:network', 'Network terminal', 'Coverage truth, rival builds and capex priorities'], ['mp:C', 'Network operations (OSS)', 'Area C of the master plan'], ['ag:nw', 'Network agents', '12 agents for network and technology']]],
-  ['fin', 'Finance & investment', [['tm:capital', 'Capital markets terminal', 'Valuations, movers and deals across telecom'], ['tab-cap', 'Capital radar', 'State, private-equity and hedge-fund moves'], ['cap:6', 'Financial planning & analysis', 'Capability #6 in the master plan'], ['ag:fn', 'Finance agents', '12 agents for finance and investor relations']]],
-  ['data', 'Data, AI & security', [['cr:ransom', 'Ransomware or a breach', 'What to do in the first hour, and who to tell'], ['mp:G', 'Technology, security & governance', 'Area G of the master plan'], ['cap:118', 'AI governance', 'Capability #118 in the master plan'], ['ag:da', 'Data & AI agents', '12 agents for data, AI and analytics']]]
+  ['fin', 'Finance & investment', [['su:fin', 'Finance & ERP', 'Revenue forecast, anomalies and receivables'], ['tm:capital', 'Capital markets terminal', 'Valuations, movers and deals across telecom'], ['su:value', 'Business value of systems', 'NPV, IRR and payback for each enterprise system'], ['ag:fn', 'Finance agents', '12 agents for finance and investor relations']]],
+  ['ops', 'Supply chain & operations', [['su:scm', 'Supply chain plan', 'Demand forecasts, reorder points and supplier risk'], ['su:ledger', 'Ledger and smart contracts', 'Signed blocks, milestone payments and settlement'], ['tm:supply', 'Supply chain terminal', 'Stock, suppliers, supply news and the ledger'], ['ag:scm', 'Supply chain agents', '12 agents for supply chain and procurement']]],
+  ['data', 'Data, AI & security', [['su:hub', 'Central data hub', 'One catalog, role-based access and queries'], ['cr:ransom', 'Ransomware or a breach', 'What to do in the first hour, and who to tell'], ['mp:G', 'Technology, security & governance', 'Area G of the master plan'], ['cap:118', 'AI governance', 'Capability #118 in the master plan'], ['ag:da', 'Data & AI agents', '12 agents for data, AI and analytics']]]
 ];
 const ROLE_KEY = 'cv.role';
 function roleRender(k) {
@@ -6535,6 +7211,7 @@ function cvDeepLink() {
   if ((m = h.match(/^dc-([a-z]+)$/)) && cvHas('dec:' + m[1])) { setTimeout(() => cvGo('dec:' + m[1]), 60); return; }
   if ((m = h.match(/^cr-([a-z]+)$/)) && cvHas('cr:' + m[1])) { setTimeout(() => cvGo('cr:' + m[1]), 60); return; }
   if ((m = h.match(/^eg-([a-z]+|[cub]-[0-9a-f]{6})$/i)) && cvHas('eg:' + m[1])) { setTimeout(() => cvGo('eg:' + m[1]), 60); return; }
+  if ((m = h.match(/^su-([a-z]+)$/)) && cvHas('su:' + m[1])) { setTimeout(() => cvGo('su:' + m[1]), 60); return; }
   if ((m = h.match(/^tm-([\w-]+)$/)) && cvHas('tm:' + m[1])) setTimeout(() => cvGo('tm:' + m[1]), 60);
 }
 addEventListener('hashchange', cvDeepLink);
@@ -6543,7 +7220,7 @@ addEventListener('hashchange', cvDeepLink);
 $('#simClock').textContent = fmtClock();
 setLive(live);
 renderFeed(); kpis(); renderDetail();
-[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initTerminals, initMasterPlan, initDecision, initCrisis, initEngage, initRoleStart, initFind, initChat, initLang]
+[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initTerminals, initMasterPlan, initDecision, initCrisis, initEngage, initSuite, initRoleStart, initFind, initChat, initLang]
   .forEach(f => { try { f(); } catch (err) { console.warn('Cellvoyant: ' + f.name + ' skipped', err); } });
 const radar = initRadar();
 renderServices(); renderReqs();
