@@ -2649,6 +2649,7 @@ const SERVICES = [
   { k: 'board_brief', name: 'Weekly board brief', turn: 'weekly', desc: 'An analyst-reviewed brief on rivals, capital moves and recommended responses.' },
   { k: 'op_desk', name: 'Operator desk: full edition for one operator', turn: '3 weeks', desc: 'A segment-by-segment marketing plan, sales playbook, strategy horizons and rival-response playbook for your operator.' },
   { k: 'strategy_sprint', name: 'Strategy sprint for a big problem', turn: '1–2 weeks', desc: 'Analysts and AI work one complex problem into options, a recommendation, a 90-day plan and KPIs with your team.' },
+  { k: 'engage', name: 'Engagement AI pilot', turn: '12 weeks', desc: 'Tokenize customer, app and account data, train the routine, timing, churn and persuadability models, run in shadow mode, then an A/B test with a 10% holdout to measure customers kept.' },
   { k: 'crisis', name: 'Crisis tabletop exercise', turn: '1 week', desc: 'Rehearse a crisis-radar playbook with network, security, legal and communications teams, with timed injects and a debrief.' },
   { k: 'capability', name: 'Master plan: scope a capability', turn: 'scoped in 2 weeks', desc: 'Scope one or more master-plan capabilities: data needed, integration points, owners, KPIs and a pilot plan.' },
   { k: 'lab_item', name: 'Innovation lab: scope or pilot a tool', turn: 'scoped in 1 week', desc: 'Scope, build and pilot any tool, agent or service from the innovation lab.' },
@@ -4002,6 +4003,7 @@ function tmPanelHtml(k, arg, tid) {
   if (k === 'mplan') return mpPanelHtml();
   if (k === 'decide') return dcPanelHtml();
   if (k === 'crisis') return crPanelHtml();
+  if (k === 'engage') return egPanelHtml();
   if (k === 'services') return svPanelHtml(tid, arg);
   if (k === 'notes') return `<label class="sr" for="tmNote${tid}">Notes</label><textarea class="tm-q" id="tmNote${tid}" rows="6" data-tmnote placeholder="Notes for this terminal">${esc(TM.notes[TM.active] || '')}</textarea><p class="tiny muted">Saved in this browser only.</p>`;
   return '';
@@ -4122,6 +4124,7 @@ async function tmCmd(raw) {
     else if (C === 'CAP') rows(mpCmd(arg));
     else if (C === 'DECIDE') rows(dcCmd(arg));
     else if (C === 'RISK') rows(crCmd(arg));
+    else if (C === 'ENGAGE') rows(egCmd(arg));
     else tmOut(`Unknown command ${esc(C)}. Type HELP.`);
   } catch (e) { tmOut(`<span class="tm-err">${esc(e.message || String(e))}</span>`); }
 }
@@ -4459,12 +4462,13 @@ function findIndex() {
   $$('main details > summary').forEach(sm => { const d = sm.parentElement; if (d.closest('#resGrid')) return; add(d.closest('.faq') ? 'Question' : 'Detail', txtOf(sm), txtOf(d.closest('section') && $('h2', d.closest('section'))), () => { d.open = true; findGo(d, true); }); });
   if ($('#tmApp')) { tlBuild().forEach(t => add('Tool', t.n, `${t.fam} · ${t.d}`, () => { tmOpen('tools'); tmCmd('TOOL ' + t.id); findGo($('#terminals')); })); SVC_CAT.forEach(x => add('Service', x.name, `${x.dn} · ${x.turn} · ${x.desc}`, () => { tmOpen('tools'); tmCmd('SERVICES ' + x.name); findGo($('#terminals')); })); }
   if ($('#mpList')) mpBuild().forEach(c => add('Capability', `${c.no}. ${c.n}`, `${c.dom}. ${c.dn} · P${c.p} · ${MP_ROLE[c.role][0]} · ${c.tools}`, () => mpShow(c.no), EDITION === 'eand' ? c.app : ''));
+  if ($('#egApp')) EG_GOALS.forEach(([g, n]) => add('Engagement', `Engagement AI · ${n}`, 'Today’s plan: who to contact, when, how and with what', () => cvGo('eg:' + g), 'best time to contact churn persuadable next best action customers users clients'));
   if ($('#crApp')) CR_ITEMS.forEach(x => add('Risk', crT(x.t), `Crisis radar · ${CR_SECN[x.sec]} · ${CR_H[x.h][1]}`, () => cvGo('cr:' + x.k), x.sig.map(crT).join(' ')));
   if ($('#dcApp')) DC_SCN.forEach(x => add('Decision scenario', dcT(x.t, x), `${x.type} · from detection to a recommendation for review`, () => cvGo('dec:' + x.k)));
   TOOLDEFS.forEach(d => add('Assistant tool', d.name.replace(/_/g, ' '), d.description, () => { selectTab('tab-ask'); findGo($('#app')); }));
   return (FIND.items = it);
 }
-const FIND_ORDER = ['Chapter', 'Terminal', 'Risk', 'Capability', 'Decision scenario', 'Tool', 'Service', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
+const FIND_ORDER = ['Chapter', 'Terminal', 'Risk', 'Engagement', 'Capability', 'Decision scenario', 'Tool', 'Service', 'Section', 'Operator', 'Operator desk', 'Company', 'Competitor', 'AI agent', 'Agent department', 'Innovation lab', 'Core lab', 'Department', 'Team', 'Sector', 'Big problem', 'Console view', 'Workshop', 'Resource', 'Playbook', 'Glossary', 'Question', 'Detail', 'Assistant tool', 'Source'];
 function findSearch(raw) {
   const q = raw.trim().toLowerCase(), items = findIndex();
   if (!q) return items.filter(x => x.kind === 'Chapter').map(x => ({ x, sc: 1 }));
@@ -4559,23 +4563,23 @@ const RTL = new Set(['ar', 'ur']);
 // interface strings; keys are the English text as it appears on the page
 const I18N_KEYS = ['Problem', 'Market', 'Platform', 'Operator desk', 'Live console', 'Terminals', 'AI agents', 'Academy', 'Innovation', 'Patent', 'Business', 'Join the pilot', 'Overview', 'Customers', 'Competition', 'Innovation lab', 'Solutions', 'Value', 'Request a pilot', 'Search',
   'Search chapters, tools, agents, companies, operators, sources…', 'Ask Cellvoyant', 'Type or speak a question…', 'Send', 'Listening…', 'Speak answers', 'Stop', 'HELLO', '+ New terminal', 'Run', 'Run agent', 'Run tool', 'Request', 'Open a terminal', 'Language',
-  'Translating the page…', 'Page translated on this device', 'IFACE_ONLY', 'Show original', 'VOICE_NA', 'MIC_BLOCKED', 'Find an agent or a skill…', 'Clear', 'Thinking…', 'Translated by Claude', 'Master plan', 'Decision engine', 'Crisis radar'];
+  'Translating the page…', 'Page translated on this device', 'IFACE_ONLY', 'Show original', 'VOICE_NA', 'MIC_BLOCKED', 'Find an agent or a skill…', 'Clear', 'Thinking…', 'Translated by Claude', 'Master plan', 'Decision engine', 'Crisis radar', 'Engagement AI'];
 const I18N_ROWS = {
   ar: ['المشكلة', 'السوق', 'المنصة', 'مكتب المشغّل', 'وحدة التحكم المباشرة', 'المحطات الطرفية', 'وكلاء الذكاء الاصطناعي', 'الأكاديمية', 'الابتكار', 'براءة الاختراع', 'نموذج العمل', 'انضم إلى التجربة', 'نظرة عامة', 'العملاء', 'المنافسة', 'مختبر الابتكار', 'الحلول', 'القيمة', 'اطلب تجربة', 'بحث',
     'ابحث في الفصول والأدوات والوكلاء والشركات والمشغّلين والمصادر…', 'اسأل Cellvoyant', 'اكتب سؤالك أو تحدّث…', 'إرسال', 'أستمع…', 'قراءة الإجابات بصوت', 'إيقاف', 'مرحبًا! اسألني عن السوق، أو اطلب مني فتح أي قسم أو أداة.', '+ محطة جديدة', 'تشغيل', 'تشغيل الوكيل', 'تشغيل الأداة', 'اطلب', 'افتح محطة', 'اللغة',
-    'جارٍ ترجمة الصفحة…', 'تمت ترجمة الصفحة على هذا الجهاز', 'تمت ترجمة الواجهة. تحتاج ترجمة الصفحة كاملة إلى مترجم Chrome المدمج أو نسخة Claude.', 'عرض الأصل', 'الإدخال الصوتي غير متاح في هذا المتصفح.', 'لا يمكن الوصول إلى الميكروفون هنا.', 'ابحث عن وكيل أو مهارة…', 'مسح', 'جارٍ التفكير…', 'ترجمة Claude', 'الخطة الرئيسية', 'محرّك القرار', 'رادار الأزمات'],
+    'جارٍ ترجمة الصفحة…', 'تمت ترجمة الصفحة على هذا الجهاز', 'تمت ترجمة الواجهة. تحتاج ترجمة الصفحة كاملة إلى مترجم Chrome المدمج أو نسخة Claude.', 'عرض الأصل', 'الإدخال الصوتي غير متاح في هذا المتصفح.', 'لا يمكن الوصول إلى الميكروفون هنا.', 'ابحث عن وكيل أو مهارة…', 'مسح', 'جارٍ التفكير…', 'ترجمة Claude', 'الخطة الرئيسية', 'محرّك القرار', 'رادار الأزمات', 'ذكاء التفاعل'],
   fr: ['Problème', 'Marché', 'Plateforme', 'Bureau opérateur', 'Console en direct', 'Terminaux', 'Agents IA', 'Académie', 'Innovation', 'Brevet', 'Modèle économique', 'Rejoindre le pilote', 'Vue d’ensemble', 'Clients', 'Concurrence', 'Laboratoire d’innovation', 'Solutions', 'Valeur', 'Demander un pilote', 'Rechercher',
     'Rechercher chapitres, outils, agents, entreprises, opérateurs, sources…', 'Demander à Cellvoyant', 'Écrivez ou dites votre question…', 'Envoyer', 'J’écoute…', 'Lire les réponses à voix haute', 'Arrêter', 'Bonjour ! Posez-moi une question sur le marché, ou demandez-moi d’ouvrir une section ou un outil.', '+ Nouveau terminal', 'Lancer', 'Lancer l’agent', 'Lancer l’outil', 'Demander', 'Ouvrir un terminal', 'Langue',
-    'Traduction de la page…', 'Page traduite sur cet appareil', 'Interface traduite. La traduction complète de la page nécessite le traducteur intégré de Chrome ou la version Claude.', 'Afficher l’original', 'La saisie vocale n’est pas disponible dans ce navigateur.', 'Le micro n’est pas accessible ici.', 'Trouver un agent ou une compétence…', 'Effacer', 'Réflexion…', 'Traduit par Claude', 'Plan directeur', 'Moteur de décision', 'Radar des crises'],
+    'Traduction de la page…', 'Page traduite sur cet appareil', 'Interface traduite. La traduction complète de la page nécessite le traducteur intégré de Chrome ou la version Claude.', 'Afficher l’original', 'La saisie vocale n’est pas disponible dans ce navigateur.', 'Le micro n’est pas accessible ici.', 'Trouver un agent ou une compétence…', 'Effacer', 'Réflexion…', 'Traduit par Claude', 'Plan directeur', 'Moteur de décision', 'Radar des crises', 'IA d’engagement'],
   hi: ['समस्या', 'बाज़ार', 'प्लेटफ़ॉर्म', 'ऑपरेटर डेस्क', 'लाइव कंसोल', 'टर्मिनल', 'एआई एजेंट', 'अकादमी', 'नवाचार', 'पेटेंट', 'व्यवसाय मॉडल', 'पायलट में शामिल हों', 'अवलोकन', 'ग्राहक', 'प्रतिस्पर्धा', 'नवाचार प्रयोगशाला', 'समाधान', 'मूल्य', 'पायलट का अनुरोध करें', 'खोजें',
     'अध्याय, टूल, एजेंट, कंपनियाँ, ऑपरेटर और स्रोत खोजें…', 'Cellvoyant से पूछें', 'प्रश्न लिखें या बोलें…', 'भेजें', 'सुन रहा हूँ…', 'उत्तर बोलकर सुनाएँ', 'रोकें', 'नमस्ते! बाज़ार के बारे में कुछ भी पूछें, या कोई अनुभाग या टूल खोलने को कहें।', '+ नया टर्मिनल', 'चलाएँ', 'एजेंट चलाएँ', 'टूल चलाएँ', 'अनुरोध करें', 'टर्मिनल खोलें', 'भाषा',
-    'पेज का अनुवाद हो रहा है…', 'पेज का अनुवाद इसी डिवाइस पर हुआ', 'इंटरफ़ेस का अनुवाद हो गया। पूरे पेज के अनुवाद के लिए Chrome का अंतर्निहित अनुवादक या Claude संस्करण चाहिए।', 'मूल दिखाएँ', 'इस ब्राउज़र में आवाज़ से इनपुट उपलब्ध नहीं है।', 'यहाँ माइक्रोफ़ोन उपलब्ध नहीं है।', 'एजेंट या कौशल खोजें…', 'साफ़ करें', 'सोच रहा हूँ…', 'Claude द्वारा अनुवादित', 'मास्टर प्लान', 'निर्णय इंजन', 'संकट रडार'],
+    'पेज का अनुवाद हो रहा है…', 'पेज का अनुवाद इसी डिवाइस पर हुआ', 'इंटरफ़ेस का अनुवाद हो गया। पूरे पेज के अनुवाद के लिए Chrome का अंतर्निहित अनुवादक या Claude संस्करण चाहिए।', 'मूल दिखाएँ', 'इस ब्राउज़र में आवाज़ से इनपुट उपलब्ध नहीं है।', 'यहाँ माइक्रोफ़ोन उपलब्ध नहीं है।', 'एजेंट या कौशल खोजें…', 'साफ़ करें', 'सोच रहा हूँ…', 'Claude द्वारा अनुवादित', 'मास्टर प्लान', 'निर्णय इंजन', 'संकट रडार', 'एंगेजमेंट एआई'],
   ur: ['مسئلہ', 'مارکیٹ', 'پلیٹ فارم', 'آپریٹر ڈیسک', 'لائیو کنسول', 'ٹرمینلز', 'اے آئی ایجنٹس', 'اکیڈمی', 'جدت', 'پیٹنٹ', 'کاروباری ماڈل', 'پائلٹ میں شامل ہوں', 'جائزہ', 'صارفین', 'مسابقت', 'جدت کی لیب', 'حل', 'قدر', 'پائلٹ کی درخواست کریں', 'تلاش',
     'ابواب، ٹولز، ایجنٹس، کمپنیاں، آپریٹرز اور ذرائع تلاش کریں…', 'Cellvoyant سے پوچھیں', 'سوال لکھیں یا بولیں…', 'بھیجیں', 'سن رہا ہوں…', 'جوابات بول کر سنائیں', 'روکیں', 'السلام علیکم! مارکیٹ کے بارے میں کچھ بھی پوچھیں، یا کوئی حصہ یا ٹول کھولنے کو کہیں۔', '+ نیا ٹرمینل', 'چلائیں', 'ایجنٹ چلائیں', 'ٹول چلائیں', 'درخواست کریں', 'ٹرمینل کھولیں', 'زبان',
-    'صفحے کا ترجمہ ہو رہا ہے…', 'صفحے کا ترجمہ اسی ڈیوائس پر ہوا', 'انٹرفیس کا ترجمہ ہو گیا۔ پورے صفحے کے ترجمے کے لیے Chrome کا بلٹ اِن مترجم یا Claude ورژن درکار ہے۔', 'اصل دکھائیں', 'اس براؤزر میں آواز سے ان پٹ دستیاب نہیں۔', 'یہاں مائیکروفون دستیاب نہیں۔', 'ایجنٹ یا مہارت تلاش کریں…', 'صاف کریں', 'سوچ رہا ہوں…', 'Claude کا ترجمہ', 'ماسٹر پلان', 'فیصلہ انجن', 'بحران ریڈار'],
+    'صفحے کا ترجمہ ہو رہا ہے…', 'صفحے کا ترجمہ اسی ڈیوائس پر ہوا', 'انٹرفیس کا ترجمہ ہو گیا۔ پورے صفحے کے ترجمے کے لیے Chrome کا بلٹ اِن مترجم یا Claude ورژن درکار ہے۔', 'اصل دکھائیں', 'اس براؤزر میں آواز سے ان پٹ دستیاب نہیں۔', 'یہاں مائیکروفون دستیاب نہیں۔', 'ایجنٹ یا مہارت تلاش کریں…', 'صاف کریں', 'سوچ رہا ہوں…', 'Claude کا ترجمہ', 'ماسٹر پلان', 'فیصلہ انجن', 'بحران ریڈار', 'انگیجمنٹ اے آئی'],
   zh: ['问题', '市场', '平台', '运营商工作台', '实时控制台', '终端', 'AI 智能体', '学院', '创新', '专利', '商业模式', '加入试点', '概览', '客户', '竞争', '创新实验室', '解决方案', '价值', '申请试点', '搜索',
     '搜索章节、工具、智能体、公司、运营商、来源…', '询问 Cellvoyant', '输入或说出你的问题…', '发送', '正在聆听…', '朗读回答', '停止', '你好！可以问我任何关于市场的问题，或让我打开某个章节或工具。', '+ 新建终端', '运行', '运行智能体', '运行工具', '申请', '打开终端', '语言',
-    '正在翻译页面…', '已在本设备上翻译页面', '界面已翻译。整页翻译需要 Chrome 内置翻译器或 Claude 版本。', '显示原文', '此浏览器不支持语音输入。', '此处无法使用麦克风。', '查找智能体或技能…', '清除', '正在思考…', 'Claude 翻译', '总体规划', '决策引擎', '危机雷达']
+    '正在翻译页面…', '已在本设备上翻译页面', '界面已翻译。整页翻译需要 Chrome 内置翻译器或 Claude 版本。', '显示原文', '此浏览器不支持语音输入。', '此处无法使用麦克风。', '查找智能体或技能…', '清除', '正在思考…', 'Claude 翻译', '总体规划', '决策引擎', '危机雷达', '客户互动 AI']
 };
 const I18N_EN = { HELLO: 'Hello! Ask me anything about the market, or tell me what to open.', IFACE_ONLY: 'Interface translated. Full-page translation needs Chrome’s built-in translator or the Claude version.', VOICE_NA: 'Voice input isn’t available in this browser.', MIC_BLOCKED: 'The microphone can’t be used here.' };
 const I18N = Object.fromEntries(Object.entries(I18N_ROWS).map(([l, row]) => [l, Object.fromEntries(I18N_KEYS.map((k, i) => [k, row[i]]))]));
@@ -4716,6 +4720,7 @@ async function cvLocal(q) {
   const s = q.toLowerCase(), subj = x => q.replace(x, '').replace(/[?.!]/g, '').trim();
   const nav = cvNavigate(q); if (nav) return esc(nav);
   const cr = crAnswer(q); if (cr) return cr;
+  const eg = egAnswer(q); if (eg) return eg;
   const mp = mpAnswer(q); if (mp) return mp;
   if (/^(hi|hello|hey|help|what can you do|مرحبا|bonjour|नमस्ते|سلام|你好)/i.test(s)) return `<p>${esc(tr('HELLO'))}</p>${cvList(['Live news: “news about stc this week”', 'Exchange rates: “dirham exchange rates”', 'Country data: “mobile subscriptions in the Gulf”', 'App ratings: “app ratings for du”', 'Tools: “calculate ARPU 1.2 billion 4 million 12”', 'Agents: “run churn sentinel”', 'Navigation: “open the pricing terminal”, “switch to Arabic”'])}`;
   if (/\bnews|headline|latest on|what'?s happening|أخبار|actualit|समाचार|خبریں|新闻/.test(s)) {
@@ -5042,6 +5047,7 @@ function cvHas(tok) {
   if (t === 'cap') return !!$('#mpList') && !!mpGet(v);
   if (t === 'mp') return !!$('#mpList');
   if (t === 'cr') return !!$('#crApp') && (!v || !!crGet(v));
+  if (t === 'eg') return !!$('#egApp') && (!v || !!EG_GN[v] || /^[cub]-[0-9a-f]{6}$/i.test(v));
   return false;
 }
 // one navigator for every link on the page: sections, console views, terminals, agent departments, desk tabs, the decision engine and capabilities
@@ -5055,6 +5061,7 @@ function cvGo(tok) {
   else if (t === 'dec') { if (v) dcRun(v); findGo($('#decision')); }
   else if (t === 'cap') mpShow(+v);
   else if (t === 'cr') { if (v) crShow(v, true); else findGo($('#crisis')); }
+  else if (t === 'eg') { if (v && EG_GN[v]) { EG.goal = v; egEnsure(); egRender(); findGo($('#eg-plan')); } else if (!v || !egShow(v, true)) findGo($('#engagement')); }
   else if (t === 'mp') { mpReset(); if (/^P[012]$/.test(v)) MP.p = v; else if (/^[A-I]$/.test(v)) MP.dom = v; else if (v === 'live') MP.live = true; mpRender(); findGo($('#masterplan')); }
   return true;
 }
@@ -5886,11 +5893,618 @@ TM_HELP.push(['RISK [name|extreme|critical|network|cyber…]', 'the crisis radar
 CV_TOOLDEFS.push({ name: 'crisis_radar', description: 'The crisis radar: extreme and critical telecom risks that need action now (network, cyber and fraud, customers, market, regulation, finance), each with a score (likelihood × impact × speed), when to act, the owner, the first-hour actions and what happens if nobody acts. Live sensors (earthquakes near cable routes, weather, exploited vulnerabilities, cloud incidents, currencies) can raise scores. Scores are illustrative.', inputSchema: { type: 'object', properties: { risk: { type: 'string', enum: CR_ITEMS.map(x => x.k) }, severity: { type: 'string', enum: ['extreme', 'critical', 'all'] }, area: { type: 'string', enum: CR_SEC.map(s => s[0]) } } },
   run: a => crItems().filter(x => (!a.risk || x.k === a.risk) && (!a.area || x.sec === a.area) && (a.severity === 'all' || a.risk || (a.severity === 'extreme' ? x.sev[1] === 'ext' : ['ext', 'crit'].includes(x.sev[1])))).map(x => ({ rank: x.rank, risk: crT(x.t), severity: x.sev[2], score: x.v, raised_by_live_sensor: x.up, act: CR_H[x.h][1], owner: crT(x.owner), escalate: crT(x.esc), first_hour: x.now.map(crT), if_nobody_acts: x.cost.map(crT), solved_when: crT(x.done), illustrative: true })) });
 
+/* ---------- ENGAGEMENT AI: whether, when, how and with what to engage each customer, app user and business client ---------- */
+const EG_W = EDITION === 'eand'
+  ? { op: 'etisalat UAE', call: [9, 18], callQ: 'Calls 09:00–18:00 only (UAE telemarketing rule)', callRule: 'Sales calls only 09:00–18:00 and never to numbers on the Do Not Call Registry (UAE Cabinet Resolution No. 56 of 2024)', dnc: 'On the UAE Do Not Call Registry', move: 'Visa ends: leaving the UAE', money: v => fmtMoney(v * 3.6725).replace('$', 'AED ') }
+  : { op: 'Nimbus Mobile', call: [8, 21], callQ: 'Quiet hours: calls 08:00–21:00', callRule: 'Sales calls only 08:00–21:00 (the US rule for telephone solicitations, used as a reference) and never to numbers on a do-not-call list', dnc: 'On the do-not-call list', move: 'Moving abroad', money: fmtMoney };
+const EG_AUD = [['con', 'Consumers', 'C'], ['app', 'App users', 'U'], ['biz', 'Business clients', 'B']];
+const EG_AUDN = Object.fromEntries(EG_AUD.map(a => [a[0], a[1]]));
+const EG_CH = RT_CH.concat([['meet', 'Account manager visit']]);
+const EG_CHN = Object.fromEntries(EG_CH);
+const EG_CC = { push: 'var(--cx-1)', sms: 'var(--cx-2)', email: 'var(--cx-3)', call: 'var(--signal)', inapp: 'var(--accent)', meet: 'var(--ink-2)' };
+// lam: sessions an hour at the person's busiest hour, per day (app and data sessions; portal logins and calls for business clients)
+const EG_SEG = {
+  con: RT_SEG.map(s => Object.assign({}, s, { val: s.arpu, lam: .7 })),
+  app: [
+    { k: 'newu', l: 'New app user', peaks: [[20, 2], [12, 1.6]], wk: 1.2, ch: { push: .7, sms: 0, email: .1, call: -1.2, inapp: 1 }, val: 6, risk: .32, lam: 1.1 },
+    { k: 'daily', l: 'Daily app user', peaks: [[8, 1.3], [21, 1.8]], wk: 1.1, ch: { push: .6, sms: -.3, email: -.2, call: -1.4, inapp: 1.1 }, val: 9, risk: .08, lam: 1.4 },
+    { k: 'lapse', l: 'Lapsing app user', peaks: [[19, 2.4]], wk: 1.3, ch: { push: -.2, sms: .5, email: .4, call: -1, inapp: -.6 }, val: 7, risk: .42, lam: .5 },
+    { k: 'wallet', l: 'Wallet and payments user', peaks: [[13, 1.5], [20, 1.6]], wk: 1, ch: { push: .8, sms: .4, email: 0, call: -1, inapp: .7 }, val: 11, risk: .14, lam: 1 }
+  ],
+  biz: [
+    { k: 'sme', l: 'Small business owner', peaks: [[8, 1.2], [16, 1.6]], wk: .5, ch: { push: -.4, sms: .4, email: .3, call: .6, inapp: 0, meet: .2 }, val: 320, risk: .17, lam: .35 },
+    { k: 'mid', l: 'Mid-size company IT lead', peaks: [[10, 1.3], [14, 1.6]], wk: .3, ch: { push: -.8, sms: -.2, email: .8, call: .3, inapp: .3, meet: .5 }, val: 2400, risk: .11, lam: .4 },
+    { k: 'ent', l: 'Enterprise procurement', peaks: [[10, 1.5]], wk: .2, ch: { push: -1, sms: -.6, email: .6, call: .1, inapp: .1, meet: .9 }, val: 18000, risk: .08, lam: .3 },
+    { k: 'gov', l: 'Government entity', peaks: [[9, 1.3]], wk: .15, ch: { push: -1, sms: -.6, email: .5, call: 0, inapp: -.2, meet: 1 }, val: 26000, risk: .05, lam: .25 }
+  ]
+};
+const EG_GOALS = [['churn', 'Reduce churn'], ['engage', 'Grow engagement'], ['upsell', 'Upsell'], ['onboard', 'Onboard new customers'], ['pay', 'Payment reminders']];
+const EG_GN = Object.fromEntries(EG_GOALS);
+// the moments that matter: signals that raise the chance of leaving
+const EG_X = ['drop', 'net', 'shock', 'cmp', 'payf', 'rival', 'end', 'idle', 'nps', 'move'];
+const EG_XL = { drop: 'Usage down 30% or more in 30 days', net: 'Dropped calls or slow data this week', shock: 'Last bill much higher than usual', cmp: 'Complaint in the last 48 hours', payf: 'A payment failed', rival: 'A rival campaign in their area', end: 'Contract ends within 60 days', idle: 'App not opened for 3 weeks', nps: 'Low satisfaction score', move: EG_W.move, quiet: 'Long-time customer with no warning signs' };
+const EG_ACT = {
+  fix: { n: 'Fix the problem first, then follow up', nb: 'Fix the fault, then the account manager follows up', ch: ['call', 'sms', 'push', 'email', 'inapp'], mk: false, cost: p => p.aud === 'biz' ? 60 : 4, why: ['net', 'cmp', 'nps'] },
+  offer: { n: 'Loyalty offer: bonus data or a discount', nb: 'Renewal offer with a multi-year discount', ch: ['push', 'sms', 'email', 'inapp', 'call', 'meet'], mk: true, cost: p => p.val * .9, why: ['shock', 'rival', 'end'] },
+  plan: { n: 'Move them to a plan that fits their use', nb: 'Right-size the contract to what they use', ch: ['sms', 'email', 'push', 'inapp', 'call', 'meet'], mk: true, cost: p => p.val * 1.2, why: ['shock', 'drop'] },
+  care: { n: 'A person from the retention desk checks in', nb: 'Account review with their account manager', ch: ['call', 'meet'], mk: true, cost: p => p.aud === 'biz' ? 150 : 6, why: ['end', 'nps'] },
+  nudge: { n: 'A helpful tip in the app', nb: 'A helpful tip in the business portal', ch: ['inapp', 'push', 'email'], mk: true, cost: () => .05, why: ['idle', 'drop'] },
+  up: { n: 'An upgrade that fits how they use the service', nb: 'More lines or a faster link at a better unit price', ch: ['push', 'inapp', 'sms', 'email', 'call', 'meet'], mk: true, cost: () => 0, why: [] },
+  welcome: { n: 'Welcome and set-up help', nb: 'An onboarding session for their team', ch: ['inapp', 'push', 'sms', 'email', 'call', 'meet'], mk: false, cost: () => .5, why: [] },
+  remind: { n: 'A friendly payment reminder', nb: 'A payment reminder to their finance contact', ch: ['sms', 'push', 'email', 'inapp'], mk: false, cost: () => .02, why: ['payf'] }
+};
+const EG_ARMS = ['fix', 'offer', 'plan', 'care', 'nudge'];
+// each action may only work through the signals it can plausibly change, which keeps the uplift estimates stable
+const EG_IX = { fix: ['net', 'cmp', 'nps', 'quiet'], offer: ['shock', 'rival', 'end', 'quiet'], plan: ['shock', 'drop', 'quiet'], care: ['end', 'nps', 'biz', 'quiet'], nudge: ['idle', 'drop', 'quiet'] };
+const EG_TF = ['Bias', 'Activity at this hour', 'Activity squared', 'Past reply rate on this channel', 'Weekend day', 'Contacts in the last 7 days', 'Call after 20:00', 'Email 07:00–09:00', 'Channel: SMS', 'Channel: email', 'Channel: call', 'Channel: in-app', 'Channel: visit'];
+const EG_GRP = { pers: ['Persuadable', 'Engage: reaching them lowers the chance they leave'], sure: ['Sure thing', 'Likely to stay anyway, so no need to spend'], lost: ['Lost cause', 'Likely to leave whatever we do, so don’t spend'], dnd: ['Do not disturb', 'A sales contact would make them more likely to leave'] };
+const EG = { seed: 5, ready: false, aud: 'all', goal: 'churn', obj: 'kept', sel: null, n: 150, cph: 8, learn: null, pc: {} };
+const egActN = (a, p) => p && p.aud === 'biz' ? EG_ACT[a].nb : EG_ACT[a].n;
+const egDot = (w, v) => { let z = 0; for (let f = 0; f < v.length; f++) z += w[f] * v[f]; return z; };
+// training rows keep only their non-zero features
+const egRow = (v, y) => { const ix = [], vx = []; v.forEach((x, f) => { if (x) { ix.push(f); vx.push(x); } }); return { ix, vx, y }; };
+const egDotS = (w, r) => { let z = 0; for (let j = 0; j < r.ix.length; j++) z += w[r.ix[j]] * r.vx[j]; return z; };
+const egSlot = z => `${RT_DAYS[z.d]} ${pad(z.h)}:00–${pad(z.h + 1)}:00`;
+const egSess = p => p.aud === 'biz' ? 'portal logins and calls' : 'app and data sessions';
+const egPct = v => Math.round(v * 100) + '%';
+const egNum = v => v < 10 ? v.toFixed(1) : fmtInt(v);
+// logistic regression by stochastic gradient descent, with L2 shrinkage applied once per pass
+function egFit(rows, k, R, epochs, lr0, l2) {
+  const w = new Float64Array(k), idx = rows.map((_, i) => i);
+  for (let ep = 0; ep < epochs; ep++) {
+    for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); const t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+    const lr = lr0 / (1 + ep * .5), decay = Math.exp(-lr * l2 * rows.length);
+    for (const ri of idx) { const r = rows[ri], g = lr * (rtSig(egDotS(w, r)) - r.y); for (let j = 0; j < r.ix.length; j++) w[r.ix[j]] -= g * r.vx[j]; }
+    for (let f = 1; f < k; f++) w[f] *= decay;
+  }
+  return w;
+}
+const EG_CONSENT = { con: { push: .8, sms: .9, email: .75, call: .35, inapp: .85, meet: 0 }, app: { push: .85, sms: .5, email: .7, call: .05, inapp: .95, meet: 0 }, biz: { push: .2, sms: .6, email: .95, call: .8, inapp: .6, meet: .85 } };
+function egMake(R, gauss, aud, i) {
+  const u = R(); aud = aud || (u < .5 ? 'con' : u < .8 ? 'app' : 'biz');
+  const S = EG_SEG[aud][Math.floor(R() * EG_SEG[aud].length)], b = q => R() < q ? 1 : 0;
+  const pre = aud === 'con' && (['youth', 'value'].includes(S.k) ? R() < .75 : R() < .12), post = aud === 'biz' || (aud === 'con' && !pre);
+  const tenure = R() < .14 ? Math.floor(R() * 3) : 3 + Math.floor(R() * R() * 110), endIn = post ? 1 + Math.floor(R() * 540) : null;
+  const p = { aud, seg: S, i, tenure, endIn, val: Math.max(1, Math.round(S.val * (.6 + R() * .8))), shift: gauss() * 1.1, wk: S.wk * (1 + gauss() * .1), actC: {}, lam: S.lam,
+    dw: Array.from({ length: 7 }, () => Math.min(1.5, Math.max(.6, Math.exp(gauss() * .18)))), ps: R(), c7: Math.floor(R() * R() * 4), optOut: R() < .02,
+    dncr: R() < (aud === 'con' ? .2 : aud === 'biz' ? .05 : .1), billIn: aud === 'app' ? null : Math.floor(R() * 30), heavy: b(.25) };
+  const cs = EG_CONSENT[aud]; p.aff = {}; p.consent = {};
+  for (const [k] of EG_CH) { p.aff[k] = (S.ch[k] == null ? -1.6 : S.ch[k]) + gauss() * .35; p.consent[k] = R() < cs[k]; }
+  Object.assign(p, { drop: b(aud === 'app' ? .2 : .13), net: b(aud === 'app' ? .04 : .11), shock: b(aud === 'app' ? 0 : .08), cmp: b(.05), payf: b(aud === 'biz' ? .04 : .05), rival: b(.15), end: endIn != null && endIn <= 60 ? 1 : 0,
+    idle: b(aud === 'app' ? .22 : aud === 'con' ? .08 : .05), nps: b(.1), move: b(aud === 'con' ? .04 : aud === 'app' ? .02 : .01) });
+  p.quiet = EG_X.every(k => !p[k]) && p.tenure > 24 ? 1 : 0;
+  p.dog = p.quiet && R() < .55;  // hidden: a sales contact reminds them to shop around
+  const z = Math.log(S.risk / (1 - S.risk)) - 1 + p.drop + .9 * p.net + .8 * p.shock + p.cmp + .6 * p.payf + .7 * p.rival + p.end + .8 * p.idle + .7 * p.nps + 2.4 * p.move + (p.tenure < 6 ? .4 : 0) - (p.tenure > 24 ? .3 : 0) + gauss() * .25;
+  p.p0 = rtSig(z);  // hidden: true chance of leaving in 90 days if nobody acts
+  return p;
+}
+// hidden truth: share of the churn risk removed when the action reaches them (negative means the contact pushes them away)
+function egEff(p, a) {
+  if (a === 'none') return 0;
+  if (p.move) return .03;
+  if (p.dog && a !== 'fix') return -.45;
+  const e = { fix: .06 + .55 * (p.net || p.cmp) + .25 * p.nps, offer: .08 + .5 * (p.shock || p.rival || p.end) * (.4 + p.ps), plan: .05 + .5 * p.shock + .15 * p.drop,
+    care: p.aud === 'biz' ? .35 + .2 * p.end : p.seg.k === 'senior' ? .3 : .06 + .25 * p.nps, nudge: .03 + .4 * p.idle + .15 * p.drop }[a];
+  return Math.min(.8, e);
+}
+// hidden truth: chance they reply or open at this day, hour and channel
+function egEng(p, d, h, ch) {
+  const we = rtWeekend(d, 'ss');
+  let z = -2.6 + 1.7 * rtAct(p, we, false, false)[h] * p.dw[d] + p.aff[ch] - .4 * p.c7 + (we ? (p.wk - 1) * .6 : 0);
+  if (ch === 'call' && h >= 20) z -= .6; if (ch === 'email' && h >= 7 && h <= 9) z += .3; if (ch === 'meet') z -= .2;
+  return rtSig(z);
+}
+// what the operator can see: 8 weeks of session counts and 90 days of replies by channel
+function egObserve(p, R, gauss) {
+  const pois = l => { if (l > 25) return Math.max(0, Math.round(l + Math.sqrt(l) * gauss())); let k = 0, t = Math.exp(-l), s = t; const u = R(); while (u > s && k < 200) { k++; t *= l / k; s += t; } return k; };
+  const aw = rtAct(p, false, false, false), ae = rtAct(p, true, false, false), sw = aw.reduce((s, a) => s + a, 0), se = ae.reduce((s, a) => s + a, 0);
+  p.hc = [aw.map(a => pois(p.lam * 40 * a)), ae.map(a => pois(p.lam * 16 * a))];
+  p.dc = p.dw.map((f, d) => pois(p.lam * 8 * f * (rtWeekend(d, 'ss') ? se : sw) / 3));
+  p.rn = {}; p.rs = {};
+  EG_CH.forEach(([ch]) => { const n = p.consent[ch] && !p.optOut ? Math.floor(R() * 5) : 0; let e = 0; for (let j = 0; j < n; j++) if (R() < egEng(p, Math.floor(R() * 7), 9 + Math.floor(R() * 11), ch)) e++; p.rn[ch] = n; p.rs[ch] = e; });
+}
+// empirical Bayes: each person's own hourly pattern, pulled toward their segment's until enough sessions are seen
+function egEstimate(p, segS) {
+  const k = 30, sh = (cnt, pri) => { const n = cnt.reduce((s, c) => s + c, 0), v = cnt.map((c, h) => (c + k * pri[h]) / (n + k)), m = Math.max(...v); return v.map(x => x / m); };
+  const S = segS[p.seg.k]; p.ah = [sh(p.hc[0], S[0]), sh(p.hc[1], S[1])];
+  const mW = (p.dc[0] + p.dc[1] + p.dc[2] + p.dc[3] + p.dc[4]) / 5, mE = (p.dc[5] + p.dc[6]) / 2;
+  p.dwh = p.dc.map((c, d) => (c + 6) / ((rtWeekend(d, 'ss') ? mE : mW) + 6));
+  p.rl = Object.fromEntries(EG_CH.map(([ch]) => { const r = (p.rs[ch] + .36) / (p.rn[ch] + 3); return [ch, Math.log(r / (1 - r))]; }));
+  p.ns = p.hc[0].reduce((s, c) => s + c, 0) + p.hc[1].reduce((s, c) => s + c, 0);
+}
+const egTX = (p, d, h, ch) => { const we = rtWeekend(d, 'ss'), a = p.ah[we ? 1 : 0][h] * p.dwh[d]; return [1, a, a * a, p.rl[ch], we ? 1 : 0, p.c7 / 3, ch === 'call' && h >= 20 ? 1 : 0, ch === 'email' && h >= 7 && h <= 9 ? 1 : 0, ch === 'sms' ? 1 : 0, ch === 'email' ? 1 : 0, ch === 'call' ? 1 : 0, ch === 'inapp' ? 1 : 0, ch === 'meet' ? 1 : 0]; };
+// the timing model's estimate, written out because it runs millions of times
+function egEhat(p, d, h, ch) {
+  const w = EG.wt, we = rtWeekend(d, 'ss'), a = p.ah[we ? 1 : 0][h] * p.dwh[d];
+  return rtSig(w[0] + w[1] * a + w[2] * a * a + w[3] * p.rl[ch] + (we ? w[4] : 0) + w[5] * p.c7 / 3 + (ch === 'call' && h >= 20 ? w[6] : 0) + (ch === 'email' && h >= 7 && h <= 9 ? w[7] : 0)
+    + (ch === 'sms' ? w[8] : ch === 'email' ? w[9] : ch === 'call' ? w[10] : ch === 'inapp' ? w[11] : ch === 'meet' ? w[12] : 0));
+}
+function egPhi(p, arm) {
+  const b = p.xb || (p.xb = [1, ...EG_X.map(k => p[k]), p.tenure < 6 ? 1 : 0, p.tenure > 24 ? 1 : 0, p.quiet, p.aud === 'app' ? 1 : 0, p.aud === 'biz' ? 1 : 0]);
+  const v = b.slice();
+  EG_ARMS.forEach(a => { const on = a === arm ? 1 : 0; v.push(on); EG_IX[a].forEach(k => v.push(on ? (k === 'biz' ? b[15] : p[k]) : 0)); });
+  return v;
+}
+const egFixCh = (p, a) => p.optOut ? null : EG_ACT[a].ch.find(c => p.consent[c]) || null;
+// guardrails run before any score is used; '' means the slot is allowed
+function egBlock(p, d, h, ch, mk) {
+  const we = rtWeekend(d, 'ss');
+  if (p.optOut) return 'Opted out of all contact';
+  if (!p.consent[ch]) return `No consent for ${EG_CHN[ch]}`;
+  if (mk && p.cmp) return 'Cooling-off: complaint in the last 48 hours';
+  if (mk && p.c7 >= 2) return 'Frequency cap: 2 sales contacts in 7 days already used';
+  if (ch === 'call' && mk && p.dncr) return EG_W.dnc;
+  if (ch === 'call' && (h < EG_W.call[0] || h >= EG_W.call[1])) return EG_W.callQ;
+  if (ch === 'meet' && (we || h < 9 || h >= 17)) return 'Visits on working days, 09:00–17:00';
+  if (ch === 'sms' && (h < 8 || h >= 21)) return 'Quiet hours: SMS 08:00–21:00';
+  if (h < 8 || h >= 22) return 'Quiet hours: no messages 22:00–08:00';
+  if (p.aud === 'biz' && we) return 'Business clients: working days only';
+  if (ch === 'call' && mk && we) return 'No sales calls on weekend days';
+  return '';
+}
+function egScan(p, mk) {
+  const out = {};
+  EG_CH.forEach(([ch]) => {
+    if (p.optOut || !p.consent[ch]) return; let b = null;
+    for (let d = 0; d < 7; d++) for (let h = 8; h < 22; h++) { if (egBlock(p, d, h, ch, mk)) continue; const e = egEhat(p, d, h, ch); if (!b || e > b.e) b = { d, h, ch, e }; }
+    if (b) out[ch] = b;
+  });
+  return out;
+}
+// risk, effect if reached, best moment per channel, next best action and group
+function egScore(p) {
+  p.risk = rtSig(egDot(EG.wc, egPhi(p, 'none')));
+  p.bm = egScan(p, true); p.bs = egScan(p, false); p.opts = {};
+  EG_ARMS.forEach(a => {
+    const A = EG_ACT[a], fch = egFixCh(p, a); if (!fch) return;
+    // the campaign reached only some people (three tries at 10:00), so divide by that reach to get the effect when reached
+    const itt = p.risk - rtSig(egDot(EG.wc, egPhi(p, a))), reach = itt / Math.max(.08, 1 - [1, 2, 3].reduce((s, d) => s * (1 - egEhat(p, d, 10, fch)), 1));
+    const best = A.ch.map(ch => (A.mk ? p.bm : p.bs)[ch]).filter(Boolean).sort((x, y) => y.e - x.e)[0]; if (!best) return;
+    const upl = Math.max(-.3, Math.min(p.risk * .95, reach * best.e));
+    p.opts[a] = { a, reach, best, upl, ev: upl * p.val * 12 - A.cost(p) * best.e };
+  });
+  // rule: people who said they are leaving the country are not targeted with retention spend
+  if (p.move) Object.values(p.opts).forEach(o => { o.upl = Math.min(o.upl, .002); o.reach = Math.min(o.reach, 0); o.ev = -1; });
+  const L = Object.values(p.opts).sort((x, y) => y.ev - x.ev), top = L.length ? Math.max(...L.map(o => o.upl)) : 0;
+  p.upl = top;
+  p.grp = p.move ? 'lost' : top >= .03 ? 'pers' : p.opts.offer && p.opts.offer.upl <= -.008 ? 'dnd' : p.risk < .15 ? 'sure' : 'lost';
+  p.nba = p.grp === 'pers' ? L.find(o => o.ev > 0 && o.upl >= .01) || null : null;
+  p.y = p.grp === 'dnd' ? p.opts.offer.upl : top;  // the map shows what a sales offer would do to do-not-disturb customers
+}
+function egBuild() {
+  const R = rtRng(EG.seed * 977 + 13), gauss = () => Math.sqrt(-2 * Math.log(R() || 1e-9)) * Math.cos(2 * Math.PI * R());
+  const hx = () => Math.floor(R() * 0xffffff).toString(16).toUpperCase().padStart(6, '0');
+  // history: 36,000 past relationships in a randomized retention campaign (three tries at 10:00, Tuesday to Thursday), the first 5,000 with session logs; today: 2,400 to score
+  const H = Array.from({ length: 36000 }, (_, i) => egMake(R, gauss, null, i)), HT = H.slice(0, 5000);
+  const P = Array.from({ length: 2400 }, (_, i) => { const p = egMake(R, gauss, null, i); p.id = EG_AUD.find(a => a[0] === p.aud)[2] + '-' + hx(); return p; });
+  HT.forEach(p => egObserve(p, R, gauss)); P.forEach(p => egObserve(p, R, gauss));
+  const segS = {};
+  HT.forEach(p => { const s = segS[p.seg.k] || (segS[p.seg.k] = [new Array(24).fill(0), new Array(24).fill(0)]); for (let h = 0; h < 24; h++) { s[0][h] += p.hc[0][h]; s[1][h] += p.hc[1][h]; } });
+  Object.values(segS).forEach(s => s.forEach(a => { const t = a.reduce((x, y) => x + y, 0) || 1; a.forEach((v, h) => { a[h] = v / t; }); }));
+  HT.forEach(p => egEstimate(p, segS)); P.forEach(p => egEstimate(p, segS));
+  // timing model: past contacts at random allowed hours, tested on relationships it never saw
+  const trT = [], teT = [];
+  HT.forEach((p, i) => { if (p.optOut) return; const chs = EG_CH.map(c => c[0]).filter(c => p.consent[c]);
+    for (let j = 0; j < 3 && chs.length; j++) { const ch = chs[Math.floor(R() * chs.length)], d = Math.floor(R() * 7), h = 8 + Math.floor(R() * 14); (i % 5 ? trT : teT).push(Object.assign(egRow(egTX(p, d, h, ch), R() < egEng(p, d, h, ch) ? 1 : 0), { ch, h })); } });
+  EG.wt = egFit(trT, EG_TF.length, R, 5, .08, 1e-4);
+  const bN = {}, bE = {}; trT.forEach(r => { const k = r.ch + r.h; bN[k] = (bN[k] || 0) + 1; bE[k] = (bE[k] || 0) + r.y; });
+  const tAuc = rtAuc(teT.map(r => rtSig(egDotS(EG.wt, r))), teT.map(r => r.y)), tBase = rtAuc(teT.map(r => ((bE[r.ch + r.h] || 0) + 1) / ((bN[r.ch + r.h] || 0) + 6)), teT.map(r => r.y));
+  // churn and persuadability: one logistic model with action × signal interactions, trained on the randomized campaign
+  const trC = [], teC = [];
+  H.forEach((p, i) => {
+    const arm = ['none'].concat(EG_ARMS)[Math.floor(R() * 6)], ch = arm === 'none' ? null : egFixCh(p, arm), e = ch ? 1 - [1, 2, 3].reduce((s, d) => s * (1 - egEng(p, d, 10, ch)), 1) : 0;
+    (i % 5 ? trC : teC).push(egRow(egPhi(p, arm), R() < Math.min(.99, Math.max(0, p.p0 * (1 - e * egEff(p, arm)))) ? 1 : 0));
+  });
+  EG.wc = egFit(trC, egPhi(H[0], 'none').length, R, 8, .05, 2e-4);
+  const cAuc = rtAuc(teC.map(r => rtSig(egDotS(EG.wc, r))), teC.map(r => r.y));
+  EG.P = P; P.forEach(egScore);
+  EG.m = { tAuc, tBase, cAuc, nH: H.length, nS: HT.length, nTr: trC.length, nT: trT.length + teT.length, nP: P.length };
+  egEval(); EG.pc = {}; EG.learn = null; EG.ready = true;
+}
+// scored against the hidden truth, which only synthetic data allows; a pilot measures it with a holdout group
+function egEval() {
+  const P = EG.P.filter(p => !p.optOut), k = Math.round(P.length * .3), m = EG.m;
+  const fixed = (p, a) => { const ch = egFixCh(p, a); return !ch || egBlock(p, 1, 10, ch, EG_ACT[a].mk) ? 0 : p.p0 * egEng(p, 1, 10, ch) * egEff(p, a); };
+  const ai = p => p.nba ? p.p0 * egEng(p, p.nba.best.d, p.nba.best.h, p.nba.best.ch) * egEff(p, p.nba.a) : 0;
+  const per = v => v / P.length * 1000;
+  m.k = k; m.rand = per(P.reduce((s, p) => s + fixed(p, 'offer'), 0) * .3);
+  const byRisk = P.slice().sort((x, y) => y.risk - x.risk).slice(0, k);
+  m.risk = per(byRisk.reduce((s, p) => s + fixed(p, 'offer'), 0)); m.riskDog = byRisk.filter(p => p.dog).length;
+  m.upl = per(P.slice().sort((x, y) => (y.nba ? y.nba.upl : -1) - (x.nba ? x.nba.upl : -1)).slice(0, k).reduce((s, p) => s + ai(p), 0));
+  const dnd = P.filter(p => p.grp === 'dnd'); m.dnd = dnd.length; m.dndHit = dnd.filter(p => p.dog).length;
+  m.aud = {};
+  ['all'].concat(EG_AUD.map(a => a[0])).forEach(a => {
+    let eb = 0, ef = 0, n = 0;
+    P.filter(p => a === 'all' || p.aud === a).forEach(p => { const b = Object.values(p.bm).sort((x, y) => y.e - x.e)[0], fch = ['sms', 'email'].find(c => p.consent[c]); if (!b) return; n++; eb += egEng(p, b.d, b.h, b.ch); if (fch && !egBlock(p, 1, 10, fch, true)) ef += egEng(p, 1, 10, fch); });
+    m.aud[a] = { eb: n ? eb / n : 0, ef: n ? ef / n : 0, n };
+  });
+}
+const egEnsure = () => { if (!EG.ready) egBuild(); };
+const egPeople = (aud = EG.aud) => EG.P.filter(p => aud === 'all' || p.aud === aud);
+const egGet = id => EG.ready && EG.P.find(p => p.id === String(id).toUpperCase());
+// churn contacts are worth customers kept (the offer's cost counted as a share of a year's revenue) or revenue protected
+function egOptions(p, G, obj = EG.obj) {
+  if (p.optOut) return [];
+  const o = (a, val) => ({ a, mk: EG_ACT[a].mk, chs: EG_ACT[a].ch.filter(c => p.consent[c]), val });
+  if (G === 'churn') return Object.values(p.opts).filter(x => x.reach > 0).map(x => o(x.a, obj === 'rev' ? e => x.reach * e * p.val * 12 - EG_ACT[x.a].cost(p) * e : e => (x.reach - EG_ACT[x.a].cost(p) / (p.val * 12)) * e));
+  if (G === 'engage') return p.drop || p.idle ? [o('nudge', e => e * (.25 * p.risk * p.val * 12 + .5))] : [];
+  if (G === 'upsell') return p.heavy && p.risk < .2 && p.grp !== 'dnd' && !p.move ? [o('up', e => e * .15 * p.val * .25 * 12)] : [];
+  if (G === 'onboard') return p.tenure < 3 ? [o('welcome', e => e * (.3 * p.risk * p.val * 12 + .5))] : [];
+  if (G === 'pay') return (p.billIn != null && p.billIn <= 3) || p.payf ? [o('remind', e => e * .35 * p.val + .01)] : [];
+  return [];
+}
+// the hidden truth for a planned contact: replies, customers kept and value
+function egTrue(o, G) {
+  const p = o.p, e = egEng(p, o.d, o.h, o.ch);
+  if (G === 'churn') { const kept = p.p0 * e * egEff(p, o.a); return { e, kept, v: kept * p.val * 12 }; }
+  const v = G === 'engage' ? e * .25 * p.p0 * p.val * 12 : G === 'upsell' ? e * .15 * p.val * .25 * 12 : G === 'onboard' ? e * .3 * p.p0 * p.val * 12 : e * .35 * p.val;
+  return { e, kept: G === 'onboard' || G === 'engage' ? v / (p.val * 12) : 0, v };
+}
+// today's plan: the best slot left today for each person, ranked by expected value, within call-centre and visit capacity
+function egPlan(G = EG.goal, aud = EG.aud, n = EG.n, cph = EG.cph, obj = EG.obj) {
+  const now = new Date(), d0 = (now.getDay() + 6) % 7, h0 = now.getHours(), late = h0 >= 20, day = late ? (d0 + 1) % 7 : d0;
+  const key = [G, aud, n, cph, obj, day, late ? 8 : h0].join('|'); if (EG.pc[key]) return EG.pc[key];
+  const hours = []; for (let h = late ? 8 : Math.max(8, h0 + 1); h <= 21; h++) hours.push(h);
+  const cand = [];
+  egPeople(aud).forEach(p => {
+    const L = [];
+    egOptions(p, G, obj).forEach(o => hours.forEach(h => o.chs.forEach(ch => { if (egBlock(p, day, h, ch, o.mk)) return; const e = egEhat(p, day, h, ch), v = o.val(e); if (v > 0) L.push({ p, a: o.a, d: day, h, ch, e, v }); })));
+    if (L.length) cand.push(L.sort((x, y) => y.v - x.v).slice(0, 5));
+  });
+  cand.sort((x, y) => y[0].v - x[0].v);
+  const used = {}, out = [];
+  for (const L of cand) {
+    if (out.length >= n) break;
+    const o = L.find(z => z.ch === 'call' ? (used['call' + z.h] || 0) < cph : z.ch === 'meet' ? (used['meet' + z.h] || 0) < 2 : true); if (!o) continue;
+    used[o.ch + o.h] = (used[o.ch + o.h] || 0) + 1; out.push(o);
+  }
+  // today's practice: the same number of people, highest risk first (or the first eligible), one message at a fixed time (10:00, or the first hour left)
+  const fh = hours.includes(10) ? 10 : hours[0], fa = { churn: 'offer', engage: 'nudge', upsell: 'up', onboard: 'welcome', pay: 'remind' }[G];
+  const pool = egPeople(aud).filter(p => !p.optOut && (G === 'churn' || egOptions(p, G).length)), base = [];
+  (G === 'churn' ? pool.slice().sort((x, y) => y.risk - x.risk) : pool).slice(0, out.length).forEach(p => { const ch = ['sms', 'email', 'push'].find(c => p.consent[c] && !egBlock(p, day, fh, c, EG_ACT[fa].mk)); if (ch) base.push({ p, a: fa, d: day, h: fh, ch }); });
+  const sum = (L, f) => L.reduce((s, o) => s + f(o), 0), tA = out.map(o => egTrue(o, G)), tB = base.map(o => egTrue(o, G));
+  const res = { G, aud, obj, day, fh, hours, out, base, ai: { e: sum(tA, t => t.e), kept: sum(tA, t => t.kept), v: sum(tA, t => t.v) }, fx: { e: sum(tB, t => t.e), kept: sum(tB, t => t.kept), v: sum(tB, t => t.v) },
+    calls: out.filter(o => o.ch === 'call').length, meets: out.filter(o => o.ch === 'meet').length, skipped: cand.length - out.length, dnd: egPeople(aud).filter(p => p.grp === 'dnd').length };
+  return (EG.pc[key] = res);
+}
+// the learning loop: Thompson sampling picks a time block and channel per segment and learns from every reply
+function egGamma(R, gauss, k) {
+  const d = k - 1 / 3, c = 1 / Math.sqrt(9 * d);
+  for (;;) { let x, v; do { x = gauss(); v = 1 + c * x; } while (v <= 0); v = v * v * v; const u = R(); if (u < 1 - .0331 * x ** 4 || Math.log(u) < .5 * x * x + d * (1 - v + Math.log(v))) return d * v; }
+}
+function egLearnRun() {
+  const R = rtRng(EG.seed * 31 + 7), gauss = () => Math.sqrt(-2 * Math.log(R() || 1e-9)) * Math.cos(2 * Math.PI * R());
+  const blocks = [[8, 10], [10, 12], [12, 14], [14, 17], [17, 19], [19, 21]], chs = ['push', 'sms', 'email'], arms = [];
+  blocks.forEach((b, bi) => chs.forEach(ch => arms.push([bi, ch])));
+  const post = {}, weeks = [];
+  for (let w = 0; w < 12; w++) {
+    let fx = 0, ai = 0, best = 0, n = 0;
+    for (let i = 0; i < 400; i++) {
+      const p = egMake(R, gauss, R() < .6 ? 'con' : 'app', i), ok = p.optOut ? [] : arms.filter(([, ch]) => p.consent[ch]); if (!ok.length) continue; n++;
+      const tr = ([bi, ch]) => { const [a, b] = blocks[bi]; let s = 0; for (let h = a; h < b; h++) s += egEng(p, 1, h, ch); return s / (b - a); };
+      const fa = ok.find(([bi, ch]) => bi === 1 && ch === 'sms') || ok.find(([bi]) => bi === 1); fx += tr(fa); best += Math.max(...ok.map(tr));
+      const Q = post[p.seg.k] || (post[p.seg.k] = { l: p.seg.l, a: arms.map(() => [1, 1]) });
+      let pick = ok[0], top = -1;
+      ok.forEach(arm => { const [a, b] = Q.a[arms.indexOf(arm)], x = egGamma(R, gauss, a), y = egGamma(R, gauss, b), s = x / (x + y); if (s > top) { top = s; pick = arm; } });
+      const t = tr(pick), y = R() < t ? 1 : 0, j = arms.indexOf(pick); ai += t; Q.a[j][0] += y; Q.a[j][1] += 1 - y;
+    }
+    weeks.push({ fx: fx / n, ai: ai / n, best: best / n });
+  }
+  const learned = Object.values(post).map(Q => { const j = Q.a.map((x, i) => [x[0] / (x[0] + x[1]), x[0] + x[1] - 2, i]).sort((x, y) => y[0] - x[0])[0]; return { l: Q.l, b: blocks[arms[j[2]][0]], ch: arms[j[2]][1], rate: j[0], n: j[1] }; });
+  return (EG.learn = { weeks, learned, blocks });
+}
+
+/* the Engagement AI section */
+function egWindow(p) {
+  if (p.cmp || p.net) return ['Within 48 hours', 'Right after a bad experience, fixing it matters most'];
+  if (p.payf) return ['Before the next billing run', 'A failed payment often turns into a suspension and a lost customer'];
+  if (p.endIn != null && p.endIn <= 90) { const t = new Date(Date.now() + Math.max(0, p.endIn - 30) * 864e5); return [p.endIn <= 30 ? 'Now' : 'By ' + t.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }), `The contract ends in ${p.endIn} days; most decide about 30 days before`]; }
+  if (p.drop || p.idle) return ['This week', 'Usage is falling, and most leavers go quiet first'];
+  if (p.rival) return ['While the rival campaign runs', 'A rival is targeting their area'];
+  if (p.tenure < 3) return ['In the first 90 days', 'New customers decide early whether to stay'];
+  return ['No rush', 'No warning signs right now'];
+}
+function egWhy(p, o) {
+  const b = o.best, a = p.ah[rtWeekend(b.d, 'ss') ? 1 : 0][b.h] * p.dwh[b.d], out = [];
+  if (a > .55) out.push(`Usually active around ${pad(b.h)}:00 on ${RT_DAYS[b.d]}s (learned from ${fmtInt(p.ns)} ${egSess(p)})`);
+  if (p.rn[b.ch]) out.push(`Replied to ${p.rs[b.ch]} of ${p.rn[b.ch]} recent ${EG_CHN[b.ch]} messages`);
+  const hit = EG_ACT[o.a].why.filter(k => p[k]).map(k => EG_XL[k].toLowerCase()); if (hit.length) out.push(`This action answers: ${hit.join('; ')}`);
+  if (!out.length) out.push(`${EG_CHN[b.ch]} has the best predicted reply chance in the allowed hours`);
+  return out.slice(0, 3);
+}
+function egHeatSvg(p, ch, mk) {
+  const cw = 22, rh = 16, L = 34, T = 16, hs = Array.from({ length: 14 }, (_, i) => i + 8);
+  const cells = []; for (let d = 0; d < 7; d++) hs.forEach(h => { const bl = egBlock(p, d, h, ch, mk); cells.push({ d, h, bl, e: bl ? 0 : egEhat(p, d, h, ch) }); });
+  const best = cells.filter(c => !c.bl).sort((x, y) => y.e - x.e)[0], mx = Math.max(.05, best ? best.e : 0);
+  return `<svg class="eg-heat" viewBox="0 0 ${L + hs.length * cw + 2} ${T + 7 * rh + 2}" role="img" aria-label="Predicted reply chance by day and hour for ${esc(EG_CHN[ch])}"><defs><pattern id="egHatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" style="fill:var(--surface)"/><line x1="0" y1="0" x2="0" y2="5" style="stroke:var(--line-strong);stroke-width:1.4"/></pattern></defs>`
+    + hs.filter(h => h % 3 === 2).map(h => `<text x="${L + (h - 8) * cw + 2}" y="11" style="font:10px var(--f-mono);fill:var(--muted)">${pad(h)}</text>`).join('')
+    + RT_DAYS.map((d, i) => `<text x="${L - 6}" y="${T + i * rh + 12}" text-anchor="end" style="font:10.5px var(--f-mono);fill:${rtWeekend(i, 'ss') ? 'var(--signal)' : 'var(--ink-2)'}">${d}</text>`).join('')
+    + cells.map(c => `<rect x="${L + (c.h - 8) * cw + 1}" y="${T + c.d * rh + 1}" width="${cw - 2}" height="${rh - 2}" rx="2.5" style="fill:${c.bl ? 'url(#egHatch)' : `color-mix(in srgb,var(--accent) ${(6 + 94 * Math.min(1, c.e / mx)).toFixed(0)}%,var(--surface-2))`}"><title>${RT_DAYS[c.d]} ${pad(c.h)}:00 · ${c.bl ? 'blocked: ' + esc(c.bl) : egPct(c.e) + ' predicted reply chance'}</title></rect>`).join('')
+    + (best ? `<rect x="${L + (best.h - 8) * cw}" y="${T + best.d * rh}" width="${cw}" height="${rh}" rx="3" style="fill:none;stroke:var(--ink);stroke-width:2"/>` : '') + '</svg>';
+}
+function egSumHtml() {
+  const L = egPeople(), n = L.length, c = g => L.filter(p => p.grp === g).length, at = L.filter(p => p.risk >= .25).length, a = EG.m.aud[EG.aud], up = a.ef ? a.eb / a.ef - 1 : 0;
+  const who = EG.aud === 'all' ? 'customers, app users and business clients' : EG_AUDN[EG.aud].toLowerCase();
+  return [[fmtInt(n), `${who} scored, all synthetic and tokenized`], [fmtInt(at), `likely to leave: 25% or higher chance in 90 days`], [fmtInt(c('pers')), 'persuadable: a contact at the right moment changes the outcome', 'hot'],
+    [fmtInt(c('dnd')), 'do not disturb: a sales contact would push them away'], [(up >= 0 ? '+' : '') + Math.round(up * 100) + '%', 'more replies at each one’s best moment than on a fixed schedule']]
+    .map(([v, l, cls]) => `<div${cls ? ` class="${cls}"` : ''}><b>${v}</b><span>${esc(l)}</span></div>`).join('');
+}
+function egFlowHtml() {
+  const m = EG.m, a = m.aud.all;
+  return [['Connect', 'Tokenized customer, app and account data', `${fmtInt(m.nP)} relationships · 10 signals`], ['Learn routines', 'When each person is active and replies', `AUC ${m.tAuc.toFixed(2)} vs ${m.tBase.toFixed(2)}`],
+    ['Predict churn', 'Who is likely to leave in 90 days', `AUC ${m.cAuc.toFixed(2)}`], ['Find persuadables', 'Who a contact would change, and with what', `${(m.upl / Math.max(.01, m.risk)).toFixed(1)}× more kept`],
+    ['Pick the moment', 'Best day, hour and channel within the rules', `+${Math.round((a.eb / Math.max(.001, a.ef) - 1) * 100)}% replies`], ['Learn and measure', 'Every reply updates the model; a holdout proves it', '10% holdout']]
+    .map(([t, d, k], i) => `<li><span class="dc-n">${i + 1}</span><b>${esc(t)}</b><span class="tiny muted">${esc(d)}</span><span class="tiny mono">${esc(k)}</span></li>`).join('');
+}
+function egMapHtml() {
+  const L = egPeople(), sel = EG.sel, step = Math.max(1, Math.ceil(L.length / 700)), pts = L.filter((p, i) => i % step === 0 || p === sel);
+  const W = 560, H = 300, l = 44, r = 10, t = 12, b = 40, xm = .8, y1 = Math.min(.45, Math.max(.12, ...L.map(p => p.y)) + .01), y0 = Math.max(-.2, Math.min(-.06, ...L.map(p => p.y)) - .01);
+  const sx = v => l + Math.min(xm, Math.max(0, v)) / xm * (W - l - r), sy = v => t + (y1 - Math.min(y1, Math.max(y0, v))) / (y1 - y0) * (H - t - b);
+  const cnt = g => fmtInt(L.filter(p => p.grp === g).length);
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Each dot is a customer, user or client: chance of leaving across, effect of a contact up">
+    <rect x="${l}" y="${sy(y1)}" width="${W - l - r}" height="${sy(.03) - sy(y1)}" style="fill:var(--accent-soft);opacity:.55"/>
+    <rect x="${l}" y="${sy(-.008)}" width="${W - l - r}" height="${sy(y0) - sy(-.008)}" style="fill:var(--crit-soft);opacity:.55"/>
+    ${[0, .2, .4, .6, .8].map(v => `<line x1="${sx(v)}" y1="${t}" x2="${sx(v)}" y2="${H - b}" style="stroke:var(--grid)"/><text x="${sx(v)}" y="${H - b + 14}" text-anchor="middle" style="font:10.5px var(--f-mono);fill:var(--muted)">${Math.round(v * 100)}%</text>`).join('')}
+    ${[-.15, -.1, -.05, 0, .05, .1, .15, .2, .25, .3, .35, .4].filter(v => v >= y0 && v <= y1).map(v => `<line x1="${l}" y1="${sy(v)}" x2="${W - r}" y2="${sy(v)}" style="stroke:${v ? 'var(--grid)' : 'var(--line-strong)'}"/><text x="${l - 6}" y="${sy(v) + 4}" text-anchor="end" style="font:10.5px var(--f-mono);fill:var(--muted)">${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(Math.round(v * 100))}</text>`).join('')}
+    <line x1="${sx(.15)}" y1="${sy(.03)}" x2="${sx(.15)}" y2="${sy(-.008)}" style="stroke:var(--line-strong);stroke-dasharray:3 3"/>
+    <text x="${W - r - 4}" y="${sy(y1) + 14}" text-anchor="end" style="font:600 11.5px var(--f-body);fill:var(--accent)">Persuadable · ${cnt('pers')}</text>
+    <text x="${W - r - 4}" y="${sy(y0) - 6}" text-anchor="end" style="font:600 11.5px var(--f-body);fill:var(--crit)">Do not disturb · ${cnt('dnd')}</text>
+    ${pts.map(p => `<circle class="eg-dot g-${p.grp}${p === sel ? ' sel' : ''}" data-egid="${p.id}" cx="${sx(p.risk).toFixed(1)}" cy="${sy(p.y).toFixed(1)}" r="${(2.6 + Math.log10(p.val) * .75).toFixed(1)}"><title>${esc(p.id)} · ${esc(p.seg.l)} · ${egPct(p.risk)} chance of leaving · ${EG_GRP[p.grp][0]}</title></circle>`).join('')}
+    <text x="${(l + W - r) / 2}" y="${H - 6}" text-anchor="middle" style="font:11px var(--f-body);fill:var(--ink-2)">Chance of leaving in 90 days →</text>
+    <text x="12" y="${(t + H - b) / 2}" text-anchor="middle" transform="rotate(-90 12 ${(t + H - b) / 2})" style="font:11px var(--f-body);fill:var(--ink-2)">Fewer leavers per 100 if reached ↑</text></svg>
+    <div class="eg-leg">${Object.entries(EG_GRP).map(([g, [n]]) => `<span><i class="eg-sw g-${g}" style="border-radius:50%"></i>${esc(n)} · ${cnt(g)}</span>`).join('')}<span class="tiny muted">Do-not-disturb dots show what a sales offer would do</span></div>`;
+}
+function egCardHtml(p) {
+  if (!p) return `<div class="box-h"><span><b>Customer</b></span></div><div class="detail"><p class="small muted">Click a dot to see one customer.</p></div>`;
+  const o = p.nba, alt = Object.values(p.opts).sort((x, y) => y.ev - x.ev), win = egWindow(p), g = EG_GRP[p.grp], moments = EG_X.filter(k => p[k]).map(k => EG_XL[k]).concat(p.quiet ? [EG_XL.quiet] : []);
+  const mk = o ? EG_ACT[o.a].mk : true, anyB = o ? o.best : Object.values(p.bm).sort((x, y) => y.e - x.e)[0], fch = ['sms', 'email'].find(c => p.consent[c]), fx = fch && !egBlock(p, 1, 10, fch, mk) ? egEhat(p, 1, 10, fch) : null;
+  const after = o ? Math.max(0, p.risk - o.upl) : p.risk;
+  const rules = [['Consent', p.optOut ? 'Opted out of all contact' : EG_CH.filter(([k]) => p.consent[k]).map(k => k[1]).join(', ') || 'none', !p.optOut],
+    ['Sales calls', p.dncr ? EG_W.dnc : EG_W.callRule, !p.dncr], ['Quiet hours', 'SMS 08:00–21:00 · other messages 08:00–22:00', true],
+    ['Frequency cap', `${p.c7} of 2 sales contacts used this week`, p.c7 < 2], ['Cooling-off', p.cmp ? 'Complaint in the last 48 hours: service contact only' : 'No recent complaint', !p.cmp]];
+  return `<div class="box-h"><span><b>${esc(p.id)}</b> · ${esc(EG_AUDN[p.aud])} · ${esc(p.seg.l)}</span><span class="eg-g ${p.grp}">${esc(g[0])}</span></div><div class="detail">
+    <p class="small">${esc(g[1])}. ${esc(EG_W.money(p.val))} a month · ${p.tenure < 12 ? p.tenure + ' months' : Math.floor(p.tenure / 12) + ' years'} as a ${p.aud === 'biz' ? 'client' : 'customer'}${p.endIn != null ? ` · contract ends in ${p.endIn} days` : ''}.</p>
+    ${o ? `<div class="rt-best"><span class="label">Next best action</span><b>${esc(egActN(o.a, p))}</b><span class="rt-p">${esc(EG_CHN[o.best.ch])} · ${esc(egSlot(o.best))} · <span class="mono">${egPct(o.best.e)}</span> predicted reply chance</span></div>`
+      : `<div class="rt-best"><span class="label">Next best action</span><b>${p.grp === 'dnd' ? 'Leave them alone' : 'No contact needed'}</b><span class="small muted">${p.grp === 'dnd' ? 'Every sales contact is predicted to raise the chance they leave. Service messages still go out.' : p.optOut ? 'They opted out of all contact.' : 'No action is predicted to change the outcome enough to be worth a contact.'}</span></div>`}
+    <div class="eg-risk"><span>Chance of leaving in 90 days: <b>${egPct(p.risk)}</b>${o ? ` → <b>${egPct(after)}</b> if reached` : ''}</span><span class="tiny muted">${o ? '−' + (o.upl * 100).toFixed(1) + ' pts' : ''}</span>
+      <span class="eg-rb" aria-hidden="true"><i style="width:${(p.risk * 100).toFixed(1)}%;background:var(--crit);opacity:.35"></i><i style="width:${(after * 100).toFixed(1)}%;background:var(--crit)"></i></span></div>
+    <div class="rt-cmp"><div><span class="label">Act</span><b>${esc(win[0])}</b><span class="tiny muted">${esc(win[1])}</span></div><div><span class="label">Best moment vs fixed schedule</span><b>${anyB ? egPct(anyB.e) : '—'} vs ${fx == null ? 'blocked' : egPct(fx)}</b><span class="tiny muted">${anyB ? esc(EG_CHN[anyB.ch] + ' · ' + egSlot(anyB)) : 'no allowed slot'} vs Tue 10:00 ${fch ? esc(EG_CHN[fch]) : ''}</span></div></div>
+    ${moments.length ? `<div><span class="label">Moments that matter</span><div class="chips">${moments.map(m => `<span class="chip">${esc(m)}</span>`).join('')}</div></div>` : ''}
+    ${o ? `<div><span class="label">When they reply: ${esc(EG_CHN[o.best.ch])}, next 7 days</span>${egHeatSvg(p, o.best.ch, EG_ACT[o.a].mk)}</div><div><span class="label">Why this moment and action</span><ul class="cxl">${egWhy(p, o).map(r => `<li>${esc(r)}</li>`).join('')}</ul></div>` : ''}
+    ${alt.length > 1 ? `<div><span class="label">Actions compared (fewer leavers per 100 if reached at the best moment)</span><div class="rt-w">${alt.map(x => `<div><span>${esc(egActN(x.a, p))}</span><span class="bar"><i style="width:${Math.min(100, Math.abs(x.upl) / Math.max(.01, ...alt.map(y => Math.abs(y.upl))) * 100).toFixed(0)}%;background:${x.upl >= 0 ? 'var(--good)' : 'var(--crit)'}"></i></span><span class="mono tiny">${x.upl >= 0 ? '+' : '−'}${Math.abs(x.upl * 100).toFixed(1)}</span></div>`).join('')}</div></div>` : ''}
+    <div><span class="label">Guardrails checked</span><div class="rt-rules">${rules.map(r => `<div class="${r[2] ? 'ok' : 'stop'}"><i aria-hidden="true">${r[2] ? '✓' : '✕'}</i><b>${esc(r[0])}</b><span>${esc(r[1])}</span></div>`).join('')}</div></div>
+    <div class="row-btns">${o ? `<button type="button" class="btn sm accent" data-egadd="${esc(p.id)}">Add to my workspace</button>` : ''}<button type="button" class="btn sm" data-egnext>Next persuadable →</button></div>
+  </div>`;
+}
+function egPlanHtml() {
+  const P = egPlan(), G = P.G, money = EG_W.money, dayN = RT_DAYS[P.day], today = P.day === (new Date().getDay() + 6) % 7;
+  const up = P.fx.e ? P.ai.e / P.fx.e - 1 : 0;
+  const k = [['Contacts planned', fmtInt(P.out.length), `${P.calls} calls · ${P.meets} visits · ${P.out.length - P.calls - P.meets} messages`],
+    ['Expected replies', fmtInt(P.ai.e), `vs ${fmtInt(P.fx.e)} today (${up >= 0 ? '+' : ''}${Math.round(up * 100)}%)`, 'good'],
+    G === 'churn' ? ['Customers kept', egNum(P.ai.kept), `vs ${egNum(P.fx.kept)} for highest risk first at ${pad(P.fh)}:00`, 'good'] : ['Value created', money(P.ai.v), `vs ${money(P.fx.v)} for one message at ${pad(P.fh)}:00`, 'good'],
+    G === 'churn' ? ['Revenue protected', money(P.ai.v) + '/yr', `vs ${money(P.fx.v)} · ${fmtInt(P.dnd)} left alone on purpose`] : ['Not reachable today', fmtInt(P.skipped), 'blocked by capacity, consent or quiet hours']];
+  const hs = P.hours, W = 560, H = 170, l = 30, b = 24, t = 8, bw = (W - l - 6) / Math.max(1, hs.length), by = {};
+  P.out.forEach(o => { const z = by[o.h] || (by[o.h] = {}); z[o.ch] = (z[o.ch] || 0) + 1; });
+  const mx = Math.max(1, ...hs.map(h => Object.values(by[h] || {}).reduce((s, v) => s + v, 0)));
+  const bars = hs.map((h, i) => { let y = H - b; return EG_CH.map(([ch]) => { const v = (by[h] || {})[ch] || 0; if (!v) return ''; const hh = v / mx * (H - b - t); y -= hh; return `<rect x="${(l + i * bw + 2).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw - 4).toFixed(1)}" height="${hh.toFixed(1)}" style="fill:${EG_CC[ch]}"><title>${pad(h)}:00 · ${v} by ${esc(EG_CHN[ch])}</title></rect>`; }).join('') + `<text x="${(l + i * bw + bw / 2).toFixed(1)}" y="${H - 8}" text-anchor="middle" style="font:10px var(--f-mono);fill:var(--muted)">${pad(h)}</text>`; }).join('');
+  const chans = EG_CH.filter(([ch]) => P.out.some(o => o.ch === ch));
+  const rows = P.out.slice(0, 12).map(o => `<tr><td class="mono">${pad(o.h)}:00</td><td><button type="button" class="linkish mono" data-egid="${esc(o.p.id)}">${esc(o.p.id)}</button></td><td>${esc(o.p.seg.l)}</td><td>${esc(egActN(o.a, o.p))}</td><td>${esc(EG_CHN[o.ch])}</td><td class="mono">${egPct(o.e)}</td><td class="mono">${esc(money(o.v))}</td></tr>`).join('');
+  return `<div class="ue-out eg-k">${k.map(([lb, v, s, c]) => `<div${c ? ` class="${c}"` : ''}><span>${esc(lb)}</span><b>${esc(v)}</b><span>${esc(s)}</span></div>`).join('')}</div>
+    <div class="eg-two"><div class="box"><div class="box-h"><span><b>Contacts by hour</b> · ${today ? 'rest of today' : dayN}</span><span>${esc(EG_GN[G])}</span></div><div class="wb-body">
+      ${P.out.length ? `<svg class="eg-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Planned contacts by hour and channel"><line x1="${l}" y1="${H - b}" x2="${W - 4}" y2="${H - b}" style="stroke:var(--line-strong)"/><text x="${l - 6}" y="${t + 8}" text-anchor="end" style="font:10px var(--f-mono);fill:var(--muted)">${mx}</text>${bars}</svg>
+      <div class="eg-leg">${chans.map(([ch, n]) => `<span><i class="eg-sw" style="background:${EG_CC[ch]}"></i>${esc(n)}</span>`).join('')}</div>` : `<p class="small muted">Nobody in this audience can be reached for this goal in the hours left today.</p>`}</div></div>
+      <div class="box"><div class="box-h"><span><b>How the plan is built</b></span></div><div class="wb-body small">
+        <ol class="eg-how"><li>Score every allowed hour left ${today ? 'today' : 'on ' + dayN} for each person and channel; blocked hours never count.</li><li>Rank people by expected value: chance of a reply × what the contact is worth${G === 'churn' ? ', minus the cost of the offer' : ''}.</li><li>Fill the call centre hour by hour (${EG.cph} calls an hour) and account managers’ visits (2 an hour); move people to their next-best slot when an hour is full.</li><li>Stop at ${fmtInt(EG.n)} contacts. ${G === 'churn' ? 'Do-not-disturb customers are never contacted with sales offers.' : 'Service messages skip the sales cap but keep consent and quiet hours.'}</li></ol>
+        <p class="tiny muted">Compared with today’s practice: the same number of people, ${G === 'churn' ? 'highest predicted risk first' : 'eligible people in list order'}, one ${EG_ACT[{ churn: 'offer', engage: 'nudge', upsell: 'up', onboard: 'welcome', pay: 'remind' }[G]].n.toLowerCase()} at ${pad(P.fh)}:00 by SMS, email or push. Outcomes use the hidden truth of the synthetic data.</p>
+        <div class="row-btns"><button type="button" class="btn sm" data-egcsv>Download the plan (CSV)</button><button type="button" class="btn sm" data-egtop>Add the top 5 to my workspace</button></div></div></div></div>
+    ${P.out.length ? `<div class="box"><div class="box-h"><span><b>First 12 contacts, by expected value</b></span><span>${fmtInt(P.out.length)} in the plan</span></div><div class="tbl-wrap"><table class="wb-table"><thead><tr><th>Time</th><th>Token</th><th>Segment</th><th>Action</th><th>Channel</th><th>Reply</th><th>Value</th></tr></thead><tbody>${rows}</tbody></table></div></div>` : ''}`;
+}
+function egLearnHtml(upto) {
+  const Lr = EG.learn || egLearnRun(), wk = Lr.weeks.slice(0, upto == null ? 12 : upto), W = 560, H = 210, l = 40, r = 12, t = 12, b = 28;
+  const all = Lr.weeks.flatMap(w => [w.fx, w.ai, w.best]), y0 = Math.max(0, Math.min(...all) - .02), y1 = Math.max(...all) + .02;
+  const sx = i => l + i / 11 * (W - l - r), sy = v => t + (y1 - v) / (y1 - y0) * (H - t - b);
+  const line = (k, st, dash) => wk.length ? `<polyline points="${wk.map((w, i) => sx(i).toFixed(1) + ',' + sy(w[k]).toFixed(1)).join(' ')}" style="fill:none;stroke:${st};stroke-width:2.2${dash ? ';stroke-dasharray:' + dash : ''}"/>` + `<circle cx="${sx(wk.length - 1).toFixed(1)}" cy="${sy(wk[wk.length - 1][k]).toFixed(1)}" r="3.5" style="fill:${st}"/>` : '';
+  const last = Lr.weeks[11], first = Lr.weeks[0], gap = (last.ai - last.fx) / Math.max(.001, last.best - last.fx);
+  return `<div class="eg-two"><div class="box"><div class="box-h"><span><b>Reply rate, week by week</b> · new customers each week</span><span>${wk.length} of 12 weeks</span></div><div class="wb-body">
+      <svg class="eg-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Weekly reply rate: fixed schedule, learning AI and the best possible">
+        ${[0, .25, .5, .75, 1].map(f => { const v = y0 + f * (y1 - y0); return `<line x1="${l}" y1="${sy(v).toFixed(1)}" x2="${W - r}" y2="${sy(v).toFixed(1)}" style="stroke:var(--grid)"/><text x="${l - 6}" y="${(sy(v) + 4).toFixed(1)}" text-anchor="end" style="font:10px var(--f-mono);fill:var(--muted)">${Math.round(v * 100)}%</text>`; }).join('')}
+        ${[0, 3, 7, 11].map(i => `<text x="${sx(i).toFixed(1)}" y="${H - 8}" text-anchor="middle" style="font:10px var(--f-mono);fill:var(--muted)">wk ${i + 1}</text>`).join('')}
+        ${line('best', 'var(--good)', '2 4')}${line('fx', 'var(--muted)', '6 4')}${line('ai', 'var(--accent)')}</svg>
+      <div class="eg-leg"><span><i class="eg-sw" style="background:var(--accent)"></i>Engagement AI, learning</span><span><i class="eg-sw" style="background:var(--muted)"></i>Fixed schedule (Tue 10:00 SMS)</span><span><i class="eg-sw" style="background:var(--good)"></i>Best possible (knows each person)</span></div>
+      <p class="small">Week 1: ${egPct(first.ai)} replies while it explores. Week 12: <b>${egPct(last.ai)}</b> vs ${egPct(last.fx)} on a fixed schedule, closing ${Math.round(gap * 100)}% of the gap to the best possible ${egPct(last.best)}.</p></div></div>
+    <div class="box"><div class="box-h"><span><b>What it learned</b> · best time block per segment</span></div><div class="tbl-wrap"><table class="wb-table"><thead><tr><th>Segment</th><th>Block</th><th>Channel</th><th>Replies</th></tr></thead><tbody>
+      ${Lr.learned.map(x => `<tr><td>${esc(x.l)}</td><td class="mono">${pad(x.b[0])}–${pad(x.b[1])}</td><td>${esc(EG_CHN[x.ch])}</td><td class="mono">${egPct(x.rate)}</td></tr>`).join('')}</tbody></table></div>
+      <p class="tiny muted" style="padding:0 12px 12px">Thompson sampling: each segment keeps a belief about 18 options (6 time blocks × 3 channels), tries the promising ones more often and updates with every reply, so new routines are picked up within weeks.</p></div></div>`;
+}
+function egLearnedWords() {
+  let off = 16; const out = [], lab = k => k === 'biz' ? 'a business client' : EG_XL[k].toLowerCase();
+  EG_ARMS.forEach(a => {
+    const w = EG_IX[a].map((k, j) => [k, EG.wc[off + 1 + j]]); off += EG_IX[a].length + 1;
+    out.push([EG_ACT[a].n, w.filter(x => x[1] < -.15).sort((x, y) => x[1] - y[1]).slice(0, 2).map(x => lab(x[0])), (w.filter(x => x[1] > .15).sort((x, y) => y[1] - x[1])[0] || [''])[0] ? lab(w.filter(x => x[1] > .15).sort((x, y) => y[1] - x[1])[0][0]) : '']);
+  });
+  return out;
+}
+function egBuildHtml() {
+  const m = EG.m, Lr = EG.learn, gap = Lr ? (Lr.weeks[11].ai - Lr.weeks[11].fx) / Math.max(.001, Lr.weeks[11].best - Lr.weeks[11].fx) : null;
+  const rows = [['Daily routine', 'Empirical-Bayes profile from session counts, pulled toward the segment when data is thin', `8 weeks of sessions from ${fmtInt(m.nS)} relationships`, 'A personal 7 × 24 activity profile'],
+    ['Reply timing', `Logistic regression, ${EG_TF.length - 1} features`, `${fmtInt(m.nT)} past contacts`, `AUC ${m.tAuc.toFixed(3)} vs ${m.tBase.toFixed(3)} for one hour × channel rule`],
+    ['Churn risk', 'Logistic regression on 15 signals', `${fmtInt(m.nTr)} relationships, 90-day outcome`, `AUC ${m.cAuc.toFixed(3)} on relationships it never saw`],
+    ['Persuadability (uplift)', 'The same model with action × signal interactions, trained on a randomized campaign', '5 actions and a control group', `Top 30%: ${m.upl.toFixed(1)} kept per 1,000 vs ${m.risk.toFixed(1)} highest-risk-first and ${m.rand.toFixed(1)} at random`],
+    ['Learning loop', 'Thompson sampling per segment', 'Every reply, every week', gap == null ? 'Run it below' : `${Math.round(gap * 100)}% of the gap to the best possible closed in 12 weeks`]];
+  const plan = [['Weeks 1–2', 'Data and privacy review: tokenize customer, app and account data; agree consent, quiet hours, caps and the do-not-call check with legal'], ['Weeks 3–5', 'Train the routine, timing, churn and persuadability models on 12 months of history; check calibration and fairness by segment'],
+    ['Week 6', 'Shadow mode: the plan is produced every morning next to today’s process, and nothing is sent'], ['Weeks 7–10', 'A/B test: Engagement AI vs today’s schedule, with a 10% holdout that gets no contact, to measure customers kept'],
+    ['Weeks 11–12', 'Decide the rollout on churn, replies, opt-outs and complaints; hand over monitoring and monthly retraining']];
+  return `<div class="eg-two"><div class="box"><div class="box-h"><span><b>Model card</b></span><span>sample ${EG.seed}</span></div><div class="tbl-wrap"><table class="wb-table eg-mc"><thead><tr><th>Model</th><th>Method</th><th>Trained on</th><th>Result</th></tr></thead><tbody>${rows.map(r => `<tr>${r.map((c, i) => `<td${i ? '' : ' class="nowrap"'}>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>
+    <div class="box"><div class="box-h"><span><b>What the persuadability model learned</b></span></div><div class="wb-body"><ul class="cxl small">${egLearnedWords().map(([n, g, b]) => `<li><b>${esc(n)}</b>: ${g.length ? 'works best when ' + esc(g.join(' or ')) : 'small effect on its own'}${b ? `; backfires for ${esc(b)}` : ''}</li>`).join('')}</ul>
+      <p class="tiny muted">Do-not-disturb flags: ${fmtInt(m.dnd)} relationships, ${m.dnd ? Math.round(m.dndHit / m.dnd * 100) : 0}% of them truly pushed away by a sales contact in the hidden truth.</p></div></div></div>
+    <div class="box"><div class="box-h"><span><b>From prototype to production in 12 weeks</b></span></div><div class="wb-body"><ol class="eg-plan-l">${plan.map(([w, d]) => `<li><b>${esc(w)}</b><span>${esc(d)}</span></li>`).join('')}</ol>
+      <div class="row-btns"><button type="button" class="btn sm accent" data-egbrief>Download the solution brief</button><button type="button" class="btn sm" data-egreq>Request the 12-week pilot</button><button type="button" class="btn sm" data-egseed>Retrain on a new sample</button></div></div></div>`;
+}
+function egRender() {
+  if (!$('#egApp') || !EG.ready) return;
+  $$('#egAud [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === EG.aud)));
+  $$('#egGoal [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === EG.goal)));
+  if (!EG.sel || (EG.aud !== 'all' && EG.sel.aud !== EG.aud)) EG.sel = egPeople().filter(p => p.grp === 'pers').sort((x, y) => y.upl - x.upl)[0] || egPeople()[0];
+  $('#egSum').innerHTML = egSumHtml(); $('#egFlow').innerHTML = egFlowHtml();
+  $('#egMap').innerHTML = egMapHtml(); $('#egCard').innerHTML = egCardHtml(EG.sel);
+  $('#egPick').innerHTML = egPeople().filter(p => p.grp === 'pers').sort((x, y) => y.upl - x.upl).slice(0, 30).map(p => `<option value="${esc(p.id)}"${p === EG.sel ? ' selected' : ''}>${esc(p.id)} · ${esc(p.seg.l)} · ${egPct(p.risk)}</option>`).join('');
+  egRenderPlan(); if (!$('#egLearn').dataset.anim) $('#egLearn').innerHTML = egLearnHtml(); $('#egBuild').innerHTML = egBuildHtml();
+}
+function egRenderPlan() {
+  $('#egNv').textContent = fmtInt(EG.n); $('#egCphv').textContent = EG.cph;
+  $$('#egObj [data-v]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.v === EG.obj))); $('#egObj').hidden = $('#egObjL').hidden = EG.goal !== 'churn';
+  $('#egPlan').innerHTML = egPlanHtml();
+}
+function egShow(id, scroll) {
+  egEnsure(); const p = egGet(id); if (!p) return false;
+  if (EG.aud !== 'all' && p.aud !== EG.aud) EG.aud = 'all';
+  EG.sel = p; egRender(); if (scroll) findGo($('#egCard'), true); return true;
+}
+function egPlanCSV() {
+  const P = egPlan(), q = s => `"${String(s).replace(/"/g, '""')}"`;
+  return ['time,token,audience,segment,group,action,channel,predicted_reply,expected_value'].concat(P.out.map(o => [`${RT_DAYS[o.d]} ${pad(o.h)}:00`, o.p.id, EG_AUDN[o.p.aud], o.p.seg.l, EG_GRP[o.p.grp][0], egActN(o.a, o.p), EG_CHN[o.ch], o.e.toFixed(3), o.v.toFixed(2)].map(q).join(','))).join('\n');
+}
+function egBrief() {
+  egEnsure(); const m = EG.m, P = egPlan(), Lr = EG.learn || egLearnRun(), d = new Date().toISOString().slice(0, 10), cnt = (a, g) => egPeople(a).filter(p => p.grp === g).length, money = EG_W.money;
+  return `# Engagement AI: solution brief
+Cellvoyant · ${d} · for ${EG_W.op} · model sample ${EG.seed}
+
+> Every customer, user and client in this brief is synthetic and tokenized. No real customer data was used.
+
+## 1. The problem
+Operators contact customers on fixed schedules and generic triggers, so messages arrive when people are busy, offers go to customers who would have stayed anyway, and some contacts push loyal customers to shop around. Churn, wasted offers and complaints follow.
+
+## 2. What the solution does
+For every customer, app user and business client it answers four questions, inside consent, quiet hours, contact caps and the do-not-call check:
+1. **Whether** to engage: persuadable, sure thing, lost cause or do not disturb
+2. **What** to offer: the next best action (fix the problem, a loyalty offer, a better-fitting plan, a person checking in, a helpful tip)
+3. **When**: the day and hour with the highest predicted reply chance
+4. **How**: the channel (app push, SMS, email, call, in-app, account manager visit)
+
+It then plans the day within call-centre capacity and keeps learning from every reply.
+
+## 3. Data (tokenized)
+| Type | Data | Used for |
+|---|---|---|
+| Behavioral | App and data sessions by hour and day (8 weeks) | Daily routine |
+| Behavioral | Replies by channel (90 days) | Channel response rate |
+| Transactional | Plan value, tenure, contract end, bill date, failed payments | Value, timing and triggers |
+| Experience | Dropped calls, complaints, satisfaction score | Moments that matter |
+| Market | Rival campaigns by area | Moments that matter |
+| Campaign history | ${fmtInt(m.nH)} relationships in a randomized retention campaign (5 actions + control) | Churn and persuadability |
+
+## 4. Models and evaluation
+| Model | Method | Result |
+|---|---|---|
+| Daily routine | Empirical-Bayes profile from session counts, pulled toward the segment when data is thin | Personal 7 × 24 profile |
+| Reply timing | Logistic regression, ${EG_TF.length - 1} features | AUC ${m.tAuc.toFixed(3)} (one hour × channel rule: ${m.tBase.toFixed(3)}) |
+| Churn risk | Logistic regression, 15 signals | AUC ${m.cAuc.toFixed(3)} on unseen relationships |
+| Persuadability | Same model with action × signal interactions (S-learner) | Top 30% by predicted uplift keeps ${m.upl.toFixed(1)} per 1,000 vs ${m.risk.toFixed(1)} for highest risk first and ${m.rand.toFixed(1)} at random |
+| Learning loop | Thompson sampling over 6 time blocks × 3 channels per segment | Week 12 reply rate ${egPct(Lr.weeks[11].ai)} vs ${egPct(Lr.weeks[11].fx)} fixed |
+
+## 5. Who to engage
+| Audience | Persuadable | Sure thing | Lost cause | Do not disturb |
+|---|---|---|---|---|
+${EG_AUD.map(([a, n]) => `| ${n} | ${cnt(a, 'pers')} | ${cnt(a, 'sure')} | ${cnt(a, 'lost')} | ${cnt(a, 'dnd')} |`).join('\n')}
+
+## 6. Today's plan (${EG_GN[P.G]}, ${EG.aud === 'all' ? 'all audiences' : EG_AUDN[EG.aud]})
+- ${fmtInt(P.out.length)} contacts: ${P.calls} calls, ${P.meets} visits, ${P.out.length - P.calls - P.meets} messages
+- Expected replies: ${fmtInt(P.ai.e)} vs ${fmtInt(P.fx.e)} with today's practice
+${P.G === 'churn' ? `- Customers kept: ${fmtInt(P.ai.kept)} vs ${fmtInt(P.fx.kept)}; revenue protected about ${money(P.ai.v)} a year` : `- Value created: ${money(P.ai.v)} vs ${money(P.fx.v)}`}
+
+## 7. Guardrails (enforced in code before any score)
+- Consent per channel; opted-out customers are never contacted
+- ${EG_W.callRule}
+- SMS 08:00–21:00; other messages 08:00–22:00; business clients on working days only
+- At most 2 sales contacts per person per 7 days; no sales contact within 48 hours of a complaint
+- Do-not-disturb customers get service messages only
+- Every recommendation shows its reasons
+
+## 8. Measurement
+A/B test against today's schedule with a 10% holdout that receives no contact. Success: customers kept, replies, accepted offers. Guardrails: opt-outs, complaints and contacts per customer; stop if either rises more than 20% vs control.
+
+## 9. Build plan (12 weeks)
+1. Weeks 1–2: data and privacy review, tokenization, rules agreed with legal
+2. Weeks 3–5: train and validate the models; fairness by segment
+3. Week 6: shadow mode, nothing sent
+4. Weeks 7–10: A/B test with a 10% holdout
+5. Weeks 11–12: rollout decision, monitoring and monthly retraining
+
+## 10. Privacy and ethics
+Tokenized data only, minimal features, no message content. ${EDITION === 'eand' ? 'Follows the UAE Personal Data Protection Law (Federal Decree-Law No. 45 of 2021) and the UAE telemarketing rules.' : 'Follows the data-protection and telecom marketing rules where the operator works.'} Customers can opt out at any time, and people review the plan before anything is sent.
+
+## 11. Limitations
+Synthetic data: the effects and lifts here show how the solution works, not results for ${EG_W.op}. Retrain and re-measure on the operator's tokenized data before any decision.
+`;
+}
+function initEngage() {
+  const app = $('#egApp'); if (!app) return;
+  $('#egAud').innerHTML = [['all', 'Everyone']].concat(EG_AUD.map(a => [a[0], a[1]])).map(([v, n]) => `<button type="button" data-v="${v}" aria-pressed="false">${esc(n)}</button>`).join('');
+  $('#egGoal').innerHTML = EG_GOALS.map(([v, n]) => `<button type="button" data-v="${v}" aria-pressed="false">${esc(n)}</button>`).join('');
+  const start = () => { if (EG.ready) { egRender(); return; } $('#egSum').innerHTML = '<div><b>…</b><span>Training the models on synthetic, tokenized data</span></div>'; setTimeout(() => { egEnsure(); egRender(); }, 30); };
+  app.addEventListener('click', async e => {
+    if (!EG.ready) return;
+    const au = e.target.closest('#egAud [data-v]'); if (au) { EG.aud = au.dataset.v; egRender(); return; }
+    const go = e.target.closest('#egGoal [data-v]'); if (go) { EG.goal = go.dataset.v; egRender(); return; }
+    const ob = e.target.closest('#egObj [data-v]'); if (ob) { EG.obj = ob.dataset.v; egRenderPlan(); return; }
+    const dot = e.target.closest('[data-egid]'); if (dot) { egShow(dot.dataset.egid, !e.target.closest('#egMap')); return; }
+    if (e.target.closest('[data-egnext]')) { const L = egPeople().filter(p => p.grp === 'pers').sort((x, y) => y.upl - x.upl), i = L.indexOf(EG.sel); EG.sel = L[(i + 1) % L.length] || EG.sel; egRender(); return; }
+    const ad = e.target.closest('[data-egadd]'); if (ad) { const p = egGet(ad.dataset.egadd), o = p && p.nba; if (!o) return; await addTask({ title: `${egActN(o.a, p)}: ${p.id} by ${EG_CHN[o.best.ch]}`, kind: 'contact', ref: p.id, dept: p.aud === 'biz' ? 'b2b' : 'cx', prio: p.risk >= .3 ? 'high' : 'normal', due: egSlot(o.best) }, ad); return; }
+    const tp = e.target.closest('[data-egtop]'); if (tp) { for (const o of egPlan().out.slice(0, 5)) await addTask({ title: `${egActN(o.a, o.p)}: ${o.p.id} by ${EG_CHN[o.ch]}`, kind: 'contact', ref: o.p.id, dept: o.p.aud === 'biz' ? 'b2b' : EG.goal === 'upsell' ? 'pm' : 'cx', prio: o.p.risk >= .3 ? 'high' : 'normal', due: `${RT_DAYS[o.d]} ${pad(o.h)}:00` }, tp); return; }
+    if (e.target.closest('[data-egcsv]')) { saveText('cellvoyant-engagement-plan.csv', egPlanCSV(), 'text/csv'); return; }
+    if (e.target.closest('[data-egbrief]')) { saveText('cellvoyant-engagement-ai-brief.md', egBrief(), 'text/markdown'); return; }
+    const rq = e.target.closest('[data-egreq]'); if (rq) { rq.disabled = true; try { const q = await createRequest({ service: 'engage', details: `Engagement AI pilot: ${EG_GN[EG.goal]}, ${EG.aud === 'all' ? 'all audiences' : EG_AUDN[EG.aud]}`, urgency: 'standard', via: 'engagement AI' }); toast(`Requested ${q.label}${q.saved ? '' : ' (this visit only)'}`); rq.textContent = 'Pilot requested'; } catch (err) { toast(err.message); rq.disabled = false; } return; }
+    const sd = e.target.closest('[data-egseed]'); if (sd) { sd.disabled = true; sd.textContent = 'Retraining…'; setTimeout(() => { EG.seed = EG.seed % 997 + 11; EG.ready = false; EG.sel = null; egEnsure(); egRender(); toast(`Retrained on sample ${EG.seed}: churn AUC ${EG.m.cAuc.toFixed(3)}`); }, 30); return; }
+    if (e.target.closest('#egRun')) {
+      const box = $('#egLearn'); egLearnRun(); if (RM.matches) { box.innerHTML = egLearnHtml(); return; }
+      let w = 1; box.dataset.anim = '1'; box.innerHTML = egLearnHtml(w);
+      const tick = setInterval(() => { w++; box.innerHTML = egLearnHtml(w); if (w >= 12) { clearInterval(tick); delete box.dataset.anim; $('#egBuild').innerHTML = egBuildHtml(); } }, 160);
+    }
+  });
+  app.addEventListener('change', e => { if (e.target.id === 'egPick') egShow(e.target.value, false); });
+  app.addEventListener('input', e => {
+    if (e.target.id === 'egN') { EG.n = +e.target.value; egRenderPlan(); }
+    if (e.target.id === 'egCph') { EG.cph = +e.target.value; egRenderPlan(); }
+  });
+  let started = false; const go = () => { if (started) return; started = true; start(); };
+  if ('IntersectionObserver' in window) { const io = new IntersectionObserver(es => { if (es.some(x => x.isIntersecting)) { io.disconnect(); go(); } }, { rootMargin: '600px' }); io.observe(app); }
+  setTimeout(go, 6000);
+}
+function egPanelHtml() {
+  egEnsure(); const P = egPlan();
+  return P.out.slice(0, 6).map(o => `<button type="button" class="tm-line" data-tmrun="ENGAGE ${o.p.id}"><span class="tm-sev s-${o.p.grp === 'pers' ? 'high' : 'med'}">${pad(o.h)}:00</span><span>${esc(o.p.id)} · ${esc(EG_CHN[o.ch])} · ${esc(egActN(o.a, o.p))}</span><span class="mono muted">${egPct(o.e)}</span></button>`).join('')
+    + `<p class="tiny muted">${esc(EG_GN[EG.goal])}: ${P.out.length} contacts planned${P.day === (new Date().getDay() + 6) % 7 ? ' for the rest of today' : ' for ' + RT_DAYS[P.day]} · ENGAGE ${P.out[0] ? P.out[0].p.id : 'C-…'} shows one person.</p>`;
+}
+function egCmd(arg) {
+  egEnsure(); const a = arg.trim().toLowerCase(), p = egGet(a), g = EG_GOALS.find(([k, n]) => k === a || n.toLowerCase().startsWith(a));
+  if (p) { const o = p.nba; return [`${p.id} · ${EG_AUDN[p.aud]} · ${p.seg.l} · ${EG_GRP[p.grp][0]}`, `Chance of leaving in 90 days: ${egPct(p.risk)}${o ? ` → ${egPct(Math.max(0, p.risk - o.upl))} if reached` : ''}`, o ? `Next best action: ${egActN(o.a, p)} · ${EG_CHN[o.best.ch]} · ${egSlot(o.best)} (${egPct(o.best.e)} reply chance)` : `Next best action: ${p.grp === 'dnd' ? 'leave them alone (service messages only)' : 'no contact needed'}`, `Act: ${egWindow(p)[0].toLowerCase()} · moments: ${EG_X.filter(k => p[k]).map(k => EG_XL[k].toLowerCase()).join('; ') || 'none'}`]; }
+  if (a && !g) return [`No goal or token matches “${arg}”. Try ENGAGE churn, ENGAGE upsell or ENGAGE ${EG.P[0].id}.`];
+  if (g) EG.goal = g[0];
+  const P = egPlan(); if ($('#egApp') && EG.ready) egRender();
+  return [`${EG_GN[P.G]}: ${P.out.length} contacts planned (${P.calls} calls, ${P.meets} visits) · ${fmtInt(P.ai.e)} replies expected vs ${fmtInt(P.fx.e)} today${P.G === 'churn' ? ` · ${egNum(P.ai.kept)} customers kept vs ${egNum(P.fx.kept)}` : ''}`, ...P.out.slice(0, 8).map(o => `${pad(o.h)}:00 ${o.p.id} · ${EG_CHN[o.ch]} · ${egActN(o.a, o.p)} · ${egPct(o.e)}`)];
+}
+function egAnswer(q) {
+  const s = q.toLowerCase(), tok = s.match(/\b[cub]-[0-9a-f]{6}\b/);
+  if (!tok && !/best (time|moment|hour|day) to (engage|contact|reach|call|message|text|email)|right (time|moment) to|when (should|do|to) (we )?(contact|engage|call|message|reach|email)|engagement ai|next best action|persuadab|who (should we|to) (contact|call|engage|save)|(reduce|lower|cut|stop) churn|(improve|increase|grow) engagement|uplift model|do not disturb|engage (each|every|our) (customer|user|client)/.test(s)) return null;
+  egEnsure();
+  const p = tok && egGet(tok[0]);
+  if (p) return `<p><b>${esc(p.id)}</b> · ${esc(p.seg.l)} · ${esc(EG_GRP[p.grp][0])}</p>${cvList(egCmd(p.id).slice(1))}<div class="cv-acts">${cvAct('Open this customer', () => { egShow(p.id, true); return 'Opened the customer.'; })}</div>`;
+  const P = egPlan('churn'), L = egPeople('all'), top = L.filter(x => x.grp === 'pers').sort((x, y) => y.upl - x.upl)[0];
+  return `<p>Engagement AI scored ${fmtInt(L.length)} synthetic customers, app users and business clients: <b>${fmtInt(L.filter(x => x.grp === 'pers').length)} persuadable</b>, ${fmtInt(L.filter(x => x.grp === 'dnd').length)} do not disturb. Today’s churn plan reaches ${P.out.length} people at their best moment and keeps about ${egNum(P.ai.kept)} customers, vs ${egNum(P.fx.kept)} for highest risk first at ${pad(P.fh)}:00.</p>${top ? cvList([`Top persuadable: ${top.id} (${top.seg.l}): ${egActN(top.nba.a, top)} by ${EG_CHN[top.nba.best.ch]}, ${egSlot(top.nba.best)}`]) : ''}<p class="tiny muted">Synthetic, tokenized data; consent, quiet hours and contact caps are applied first.</p><div class="cv-acts">${cvAct('Open Engagement AI', () => { cvGo('eg'); return 'Opened Engagement AI.'; })}${cvAct('Show today’s plan', () => { cvGo('eg:churn'); return 'Opened today’s plan.'; })}</div>`;
+}
+TM_PANELS.engage = ['Engagement AI', 'Who to contact today, when, how and with what'];
+{ const tp = TM_PRESETS.find(t => t.id === 'customer'); if (tp) tp.panels.splice(1, 0, ['engage']); }
+TM_HELP.push(['ENGAGE [churn|engage|upsell|onboard|pay|C-…]', 'today’s engagement plan or one customer, e.g. ENGAGE churn']);
+CV_TOOLDEFS.push({ name: 'engagement_ai', description: 'Engagement AI on synthetic, tokenized data: for a goal (reduce churn, grow engagement, upsell, onboard, payment reminders) and audience (consumers, app users, business clients), today’s capacity-limited contact plan with the best hour, channel and action for each person; or, for one token (e.g. C-1A2B3C), the churn risk, whether a contact helps (persuadable, sure thing, lost cause, do not disturb), the next best action and the best moment. Consent, quiet hours, contact caps and the do-not-call check are applied first.', inputSchema: { type: 'object', properties: { goal: { type: 'string', enum: EG_GOALS.map(g => g[0]) }, audience: { type: 'string', enum: ['all', 'con', 'app', 'biz'] }, id: { type: 'string' } } },
+  run: a => { egEnsure(); const p = a.id && egGet(a.id);
+    if (p) return { id: p.id, audience: EG_AUDN[p.aud], segment: p.seg.l, group: EG_GRP[p.grp][0], churn_risk_90d: +p.risk.toFixed(3), next_best_action: p.nba ? egActN(p.nba.a, p) : null, channel: p.nba ? EG_CHN[p.nba.best.ch] : null, when: p.nba ? egSlot(p.nba.best) : null, reply_chance: p.nba ? +p.nba.best.e.toFixed(3) : null, act: egWindow(p)[0], moments: EG_X.filter(k => p[k]).map(k => EG_XL[k]), synthetic: true };
+    const P = egPlan(a.goal || EG.goal, a.audience || 'all'); return { goal: EG_GN[P.G], contacts: P.out.length, expected_replies: Math.round(P.ai.e), replies_today_practice: Math.round(P.fx.e), customers_kept: P.G === 'churn' ? Math.round(P.ai.kept) : null, kept_today_practice: P.G === 'churn' ? Math.round(P.fx.kept) : null, first: P.out.slice(0, 10).map(o => ({ time: `${RT_DAYS[o.d]} ${pad(o.h)}:00`, id: o.p.id, segment: o.p.seg.l, action: egActN(o.a, o.p), channel: EG_CHN[o.ch], reply_chance: +o.e.toFixed(3) })), synthetic: true }; } });
+
 /* ---------- START HERE: the shortest path for each role ---------- */
 const ROLES = [
   ['exec', 'Executive', [['cr', 'Crisis radar', 'The extreme risks that need action now, with first-hour playbooks'], ['tm:exec', 'Executive terminal', 'Signals, market moves, forecasts and tasks on one screen'], ['dec', 'Decision engine', 'Sourced recommendations that wait for your approval'], ['mp:P0', 'The P0 foundation', 'What to build first in the master plan']]],
   ['mkt', 'Marketing & pricing', [['tm:pricing', 'Pricing terminal', 'Compare plans and test a response before you move'], ['dec:price', 'A rival price cut', 'Run it from detection to recommendation'], ['cap:87', 'Competitor pricing engine', 'Capability #87 in the master plan'], ['ag:pr', 'Pricing agents', '12 agents for pricing and offers']]],
-  ['cust', 'Customers & retention', [['tm:customer', 'Customers terminal', 'Where churn spreads and who to save today'], ['cr:billing', 'A billing error', 'The playbook when thousands are overcharged'], ['dec:digital', 'A rival’s digital plan cut', 'Who is at risk and the best response'], ['ag:rl', 'Retention agents', '12 agents for retention and loyalty']]],
+  ['cust', 'Customers & retention', [['eg', 'Engagement AI', 'Who to contact today, when, how and with what'], ['tm:customer', 'Customers terminal', 'Where churn spreads and who to save today'], ['cr:billing', 'A billing error', 'The playbook when thousands are overcharged'], ['ag:rl', 'Retention agents', '12 agents for retention and loyalty']]],
   ['ent', 'Enterprise & SME', [['tm:enterprise', 'Enterprise terminal', 'Tenders, accounts and business offers'], ['dec:enterprise', 'A rival enterprise offer', 'SD-WAN with a free private 5G trial'], ['mp:D', 'Products & digital services', 'Area D of the master plan'], ['ag:en', 'Enterprise agents', '12 agents for enterprise and government']]],
   ['net', 'Network & technology', [['cr:cable', 'Subsea cable cuts', 'The first-hour playbook for the top network risk'], ['tm:network', 'Network terminal', 'Coverage truth, rival builds and capex priorities'], ['mp:C', 'Network operations (OSS)', 'Area C of the master plan'], ['ag:nw', 'Network agents', '12 agents for network and technology']]],
   ['fin', 'Finance & investment', [['tm:capital', 'Capital markets terminal', 'Valuations, movers and deals across telecom'], ['tab-cap', 'Capital radar', 'State, private-equity and hedge-fund moves'], ['cap:6', 'Financial planning & analysis', 'Capability #6 in the master plan'], ['ag:fn', 'Finance agents', '12 agents for finance and investor relations']]],
@@ -5920,6 +6534,7 @@ function cvDeepLink() {
   if ((m = h.match(/^cap-(\d{1,3})$/)) && mpGet(+m[1])) { setTimeout(() => mpShow(+m[1]), 60); return; }
   if ((m = h.match(/^dc-([a-z]+)$/)) && cvHas('dec:' + m[1])) { setTimeout(() => cvGo('dec:' + m[1]), 60); return; }
   if ((m = h.match(/^cr-([a-z]+)$/)) && cvHas('cr:' + m[1])) { setTimeout(() => cvGo('cr:' + m[1]), 60); return; }
+  if ((m = h.match(/^eg-([a-z]+|[cub]-[0-9a-f]{6})$/i)) && cvHas('eg:' + m[1])) { setTimeout(() => cvGo('eg:' + m[1]), 60); return; }
   if ((m = h.match(/^tm-([\w-]+)$/)) && cvHas('tm:' + m[1])) setTimeout(() => cvGo('tm:' + m[1]), 60);
 }
 addEventListener('hashchange', cvDeepLink);
@@ -5928,7 +6543,7 @@ addEventListener('hashchange', cvDeepLink);
 $('#simClock').textContent = fmtClock();
 setLive(live);
 renderFeed(); kpis(); renderDetail();
-[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initTerminals, initMasterPlan, initDecision, initCrisis, initRoleStart, initFind, initChat, initLang]
+[renderDNA, renderPred, runWar, renderLab, initTAM, initLandscape, initPositioning, initGeo, initRules, initExport, initDashboard, initWorkbench, initDepts, initAcademy, initWorkspace, initRT, initDeck, initMI, initOD, initValue, initAgents, initElab, initResources, initLaunch, initNav, initSpectrum, initTerminals, initMasterPlan, initDecision, initCrisis, initEngage, initRoleStart, initFind, initChat, initLang]
   .forEach(f => { try { f(); } catch (err) { console.warn('Cellvoyant: ' + f.name + ' skipped', err); } });
 const radar = initRadar();
 renderServices(); renderReqs();

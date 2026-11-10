@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="canonical" href="https://nsrxg9-max.github.io/cellvoyant/">
 <meta name="robots" content="index, follow, max-image-preview:large">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "Cellvoyant", "alternateName": "Cellvoyant telecom intelligence", "url": "https://nsrxg9-max.github.io/cellvoyant/", "description": "Cellvoyant — AI market and competitor intelligence for telecom operators: research, a live operations console, departments and teams, a right-time customer engagement model, workshops, resources and a provisional patent draft.", "inLanguage": ["en", "ar", "fr", "hi", "ur", "zh"]}, {"@type": "SoftwareApplication", "name": "Cellvoyant", "url": "https://nsrxg9-max.github.io/cellvoyant/", "applicationCategory": "BusinessApplication", "operatingSystem": "Web browser", "description": "Cellvoyant — AI market and competitor intelligence for telecom operators: research, a live operations console, departments and teams, a right-time customer engagement model, workshops, resources and a provisional patent draft.", "image": "https://nsrxg9-max.github.io/cellvoyant/assets/og.png", "featureList": ["Crisis radar with first-hour playbooks and live sensors", "Decision engine for rival moves with human review", "134-capability master plan", "216 AI agents in 18 departments", "Terminals with 450+ tools and live public data", "Assistant in six languages"]}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "Cellvoyant", "alternateName": "Cellvoyant telecom intelligence", "url": "https://nsrxg9-max.github.io/cellvoyant/", "description": "Cellvoyant — AI market and competitor intelligence for telecom operators: research, a live operations console, departments and teams, a right-time customer engagement model, workshops, resources and a provisional patent draft.", "inLanguage": ["en", "ar", "fr", "hi", "ur", "zh"]}, {"@type": "SoftwareApplication", "name": "Cellvoyant", "url": "https://nsrxg9-max.github.io/cellvoyant/", "applicationCategory": "BusinessApplication", "operatingSystem": "Web browser", "description": "Cellvoyant — AI market and competitor intelligence for telecom operators: research, a live operations console, departments and teams, a right-time customer engagement model, workshops, resources and a provisional patent draft.", "image": "https://nsrxg9-max.github.io/cellvoyant/assets/og.png", "featureList": ["Crisis radar with first-hour playbooks and live sensors", "Engagement AI: the best moment, channel and action for each customer, with churn and uplift models", "Decision engine for rival moves with human review", "134-capability master plan", "216 AI agents in 18 departments", "Terminals with 450+ tools and live public data", "Assistant in six languages"]}]}</script>
 <meta name="theme-color" content="#08131C">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Cellvoyant">
@@ -1798,6 +1798,43 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 @media (max-width:980px){.cr-top,.cr-mid,.cr-play,.cr-cost{grid-template-columns:minmax(0,1fr)}.cr-sum{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:560px){.cr-sum{grid-template-columns:repeat(2,minmax(0,1fr))}.cr-q{grid-template-columns:22px minmax(0,1fr) auto;gap:8px;padding:9px 10px}}
 @media (prefers-reduced-motion:reduce){.cr-sweep{display:none}.cr-pulse,.cr-b.s-ext .cr-ping{animation:none}}
+/* engagement AI */
+.eg{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.eg-bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.eg-bar>*{min-width:0}
+.eg-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px;align-items:start}
+.eg-map{padding:8px 10px 10px}
+.eg-map svg{display:block;width:100%;height:auto}
+.eg-dot{cursor:pointer;stroke:var(--surface);stroke-width:.7;opacity:.82}
+.eg-dot:hover{opacity:1;stroke:var(--ink);stroke-width:1.4}
+.eg-dot.sel{opacity:1;stroke:var(--ink);stroke-width:2.6}
+.g-pers{fill:var(--accent)}.g-sure{fill:var(--good)}.g-lost{fill:var(--muted)}.g-dnd{fill:var(--crit)}
+.eg-sw.g-pers{background:var(--accent)}.eg-sw.g-sure{background:var(--good)}.eg-sw.g-lost{background:var(--muted)}.eg-sw.g-dnd{background:var(--crit)}
+.eg-map .eg-leg{margin-top:6px}
+.eg-pick{max-width:min(260px,100%);font:13px var(--f-body);letter-spacing:0;text-transform:none}
+.eg-g{display:inline-flex;align-items:center;font:600 12px var(--f-body);letter-spacing:0;text-transform:none;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.eg-g.pers{background:var(--accent-soft);color:var(--accent)}.eg-g.sure{background:var(--good-soft);color:var(--good)}.eg-g.lost{background:var(--surface-2);color:var(--muted)}.eg-g.dnd{background:var(--crit-soft);color:var(--crit)}
+.eg-risk{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;font-size:13.5px}
+.eg-rb{grid-column:1/-1;position:relative;height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden}
+.eg-rb i{position:absolute;top:0;bottom:0;inset-inline-start:0;border-radius:5px}
+.eg-heat{display:block;width:100%;max-width:480px;height:auto;margin-top:6px}
+.eg-sl{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2)}
+.eg-sl input{accent-color:var(--accent);width:140px;max-width:38vw}
+.eg-k{grid-template-columns:repeat(4,minmax(0,1fr))}
+.eg-two{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;align-items:start;margin-block:14px}
+.eg-chart{display:block;width:100%;height:auto}
+.eg-leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-2)}
+.eg-sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-inline-end:6px;vertical-align:-1px}
+.eg-how{margin:0;padding-inline-start:18px;display:grid;gap:6px}
+.eg-plan-l{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.eg-plan-l li{display:grid;grid-template-columns:100px minmax(0,1fr);gap:12px;font-size:13.5px;align-items:baseline}
+.eg-plan-l b{font:600 12px var(--f-mono);color:var(--accent)}
+.eg .wb-table td:nth-child(n){font-family:var(--f-body)}
+.eg .wb-table td.mono:nth-child(n){font-family:var(--f-mono)}
+.eg-mc td{white-space:normal;min-width:110px;vertical-align:top}
+.eg-mc td.nowrap{white-space:nowrap;font-weight:600}
+@media (max-width:980px){.eg-top,.eg-two{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:720px){.eg-k{grid-template-columns:repeat(2,minmax(0,1fr))}.eg-plan-l li{grid-template-columns:minmax(0,1fr);gap:2px}}
 </style>
 
 <a class="skip" href="#top">Skip to content</a>
@@ -1819,6 +1856,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
       <a href="#agents">AI agents</a>
       <a href="#masterplan">Master plan</a>
       <a href="#crisis">Crisis radar</a>
+      <a href="#engagement">Engagement AI</a>
       <a href="#academy">Academy</a>
       <a href="#lab">Innovation</a>
       <a href="#patent">Patent</a>
@@ -2575,7 +2613,41 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band" id="academy">
+<section class="sec band" id="engagement">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Engagement AI · the right moment for every customer</div>
+      <h2>Engage every customer, user and client at the moment that counts</h2>
+      <p class="lede">An AI solution, developed here step by step, that learns each person’s routine and predicts who is about to leave, who can still be persuaded and what would help. It picks the best day, hour, channel and action for every customer, app user and business client, plans today’s contacts within the team’s capacity and keeps learning from every reply. Consent, quiet hours, contact caps and the do-not-call check run before any score is used.</p>
+    </div>
+    <div class="eg" id="egApp">
+      <div class="eg-bar"><span class="label">Audience</span><div class="seg-btns" id="egAud" role="group" aria-label="Audience"></div><span class="label">Goal</span><div class="seg-btns" id="egGoal" role="group" aria-label="Goal"></div></div>
+      <div class="cr-sum" id="egSum" aria-live="polite"></div>
+      <ol class="dc-flow" id="egFlow" aria-label="How Engagement AI works, step by step"></ol>
+      <h3 class="res-h" id="eg-who">Who to engage, and who to leave alone</h3>
+      <p class="small muted mp-note">Each dot is one person. Across: how likely they are to leave in the next 90 days. Up: how many fewer would leave, per 100 like them, if reached at their best moment with the best action. Click a dot, or pick a persuadable customer from the list.</p>
+      <div class="eg-top">
+        <div class="box"><div class="box-h"><span><b>Persuadability map</b></span><select id="egPick" class="eg-pick" aria-label="Pick a persuadable customer"></select></div><div class="eg-map" id="egMap"></div></div>
+        <div class="box" id="egCard" aria-live="polite"></div>
+      </div>
+      <h3 class="res-h" id="eg-plan">Today’s engagement plan</h3>
+      <div class="eg-bar">
+        <label class="eg-sl">Contacts today <input type="range" id="egN" min="50" max="400" step="10" value="150"> <b class="mono" id="egNv">150</b></label>
+        <label class="eg-sl">Calls an hour <input type="range" id="egCph" min="2" max="40" step="1" value="8"> <b class="mono" id="egCphv">8</b></label>
+        <span class="label" id="egObjL">Optimize for</span><div class="seg-btns" id="egObj" role="group" aria-labelledby="egObjL"><button type="button" data-v="kept" aria-pressed="true">Customers kept</button><button type="button" data-v="rev" aria-pressed="false">Revenue protected</button></div>
+      </div>
+      <div id="egPlan"></div>
+      <h3 class="res-h" id="eg-learn">It keeps learning</h3>
+      <div class="eg-bar"><button type="button" class="btn sm accent" id="egRun">Run 12 weeks of learning</button><span class="small muted">New customers arrive every week; the AI tries, learns from every reply and shifts to what works.</span></div>
+      <div id="egLearn"></div>
+      <h3 class="res-h" id="eg-build">How we develop it</h3>
+      <div id="egBuild"></div>
+      <p class="tiny muted" id="egNote">Every customer, app user and business client here is synthetic and tokenized (C-, U- and B- tokens); no names, numbers or message content are used. Results are scored against the hidden truth of the synthetic data; in a pilot, a 10% holdout group measures them. Call hours follow the US rule for telephone solicitations as a reference; a pilot uses the rules where the operator works.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="academy">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Cellvoyant Academy</div>
@@ -2594,7 +2666,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="resources">
+<section class="sec band" id="resources">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Resources &amp; tools</div>
@@ -2606,7 +2678,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band" id="lab">
+<section class="sec" id="lab">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Innovation lab</div>
@@ -2618,7 +2690,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="patent">
+<section class="sec band" id="patent">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Intellectual property</div>
@@ -2838,7 +2910,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band" id="business">
+<section class="sec" id="business">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Business model &amp; go-to-market</div>
@@ -2913,7 +2985,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
     </div>
   </div>
 </section>
-<section class="sec" id="launch">
+<section class="sec band" id="launch">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Launch</div>
@@ -2959,6 +3031,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
         <div class="lc ok"><i>✓</i><span>Master plan of 134 capabilities with priorities, rollout phases, data zones, a shortlist and CSV export</span></div>
         <div class="lc ok"><i>✓</i><span>Decision engine: rival move to sourced recommendation, with a human review queue and audit log</span></div>
         <div class="lc ok"><i>✓</i><span>Crisis radar: 21 high-risk problems with first-hour playbooks, live sensors, tracked responses and draft statements</span></div>
+        <div class="lc ok"><i>✓</i><span>Engagement AI: whether, when, how and with what to engage each customer, app user and business client, with a daily plan and a learning loop</span></div>
         <div class="lc ok"><i>✓</i><span>Start-here paths for seven roles, and share links to any capability, scenario or terminal</span></div>
         <div class="lc ok"><i>✓</i><span>216 AI agents in 18 departments, each with tools, services and resources</span></div>
         <div class="lc ok"><i>✓</i><span>Search across the whole platform (Ctrl K or ⌘ K)</span></div>
@@ -2991,7 +3064,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band sources" id="sources">
+<section class="sec sources" id="sources">
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">Sources</div>
@@ -3059,7 +3132,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 <footer class="foot">
   <div class="wrap">
     <span>Cellvoyant is a concept by its author. The prototype uses simulated data for fictional operators. Research figures cite their sources below.</span>
-    <span class="mono">v2.4 · 9 Nov 2026</span>
+    <span class="mono">v2.5 · 10 Nov 2026</span>
   </div>
 </footer>
 
