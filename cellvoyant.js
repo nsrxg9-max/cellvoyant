@@ -12839,15 +12839,22 @@ function vcSpeechLang(t, cur, ai) {
 }
 // ---- talk mode ----
 const VC_KEY = 'cv.voice.v1';
-const VC = { on: false, typed: false, paused: false, state: 'off', rec: null, recOn: false, recLang: '', want: false, quiet: 0, fails: [], restartT: 0, sid: 0, watch: 0, turn: 0, pid: 0, pend: null, last: '', lastLang: 'en', saying: '', prevSpeak: false, told: false, set: null };
+const VC = { on: false, typed: false, paused: false, wake: false, wakeT: 0, state: 'off', rec: null, recOn: false, recLang: '', want: false, quiet: 0, fails: [], restartT: 0, sid: 0, watch: 0, turn: 0, pid: 0, pend: null, last: '', lastLang: 'en', saying: '', prevSpeak: false, told: false, set: null };
 const VC_ST = { listening: 'Listening', thinking: 'Thinking', speaking: 'Speaking', paused: 'Paused', ready: 'Ready', off: 'Off' };
 const VC_HALT = new Set(['stop', 'pause', 'end']);
+// after “pause” the microphone listens for one thing only, a word to carry on; nothing else it hears is shown, sent or kept
+const VC_RESUME = ['resume', 'unpause', 'un pause', 'continue', 'carry on', 'go on', 'keep going', 'start listening', 'resume listening', 'listen again', "i'm back", 'im back', 'i am back',
+  'استمر', 'تابع', 'استئناف', 'أكمل', 'عدت', 'reprends', 'reprendre', 'continuer', 'je suis là', 'जारी रखो', 'जारी रखें', 'फिर से सुनो', 'जारी', 'جاری رکھو', 'جاری رکھیں', 'دوبارہ سنو', 'جاری', '继续', '恢复', '我回来了', '接着说'].map(vcNorm);
+const vcIsResume = t => { const n = vcNorm(t); return !!n && n.split(' ').length <= 4 && VC_RESUME.some(w => n === w || (' ' + n + ' ').includes(' ' + w + ' ') || (/[\u4e00-\u9fff]/.test(w) && n.includes(w))); };
+const vcPauseMsg = () => (SpeechRec && !VC.typed ? 'Paused. Say “resume” or press Resume to carry on.' : 'Paused. Press Resume to carry on.');
 const VC_KEEP = new Set(['again', 'slower', 'faster', 'help', 'talk']);
 const VC_CHAT = new Set(['scan', 'ledger', 'fn', 'comp', 'scrn', 'engage', 'risks', 'cmd', 'task', 'request', 'crisis', 'seal', 'po']);
 const VC_SVG = {
   mic: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg>',
   set: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg>',
-  x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+  x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>',
+  play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>'
 };
 const vcHas = f => typeof f === 'function';
 function vcLoad() {
@@ -12861,7 +12868,8 @@ function vcLive(t) { const l = $('#vcLive'); if (!l) return; l.textContent = '';
 const vcNote = t => { vcCap(t); vcLive(t); };
 function vcState(st, cap) {
   VC.state = st; const bar = $('#vcBar'); if (!bar) return;
-  bar.dataset.st = st; $('#vcSt').textContent = VC_ST[st] || st;
+  bar.dataset.st = st; bar.dataset.wake = VC.wake ? '1' : ''; $('#vcSt').textContent = VC_ST[st] || st;
+  const hp = $('#vcHdP'); if (hp) { const p = st === 'paused'; hp.hidden = !VC.on || VC.typed; hp.setAttribute('aria-pressed', String(p)); hp.innerHTML = `${p ? VC_SVG.play : VC_SVG.pause}<span>${p ? 'Resume' : 'Pause'}</span>`; hp.title = p ? 'Resume listening (Alt+P)' : 'Pause listening (Alt+P)'; hp.setAttribute('aria-label', p ? 'Resume listening' : 'Pause listening'); }
   const pb = $('[data-vc="pause"]', bar); pb.hidden = VC.typed; pb.textContent = st === 'paused' ? 'Resume' : 'Pause';
   $('[data-vc="mic"]', bar).hidden = !(VC.typed && SpeechRec);
   $('[data-vc="stop"]', bar).hidden = !(st === 'speaking' || st === 'thinking');
@@ -12907,6 +12915,9 @@ function vcMakeRec() {
   rec.onresult = e => {
     VC.fails = []; let interim = '', fin = '';
     for (let i = e.resultIndex; i < e.results.length; i++) { const r = e.results[i]; if (r.isFinal) fin += r[0].transcript; else interim += r[0].transcript; }
+    if (!VC.on) return;
+    if (VC.wake) { if (vcIsResume(fin) || vcIsResume(interim)) { VC.skip = !fin.trim(); vcUnpause(); } return; }
+    if (VC.skip) { if (fin.trim()) VC.skip = false; return; } // the rest of the phrase that resumed
     if (VC.state === 'speaking') { if (fin.trim()) vcBargeIn(fin); return; }
     if (interim) vcCap(interim, true);
     if (fin.trim()) { VC.quiet = 0; vcHeard(fin, 'voice'); }
@@ -12914,7 +12925,7 @@ function vcMakeRec() {
   rec.onerror = e => {
     const er = e.error;
     if (er === 'aborted') return;
-    if (er === 'no-speech') { if (++VC.quiet >= 3) vcPause('Paused after a quiet spell. Press Resume when you want to talk.'); return; }
+    if (er === 'no-speech') { if (VC.wake) return; if (++VC.quiet >= 3) vcPause('Paused after a quiet spell. Press Resume when you want to talk.'); return; }
     if (er === 'not-allowed' || er === 'service-not-allowed') { vcBlocked(); return; }
     if (er === 'audio-capture') { vcToTyped('No microphone was found.'); return; }
     if (er === 'language-not-supported') { vcToTyped(`Speech recognition doesn’t support ${LANG_NAME[LANG.cur]} in this browser.`); return; }
@@ -12942,11 +12953,16 @@ function vcResume() {
   if (VC.typed) { vcState('ready'); return; }
   VC.want = true; vcRecStart(); vcState('listening');
 }
-function vcPause(msg) {
-  VC.paused = true; VC.want = false; clearTimeout(VC.restartT);
-  if (VC.recOn) try { VC.rec.abort(); } catch (e) { /* already stopped */ }
+// soft: the person paused, so keep listening for “resume” only (for at most 5 minutes); otherwise the microphone goes off
+function vcPause(msg, soft) {
+  VC.paused = true; clearTimeout(VC.restartT); clearTimeout(VC.wakeT);
+  VC.wake = !!(soft && VC.on && !VC.typed && SpeechRec);
+  if (VC.wake) { VC.want = true; vcRecStart(); VC.wakeT = setTimeout(() => { if (VC.wake) vcPause('Paused for 5 minutes, so the microphone is off now. Press Resume to talk again.'); }, 3e5); }
+  else { VC.want = false; if (VC.recOn) try { VC.rec.abort(); } catch (e) { /* already stopped */ } }
   if (VC.on) { vcState('paused', msg); vcLive(msg); }
 }
+function vcUnpause() { clearTimeout(VC.wakeT); Object.assign(VC, { paused: false, wake: false, quiet: 0, fails: [] }); vcResume(); if (VC.on && !VC.typed) vcNote('Resumed. Listening.'); }
+const vcPauseNow = () => { VC.turn++; vcHush(); if (CV.ctl) CV.ctl.abort(); vcPause(vcPauseMsg(), true); };
 // while it speaks (only when the person allowed interruptions): stop words that are not an echo of its own voice
 function vcBargeIn(fin) {
   const c = vcParse(fin, {}), heard = vcNorm(fin);
@@ -12980,7 +12996,7 @@ function vcStart() {
 }
 function vcStop(bye) {
   if (!VC.on) return;
-  VC.on = false; VC.want = false; VC.paused = false; VC.turn++; clearTimeout(VC.restartT);
+  VC.on = false; VC.want = false; VC.paused = false; VC.wake = false; VC.skip = false; VC.turn++; clearTimeout(VC.restartT); clearTimeout(VC.wakeT);
   if (VC.recOn) try { VC.rec.abort(); } catch (e) { /* already stopped */ }
   vcHush(); vcSet(false);
   CV.speak = VC.prevSpeak;
@@ -12998,6 +13014,7 @@ function vcStop(bye) {
 /* one phrase, spoken, typed or tapped: control words, then a pending yes/no, then commands, then the assistant */
 async function vcHeard(raw, how) {
   const text = String(raw || '').trim(); if (!text) return;
+  if (VC.on && vcIsResume(text)) { if (VC.paused) vcUnpause(); else vcNote('Already listening.'); return; }
   const c = vcParse(text, { cmds: Object.keys(CVX.cmds) }), talk = VC.on;
   if (talk && VC.state === 'thinking' && !VC_HALT.has(c.k)) { vcNote('Still working on the last request. Say “stop” to cancel it.'); return; }
   switch (c.k) {
@@ -13005,7 +13022,7 @@ async function vcHeard(raw, how) {
     case 'end': if (talk) vcStop(true); return;
     case 'stop': case 'pause':
       VC.turn++; vcHush(); if (CV.ctl) CV.ctl.abort();
-      if (c.k === 'pause' && talk) vcPause('Paused. Press Resume to talk again.'); else { vcNote('Stopped.'); vcResume(); }
+      if (c.k === 'pause' && talk) vcPause(vcPauseMsg(), true); else { vcNote('Stopped.'); vcResume(); }
       return;
     case 'confirm': case 'cancel': case 'ack':
       if (VC.pend && c.k !== 'ack') {
@@ -13268,7 +13285,7 @@ function vcHelpHtml() {
       <ul class="vc-words">${langs.map(([k, n]) => `<li><b lang="${k}">${esc(n)}</b> <bdi lang="${k}" dir="${RTL.has(k) ? 'rtl' : 'ltr'}">${esc(VC_CORE[k].join(' · '))}</bdi></li>`).join('')}</ul></div>`;
   return `<div class="vc-card"><p><b>What you can say</b> · in talk mode, or typed here. Tap an example to try it.</p>${cav}${cav ? core : ''}
     ${G.map(([h, L]) => `<div class="vc-grp"><span class="label">${esc(h)}</span><div class="cv-acts">${L.map(x => `<button type="button" class="chip vc-ex" data-vcsay="${esc(x)}">${esc(x)}</button>`).join('')}</div></div>`).join('')}
-    <div class="vc-grp"><span class="label">While talking</span><p class="small">“Stop” ends an answer · “Pause” · “Read that again” · “Slower” · “Faster” · “Goodbye” ends talk mode</p></div>
+    <div class="vc-grp"><span class="label">While talking</span><p class="small">“Stop” ends an answer · “Pause”, then “Resume” or “Unpause” (Alt+P) · “Read that again” · “Slower” · “Faster” · “Goodbye” ends talk mode</p></div>
     ${cav ? '' : core}
     <p class="tiny muted">Ctrl+Shift+Space (or Alt+V outside text boxes) starts and ends talk mode. Live: speech uses your browser’s speech service (Chrome sends the audio to it). Commands use this page’s synthetic enterprise data and public sources; tasks and requests are saved to the page’s shared store when it is connected, otherwise for this visit.</p>
     <div class="cv-acts">${VC.on ? '' : '<button type="button" class="btn sm accent" data-vcgo="start">Start talk mode</button>'}<button type="button" class="btn sm" data-vcgo="set">Voice settings</button></div></div>`;
@@ -13301,8 +13318,10 @@ function initVoice() {
   $('header', box).classList.add('vc-hd');
   const keys = 'Control+Shift+Space Alt+V';
   const hb = document.createElement('button'); hb.type = 'button'; hb.className = 'vc-hb'; hb.id = 'vcTalk';
-  hb.setAttribute('aria-pressed', 'false'); hb.setAttribute('aria-label', 'Talk mode'); hb.setAttribute('aria-keyshortcuts', keys); hb.title = 'Talk mode: speak and hear answers (Ctrl+Shift+Space or Alt+V)';
-  hb.innerHTML = `${VC_SVG.mic}<span>Talk</span>`; $('#cvSpeak').before(hb);
+  hb.setAttribute('aria-pressed', 'false'); hb.setAttribute('aria-label', 'Voice mode'); hb.setAttribute('aria-keyshortcuts', keys); hb.title = 'Voice mode: talk, give commands and hear answers (Ctrl+Shift+Space or Alt+V)';
+  hb.innerHTML = `${VC_SVG.mic}<span>Voice</span>`; $('#cvSpeak').before(hb);
+  const hp = document.createElement('button'); hp.type = 'button'; hp.className = 'vc-hb vc-hp'; hp.id = 'vcHdP'; hp.hidden = true; hp.setAttribute('aria-keyshortcuts', 'Alt+P');
+  hb.after(hp); hp.addEventListener('click', () => { if (!VC.on) return; if (VC.paused) vcUnpause(); else vcPauseNow(); });
   const bar = document.createElement('div'); bar.className = 'vc-bar'; bar.id = 'vcBar'; bar.hidden = true; bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', 'Talk mode');
   bar.innerHTML = `<div class="vc-top"><span class="vc-dot" aria-hidden="true"></span><b class="vc-st" id="vcSt" aria-live="polite">Off</b><span class="vc-cap" id="vcCap"></span></div>
     <form class="vc-type" id="vcType" hidden><label class="sr" for="vcIn">Type a command</label><input id="vcIn" autocomplete="off" spellcheck="false" placeholder="e.g. revenue forecast, run churn sentinel, yes"><button type="submit" class="btn sm accent">Run</button></form>
@@ -13329,8 +13348,8 @@ function initVoice() {
   bar.addEventListener('click', e => {
     const b = e.target.closest('[data-vc]'); if (!b) return;
     const k = b.dataset.vc;
-    if (k === 'pause') { if (VC.paused) { Object.assign(VC, { paused: false, quiet: 0, fails: [] }); vcResume(); } else { VC.turn++; vcHush(); vcPause('Paused. Press Resume to talk again.'); } }
-    else if (k === 'mic') { VC.typed = false; VC.paused = false; VC.fails = []; vcResume(); }
+    if (k === 'pause') { if (VC.paused) vcUnpause(); else vcPauseNow(); }
+    else if (k === 'mic') { VC.typed = false; VC.paused = false; VC.wake = false; VC.fails = []; vcResume(); }
     else if (k === 'stop') { VC.turn++; vcHush(); if (CV.ctl) CV.ctl.abort(); vcNote('Stopped.'); vcResume(); }
     else if (k === 'end') vcStop();
     else if (k === 'help') vcShowHelp();
@@ -13377,10 +13396,11 @@ function initVoice() {
     // Alt+V types a character on some keyboards (Option+V is √ on a Mac), so inside a text box only Ctrl+Shift+Space works
     const editable = e.target && e.target.closest && e.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"])');
     const combo = (e.ctrlKey && e.shiftKey && !e.altKey && !e.metaKey && e.code === 'Space') || (!editable && e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && e.code === 'KeyV');
+    if (!editable && VC.on && !VC.typed && e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && e.code === 'KeyP' && !e.repeat) { e.preventDefault(); if (VC.paused) vcUnpause(); else vcPauseNow(); return; }
     if (!combo || e.repeat) return;
     e.preventDefault(); if (VC.on) vcStop(); else vcStart();
   });
-  document.addEventListener('visibilitychange', () => { if (document.hidden && VC.on && !VC.typed && !VC.paused) { vcHush(); vcPause('Paused while the page was in the background. Press Resume to talk again.'); } });
+  document.addEventListener('visibilitychange', () => { if (document.hidden && VC.on && !VC.typed && (!VC.paused || VC.wake)) { vcHush(); vcPause('Paused while the page was in the background. Press Resume to talk again.'); } });
   // a new interface language: listen and read in it from the next phrase
   new MutationObserver(() => { if (LANG.cur === VC.recLang) return; vcFillVoices(); VC.recLang = LANG.cur; if (VC.on && VC.recOn) try { VC.rec.abort(); } catch (e) { /* onend restarts in the new language */ } })
     .observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
