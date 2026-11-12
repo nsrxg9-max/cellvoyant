@@ -1884,6 +1884,682 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 @media (max-width:980px){.su-two,.su-cts{grid-template-columns:minmax(0,1fr)}.su-board{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:720px){.su-k,.su-nodes{grid-template-columns:repeat(2,minmax(0,1fr))}.su-gates{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:480px){.su-board{grid-template-columns:minmax(0,1fr)}}
+/* v4 · program */
+/* upgrade program */
+.pg{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.pg .res-h{margin:10px 0 0}
+.pg .mp-note{margin:0}
+.cr-sum.pg-sum{grid-template-columns:repeat(7,minmax(0,1fr))}
+.cr-sum.pg-sum span{font-size:12.5px}
+.pg-sum .pg-k-live b{color:var(--good)}
+.pg-sum .pg-k-proto b{color:var(--signal)}
+.pg-sum .pg-k-pilot b{color:var(--ink-2)}
+.pg-top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px;align-items:start}
+.pg-leg{display:inline-flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:4px 12px;letter-spacing:0;text-transform:none;font:12px var(--f-body);color:var(--ink-2)}
+.pg-sw{display:inline-block;width:10px;height:10px;border-radius:2px;flex:none}
+.pg-leg>span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.pg-sw.pg-live,.pg-stack .pg-live{background:var(--good)}
+.pg-sw.pg-proto,.pg-stack .pg-proto{background:var(--signal)}
+.pg-sw.pg-pilot,.pg-stack .pg-pilot{background:var(--muted)}
+.pg-bars{display:grid;gap:10px;padding:12px}
+.pg-br{display:grid;grid-template-columns:minmax(0,11rem) minmax(0,1fr) auto;gap:6px 12px;align-items:center}
+.pg-bl{appearance:none;border:0;background:none;padding:0;font:600 13px var(--f-body);color:var(--ink);text-align:start;min-width:0}
+button.pg-bl{cursor:pointer;text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px}
+button.pg-bl:hover{color:var(--accent);text-decoration-color:currentColor}
+.pg-stack{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--surface-2);min-width:0}
+.pg-stack i{display:block;height:100%}
+.pg-stack i+i{border-inline-start:2px solid var(--surface)}
+.pg-bn{font:600 12px var(--f-mono);color:var(--ink-2);white-space:nowrap}
+.pg-bars .tiny{margin:2px 0 0}
+.pg-key{display:grid;gap:10px;padding:12px}
+.pg-key div{display:grid;grid-template-columns:12px minmax(0,1fr);gap:2px 10px;align-items:baseline}
+.pg-key .pg-sw{align-self:center}
+.pg-key span{grid-column:2;font-size:13px;color:var(--ink-2)}
+.pg-waves{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pg-wave{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:12px;padding:14px 16px;display:grid;gap:8px;align-content:start;min-width:0}
+.pg-wave:nth-child(2){border-top-color:var(--signal)}
+.pg-wave:nth-child(3){border-top-color:var(--cx-1)}
+.pg-wave p{margin:0;color:var(--ink-2)}
+.pg-wh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.pg-wh b{font-family:var(--f-display);font-size:30px;font-weight:850;line-height:1}
+.chip.pg-chip{cursor:pointer;font:inherit;font-size:12.5px;text-align:start}
+.pg-chip .mono{color:var(--accent);font-weight:600}
+.pg-chip:hover{border-color:var(--accent)}
+.pg-bar{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;padding-block:10px;border-bottom:1px solid var(--line);background:var(--bg)}
+.band .pg-bar{background:var(--band)}
+@media (min-width:721px){.pg-bar{position:sticky;top:var(--hdr,59px);z-index:3}}
+.pg-brow{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+.pg-brow>*{min-width:0}
+.pg-brow .inp-search{flex:1 1 240px;width:auto}
+.pg-brow .inp{flex:0 1 auto;width:auto;max-width:100%;text-overflow:ellipsis}
+.pg-brow .seg-btns{max-width:100%}
+.pg-acts{display:flex;flex-wrap:wrap;gap:8px;margin-inline-start:auto}
+.chip.pg-x{cursor:pointer;font:inherit;font-size:12.5px}
+.pg-x:hover{border-color:var(--accent)}
+.pg-list{display:grid;gap:18px}
+.pg-g{display:grid;gap:6px}
+.pg-gh{display:flex;align-items:baseline;gap:10px;font-size:16px;margin:0 0 2px;padding-bottom:6px;border-bottom:2px solid var(--line-strong)}
+.pg-row{background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--muted);border-radius:10px;min-width:0}
+.pg-row.pg-live{border-inline-start-color:var(--good)}
+.pg-row.pg-proto{border-inline-start-color:var(--signal)}
+.pg-row[open]{border-block-color:var(--accent);border-inline-end-color:var(--accent)}
+.pg-row.pg-hl{background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.pg-row>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:2.2rem minmax(0,1fr) auto 14px;gap:4px 12px;align-items:center;padding:10px 12px;border-radius:9px}
+.pg-row>summary::-webkit-details-marker{display:none}
+.pg-row>summary::after{content:"▾";color:var(--muted);font-size:12px;justify-self:end}
+.pg-row[open]>summary::after{content:"▴"}
+.pg-row>summary:hover .pg-name{color:var(--accent)}
+.pg-no{color:var(--muted);font-size:13px}
+.pg-name{font-weight:700;font-size:15px;line-height:1.3;min-width:0;overflow-wrap:anywhere}
+.pg-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;align-items:center}
+.pg-p{display:inline-block;font:700 11px var(--f-mono);letter-spacing:.04em;padding:2px 7px;border-radius:6px;white-space:nowrap}
+.pg-p.pg-p0{background:var(--accent);color:var(--accent-ink)}
+.pg-p.pg-p1{background:var(--accent-soft);color:var(--ink)}
+.pg-p.pg-p2{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line-strong)}
+.pg-st{display:inline-block;font:600 11px var(--f-mono);letter-spacing:.03em;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pg-st.pg-live{background:var(--good-soft);color:var(--good)}
+.pg-st.pg-proto{background:var(--signal-soft);color:var(--signal)}
+.pg-st.pg-pilot{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line-strong)}
+.pg-ed{font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);border:1px dashed var(--line-strong);white-space:nowrap}
+.pg-hl .pg-ed{background:var(--accent-soft);color:var(--ink);border-style:solid;border-color:transparent}
+.pg-det{display:grid;gap:12px;margin-inline:12px;padding:12px 0 14px;border-top:1px dashed var(--line-strong)}
+.pg-det p{margin:4px 0 0;color:var(--ink-2)}
+.pg-iau{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pg-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 12px;margin:0}
+.pg-meta div{display:grid;gap:2px;min-width:0;align-content:start}
+.pg-meta dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pg-meta dd{margin:0;font-size:13.5px;color:var(--ink)}
+.pg-meta dd .tiny{display:block;margin-top:2px}
+.linkish.pg-own{font-size:13.5px;text-align:start}
+.pg-next{background:var(--surface-2);border-radius:8px;padding:10px 12px}
+.pg-none{align-self:center}
+.pg-tmbars{padding:6px 0}
+.pg-tmbars .pg-br{grid-template-columns:minmax(0,8.5rem) minmax(0,1fr) auto}
+.tm-line .pg-p,.tm-line .pg-st{align-self:center}
+@media (max-width:980px){.cr-sum.pg-sum{grid-template-columns:repeat(4,minmax(0,1fr))}.pg-top,.pg-waves{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:720px){
+  .pg-iau{grid-template-columns:minmax(0,1fr)}
+  .pg-meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pg-row>summary{grid-template-columns:1.8rem minmax(0,1fr) 14px;gap:6px 10px}
+  .pg-tags{grid-column:2;grid-row:2;justify-content:flex-start}
+  .pg-row>summary::after{grid-column:3;grid-row:1}
+  .pg-br{grid-template-columns:minmax(0,1fr) auto}
+  .pg-br .pg-stack{grid-column:1 / -1;grid-row:2}
+}
+@media (max-width:560px){.cr-sum.pg-sum{grid-template-columns:repeat(2,minmax(0,1fr))}.pg-sum>div:first-child{grid-column:1 / -1}}
+/* v4 · tower */
+/* AI Control Tower */
+.tw,.tw-body{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.tw-body{gap:14px}
+.tw 
+.tw .wb-body,.tw-job .wb-body,.tw-brief,.tw-aps,.tw-ap,.tw-rej,.tw-lv,.tw-ca,.tw-plan,.tw-raws,.tw-raws .ag-run,.tw-empty,.tw-live,.tw-dh,.tw-rated,.tw-again,.tw-btest{grid-template-columns:minmax(0,1fr)}
+.tw .su-bar{justify-content:space-between}
+.tw-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+.tw-runs{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;align-items:start}
+.tw .box-h .btn,.tw .box-h .pill{text-transform:none;letter-spacing:0}
+.tw .box-h>span:last-child{text-align:end}
+.tw-n{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;margin-inline-start:6px;border-radius:999px;background:var(--crit);color:var(--surface);font:700 11px var(--f-mono)}
+.tw-n:empty{display:none}
+.tw-flt{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+.tw-flt>*{min-width:0}
+.tw .tw-sel{width:auto;max-width:100%;font-size:13px;padding-block:6px}
+.tw-in{width:100%;min-width:0;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--ink);font:500 14px var(--f-body);padding:8px 10px}
+.tw-in:focus-visible,.tw .tm-q:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.tw .tm-q.mono{font-family:var(--f-mono);font-size:13px}
+.tw .wb-table td:nth-child(n),.tw-job .wb-table td:nth-child(n){font-family:var(--f-body);vertical-align:top}
+.tw .wb-table td.mono:nth-child(n),.tw-job .wb-table td.mono:nth-child(n){font-family:var(--f-mono)}
+.tw-wrap td{white-space:normal;min-width:90px}
+.tw-tbl tr.tw-on td{background:var(--accent-soft)}
+.tw-rl{display:block;font-size:13.5px;text-align:start}
+.tw-tbl td:nth-child(2){white-space:normal;min-width:150px}
+.tw-detail:focus{outline:none}
+.tw-detail:focus-visible{box-shadow:0 0 0 3px var(--accent-soft)}
+.tw-dh{display:grid;gap:2px}
+.tw-dh b{font-size:16px}
+.tw-st{display:inline-flex;align-items:center;gap:5px;font:600 11.5px var(--f-body);letter-spacing:0;text-transform:none;padding:2px 8px;border-radius:999px;white-space:nowrap;background:var(--surface-2);color:var(--ink-2)}
+.tw-st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.tw-st.ok{background:var(--good-soft);color:var(--good)}
+.tw-st.warn{background:var(--signal-soft);color:var(--signal)}
+.tw-st.err{background:var(--crit-soft);color:var(--crit)}
+.tw-st.run{background:var(--accent-soft);color:var(--accent)}
+.tw-st.run::before{animation:twPulse 1.2s ease-in-out infinite}
+@keyframes twPulse{50%{opacity:.25}}
+.tw-risk{display:inline-flex;font:600 11.5px var(--f-body);padding:2px 8px;border-radius:999px;white-space:nowrap;background:var(--surface-2);color:var(--ink-2)}
+.tw-risk.hi{background:var(--crit-soft);color:var(--crit)}
+.tw-risk.lo{background:var(--good-soft);color:var(--good)}
+/* runs */
+.tw-hb{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(60px,1.4fr) minmax(34px,auto);gap:8px;align-items:center;font-size:12.5px;color:var(--ink-2)}
+.tw-hbar{display:flex;height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.tw-hbar i{display:block;height:100%;background:var(--accent)}
+.tw-hbar i.bad{background:var(--signal)}
+.tw-leg{display:inline-flex;gap:4px 10px;align-items:center;flex-wrap:wrap}
+.tw-leg .eg-sw{margin-inline-end:2px}
+.eg-sw.tw-ok{background:var(--accent)}.eg-sw.tw-bad{background:var(--signal)}
+.tw-kvs{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.tw-kv{display:flex;justify-content:space-between;gap:8px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);font-size:13px}
+.tw-live{display:grid;gap:4px}
+.tw-empty{display:grid;gap:10px;padding:6px 0}
+.tw-tl{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:7px}
+.tw-tl li{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(60px,1fr) auto;gap:10px;align-items:center;font-size:12.5px}
+.tw-tn{display:grid;min-width:0;overflow-wrap:anywhere}
+.tw-tlb{position:relative;height:8px;border-radius:4px;background:var(--surface-2)}
+.tw-tlb i{position:absolute;top:-1px;width:10px;height:10px;border-radius:50%;background:var(--good);transform:translateX(-50%)}
+[dir="rtl"] .tw-tlb i{transform:translateX(50%)}
+.tw-tl li.err .tw-tlb i{background:var(--crit)}
+.tw-tl li.err .tw-tn{color:var(--crit)}
+.tw-acts li{line-height:1.45}
+.tw-rated{display:grid;gap:6px;justify-items:start}
+.tw-note{display:flex;flex-wrap:wrap;gap:8px;width:100%}
+.tw-note .tw-in{flex:1 1 220px;width:auto}
+.tw-rate{display:inline-flex;gap:4px}
+.tw-th{appearance:none;display:inline-grid;place-items:center;width:34px;height:34px;padding:0;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--ink-2);cursor:pointer}
+.tw-rate.mini .tw-th{width:28px;height:28px}
+.tw-th svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}
+.tw-th.dn svg{transform:scaleY(-1)}
+.tw-th:hover{border-color:var(--accent);color:var(--accent)}
+.tw-th[aria-pressed="true"]{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.tw-th.dn[aria-pressed="true"]{background:var(--crit-soft);border-color:var(--crit);color:var(--crit)}
+.tw-th[aria-pressed="true"] svg{fill:currentColor}
+.tw-again:not(:empty){border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:8px;background:var(--surface-2)}
+/* approvals */
+.tw-aps{display:grid;gap:10px}
+.tw-ap{display:grid;gap:6px;padding:10px 12px;border:1px solid var(--line);border-inline-start:4px solid var(--good);border-radius:10px;background:var(--surface)}
+.tw-ap.hi{border-inline-start-color:var(--crit)}
+.tw-ap p{margin:0;font-size:14px;line-height:1.4}
+.tw-ap-h{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.tw-rej{display:grid;gap:8px;padding:10px;border-radius:8px;background:var(--surface-2)}
+.tw-rej .chip{cursor:pointer}
+.tw-err{color:var(--crit)}
+.tw-errs{margin:0;padding-inline-start:18px;color:var(--crit);font-size:13px;display:grid;gap:3px}
+#twApprList:focus{outline:none}
+.tw-lv{display:grid;gap:8px}
+.tw-lv div{display:grid;gap:2px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}
+.tw-lv .small{color:var(--ink-2)}
+.tw-auto td{white-space:normal}
+.tw-auto .tw-sel{min-width:150px}
+.tw-log{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.tw-log li{display:grid;grid-template-columns:118px minmax(0,auto) minmax(0,1fr);gap:4px 10px;align-items:baseline;font-size:13px;padding-bottom:6px;border-bottom:1px dashed var(--line)}
+.tw-log li b{font-weight:600;white-space:nowrap}
+.tw-pilot{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;color:var(--ink-2)}
+/* builder */
+.tw .tw-bf{grid-template-columns:repeat(2,minmax(0,1fr))}
+.tw-f{display:grid;gap:4px;min-width:0}
+.tw-wide{grid-column:1/-1}
+.tw-src{border:0;margin:0;padding:0}
+.tw-ck{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.tw-ck input{accent-color:var(--accent);margin:0}
+.tw-ck:has(input:checked){background:var(--accent-soft);border-color:transparent;color:var(--ink)}
+.tw-tok{margin-top:6px}
+.tw-tok .chip{cursor:pointer}
+.tw-tok .chip:hover{border-color:var(--accent)}
+.tw-tokh summary{cursor:pointer;color:var(--ink-2);margin-top:4px}
+.tw-ca{display:grid;gap:6px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tw-ca p{margin:0;color:var(--ink-2)}
+.tw-cu{display:inline-block;margin-inline-start:4px;padding:1px 6px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font:600 10px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;vertical-align:1px}
+.tw-btest:not(:empty){border:1px solid var(--line-strong);border-radius:14px;background:var(--surface);padding:16px;display:grid;gap:10px}
+/* supervisor */
+.tw-plan{list-style:none;margin:8px 0;padding:0;display:grid;gap:8px}
+.tw-plan li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tw-plan li>span:nth-child(2){display:grid;gap:2px;min-width:0}
+.tw-add{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.tw-add .inp{flex:1 1 220px;width:auto;max-width:420px}
+.tw-steps{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.tw-steps li{gap:4px}
+.tw-steps li:not(:last-child)::after{display:none}
+.tw-steps li.run{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.tw-steps li.ok{border-color:color-mix(in srgb,var(--good) 50%,var(--line))}
+.tw-steps li.warn{border-color:color-mix(in srgb,var(--signal) 50%,var(--line))}
+.tw-steps li.err{border-color:var(--crit)}
+.tw-steps li.skip,.tw-steps li.wait{opacity:.75}
+.tw-steps .tw-st{justify-self:start}
+.tw-prog{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.tw-prog i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s ease}
+.tw-now{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tw-brief:not(:empty){display:grid;gap:12px;padding-top:4px}
+.tw-h4{margin:0;font-size:17px;line-height:1.3}
+.tw-conf div{grid-template-columns:18px minmax(0,110px) minmax(0,1fr)}
+.tw-sum:not(:empty){padding:10px 12px;border-radius:8px;background:var(--surface-2)}
+.tw-raw summary{cursor:pointer;color:var(--ink-2)}
+.tw-raws{display:grid;gap:10px;margin-top:10px}
+.tw-raws .ag-run{border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:8px;background:var(--surface-2)}
+.tw-chat .tw-job{margin-top:8px}
+.tw-chat .tw-two{grid-template-columns:minmax(0,1fr)}
+/* evaluation */
+.tw-k4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.tw-sc{display:inline-flex;align-items:center;gap:8px}
+.tw-scb{display:inline-block;width:64px;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.tw-scb i{display:block;height:100%;background:var(--good)}
+.tw-scb i.lo{background:var(--crit)}
+@media (prefers-reduced-motion:reduce){.tw-st.run::before{animation:none}.tw-prog i{transition:none}}
+@media (max-width:980px){.tw-two,.tw-runs{grid-template-columns:minmax(0,1fr)}.tw-k4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.tw .tw-bf{grid-template-columns:minmax(0,1fr)}.tw-log li{grid-template-columns:minmax(0,1fr)}.tw-hb{grid-template-columns:minmax(0,1fr) minmax(50px,1fr) auto}.tw .su-bar{justify-content:flex-start}}
+/* v4 · brain */
+/* Market Brain */
+.kg{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.kg-sum{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+.kg-tile{appearance:none;font:inherit;text-align:start;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:4px;align-content:start;min-width:0}
+button.kg-tile{cursor:pointer}
+button.kg-tile:hover{border-color:var(--line-strong)}
+.kg-tile[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.kg-tile b{font-family:var(--f-display);font-size:26px;font-weight:850;line-height:1}
+.kg-tile span{font-size:12.5px;color:var(--ink-2);display:flex;gap:6px;align-items:flex-start}
+.kg-sh{width:12px;height:12px;flex:none;margin-top:2px}
+.kg-ring{stroke:var(--ink-2);stroke-width:1.6}
+.kg-bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.kg-bar>*{min-width:0}
+.kg-find{position:relative;display:grid;gap:4px;min-width:0;flex:1 1 240px;max-width:420px}
+.kg-find .inp-search{width:100%}
+.kg-sug{position:absolute;z-index:6;inset-inline:0;top:calc(100% + 4px);margin:0;padding:4px;list-style:none;background:var(--surface);border:1px solid var(--line-strong);border-radius:10px;box-shadow:var(--shadow);max-height:320px;overflow:auto}
+.kg-sug li{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:8px;align-items:center;padding:7px 9px;border-radius:7px;cursor:pointer}
+.kg-sug li b{font-size:13.5px;font-weight:600;overflow-wrap:anywhere}
+.kg-sug li span{grid-column:2;font-size:12px;color:var(--muted)}
+.kg-sug li[aria-selected="true"],.kg-sug li:hover{background:var(--accent-soft)}
+.kg-sug li.kg-none{display:block;cursor:default;color:var(--muted);font-size:13px;background:none}
+.kg-try{appearance:none;cursor:pointer;font-family:var(--f-body)}
+.kg-try:hover{border-color:var(--accent);color:var(--ink)}
+.kg-fs{display:flex;flex-wrap:wrap;gap:6px}
+.kg-f{appearance:none;display:inline-flex;align-items:center;gap:7px;font:600 12.5px var(--f-body);padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer}
+.kg-f[aria-pressed="true"]{background:var(--surface-2);border-color:var(--line-strong);color:var(--ink)}
+.kg-f[aria-pressed="false"]{text-decoration:line-through}
+.kg-f[aria-pressed="false"] .kg-ls{opacity:.35}
+.kg-f .mono{font-size:11px;font-weight:500;color:var(--muted)}
+.kg-ls{display:inline-block;width:18px;height:0;border-top:2px solid var(--line-strong);vertical-align:middle}
+.kg-ls.r-own,.kg-ls.r-grp,.kg-ls.r-inv{border-top-color:var(--ink-2)}
+.kg-ls.r-deal,.kg-ls.r-ev{border-top-color:var(--signal)}
+.kg-ls.r-rival{border-top:2px dashed var(--crit)}
+.kg-top{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+.kg-map{padding:6px 8px 0;min-height:300px}
+.kg-svg{display:block;width:100%;height:auto}
+.kg-e{stroke:var(--line-strong);stroke-width:1;opacity:.8}
+.kg-e.r-own,.kg-e.r-grp,.kg-e.r-inv{stroke:var(--ink-2);opacity:.45}
+.kg-e.r-deal,.kg-e.r-ev{stroke:var(--signal);opacity:.55}
+.kg-e.r-rival{stroke:var(--crit);stroke-dasharray:4 3;opacity:.45}
+.kg-e.hot{opacity:.95;stroke-width:1.7}
+.kg-ah{fill:var(--muted)}
+.kg-n{cursor:pointer}
+.kg-n>:first-child{stroke:var(--surface);stroke-width:1.2;transition:stroke-width .15s ease}
+.kg-n>.kg-ring{stroke:var(--ink-2);stroke-width:1.8}
+.kg-n:hover>:first-child{stroke:var(--ink);stroke-width:2}
+.kg-n.on>:first-child{stroke:var(--ink);stroke-width:2.6}
+.kg-lab{font:500 11px var(--f-body);fill:var(--ink-2);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.kg-lab.on{font-weight:700;fill:var(--ink)}
+.kg-leg{padding:6px 12px 0}
+.kg-leg span{display:inline-flex;align-items:center;gap:6px}
+.kg-leg .kg-sh{margin-top:0}
+.kg-leg .kg-ls{width:14px}
+.kg-nb{padding:10px 12px 12px;display:grid;gap:8px;border-top:1px solid var(--line);margin-top:8px}
+.kg-nbh{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;align-items:baseline}
+.kg-chips{display:flex;flex-wrap:wrap;gap:6px}
+.kg-chip{appearance:none;display:inline-flex;align-items:center;gap:6px;font:500 12.5px var(--f-body);color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px 10px;cursor:pointer;max-width:100%;text-align:start;overflow-wrap:anywhere}
+.kg-chip:hover{border-color:var(--accent)}
+.kg-chip .kg-sh{margin-top:0}
+.kg-more summary{cursor:pointer;padding:2px 0}
+.kg-more[open] summary{margin-bottom:6px}
+.kg-head{display:grid;gap:2px;justify-items:start}
+.kg-head h3{margin:6px 0 0;font-size:20px;line-height:1.25;overflow-wrap:anywhere}
+.kg-head p{margin:0}
+.kg-type{display:inline-flex;align-items:center;gap:6px;font:600 12px var(--f-body);color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.kg-type .kg-sh{margin-top:0}
+.kg-acts{display:inline-flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;text-transform:none;letter-spacing:0}
+.kg .box-h{flex-wrap:wrap}
+.kg .box-h .seg-btns{flex:none}
+.kg-facts{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px}
+.kg-facts div{min-width:0}
+.kg-facts dt{font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.kg-facts dd{margin:2px 0 0;font-size:13.5px;overflow-wrap:anywhere}
+.kg-uv{margin:0;padding:8px 10px;border-radius:8px;background:var(--signal-soft);color:var(--ink)}
+.kg-rels{display:grid;gap:12px}
+.kg-rg ul{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.kg-rg.off{opacity:.62}
+.kg-rel{appearance:none;display:inline-flex;align-items:center;gap:6px;font:500 13px var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:5px 9px;cursor:pointer;text-align:start;max-width:100%}
+.kg-rel span{overflow-wrap:anywhere}
+.kg-rel em{font:500 11.5px var(--f-mono);font-style:normal;color:var(--muted)}
+.kg-rel:hover{border-color:var(--accent)}
+.kg-rel .kg-sh{margin-top:0}
+.kg-src a{color:var(--accent)}
+.kg-pf{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:flex-end}
+.kg-pf .kg-find{flex-basis:220px}
+.kg-path{display:grid;gap:8px}
+.kg-path p,.kg-path ul{margin:0}
+.kg-chain{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.kg-hop{font:500 12px var(--f-mono);color:var(--muted)}
+[dir="rtl"] .kg-chain{direction:ltr}  /* the arrows read left to right, like the Latin names */
+.kg .kg-rank td:nth-child(n){font-family:var(--f-body)}
+.kg .kg-rank td.mono:nth-child(n){font-family:var(--f-mono)}
+.kg-rank .kg-sh{vertical-align:-1px;margin-inline-end:4px}
+.kg-rank td:nth-child(2),.kg-rank td:nth-child(3){white-space:normal;min-width:110px}
+.kg-rn{font-size:13px;text-align:start}
+.kg-pr{display:inline-block;width:48px;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden;vertical-align:middle;margin-inline-end:8px}
+.kg-pr i{display:block;height:100%;background:var(--accent)}
+.kg-foot{border-top:1px solid var(--line);padding-top:12px}
+#kgNote .stc{margin-inline-end:4px}
+.kg-elab{font:500 10.5px var(--f-mono);fill:var(--muted)}
+.kg-sug[hidden]{display:none}
+@media (max-width:980px){.kg-top{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.kg-facts{grid-template-columns:minmax(0,1fr)}.kg-sum{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.kg-tile{padding:9px 10px}.kg-tile b{font-size:20px}.kg-tile span{font-size:11.5px}.kg-find,.kg-pf .kg-find{flex-basis:100%;max-width:none}}
+@media (prefers-reduced-motion: reduce){.kg *{transition:none!important;animation:none!important}}
+/* v4 · futurelab */
+/* FutureLab: digital twin and executive reports */
+.fl,.rp,.fl-body{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.fl-body{gap:14px}
+.rp{margin-top:10px}
+.fl>.res-h:first-child{margin:0}
+#flHead .stc{vertical-align:middle;margin-inline-start:6px}
+.rp-head:focus{outline:none}.rp-head:focus-visible,#flCmpH:focus-visible,#flCapH:focus-visible,.fl-dec li:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.fl-flow{grid-template-columns:repeat(5,minmax(0,1fr))}
+.fl-flow .fl-loop{border-style:dashed}
+.fl-flow .fl-loop .dc-n{background:var(--ink-2)}
+.fl-flow .fl-loop.on{border-color:var(--crit);background:color-mix(in srgb,var(--crit) 7%,var(--surface))}
+.fl-flow .fl-loop.on .dc-n{background:var(--crit)}
+.fl-flow .fl-loop.on .mono{color:var(--crit)}
+.fl-lev{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:10px 14px;align-items:stretch}
+.fl-sl{display:grid;gap:4px;align-content:start;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.fl-sl-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline;font-size:13.5px;color:var(--ink-2)}
+.fl-sl-h b{color:var(--ink);font-size:14px}
+.fl-sl input[type=range]{width:100%;accent-color:var(--accent);margin:4px 0}
+.fl-tog{justify-self:start;min-width:64px;justify-content:center}
+.fl-tog[aria-pressed="true"]{background:var(--crit);border-color:var(--crit);color:var(--surface)}
+.fl-pre{align-items:center;margin-top:10px}
+.fl-story .label{color:var(--accent)}
+.fl-story p{margin:4px 0 0;max-width:920px}
+.fl-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.fl-sw-base,.fl-sw-lim{width:18px}
+.fl-sw-base{background:repeating-linear-gradient(90deg,var(--ink-2) 0 4px,transparent 4px 7px)}
+.fl-sw-lim{background:repeating-linear-gradient(90deg,var(--crit) 0 2px,transparent 2px 4px)}
+.fl-sw-lo{background:color-mix(in srgb,var(--good) 55%,var(--surface))}
+.fl-sw-hi{background:var(--good)}
+.fl-qt summary,.fl-as summary{cursor:pointer;padding:6px 0;font-weight:600;color:var(--ink-2)}
+.fl-qt[open] summary{margin-bottom:6px}
+.fl .wb-table td:nth-child(n){font-family:var(--f-body)}
+.fl .wb-table td.mono:nth-child(n){font-family:var(--f-mono)}
+.fl-qtab td:first-child{white-space:nowrap;color:var(--ink-2)}
+.fl-cmp td{vertical-align:top}
+.fl-d{display:block;font-size:11.5px;color:var(--muted)}
+.fl-tor{display:grid;gap:6px;max-width:640px}
+.fl-tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:10px;align-items:center;font-size:12.5px;color:var(--ink-2)}
+.fl-tb{position:relative;height:20px;direction:ltr;background:var(--surface-2);border-radius:4px}
+.fl-tb::before{content:"";position:absolute;inset-block:0;inset-inline-start:50%;border-inline-start:1px solid var(--line-strong)}
+.fl-tb i{position:absolute;height:7px;border-radius:2px}
+.fl-tb i.lo{top:2px;opacity:.55}.fl-tb i.hi{top:11px}
+.fl-tb i.neg{background:var(--crit)}.fl-tb i.pos{background:var(--good)}
+.fl-save{display:flex;flex-wrap:wrap;gap:8px}
+.fl-save .inp{flex:1 1 180px;width:auto;background-image:none;padding-inline-end:11px}
+.fl-saved,.fl-dec,.rp-runs{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.fl-saved li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;font-size:13px}
+.fl-saved li>span:nth-child(2){display:grid;gap:1px;min-width:0}
+.fl-dec li{display:grid;gap:4px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.fl-dh{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.fl-out{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:end;margin-top:4px}
+.fl-out>span{flex:1 1 100%}
+.fl-out label{display:grid;gap:3px;color:var(--ink-2)}
+.fl-out .inp{width:140px;max-width:100%;background-image:none;padding-inline-end:8px}
+.fl-as ul{margin-top:4px}
+.rp-top{align-items:start}
+.rp .seg-btns{justify-self:start}
+.rp-f{display:grid;gap:4px;min-width:0}
+.rp-f .inp{background-image:none;padding-inline-end:11px}
+.rp-secs{border:0;margin:0;padding:0;display:grid;gap:6px;min-width:0}
+.rp-secs legend{padding:0;margin-bottom:4px}
+.rp-chk{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:8px 10px;border:1px solid var(--line);border-radius:9px;cursor:pointer;font-size:13.5px}
+.rp-chk:has(input:checked){border-color:color-mix(in srgb,var(--accent) 55%,var(--line));background:var(--accent-soft)}
+.rp-chk input{margin-top:3px;accent-color:var(--accent);inline-size:16px;block-size:16px}
+.rp-chk>span{display:grid;gap:1px;min-width:0}
+.rp-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rp-row[hidden],.rp-f[hidden]{display:none}
+.rp-runs li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:9px;font-size:13px}
+.rp-runs li>span:first-child{display:grid;gap:1px}
+.rp-out{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.rp-out:empty{display:none}
+.rp-head{display:grid;gap:2px;padding-top:6px;border-top:2px solid var(--accent)}
+.rp-head b{font-family:var(--f-display);font-size:22px;font-weight:800;line-height:1.2}
+.rp-k{grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr))}
+.rp .wb-table td:nth-child(n){font-family:var(--f-body)}
+.rp .wb-table td.mono:nth-child(n){font-family:var(--f-mono);white-space:nowrap}
+.rp-tbl td{white-space:normal;min-width:72px}
+.rp-frame{position:fixed;inset-inline-end:0;inset-block-end:0;inline-size:0;block-size:0;border:0;visibility:hidden}
+@media (max-width:980px){.fl-charts{grid-template-columns:minmax(0,1fr)}.fl-flow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.fl-flow{grid-template-columns:repeat(2,minmax(0,1fr))}.rp-row{grid-template-columns:minmax(0,1fr)}.fl-saved li{grid-template-columns:auto minmax(0,1fr)}.fl-saved li .row-btns{grid-column:1/-1}}
+/* v4 · copilot */
+/* executive copilot */
+.cpl,.cpl-body{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.cpl-body{gap:14px}
+.cpl-bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.cpl-bar>*{min-width:0}
+.cpl-tabs button{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;padding:8px 14px}
+.cpl-n{font:600 11px var(--f-mono);color:var(--muted)}
+.cpl-n:empty{display:none}
+.cpl-tabs button[aria-pressed="true"] .cpl-n{color:inherit;opacity:.75}
+.cpl-two{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px;align-items:start}
+.cpl-side{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-content:start}
+.cpl-ask{display:flex;gap:8px;align-items:center}
+.cpl-ask .inp-search{flex:1 1 auto;width:auto}
+.cpl-in{background-image:none;padding-inline-end:11px}
+.cpl-ta{width:100%;min-width:0;font:14px/1.5 var(--f-body);padding:10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--ink);resize:vertical}
+.cpl-ta:focus,.cpl-in:focus{outline:2px solid var(--accent);outline-offset:1px}
+.cpl-drop{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:12px;border:1px dashed var(--line-strong);border-radius:10px;background:var(--surface-2)}
+.cpl-drop.on{border-color:var(--accent);background:var(--accent-soft)}
+.cpl-drop .tiny{flex:1 1 200px;min-width:0}
+.cpl-paste summary{cursor:pointer;color:var(--ink-2);font-weight:600}
+.cpl-paste-b{display:grid;gap:8px;margin-top:8px}
+.cpl-paste-b label{display:grid;gap:4px}
+.cpl-plat{margin-top:6px}
+.cpl-msg:empty{display:none}
+.cpl-pop[hidden],.cpl-badge[hidden],.cpl-share[hidden]{display:none}
+.cpl-docs,.cpl-mem,.cpl-feed,.cpl-src{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.cpl-docs li{display:grid;gap:2px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;min-width:0}
+.cpl-doc-h,.cpl-me-h,.cpl-me-f,.cpl-src-h,.cpl-it-h,.cpl-sub-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;min-width:0}
+.cpl-doc-h b,.cpl-me-h b{flex:1 1 auto;min-width:0;overflow-wrap:anywhere;font-size:14px}
+.cpl-docs details summary{cursor:pointer;color:var(--muted)}
+.cpl-pre{margin-top:4px;color:var(--ink-2);white-space:pre-wrap;overflow-wrap:anywhere;max-height:180px;overflow:auto}
+.cpl-empty{padding:10px 2px}
+.cpl-ans{display:grid;gap:10px}
+.cpl-ans-t{font-size:15px;line-height:1.6;color:var(--ink);padding:12px 14px;border-inline-start:3px solid var(--accent);background:var(--accent-soft);border-radius:8px;overflow-wrap:anywhere}
+.cpl-cite{appearance:none;display:inline-grid;place-items:center;min-width:20px;height:18px;margin-inline:2px;padding:0 5px;border:1px solid var(--accent);border-radius:999px;background:var(--surface);color:var(--accent);font:600 11px/1 var(--f-mono);vertical-align:2px;cursor:pointer}
+.cpl-cite:hover,.cpl-cite:focus-visible{background:var(--accent);color:var(--accent-ink)}
+.cpl-h4{margin:4px 0 0;font-size:15px}
+.cpl-src li{display:grid;gap:4px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);min-width:0}
+.cpl-src li:focus{outline:2px solid var(--accent);outline-offset:1px}
+.cpl-src li p{color:var(--ink-2);overflow-wrap:anywhere}
+.cpl-src mark{background:color-mix(in srgb,var(--signal) 26%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+.cpl-num{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:6px;background:var(--ink);color:var(--bg);font:600 12px var(--f-mono)}
+.cpl-src-h b{font-size:13.5px;overflow-wrap:anywhere}
+.cpl-ai{display:grid;gap:6px;padding:12px 14px;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface-2)}
+.cpl-ai .small p{margin:0 0 6px}
+.cpl-ai .btn{justify-self:start}
+.cpl-role{display:inline-flex;align-items:center;gap:8px;color:var(--ink-2)}
+.cpl-role select{width:auto;min-width:150px}
+.cpl-bar .inp-search{flex:1 1 220px;width:auto}
+.cpl-me{display:grid;gap:6px;padding:10px 12px;border:1px solid var(--line);border-inline-start:4px solid var(--line-strong);border-radius:9px;min-width:0}
+.cpl-me.s-pub{border-inline-start-color:var(--good)}
+.cpl-me.s-int{border-inline-start-color:var(--cx-1)}
+.cpl-me.s-conf{border-inline-start-color:var(--signal)}
+.cpl-me.s-rest{border-inline-start-color:var(--crit)}
+.cpl-me p{color:var(--ink-2);overflow-wrap:anywhere}
+.cpl-me-f{justify-content:space-between}
+.cpl-sens,.cpl-sev{font:600 11px var(--f-mono);letter-spacing:.03em;padding:2px 8px;border-radius:999px;white-space:nowrap;background:var(--surface-2);color:var(--ink-2)}
+.cpl-sens.s-pub{background:var(--good-soft);color:var(--good)}
+.cpl-sens.s-int{background:color-mix(in srgb,var(--cx-1) 16%,var(--surface));color:var(--cx-1)}
+.cpl-sens.s-conf,.cpl-sev.s-high{background:var(--signal-soft);color:var(--signal)}
+.cpl-sens.s-rest,.cpl-sev.s-crit{background:var(--crit-soft);color:var(--crit)}
+.cpl-rem{display:grid;gap:8px}
+.cpl-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.cpl-row label{display:grid;gap:4px}
+.cpl-share{margin:0;padding:8px 10px;border:1px solid var(--line);border-radius:8px}
+.cpl-share legend{padding:0 4px;color:var(--ink-2)}
+.cpl-checks{display:flex;flex-wrap:wrap;gap:6px 14px}
+.cpl-checks label{display:inline-flex;align-items:center;gap:6px}
+.cpl-np{justify-self:start}
+.cpl-fbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cpl-fbar>*{min-width:0}
+.cpl-it{display:grid;gap:4px;padding:10px 12px;border:1px solid var(--line);border-inline-start:4px solid var(--line-strong);border-radius:9px;min-width:0}
+.cpl-it.s-high{border-inline-start-color:var(--signal)}
+.cpl-it.s-crit{border-inline-start-color:var(--crit)}
+.cpl-it.un{background:color-mix(in srgb,var(--accent) 5%,var(--surface))}
+.cpl-it b{font-size:14px;overflow-wrap:anywhere}
+.cpl-it .small{color:var(--ink-2);overflow-wrap:anywhere}
+.cpl-it .row-btns{align-items:center;margin-top:2px}
+.cpl-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-inline-start:auto}
+.cpl-subs{display:grid;gap:10px}
+.cpl-sub{display:grid;gap:6px;padding-bottom:10px;border-bottom:1px dashed var(--line);min-width:0}
+.cpl-sub:last-child{border-bottom:0;padding-bottom:0}
+.cpl-sub.off>.tiny,.cpl-sub.off .cpl-sub-c{opacity:.55}
+.cpl-sub-h b{font-size:14px}
+.cpl-tog{margin-inline-start:auto;padding:6px 11px;font-size:12.5px}
+.cpl-tog[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.cpl-sub-c{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.cpl-sub-c .seg-btns button{padding:5px 9px;font-size:12px}
+.cpl-sub-c .seg-btns button:disabled{cursor:default}
+.cpl-br{display:inline-flex;align-items:center;gap:5px;color:var(--ink-2)}
+.cpl-ch{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+.cpl-ch:last-child{border-bottom:0}
+.cpl-ch .tiny{grid-column:1;overflow-wrap:anywhere}
+.cpl-ch>.stc,.cpl-ch>.btn{grid-column:2;grid-row:1 / span 2;justify-self:end}
+/* header bell */
+.cpl-bellw{position:relative;flex:none}
+.cpl-bell{position:relative;display:inline-grid;place-items:center;width:36px;height:36px;padding:0;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);color:var(--ink-2);cursor:pointer}
+.cpl-bell:hover,.cpl-bell[aria-expanded="true"]{border-color:var(--accent);color:var(--ink)}
+.cpl-bell svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cpl-badge{position:absolute;top:-5px;inset-inline-end:-6px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font:700 10.5px/18px var(--f-mono);text-align:center;box-shadow:0 0 0 2px var(--bg)}
+.cpl-badge.crit{background:var(--crit);color:var(--surface)}
+@media (prefers-reduced-motion:no-preference){.cpl-bell.cpl-ring svg{animation:cplring .9s ease-in-out 1;transform-origin:50% 15%}}
+@keyframes cplring{0%,100%{transform:rotate(0)}20%{transform:rotate(14deg)}40%{transform:rotate(-12deg)}60%{transform:rotate(8deg)}80%{transform:rotate(-4deg)}}
+.cpl-pop{position:absolute;top:calc(100% + 8px);inset-inline-end:0;z-index:60;width:min(360px,calc(100vw - 32px));display:grid;gap:6px;padding:10px;border:1px solid var(--line-strong);border-radius:12px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.cpl-pop-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:2px 4px 4px}
+.cpl-pop-l{list-style:none;margin:0;padding:0;display:grid;gap:4px;max-height:min(360px,60vh);overflow-y:auto;overscroll-behavior:contain}
+.cpl-pop-it{appearance:none;width:100%;display:grid;gap:3px;justify-items:start;text-align:start;padding:8px 10px;border:1px solid var(--line);border-inline-start:3px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer}
+.cpl-pop-it.s-high{border-inline-start-color:var(--signal)}
+.cpl-pop-it.s-crit{border-inline-start-color:var(--crit)}
+.cpl-pop-it:hover,.cpl-pop-it:focus-visible{background:var(--accent-soft)}
+.cpl-pop-it b{font-size:13px;line-height:1.35;overflow-wrap:anywhere}
+.cpl-pop-none{padding:6px 4px}
+.cpl-pop-f{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:4px 4px 0}
+@media (max-width:980px){.cpl-two{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:720px){.cpl-bellw{margin-inline-start:-10px}}
+/* phones: tighten the header row the bell joins so the section nav keeps room to scroll */
+@media (max-width:480px){.top .wrap:has(#cplBell){gap:8px}.cpl-bellw{margin-inline-start:0}.cpl-bell{width:32px;height:32px}}
+@media (max-width:480px){.cpl-row{grid-template-columns:minmax(0,1fr)}.cpl-ask{flex-wrap:wrap}.cpl-ask .inp-search{flex-basis:100%}}
+/* v4 · govern */
+/* trust & governance */
+.gv,.gv-body{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.gv-body{gap:14px}
+.gv-bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.gv-bar>*{min-width:0}
+.gv-two{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;align-items:start}
+.gv-k{grid-template-columns:repeat(4,minmax(0,1fr))}
+.gv .wb-body{grid-template-columns:minmax(0,1fr)}
+.gv-res{display:grid;gap:8px;min-width:0}
+.gv-res>p{margin:0}
+.gv .btn[aria-disabled="true"]{opacity:.6;cursor:progress;transform:none}
+.gv-st{display:inline-flex;align-items:center;font:600 11.5px/1.4 var(--f-body);letter-spacing:0;text-transform:none;padding:2px 8px;border-radius:999px;white-space:nowrap;background:var(--surface-2);color:var(--muted)}
+.gv-st.s-pass{background:var(--good-soft);color:var(--good)}
+.gv-st.s-watch{background:var(--signal-soft);color:var(--signal)}
+.gv-st.s-fail{background:var(--crit-soft);color:var(--crit)}
+.gv-lbl{display:inline-flex;align-items:center;font:600 11.5px/1.4 var(--f-body);letter-spacing:0;text-transform:none;padding:2px 9px;border-radius:999px;border:1px solid var(--line);white-space:nowrap;color:var(--ink-2);background:var(--surface)}
+.gv-lbl.l-live{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 35%,transparent);color:var(--good)}
+.gv-lbl.l-proto{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 35%,transparent);color:var(--ink)}
+.gv-lbl.l-pilot{background:var(--signal-soft);border-color:color-mix(in srgb,var(--signal) 35%,transparent);color:var(--signal)}
+.gv-lbl.l-design{background:var(--surface-2);color:var(--muted)}
+.gv-tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.gv-h{margin:0 0 6px;font-size:17px;font-stretch:100%;font-variation-settings:normal;overflow-wrap:anywhere}
+.gv-pad{margin:0;padding:10px 12px 12px}
+.gv-err{color:var(--crit)}
+.gv-stale{color:var(--signal);font-weight:600}
+.gv .wb-table td:nth-child(n){font-family:var(--f-body)}
+.gv .wb-table td.mono:nth-child(n){font-family:var(--f-mono)}
+.gv-wrap td{white-space:normal;vertical-align:top;min-width:72px}
+.gv-wrap td:first-child{min-width:130px}
+.gv-on td{background:var(--accent-soft)}
+.gv-chg td{background:color-mix(in srgb,var(--signal) 12%,var(--surface))}
+.gv-mn{font-size:13.5px;text-align:start}
+.gv-dl{display:grid;grid-template-columns:minmax(0,128px) minmax(0,1fr);gap:7px 12px;margin:0;font-size:13.5px}
+.gv-dl dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.gv-dl dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.gv-chk{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.gv-chk li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 10px;align-items:baseline;padding:7px 10px;border:1px solid var(--line);border-inline-start:4px solid var(--good);border-radius:8px;font-size:13.5px}
+.gv-chk li.s-watch{border-inline-start-color:var(--signal)}
+.gv-chk li.s-fail{border-inline-start-color:var(--crit);background:color-mix(in srgb,var(--crit) 6%,var(--surface))}
+.gv-chk li.s-skip{border-inline-start-color:var(--line-strong)}
+.gv-chk li>.small{grid-column:2/-1;color:var(--ink-2);overflow-wrap:anywhere}
+.gv-grp{border:1px solid var(--line);border-radius:10px;padding:0 10px}
+.gv-grp+.gv-grp{margin-top:8px}
+.gv-grp>summary{cursor:pointer;padding:9px 2px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:13.5px}
+.gv-grp[open]>summary{border-bottom:1px solid var(--line);margin-bottom:8px}
+.gv-grp[open]{padding-bottom:10px}
+.gv-sel{width:100%;max-width:100%;font:13px var(--f-mono);padding:8px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--ink)}
+.gv-ta{width:100%;min-height:150px;font:12.5px/1.5 var(--f-mono);padding:10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface-2);color:var(--ink);resize:vertical}
+.gv-check{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink-2)}
+.gv-check input{margin-top:3px;accent-color:var(--accent)}
+.gv-out{margin:0;min-height:120px;max-height:420px;overflow:auto;padding:12px;border-radius:8px;background:var(--screen);color:var(--screen-ink);font:12px/1.55 var(--f-mono);white-space:pre-wrap;overflow-wrap:anywhere}
+.gv-out.err{box-shadow:inset 0 0 0 2px var(--crit)}
+.gv-code{margin:6px 0 0;padding:10px 12px;background:var(--surface-2);border-radius:8px;font:12px/1.5 var(--f-mono);white-space:pre-wrap;overflow-wrap:anywhere}
+.gv-fp{font:11.5px var(--f-mono);color:var(--muted);white-space:nowrap}
+.gv-sec{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gv-sec li{display:grid;gap:6px;align-content:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.gv-sec-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+.gv-sec p{margin:0;overflow-wrap:anywhere}
+.gv-sec .label{margin-inline-end:6px}
+.gv-see{font-size:13px;justify-self:start}
+@media (max-width:980px){.gv-two,.gv-sec{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:720px){.gv-k{grid-template-columns:repeat(2,minmax(0,1fr))}.gv-dl{grid-template-columns:minmax(0,1fr);gap:2px 0}.gv-dl dd{margin-bottom:6px}}
+/* v4 · voice */
+/* voice: talk mode for Ask Cellvoyant */
+/* the floating Talk button sits above the Ask Cellvoyant button (48px tall at 18px; 46px at 12px on phones) with a 10px gap, so they never overlap */
+.vc-fab{position:fixed;inset-inline-end:18px;bottom:76px;z-index:70;display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 15px 0 12px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);color:var(--ink);font:600 13.5px var(--f-body);box-shadow:var(--shadow);cursor:pointer}
+.vc-fab:hover{border-color:var(--accent);color:var(--accent)}
+.vc-fab[hidden]{display:none}
+.vc-fab svg,.vc-hb svg,.vc-ic svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:520px){.vc-fab{inset-inline-end:12px;bottom:68px;width:46px;height:46px;padding:0;justify-content:center}.vc-fab span{display:none}}
+/* chat header: the Talk toggle; the title shortens instead of running under the buttons */
+.vc-hd>div{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.vc-hb{flex:none;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 11px 0 9px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--ink-2);font:600 13px var(--f-body);cursor:pointer}
+.vc-hb:hover{border-color:var(--accent);color:var(--ink)}
+.vc-hb[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+@media (max-width:520px){.vc-hb{width:36px;padding:0;justify-content:center}.vc-hb span{display:none}}
+#cvChat.vc-on #cvMic{display:none}
+#cvChat.vc-on #cvSpeak:disabled{cursor:default;opacity:.75}
+/* the voice bar: state, live caption, controls */
+.vc-bar{display:grid;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:color-mix(in srgb,var(--accent-soft) 45%,var(--surface))}
+.vc-bar[hidden],.vc-type[hidden],.vc-btns [hidden]{display:none}
+.vc-top{display:flex;align-items:baseline;gap:8px;min-width:0}
+.vc-dot{flex:none;align-self:center;width:10px;height:10px;border-radius:50%;background:var(--muted)}
+.vc-bar[data-st="listening"] .vc-dot{background:var(--crit)}
+.vc-bar[data-st="thinking"] .vc-dot{background:var(--signal)}
+.vc-bar[data-st="speaking"] .vc-dot{background:var(--accent)}
+.vc-bar[data-st="ready"] .vc-dot{background:var(--good)}
+@keyframes vcpulse{50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--crit) 28%,transparent)}}
+/* the listening dot pulses only when the person has not asked for reduced motion */
+@media (prefers-reduced-motion:no-preference){.vc-bar[data-st="listening"] .vc-dot{animation:vcpulse 1.4s ease-in-out infinite}}
+.vc-st{flex:none;font:600 13px var(--f-body)}
+.vc-cap{flex:1;min-width:0;font-size:13px;line-height:1.4;color:var(--ink-2);overflow:hidden;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.vc-cap.vc-int{font-style:italic;color:var(--muted)}
+.vc-type{display:flex;gap:6px}
+.vc-type input{flex:1;min-width:0;border:1px solid var(--line-strong);border-radius:10px;padding:7px 10px;font:14px var(--f-body);background:var(--surface);color:var(--ink)}
+.vc-btns{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.vc-btns .btn.sm{padding:6px 11px}
+.vc-sp{flex:1}
+.vc-ic{width:32px;height:32px;font:700 14px var(--f-body)}
+/* voice settings: a small panel over the chat */
+.vc-pop{position:absolute;inset-inline:10px;bottom:64px;z-index:2;display:grid;gap:10px;max-height:calc(100% - 140px);overflow:auto;padding:12px 14px;border:1px solid var(--line-strong);border-radius:14px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.vc-pop[hidden]{display:none}
+.vc-pop-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.vc-row{display:grid;gap:4px;font-size:13.5px}
+.vc-row input[type=range]{width:100%;accent-color:var(--accent)}
+.vc-row select{width:100%;min-width:0;border:1px solid var(--line-strong);border-radius:8px;padding:6px 8px;font:13.5px var(--f-body);background:var(--surface);color:var(--ink)}
+.vc-chk{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;line-height:1.4}
+.vc-chk input{flex:none;margin-top:3px;accent-color:var(--accent)}
+.vc-pop p{margin:0}
+/* results and the "What you can say" card inside chat answers */
+.vc-card,.vc-grp,.vc-wrap{display:grid;gap:6px}
+.vc-card{gap:10px}
+.vc-grp .label{color:var(--accent)}
+.vc-ex{text-align:start;white-space:normal}
+.vc-words{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:13px}
+.vc-words b{display:inline-block;min-width:4.5em;font-weight:600}
+.vc-pre{min-width:0;max-width:100%;max-height:260px;margin:0;overflow:auto;padding:10px;border-radius:8px;background:var(--screen);color:var(--screen-ink);font:11.5px/1.5 var(--f-mono);white-space:pre;direction:ltr;text-align:left}
+/* v4 · depts */
+/* AI agent departments on phones: two columns, so the 28 department buttons do not push the agents far down the page */
+@media (max-width:560px){.ag-depts{grid-template-columns:repeat(2,minmax(0,1fr))}.ag-depts button{padding:8px 10px}.ag-depts button b{font-size:13px;line-height:1.25;overflow-wrap:break-word}.ag-depts button span{line-height:1.25}}
+[hidden]{display:none!important}
 </style>
 <style>
 .brand small{font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.06em;color:var(--muted);font-stretch:100%;font-variation-settings:normal;margin-left:2px}
@@ -2015,17 +2691,22 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
       <a href="#crisis">Crisis radar</a>
       <a href="#engagement">Engagement AI</a>
       <a href="#suite">Cellvoyant One</a>
+      <a href="#futurelab">FutureLab</a>
       <a href="#masterplan">Master plan</a>
       <a href="#glance">Market</a>
       <a href="#operators">Customers</a>
       <a href="#terminals">Terminals</a>
       <a href="#battle">Competition</a>
       <a href="#agents">AI agents</a>
+      <a href="#tower">Control tower</a>
+      <a href="#brain">Market Brain</a>
       <a href="#elab">Innovation lab</a>
       <a href="#challenge">Solutions</a>
       <a href="#console">Platform</a>
       <a href="#value">Value</a>
+      <a href="#govern">Trust & governance</a>
       <a href="#patent">Patent</a>
+      <a href="#program">Upgrade program</a>
       <a href="#business">Business</a>
     </nav>
     <a class="ed-cta" href="#launch">Request a pilot</a>
@@ -2052,7 +2733,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
       <aside class="exec" aria-label="Executive summary">
         <div class="exec-h"><span class="label">Executive summary</span><span class="tiny muted">Cellvoyant assessment</span></div>
         <div class="exec-row"><b>Where etisalat stands</b><p>About 61% of UAE mobile lines and 16.5m UAE subscribers (Sep 2026), with a UAE licence renewed to 2046. du is growing faster in fixed wireless, fibre and digital services.</p></div>
-        <div class="exec-row"><b>What we recommend</b><ul><li>Converged household and youth offers to defend and grow share</li><li>Engagement AI that decides whether, when, how and with what to contact each customer, app user and business client, inside strict contact rules</li><li>Cellvoyant One: CRM, ERP, supply chain and a central database, secured by a permissioned ledger with smart contracts</li><li>264 AI agents in 22 departments, and terminals for every team</li><li>A 134-capability master plan for e&amp;, starting with the market intelligence hub and a decision engine that keeps people in charge</li><li>A crisis radar with first-hour playbooks for the extreme risks, from subsea cable cuts to ransomware</li><li>An innovation lab of 600+ tools to scope, pilot and scale</li></ul></div>
+        <div class="exec-row"><b>What we recommend</b><ul><li>Converged household and youth offers to defend and grow share</li><li>Engagement AI that decides whether, when, how and with what to contact each customer, app user and business client, inside strict contact rules</li><li>Cellvoyant One: CRM, ERP, supply chain and a central database, secured by a permissioned ledger with smart contracts</li><li>336 AI agents in 28 departments, and terminals for every team</li><li>A 134-capability master plan for e&amp;, starting with the market intelligence hub and a decision engine that keeps people in charge</li><li>A crisis radar with first-hour playbooks for the extreme risks, from subsea cable cuts to ransomware</li><li>An innovation lab of 600+ tools to scope, pilot and scale</li></ul></div>
         <div class="exec-row"><b>How we prove it</b><p>A 30-day pilot with an A/B test: target +15% engagement vs control, earlier warning on rival moves and 40% fewer analyst hours spent collecting data.</p></div>
         <a class="btn sm accent" href="#launch">See the pilot plan →</a>
       </aside>
@@ -2066,11 +2747,11 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
     <div class="sec-head">
       <div class="eyebrow"><span class="no">01</span>Overview</div>
       <h2>Attract customers and clients, sell more, keep them longer</h2>
-      <p class="lede">Twenty-seven things etisalat UAE teams can do here, each one live on this page. Plans and ideas are Cellvoyant’s recommendations built on public data; customer data in the solutions is synthetic and tokenized until a pilot connects etisalat UAE’s own systems.</p>
+      <p class="lede">Thirty-two things etisalat UAE teams can do here, each one live on this page. Plans and ideas are Cellvoyant’s recommendations built on public data; customer data in the solutions is synthetic and tokenized until a pilot connects etisalat UAE’s own systems.</p>
     </div>
     <div class="cr-strip" id="crStrip" role="region" aria-label="Crisis alert"></div>
     <div class="role-start" id="roleStart"></div>
-    <div class="ed-grid"><a class="ed-card" href="#crisis"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.2v.3"/></svg><span class="ed-t">Solve crises first</span><span class="small">A crisis radar of 21 high-risk problems, with first-hour playbooks, live sensors and tracked responses.</span><span class="ed-go">Crisis radar →</span></a><a class="ed-card" href="#suite"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 005.66 0l3-3a4 4 0 00-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 00-5.66 0l-3 3a4 4 0 005.66 5.66l1-1"/></svg><span class="ed-t">Run the whole operator</span><span class="small">CRM, ERP finance, supply chain and a central database, secured by a ledger with smart contracts.</span><span class="ed-go">Cellvoyant One →</span></a><a class="ed-card" href="#engagement"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><span class="ed-t">Engage at the right moment</span><span class="small">Whether, when, how and with what to contact each customer, app user and business client, to cut churn.</span><span class="ed-go">Engagement AI →</span></a><a class="ed-card" data-odtab="marketing" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 001 1h3l6 4V6L7 10H4a1 1 0 00-1 1zM17 8a5 5 0 010 8"/></svg><span class="ed-t">Attract customers</span><span class="small">Six segment plans, from young digital-first users to expatriates and tourists.</span><span class="ed-go">Marketing plan →</span></a><a class="ed-card" data-odtab="sales" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg><span class="ed-t">Sell more</span><span class="small">A five-stage funnel, channel plan and sales rhythm, with right-moment upsell.</span><span class="ed-go">Sales playbook →</span></a><a class="ed-card" href="#challenge"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.6-7 10-7 10z"/></svg><span class="ed-t">Keep customers</span><span class="small">The best moment and channel for each customer, inside consent and anti-spam rules.</span><span class="ed-go">Solution 1 →</span></a><a class="ed-card" href="#clients"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></svg><span class="ed-t">Win business clients</span><span class="small">Six client groups with offers, sales motions and KPIs, plus enterprise problem plans.</span><span class="ed-go">Clients →</span></a><a class="ed-card" href="#battle"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg><span class="ed-t">Beat each rival</span><span class="small">Battlecards against du and Virgin Mobile UAE, with signals to watch and responses.</span><span class="ed-go">Battlecards →</span></a><a class="ed-card" href="#growth"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="ed-t">Plan the year</span><span class="small">A four-quarter growth plan with owners and KPIs, and a clear plan line-up.</span><span class="ed-go">Growth plan →</span></a><a class="ed-card" href="#console"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/></svg><span class="ed-t">See rivals early</span><span class="small">Ranked signals, move predictions and war-room simulations, updated every second.</span><span class="ed-go">Live console →</span></a><a class="ed-card" href="#challenge2"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span class="ed-t">One source of truth</span><span class="small">14 source types, Arabic, English and Chinese analysis, search and role-based access.</span><span class="ed-go">Solution 2 →</span></a><a class="ed-card" href="#masterplan"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="ed-t">Master plan for e&amp;</span><span class="small">134 tools, services and capabilities in nine areas, with priorities, a rollout plan and a shortlist.</span><span class="ed-go">Master plan →</span></a><a class="ed-card" href="#decision"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span class="ed-t">Decide on rival moves</span><span class="small">From a rival’s offer change to a sourced recommendation that a person approves.</span><span class="ed-go">Decision engine →</span></a><a class="ed-card" data-odtab="solve" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">New ideas, big problems</span><span class="small">An idea lab and a problem studio that turns big problems into a 90-day plan.</span><span class="ed-go">Problem studio →</span></a><a class="ed-card" href="#positioning"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/></svg><span class="ed-t">Benchmark the Gulf</span><span class="small">Real, sourced data on 108 operators, with quadrants and what to improve.</span><span class="ed-go">Positioning →</span></a><a class="ed-card" href="#value"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7M9 15v3c0 1.7 2.7 3 6 3s6-1.3 6-3v-5c0-1.6-2.4-2.9-5.5-3"/></svg><span class="ed-t">Size the prize</span><span class="small">An AED value calculator for retention, upgrades and analyst time.</span><span class="ed-go">Value calculator →</span></a><a class="ed-card" href="#academy"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5-10-5zM6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><span class="ed-t">Train every team</span><span class="small">12 workshops, templates, playbooks and a glossary.</span><span class="ed-go">Academy →</span></a><a class="ed-card" href="#terminals"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M12 15h5"/></svg><span class="ed-t">Terminals</span><span class="small">Terminals side by side with 450+ tools, live data, 340+ services and a command line.</span><span class="ed-go">Terminals →</span></a><a class="ed-card" href="#terminals" data-cvopen><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 001 1h3l6 4V6L7 10H4a1 1 0 00-1 1zM17 8a5 5 0 010 8"/></svg><span class="ed-t">Talk to Cellvoyant</span><span class="small">Ask by typing or by voice in six languages, including Arabic; answers can be read aloud.</span><span class="ed-go">Ask Cellvoyant →</span></a><a class="ed-card" href="#agents"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/></svg><span class="ed-t">AI agents at work</span><span class="small">264 agents in 22 departments, from finance and sales to supply chain and business development, search sources, run tools and brief each team.</span><span class="ed-go">AI agents →</span></a><a class="ed-card" href="#elab"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">Innovation lab</span><span class="small">600+ tools and services for 20 areas of etisalat UAE, beyond market intelligence.</span><span class="ed-go">Innovation lab →</span></a><a class="ed-card" href="#landscape"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/></svg><span class="ed-t">Know the field</span><span class="small">140 companies with owners, valuations and private-equity and hedge-fund stakes.</span><span class="ed-go">Landscape →</span></a><a class="ed-card" href="#platform"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span class="ed-t">How it works</span><span class="small">From signal to decision in six steps, with grounded AI and guardrails.</span><span class="ed-go">Platform →</span></a><a class="ed-card" href="#cellvoyant"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h2c1.5 0 1.5-6 3-6s1.5 12 3 12 1.5-9 3-9 1.5 5 3 5h4"/></svg><span class="ed-t">Market spectrum</span><span class="small">A live waterfall of rival signals by class, with sourced global telecom facts.</span><span class="ed-go">About Cellvoyant →</span></a><a class="ed-card" href="#lab"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">Core lab</span><span class="small">The 44 core Cellvoyant tools, engines, services and guardrails, live ones marked.</span><span class="ed-go">Core lab →</span></a><a class="ed-card" href="#patent"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg><span class="ed-t">Patent draft</span><span class="small">A provisional patent draft with 20 claims in tables, a claim map and a filing path.</span><span class="ed-go">Patent →</span></a><a class="ed-card" href="#business"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7M9 15v3c0 1.7 2.7 3 6 3s6-1.3 6-3v-5c0-1.6-2.4-2.9-5.5-3"/></svg><span class="ed-t">Business model</span><span class="small">Pricing, go-to-market, roadmap, success targets and how risks are handled.</span><span class="ed-go">Business →</span></a></div>
+    <div class="ed-grid"><a class="ed-card" href="#crisis"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.2v.3"/></svg><span class="ed-t">Solve crises first</span><span class="small">A crisis radar of 21 high-risk problems, with first-hour playbooks, live sensors and tracked responses.</span><span class="ed-go">Crisis radar →</span></a><a class="ed-card" href="#suite"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 005.66 0l3-3a4 4 0 00-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 00-5.66 0l-3 3a4 4 0 005.66 5.66l1-1"/></svg><span class="ed-t">Run the whole operator</span><span class="small">CRM, ERP finance, supply chain and a central database, secured by a ledger with smart contracts.</span><span class="ed-go">Cellvoyant One →</span></a><a class="ed-card" href="#engagement"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><span class="ed-t">Engage at the right moment</span><span class="small">Whether, when, how and with what to contact each customer, app user and business client, to cut churn.</span><span class="ed-go">Engagement AI →</span></a><a class="ed-card" href="#tower"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg><span class="ed-t">Steer the AI agents</span><span class="small">Every agent run logged and costed, approvals, an agent builder, a supervisor and a scheduler.</span><span class="ed-go">Control tower →</span></a><a class="ed-card" href="#futurelab"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">Test the future</span><span class="small">A digital twin of market, customers, finance and network, and board reports as PDF, Excel and PowerPoint.</span><span class="ed-go">FutureLab →</span></a><a class="ed-card" href="#brain"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 005.66 0l3-3a4 4 0 00-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 00-5.66 0l-3 3a4 4 0 005.66 5.66l1-1"/></svg><span class="ed-t">See who is connected</span><span class="small">A knowledge graph of operators, owners, sovereign funds and deals, with paths between any two.</span><span class="ed-go">Market Brain →</span></a><a class="ed-card" href="#govern"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span class="ed-t">Trust every answer</span><span class="small">Model registry, health checks, a developer hub, an evidence vault and a security checklist.</span><span class="ed-go">Governance →</span></a><a class="ed-card" href="#program"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="ed-t">The upgrade program</span><span class="small">65 upgrades with honest status, owners, waves and next steps.</span><span class="ed-go">Upgrade program →</span></a><a class="ed-card" data-odtab="marketing" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 001 1h3l6 4V6L7 10H4a1 1 0 00-1 1zM17 8a5 5 0 010 8"/></svg><span class="ed-t">Attract customers</span><span class="small">Six segment plans, from young digital-first users to expatriates and tourists.</span><span class="ed-go">Marketing plan →</span></a><a class="ed-card" data-odtab="sales" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg><span class="ed-t">Sell more</span><span class="small">A five-stage funnel, channel plan and sales rhythm, with right-moment upsell.</span><span class="ed-go">Sales playbook →</span></a><a class="ed-card" href="#challenge"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.6-7 10-7 10z"/></svg><span class="ed-t">Keep customers</span><span class="small">The best moment and channel for each customer, inside consent and anti-spam rules.</span><span class="ed-go">Solution 1 →</span></a><a class="ed-card" href="#clients"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></svg><span class="ed-t">Win business clients</span><span class="small">Six client groups with offers, sales motions and KPIs, plus enterprise problem plans.</span><span class="ed-go">Clients →</span></a><a class="ed-card" href="#battle"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg><span class="ed-t">Beat each rival</span><span class="small">Battlecards against du and Virgin Mobile UAE, with signals to watch and responses.</span><span class="ed-go">Battlecards →</span></a><a class="ed-card" href="#growth"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="ed-t">Plan the year</span><span class="small">A four-quarter growth plan with owners and KPIs, and a clear plan line-up.</span><span class="ed-go">Growth plan →</span></a><a class="ed-card" href="#console"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/></svg><span class="ed-t">See rivals early</span><span class="small">Ranked signals, move predictions and war-room simulations, updated every second.</span><span class="ed-go">Live console →</span></a><a class="ed-card" href="#challenge2"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span class="ed-t">One source of truth</span><span class="small">14 source types, Arabic, English and Chinese analysis, search and role-based access.</span><span class="ed-go">Solution 2 →</span></a><a class="ed-card" href="#masterplan"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="ed-t">Master plan for e&amp;</span><span class="small">134 tools, services and capabilities in nine areas, with priorities, a rollout plan and a shortlist.</span><span class="ed-go">Master plan →</span></a><a class="ed-card" href="#decision"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span class="ed-t">Decide on rival moves</span><span class="small">From a rival’s offer change to a sourced recommendation that a person approves.</span><span class="ed-go">Decision engine →</span></a><a class="ed-card" data-odtab="solve" href="#operators"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">New ideas, big problems</span><span class="small">An idea lab and a problem studio that turns big problems into a 90-day plan.</span><span class="ed-go">Problem studio →</span></a><a class="ed-card" href="#positioning"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/></svg><span class="ed-t">Benchmark the Gulf</span><span class="small">Real, sourced data on 108 operators, with quadrants and what to improve.</span><span class="ed-go">Positioning →</span></a><a class="ed-card" href="#value"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7M9 15v3c0 1.7 2.7 3 6 3s6-1.3 6-3v-5c0-1.6-2.4-2.9-5.5-3"/></svg><span class="ed-t">Size the prize</span><span class="small">An AED value calculator for retention, upgrades and analyst time.</span><span class="ed-go">Value calculator →</span></a><a class="ed-card" href="#academy"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5-10-5zM6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><span class="ed-t">Train every team</span><span class="small">12 workshops, templates, playbooks and a glossary.</span><span class="ed-go">Academy →</span></a><a class="ed-card" href="#terminals"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M12 15h5"/></svg><span class="ed-t">Terminals</span><span class="small">Terminals side by side with 450+ tools, live data, 500+ services and a command line.</span><span class="ed-go">Terminals →</span></a><a class="ed-card" href="#terminals" data-cvopen><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 001 1h3l6 4V6L7 10H4a1 1 0 00-1 1zM17 8a5 5 0 010 8"/></svg><span class="ed-t">Talk to Cellvoyant</span><span class="small">Ask by typing or talk hands-free in six languages, including Arabic: give voice commands, confirm actions and hear the answers.</span><span class="ed-go">Ask Cellvoyant →</span></a><a class="ed-card" href="#agents"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/></svg><span class="ed-t">AI agents at work</span><span class="small">336 agents in 28 departments, from finance and sales to people, sustainability, risk, 6G and IoT, search sources, run tools and brief each team.</span><span class="ed-go">AI agents →</span></a><a class="ed-card" href="#elab"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">Innovation lab</span><span class="small">600+ tools and services for 20 areas of etisalat UAE, beyond market intelligence.</span><span class="ed-go">Innovation lab →</span></a><a class="ed-card" href="#landscape"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/></svg><span class="ed-t">Know the field</span><span class="small">140 companies with owners, valuations and private-equity and hedge-fund stakes.</span><span class="ed-go">Landscape →</span></a><a class="ed-card" href="#platform"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span class="ed-t">How it works</span><span class="small">From signal to decision in six steps, with grounded AI and guardrails.</span><span class="ed-go">Platform →</span></a><a class="ed-card" href="#cellvoyant"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h2c1.5 0 1.5-6 3-6s1.5 12 3 12 1.5-9 3-9 1.5 5 3 5h4"/></svg><span class="ed-t">Market spectrum</span><span class="small">A live waterfall of rival signals by class, with sourced global telecom facts.</span><span class="ed-go">About Cellvoyant →</span></a><a class="ed-card" href="#lab"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span class="ed-t">Core lab</span><span class="small">The 44 core Cellvoyant tools, engines, services and guardrails, live ones marked.</span><span class="ed-go">Core lab →</span></a><a class="ed-card" href="#patent"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg><span class="ed-t">Patent draft</span><span class="small">A provisional patent draft with 20 claims in tables, a claim map and a filing path.</span><span class="ed-go">Patent →</span></a><a class="ed-card" href="#business"><svg class="ed-ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7M9 15v3c0 1.7 2.7 3 6 3s6-1.3 6-3v-5c0-1.6-2.4-2.9-5.5-3"/></svg><span class="ed-t">Business model</span><span class="small">Pricing, go-to-market, roadmap, success targets and how risks are handled.</span><span class="ed-go">Business →</span></a></div>
     <p class="tiny muted ed-note">Facts about etisalat and du come from their published results and link to the source. This edition uses no etisalat internal data.</p>
   </div>
 </section>
@@ -2540,10 +3221,35 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="terminals">
+<section class="sec" id="futurelab">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">16</span>Terminals</div>
+      <div class="eyebrow"><span class="no">16</span>FutureLab for etisalat UAE · digital twin and executive reports</div>
+      <h2>Test a decision on the next two years, then build the board report</h2>
+      <p class="lede">FutureLab links four models: the market, customers, finances and the network. Move your price, a rival’s price cut or 5G home launch, marketing or capex, and all eight quarters update. When traffic passes 80% of capacity, congestion feeds back into churn. Save up to three scenarios to compare, see which lever matters most, and send the one you prefer for a decision. The report builder turns this page into a PDF, an Excel workbook or a PowerPoint deck. It works on demand, or prepares the report daily or weekly while this page is open (sending it needs a pilot).</p>
+    </div>
+    <div class="fl" id="flApp">
+      <h3 class="res-h" id="flHead">The twin: four linked models, eight quarters <span class="stc st-proto">Prototype · synthetic baselines</span></h3>
+      <div class="cr-sum" id="flSum"></div>
+      <ol class="dc-flow fl-flow" id="flFlow" aria-label="How the four models link, with the result of each"></ol>
+      <div id="flLevers"></div>
+      <div class="rt-best fl-story" id="flStory" aria-live="polite"><span class="label">Starting the twin…</span></div>
+      <div class="fl-body" id="flBody"></div>
+      <p class="tiny muted" id="flNote">Illustrative model on synthetic baselines. The elasticities and network figures are stated assumptions, not fitted to any operator’s data.</p>
+    </div>
+    <div class="rp" id="rpApp">
+      <h3 class="res-h" id="rpHead">Executive reports: PDF, Excel and PowerPoint</h3>
+      <p class="small muted mp-note">Pick the sections, then print or save as PDF, or download an Excel workbook or a PowerPoint deck. Every file keeps the page’s labels: what is synthetic stays marked as synthetic.</p>
+      <div id="rpBody"><p class="small muted">Loading the report builder…</p></div>
+      <p class="tiny muted" id="rpNote">Reports are built in your browser from this page’s current data. Sending by email and the operator’s own data need a pilot.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="terminals">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span class="no">17</span>Terminals</div>
       <h2>A terminal for every job, and ones you build yourself</h2>
       <p class="lede">Everything on the platform in one place. Open several terminals side by side as tabs: each puts live panels, the AI agents, a library of more than 450 tools, a catalog of more than 340 services and a command line on one screen. The Live intelligence terminal reads real public sources as you use it: worldwide news (GDELT), World Bank country data, Wikipedia, Apple App Store ratings and daily exchange rates; your search terms are sent to those services. Start from a ready-made terminal or build a custom one for a specific purpose; yours are saved in this browser. Type <b>HELP</b> in the command line to see what it can do.</p>
     </div>
@@ -2554,11 +3260,11 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band" id="agents">
+<section class="sec" id="agents">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">17</span>AI agent departments</div>
-      <h2><span id="agCount">264</span> AI agents in <span id="agDeptN">22</span> departments, working for etisalat UAE</h2>
+      <div class="eyebrow"><span class="no">18</span>AI agent departments</div>
+      <h2><span id="agCount">336</span> AI agents in <span id="agDeptN">28</span> departments, working for etisalat UAE</h2>
       <p class="lede">Every department has at least twelve agents. Each agent has a job, the sources it searches, the tools it runs, the services it can book and the resources it works with. Give it a task: it searches the knowledge base, runs its tools and writes a brief with findings and recommended actions, which go to the workspace in one click. In the Claude viewer agents reason with Claude; elsewhere a built-in agent runs the same tools. Every agent also runs from the terminals.</p>
     </div>
     <div class="ag-wrap" id="agApp">
@@ -2578,10 +3284,29 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
+<section class="sec band" id="tower">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span class="no">19</span>AI Control Tower for etisalat UAE · agent operations</div>
+      <h2>See every agent run, decide what agents may do, and put them on a schedule</h2>
+      <p class="lede">Every agent run is logged here with the tools it used, what it found, how long it took and an estimated cost. Agents’ actions wait for a person unless a department lets low-risk ones through; price, offers, customer contact, payments and contracts always wait. Build your own agents, give a supervisor one goal for several departments, schedule runs, and rate each brief so weak agents are flagged for retraining.</p>
+    </div>
+    <div class="tw" id="twApp">
+      <div class="cr-sum" id="twSum" aria-live="polite"></div>
+      <div class="su-bar">
+        <div class="seg-btns" id="twTabs" role="group" aria-label="Control tower views"></div>
+        <span class="row-btns"><span class="pill sim">Prototype</span><span class="tiny muted" id="twStore"></span><button type="button" class="btn sm" id="twLink" data-cvlink="tower-runs">Copy link</button></span>
+      </div>
+      <div class="tw-body" id="twBody"><p class="small muted">Loading the control tower…</p></div>
+      <p class="tiny muted" id="twNote">Prototype: the run log, approvals, custom agents, schedules and ratings are kept in this browser only. *Costs are estimates of about four characters per token at an illustrative <span id="twRateT">$6</span> per million tokens; built-in runs use no model at all, so the figure shows what a hosted model would cost. Console signals are simulated for fictional operators. Schedules run only while this page is open. A shared log for the whole team, single sign-on, schedules on a server and real model bills need a pilot.</p>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="elab">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">18</span>Innovation lab for etisalat</div>
+      <div class="eyebrow"><span class="no">20</span>Innovation lab for etisalat</div>
       <h2><span id="elTotal">600</span> tools and services for every part of etisalat UAE</h2>
       <p class="lede">Far beyond market intelligence: agents, models, dashboards, playbooks, services and workshops for 20 areas, from marketing and retention to network, etisalat money, security and people. Live items open on this page; everything else can be scoped and piloted on request.</p>
     </div>
@@ -2600,7 +3325,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 <section class="sec band" id="lab">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">19</span>Core lab</div>
+      <div class="eyebrow"><span class="no">21</span>Core lab</div>
       <h2>The 44 core Cellvoyant tools, engines, services and guardrails</h2>
       <p class="lede"><b id="labLiveN">17</b> of them already run on this page (filter by <b>Live now</b>). This is the full set Cellvoyant is designed to grow into, each tied to a specific telecom problem. All 44 are also in the innovation lab above, next to 600+ more for etisalat UAE. Items marked <span class="badge core">Patent core</span> carry the inventive steps claimed in the draft below.</p>
     </div>
@@ -2612,7 +3337,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 <section class="sec" id="challenge">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">20</span>Solution 1 · right-time engagement</div>
+      <div class="eyebrow"><span class="no">22</span>Solution 1 · right-time engagement</div>
       <h2>Reach every customer at the right moment</h2>
       <p class="lede">Telecom companies often reach customers at the wrong moment and miss chances to keep them, sell them more and make them happier. The challenge: an AI solution that predicts the best time to contact each customer from behavioral, transactional and contextual data, so engagement goes up and churn goes down, without ever becoming intrusive. Students, analysts and operators can all work on it, and the prototype below solves it end to end.</p>
     </div>
@@ -2694,7 +3419,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 <section class="sec band" id="challenge2">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">21</span>Solution 2 · central market intelligence</div>
+      <div class="eyebrow"><span class="no">23</span>Solution 2 · central market intelligence</div>
       <h2>One AI-powered intelligence platform for a whole telecom group</h2>
       <p class="lede">Large telecom groups such as etisalat and their peers hold market intelligence in regional databases, vendor subscriptions, spreadsheets and public sources. The challenge: one central AI platform that automates collection, monitors competitors and delivers timely insights and recommended actions to every business unit, securely. This is the problem Cellvoyant was built for. Here is how each requirement is met.</p>
       <p class="tiny muted">Challenge brief as provided. Cellvoyant is independent and is not affiliated with or endorsed by etisalat or any operator named on this page.</p>
@@ -2790,7 +3515,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 <section class="sec" id="platform">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">22</span>The solution</div>
+      <div class="eyebrow"><span class="no">24</span>The solution</div>
       <h2>One signal mesh, one telecom knowledge graph, agents that reason about moves</h2>
       <p class="lede">Cellvoyant works like a network operations center for the market. Instead of alarms from base stations, it receives signals from competitors, turns them into verified events, and sends each one to the person who can act before it goes stale.</p>
     </div>
@@ -2847,7 +3572,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 <section class="sec band" id="console">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">23</span>Working prototype</div>
+      <div class="eyebrow"><span class="no">25</span>Working prototype</div>
       <h2>The Cellvoyant console</h2>
       <p class="lede">Click an alert to see its evidence, sequence a tariff, toggle the weak signals behind a prediction, war-game a price cut, or have the AI assistant run any of it and book a service. The console runs live and updates every second. Its figures are simulated for six fictional operators in one demo market, where you play <b>Nimbus Mobile</b>; in a pilot, the same console runs on etisalat UAE’s market and data. The Capital radar, the Analyst workbench and the Landscape use real, sourced market data. Pick a department in <b>Lens</b> to re-rank everything for that team.</p>
     </div>
@@ -3138,7 +3863,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 <section class="sec" id="landscape">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">24</span>Competitor &amp; capital landscape · data as of Sep 2026</div>
+      <div class="eyebrow"><span class="no">26</span>Competitor &amp; capital landscape · data as of Sep 2026</div>
       <h2>Who competes, who owns them, and where the capital sits</h2>
       <p class="lede">Every direct competitor and adjacent telecom-intelligence vendor, and the operators that make up the market. For each: ownership, private-equity and hedge-fund involvement, market cap or valuation, revenue and capital raised, each figure with its source and date. Click any row for details.</p>
     </div>
@@ -3190,7 +3915,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
 <section class="sec band" id="positioning">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">25</span>Positioning · researched Oct 2026</div>
+      <div class="eyebrow"><span class="no">27</span>Positioning · researched Oct 2026</div>
       <h2>Where etisalat and its competitors sit</h2>
       <p class="lede">Two maps. The first places telecom operators across the Gulf, the wider Middle East, Asia-Pacific, Europe, Africa and the Americas, starting with the Gulf. The second places Cellvoyant’s own competitors, the intelligence vendors. Click any company to see its quadrant, owners, what to improve, how to succeed and its competitors.</p>
     </div>
@@ -3218,10 +3943,53 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="value">
+<section class="sec" id="brain">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">26</span>Value calculator</div>
+      <div class="eyebrow"><span class="no">28</span>Market Brain · a knowledge graph of the market</div>
+      <h2>See who owns whom, and how any two names in telecom connect</h2>
+      <p class="lede">The Market Brain joins the operators, groups, markets, regulators, investors, companies and deals researched on this page into one graph. Search a name to see its owners, stakes, rivals and deals with their sources. Trace the chain between any two names, and find the most connected players. It runs in your browser on the researched records.</p>
+    </div>
+    <div class="kg" id="kgApp">
+      <div class="kg-sum" id="kgSum" role="group" aria-label="What the graph holds"></div>
+      <div class="kg-bar">
+        <div class="kg-find"><label class="sr" for="kgQ">Find an entity</label><input id="kgQ" class="inp-search" type="search" autocomplete="off" spellcheck="false" placeholder="Find an operator, investor, market or deal…" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="kgLq" data-kgsug="q"><ul class="kg-sug" id="kgLq" role="listbox" aria-label="Matching entities" hidden></ul></div>
+        <span class="label">Try</span><div class="chips" id="kgTry"></div>
+      </div>
+      <div class="kg-bar"><span class="label" id="kgRelL">Relations used by the map, the path finder and the ranking</span><div class="seg-btns" id="kgPre" role="group" aria-label="Relation presets"></div></div>
+      <div class="kg-fs" id="kgRel" role="group" aria-labelledby="kgRelL"></div>
+      <div class="kg-top" id="kgTop">
+        <div class="box"><div class="box-h"><span><b>Neighbourhood</b> · <span id="kgMapN"></span></span><div class="seg-btns" id="kgHops" role="group" aria-label="Steps shown"><button type="button" data-kghops="1" aria-pressed="false">1 step</button><button type="button" data-kghops="2" aria-pressed="true">2 steps</button></div></div>
+          <div class="kg-map" id="kgMap"></div>
+          <div class="eg-leg kg-leg" id="kgLeg"></div>
+          <div class="kg-nb" id="kgNb"></div>
+        </div>
+        <div class="box kg-card" id="kgCard"></div>
+      </div>
+      <p class="sr" id="kgSay" aria-live="polite"></p>
+      <h3 class="res-h" id="kg-path">How are these connected?</h3>
+      <form class="kg-pf" id="kgPathF" autocomplete="off">
+        <div class="kg-find"><label class="label" for="kgA">From</label><input id="kgA" class="inp-search" type="search" autocomplete="off" spellcheck="false" placeholder="e.g. a state fund" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="kgLa" data-kgsug="a"><ul class="kg-sug" id="kgLa" role="listbox" aria-label="Matching entities" hidden></ul></div>
+        <button type="button" class="btn sm" data-kgswap aria-label="Swap from and to">⇄</button>
+        <div class="kg-find"><label class="label" for="kgB">To</label><input id="kgB" class="inp-search" type="search" autocomplete="off" spellcheck="false" placeholder="e.g. an operator" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="kgLb" data-kgsug="b"><ul class="kg-sug" id="kgLb" role="listbox" aria-label="Matching entities" hidden></ul></div>
+        <button class="btn sm accent" type="submit">Find the connection</button>
+      </form>
+      <div class="kg-bar"><span class="label">Examples</span><div class="chips" id="kgPathTry"></div></div>
+      <div class="kg-path" id="kgPath" aria-live="polite"></div>
+      <h3 class="res-h" id="kg-top">Most connected</h3>
+      <div class="kg-bar"><span class="label" id="kgRkL">Rank by</span><div class="seg-btns" id="kgRk" role="group" aria-labelledby="kgRkL"><button type="button" data-kgrank="pr" aria-pressed="true">PageRank</button><button type="button" data-kgrank="deg" aria-pressed="false">Connections</button></div><span class="small muted">Pick a type in the tiles at the top to rank one type only. With all relations on, operators present in many markets rank high; <button type="button" class="linkish small" data-kgpre="cap">rank by ownership and capital only</button>.</span></div>
+      <div id="kgRank"></div>
+      <div class="kg-bar kg-foot"><span class="stc st-live">Live</span><span class="small">Built in your browser from the researched records on this page, as of <span id="kgAsOf">the file dates</span>.</span><button type="button" class="btn sm" data-kgjson>Download the graph (JSON)</button></div>
+      <p class="tiny muted" id="kgNote">Names written differently in different records are merged by matching rules and a short alias list, so “PIF” and “Public Investment Fund (PIF)” are one entity. Every relation keeps the wording and the source link of the record it came from, and stakes marked unverified in the records stay marked here. Rivals are linked only when the rival is itself in the data; regulators and market events are recorded for the six Gulf markets. <span class="stc st-prod">Needs pilot</span> Keeping the graph current from company registries, filings and news feeds, with analyst review, needs a backend and licensed feeds.</p>
+      <div id="kgMerged"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="value">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span class="no">29</span>Value calculator</div>
       <h2>What the programme could be worth, in AED</h2>
       <p class="lede">An illustrative calculator. The inputs are examples, not etisalat UAE figures: replace them with etisalat UAE’s own numbers to size the opportunity. The pilot measures the real effect.</p>
     </div>
@@ -3247,10 +4015,10 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band" id="departments">
+<section class="sec" id="departments">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">27</span>Departments &amp; sectors</div>
+      <div class="eyebrow"><span class="no">30</span>Departments &amp; sectors</div>
       <h2>Nine departments, 36 teams, six lines of business</h2>
       <p class="lede">Every signal is routed to the teams that can act on it, with a lead owner and an act-by time. Pick a department to see the questions it answers, its tools, the KPIs it watches and its operating rhythm, then open the console with that department’s lens. Or switch to business sectors to see what Cellvoyant watches in each line of business.</p>
     </div>
@@ -3263,10 +4031,10 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="academy">
+<section class="sec band" id="academy">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">28</span>Cellvoyant Academy</div>
+      <div class="eyebrow"><span class="no">31</span>Cellvoyant Academy</div>
       <h2>Workshops for etisalat UAE teams</h2>
       <p class="lede">Hands-on sessions built on the console and the real market data on this page. Each one ends with something your team can use the next day. Seat requests go into the same queue as the console’s services.</p>
     </div>
@@ -3282,10 +4050,10 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band" id="resources">
+<section class="sec" id="resources">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">29</span>Resources &amp; tools</div>
+      <div class="eyebrow"><span class="no">32</span>Resources &amp; tools</div>
       <h2>Templates, playbooks, tools and trusted sources</h2>
       <p class="lede">Everything an operator or analyst needs next to the console: download a template, follow a playbook, open a tool, or go straight to the regulator or data source.</p>
     </div>
@@ -3294,10 +4062,10 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="howwework">
+<section class="sec band" id="howwework">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">30</span>How we work together</div>
+      <div class="eyebrow"><span class="no">33</span>How we work together</div>
       <h2>Governance, data and security for an etisalat UAE pilot</h2>
       <p class="lede">A light structure with clear owners, and data that never leaves etisalat UAE’s control.</p>
     </div>
@@ -3309,10 +4077,27 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
+<section class="sec" id="govern">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span class="no">34</span>Trust &amp; governance · models, health, APIs and evidence</div>
+      <h2>Check every model, test the platform and trace each figure to its source</h2>
+      <p class="lede">A registry of the platform’s AI models and rule engines, each with its metrics against thresholds, owner, risk tier, human oversight and a model card you can download. Health checks and a self-test suite run in your browser and keep an incident log. A developer hub documents every tool as an API you can try here, and SHA-256 fingerprints tie each sourced figure to its source and date. A checklist shows which security and privacy controls work today and which need a pilot.</p>
+    </div>
+    <div class="gv" id="gvApp">
+      <div class="cr-sum" id="gvSum"></div>
+      <p class="sr" id="gvLive" role="status" aria-live="polite"></p>
+      <div class="gv-bar"><div class="seg-btns" id="gvTabs" role="group" aria-label="Trust centre views"></div><span class="small muted" id="gvRoad"></span></div>
+      <div class="gv-body" id="gvBody"></div>
+      <p class="tiny muted" id="gvNote">Everything here runs in your browser. Model metrics come from synthetic or illustrative data, so approval is for the prototype only; production use needs a pilot on the operator’s data. The REST API and webhooks are designs, not live services.</p>
+    </div>
+  </div>
+</section>
+
 <section class="sec band" id="patent">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">31</span>Intellectual property</div>
+      <div class="eyebrow"><span class="no">35</span>Intellectual property</div>
       <h2>Provisional patent application, working draft</h2>
       <p class="lede">A complete first draft in the structure a US provisional application uses: field, background, summary, drawings, detailed description, 20 claims and an abstract. Take it to a registered patent attorney or agent to review and file. This draft is not legal advice.</p>
     </div>
@@ -3529,10 +4314,37 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec" id="business">
+<section class="sec" id="program">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">32</span>Business model &amp; go-to-market</div>
+      <div class="eyebrow"><span class="no">36</span>Upgrade program · 65 items</div>
+      <h2>The upgrade program: what is live, what is a prototype and what needs a pilot</h2>
+      <p class="lede">Sixty-five upgrades across every department and system, each with what we improve, add and upgrade. Every item gets an honest status: live on this page now, a prototype on synthetic data or browser storage, or waiting for a pilot with a backend, an operator’s data, single sign-on or licensed feeds. Filter the list, open an item to see where it stands and the next step, then download it or request scoping.</p>
+    </div>
+    <div class="pg" id="pgApp">
+      <div class="cr-sum pg-sum" id="pgSum" aria-live="polite"></div>
+      <div class="pg-top">
+        <div class="box"><div class="box-h"><span><b>Progress by priority</b> · items by status</span><span class="pg-leg" aria-hidden="true"><span><i class="pg-sw pg-live"></i>Live</span><span><i class="pg-sw pg-proto"></i>Prototype</span><span><i class="pg-sw pg-pilot"></i>Pilot</span></span></div><div class="pg-bars" id="pgProg"></div></div>
+        <div class="box"><div class="box-h"><span><b>What each status means</b></span></div><div class="pg-key" id="pgKey"></div></div>
+      </div>
+      <h3 class="res-h" id="pg-waves">Three waves over the next 12 months</h3>
+      <p class="small muted mp-note">P0 items start in Wave 1, P1 in Wave 2 and P2 in Wave 3, unless an item says why it moved. Click an item to open it in the list.</p>
+      <div class="pg-waves" id="pgWaves"></div>
+      <h3 class="res-h" id="pg-list">All 65 items</h3>
+      <div class="pg-bar" id="pgBar">
+        <div class="pg-brow"><span class="label" id="pgPriL">Priority</span><div class="seg-btns" id="pgPri" role="group" aria-labelledby="pgPriL"></div><span class="label" id="pgStL">Status</span><div class="seg-btns" id="pgSt" role="group" aria-labelledby="pgStL"></div></div>
+        <div class="pg-brow"><label class="sr" for="pgQ">Search the upgrade program</label><input class="inp-search" id="pgQ" type="search" autocomplete="off" placeholder="Search 65 items, e.g. alerts, 5G, SSO"><label class="sr" for="pgArea">Area</label><select class="inp" id="pgArea"></select><span class="small muted" id="pgCount" tabindex="-1" aria-live="polite"></span><span id="pgWaveF"></span><span class="pg-acts"><button type="button" class="btn sm" id="pgCsv">Download CSV</button><button type="button" class="btn sm accent" id="pgReq">Request scoping for these items</button></span></div>
+      </div>
+      <div class="pg-list" id="pgList"></div>
+      <p class="tiny muted" id="pgNote">Status is judged against each item’s “Add” column: an item is live only when this page does that part today. Synthetic and illustrative figures are labelled where they appear. Owners are the platform’s AI agent departments; a pilot assigns people.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="business">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><span class="no">37</span>Business model &amp; go-to-market</div>
       <h2>How Cellvoyant makes money and wins its first customers</h2>
       <p class="lede">Proposed pricing and targets to validate in customer discovery. They are planning assumptions, not market facts.</p>
     </div>
@@ -3605,10 +4417,10 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec band" id="launch">
+<section class="sec" id="launch">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">33</span>Next step</div>
+      <div class="eyebrow"><span class="no">38</span>Next step</div>
       <h2>Start with a 30-day pilot at etisalat UAE</h2>
       <p class="lede">Cellvoyant runs next to the current process for 30 days in shadow mode, and the right-time engine is tested against the fixed schedule in a controlled A/B test on tokenized data. Week 8 decides the rollout.</p>
     </div>
@@ -3643,7 +4455,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
         <div class="lc ok"><i>✓</i><span>AI assistant with <b id="lcTools">17</b> tools and a service desk</span></div>
         <div class="lc ok"><i>✓</i><span>Operator desk with an etisalat UAE edition, problem studio and idea lab</span></div>
         <div class="lc ok"><i>✓</i><span>9 departments, 36 teams, 12 workshops and a resources library</span></div>
-        <div class="lc ok"><i>✓</i><span>Terminals: 13 ready-made, custom ones, 450+ tools, 340+ services and a command line</span></div>
+        <div class="lc ok"><i>✓</i><span>Terminals: 13 ready-made, custom ones, 450+ tools, 500+ services and a command line</span></div>
         <div class="lc ok"><i>✓</i><span>Live data from public sources: news, World Bank, Wikipedia, app ratings and exchange rates</span></div>
         <div class="lc ok"><i>✓</i><span>Ask Cellvoyant: an assistant on every page you can type or talk to, with spoken answers</span></div>
         <div class="lc ok"><i>✓</i><span>Six languages: English, Arabic, French, Hindi, Urdu and Chinese, right-to-left where needed</span></div>
@@ -3654,7 +4466,14 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
         <div class="lc ok"><i>✓</i><span>Cellvoyant One: a central database with role-based access, CRM, finance forecasting and anomaly detection, supply chain planning, product innovation, system value and market functions</span></div>
         <div class="lc ok"><i>✓</i><span>Permissioned ledger: SHA-256 blocks signed by 3 of 4 validators, tamper detection and four smart contracts</span></div>
         <div class="lc ok"><i>✓</i><span>Start-here paths for seven roles, and share links to any capability, scenario or terminal</span></div>
-        <div class="lc ok"><i>✓</i><span>264 AI agents in 22 departments, each with tools, services and resources</span></div>
+        <div class="lc ok"><i>✓</i><span>336 AI agents in 28 departments, each with tools, services and resources</span></div>
+        <div class="lc ok"><i>✓</i><span>Talk mode: hands-free voice commands and conversation (Alt+V), with spoken answers and confirmation before any action</span></div>
+        <div class="lc ok"><i>✓</i><span>AI Control Tower: every agent run logged and costed, approvals with controlled autonomy, an agent builder, a supervisor across departments, a scheduler and evaluation</span></div>
+        <div class="lc ok"><i>✓</i><span>Market Brain: a knowledge graph of operators, owners, investors and deals, with path finding and PageRank</span></div>
+        <div class="lc ok"><i>✓</i><span>FutureLab: a digital twin of market, customers, finance and network, and executive reports as PDF, Excel and PowerPoint</span></div>
+        <div class="lc ok"><i>✓</i><span>Executive copilot: cited answers from documents, memory by role and the alert center</span></div>
+        <div class="lc ok"><i>✓</i><span>Trust &amp; governance: model registry, health checks and self-test, developer hub, evidence vault and a security and privacy checklist</span></div>
+        <div class="lc ok"><i>✓</i><span>Upgrade program: 65 items, each with an honest status (live, prototype or needs pilot), an owner, a wave, a next step, CSV export and scoping requests</span></div>
         <div class="lc ok"><i>✓</i><span>Search across the whole platform (Ctrl K or ⌘ K)</span></div>
         <div class="lc ok"><i>✓</i><span>Installable app with offline access and share previews (public site)</span></div></div>
       <div class="lc-col"><span class="label">Data &amp; trust</span>
@@ -3684,10 +4503,10 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
   </div>
 </section>
 
-<section class="sec sources" id="sources">
+<section class="sec band sources" id="sources">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow"><span class="no">34</span>Sources</div>
+      <div class="eyebrow"><span class="no">39</span>Sources</div>
       <h2>Where every number comes from</h2>
       <p class="lede" style="font-size:16px">38 sources, re-checked on 24 September 2026 against the original pages. Where a source said something slightly different, the page wording was corrected. Market-size estimates vary widely with each firm's definitions. All console data is simulated.</p>
     </div>
@@ -3756,7 +4575,7 @@ html[lang="hi"]{--f-body:"Noto Sans Devanagari","IBM Plex Sans",system-ui,sans-s
     <div><span class="label">This edition</span><ul class="small"><li><a href="#edition">Overview</a></li><li><a href="#masterplan">Master plan for e&amp;</a></li><li><a href="#decision">Decision engine</a></li><li><a href="#crisis">Crisis radar</a></li><li><a href="#engagement">Engagement AI</a></li><li><a href="#suite">Cellvoyant One</a></li><li><a href="#operators">etisalat UAE desk</a></li><li><a href="#challenge">Solution 1 · right-time engagement</a></li><li><a href="#challenge2">Solution 2 · market intelligence</a></li><li><a href="#terminals">Terminals</a></li><li><a href="#agents">AI agents</a></li><li><a href="#lab">Core lab</a></li><li><a href="#patent">Patent draft</a></li><li><a href="#business">Business model</a></li><li><a href="#launch">Pilot plan</a></li></ul></div>
     <div><span class="label">Notes</span><p class="small">Not affiliated with or endorsed by etisalat (e&amp;). Facts link to their published sources; plans, battlecards and targets are Cellvoyant recommendations. Console signals are simulated.</p></div>
   </div>
-  <div class="wrap ed-foot-bar"><span>© 2026 Cellvoyant</span><span class="mono">etisalat (e&amp;) UAE edition · v3.0 · 10 Nov 2026</span><a href="./">Main Cellvoyant platform →</a></div>
+  <div class="wrap ed-foot-bar"><span>© 2026 Cellvoyant</span><span class="mono">etisalat (e&amp;) UAE edition · v4.0 · 12 Nov 2026</span><a href="./">Main Cellvoyant platform →</a></div>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
